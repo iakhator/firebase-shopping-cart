@@ -1,0 +1,15 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700");
+@import url("https://fonts.googleapis.com/css?family=Macondo+Swash+Caps");
+
+$fontMacondo: "Macondo Swash Caps",
+cursive;
+
+//font size
+$font-weight-light: 300;
+$font-weight-bold: 600;
+
+.el-menu-logo {
+  font-family: $fontMacondo;
+  font-weight: $font-weight-bold;
+  font-size: 1.3rem;
+}
