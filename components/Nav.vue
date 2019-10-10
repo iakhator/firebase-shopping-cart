@@ -19,14 +19,19 @@
         <el-menu-item index="2-1">profile</el-menu-item>
         <el-menu-item index="2-2">history</el-menu-item>
       </el-submenu>
-      <el-menu-item index="3" class="el-menu-navlist">
-        <font-awesome-icon icon="shopping-bag" />
+      <el-menu-item index="3" class="el-menu-navlist" @click="drawer = true">
+        <el-badge :value="cartTotal" class="item">
+          <font-awesome-icon icon="shopping-bag" class="shopping-bag" />
+        </el-badge>
       </el-menu-item>
       <el-menu-item index="4" class="el-menu-navlist">
         <nuxt-link to="/orders">Orders</nuxt-link>
       </el-menu-item>
     </el-menu>
     <items-nav />
+    <el-drawer title="Cart" :visible.sync="drawer" size="35%">
+      <div>me</div>
+    </el-drawer>
   </div>
 </template>
 
@@ -38,7 +43,9 @@ export default {
   },
   data() {
     return {
-      activeIndex2: '1'
+      activeIndex2: '1',
+      cartTotal: 1,
+      drawer: false
     }
   },
   methods: {
@@ -60,5 +67,14 @@ export default {
 
 .el-menu--horizontal > .el-menu-item a {
   text-decoration: none;
+}
+
+.item {
+  margin-top: -9px;
+  margin-right: 20px;
+}
+
+.shopping-bag {
+  position: absolute;
 }
 </style>
