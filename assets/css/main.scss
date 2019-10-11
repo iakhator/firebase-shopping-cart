@@ -4,9 +4,24 @@
 $fontMacondo: "Macondo Swash Caps",
 cursive;
 
+$white: #ffffff;
+$off-white: #F8F5F2;
+$black: #000000;
+$off-black: #1B1A1A;
 //font size
 $font-weight-light: 300;
 $font-weight-bold: 600;
+
+body {
+  background: $off-white;
+  color: $off-black;
+}
+
+// navBar
+
+.el-menu {
+  background: $off-black;
+}
 
 .el-menu-logo {
   font-family: $fontMacondo;

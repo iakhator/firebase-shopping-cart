@@ -4,7 +4,7 @@
       :default-active="activeIndex2"
       class="el-menu-demo"
       mode="horizontal"
-      background-color="#545c64"
+      background-color="#1B1A1A"
       text-color="#fff"
       active-text-color="#ffd04b"
       @select="handleSelect"
@@ -28,7 +28,8 @@
         <nuxt-link to="/orders">Orders</nuxt-link>
       </el-menu-item>
     </el-menu>
-    <items-nav />
+    <!-- <items-nav /> -->
+
     <el-drawer title="Cart" :visible.sync="drawer" size="35%">
       <div>me</div>
     </el-drawer>
@@ -36,11 +37,11 @@
 </template>
 
 <script>
-import ItemsNav from './ItemsNav'
+// import ItemsNav from './ItemsNav'
 export default {
-  components: {
-    ItemsNav
-  },
+  // components: {
+  //   ItemsNav
+  // },
   data() {
     return {
       activeIndex2: '1',
@@ -57,16 +58,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$off-white: #f8f5f2;
+$off-black: #1b1a1a;
+
 .el-menu-demo .el-menu-navlist {
   float: right;
 
   a {
     text-decoration: none;
+    color: $off-white;
   }
+}
+
+.el-menu.el-menu--horizontal {
+  border-bottom: solid 1px $off-black;
 }
 
 .el-menu--horizontal > .el-menu-item a {
   text-decoration: none;
+  color: $off-white;
 }
 
 .item {
@@ -76,5 +86,9 @@ export default {
 
 .shopping-bag {
   position: absolute;
+}
+
+.svg-inline--fa {
+  color: $off-white;
 }
 </style>
