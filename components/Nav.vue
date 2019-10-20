@@ -19,7 +19,7 @@
         <el-menu-item index="2-1">profile</el-menu-item>
         <el-menu-item index="2-2">history</el-menu-item>
       </el-submenu>
-      <el-menu-item index="3" class="el-menu-navlist" @click="drawer = true">
+      <el-menu-item index="3" class="el-menu-navlist" @click="cartDrawer = true">
         <el-badge :value="cartTotal" class="item">
           <font-awesome-icon icon="shopping-bag" class="shopping-bag" />
         </el-badge>
@@ -28,27 +28,35 @@
         <nuxt-link to="/orders">Orders</nuxt-link>
       </el-menu-item>
     </el-menu>
-    <!-- <items-nav /> -->
-
-    <el-drawer title="Cart" :visible.sync="drawer" size="35%">
+    <product-categories :categories="categories" />
+    <el-drawer title="Your Shopping Cart" :visible.sync="cartDrawer" size="35%">
       <div>me</div>
     </el-drawer>
   </div>
 </template>
 
 <script>
-// import ItemsNav from './ItemsNav'
+import ProductCategories from './ProductCategories'
+
 export default {
-  // components: {
-  //   ItemsNav
-  // },
+  components: {
+    ProductCategories
+  },
+
   data() {
     return {
       activeIndex2: '1',
       cartTotal: 1,
-      drawer: false
+      cartDrawer: false,
+      categories: []
     }
   },
+
+  async mounted() {
+    const categories = await this.$axios.$get('/api/categories')
+    this.categories = categories
+  },
+
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath)

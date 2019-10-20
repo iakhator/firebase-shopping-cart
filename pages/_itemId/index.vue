@@ -10,6 +10,11 @@ export default {
     }
   },
 
+  async asyncData({ $axios }) {
+    const categories = await $axios.$get('/api/categories')
+    console.log(categories)
+  },
+
   created() {
     this.itemId = this.$route.params.itemId
   }
