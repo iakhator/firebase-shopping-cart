@@ -5,10 +5,10 @@ const serviceAccount = require('./serviceAccountKey.js')
 require('firebase/auth')
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCXYFZ4uwp-2-Oxmy5pDyic8r0n8j3OocM',
+  apiKey: process.env.API_KEY,
   authDomain: process.env.DATABASE_URL,
-  databaseURL: 'https://fireapp-27b00.firebaseio.com',
-  projectId: 'fireapp-27b00',
+  databaseURL: process.env.DATABASE_URL,
+  projectId: process.env.PROJECT_ID,
   storageBucket: process.env.STORAGE_BUCKET,
   messagingSenderId: '1031298048826',
   appId: '1:1031298048826:web:a8032c2f3e357314'
