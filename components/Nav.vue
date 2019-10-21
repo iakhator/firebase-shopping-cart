@@ -54,7 +54,7 @@ export default {
 
   async mounted() {
     const categories = await this.$axios.$get('/api/categories')
-    this.categories = categories
+    this.categories = categories.categories
   },
 
   methods: {

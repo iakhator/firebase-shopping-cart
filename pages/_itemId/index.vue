@@ -1,8 +1,10 @@
 <template>
-  <div>{{ itemId }}</div>
+  <product-list :products="categoryProducts" />
 </template>
 
 <script>
+import ProductList from '../../components/ProductList'
+
 export default {
   data() {
     return {
@@ -10,13 +12,13 @@ export default {
     }
   },
 
-  async asyncData({ $axios }) {
-    const categories = await $axios.$get('/api/categories')
-    console.log(categories)
+  components: {
+    ProductList
   },
 
-  created() {
-    this.itemId = this.$route.params.itemId
+  async asyncData({ $axios, params }) {
+    const categoryProducts = await $axios.$get(`/api/category/${params.itemId}`)
+    return categoryProducts
   }
 }
 </script>

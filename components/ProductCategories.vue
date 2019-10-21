@@ -1,11 +1,11 @@
 <template>
   <el-tabs v-model="activeName" @tab-click="handleClick">
-    <el-tab-pane label="All" name="all" />
-    <el-tab-pane label="Samsung" name="samsung" />
-    <el-tab-pane label="Xiaomi" name="xiaomi" />
-    <el-tab-pane label="Iphone" name="iphone" />
-    <el-tab-pane label="Lg" name="lg" />
-    {{ categories }}
+    <el-tab-pane
+      v-for="category in categories"
+      :key="category.id"
+      :label="category.name"
+      :name="category.id"
+    />
   </el-tabs>
 </template>
 
@@ -13,7 +13,7 @@
 export default {
   props: {
     categories: {
-      type: Object,
+      type: Array,
       required: true
     }
   },
