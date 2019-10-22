@@ -9,8 +9,8 @@ export default {
   components: { ProductList },
 
   async asyncData({ $axios }) {
-    const products = await $axios.$get('/api/products')
-    return products
+    const { data } = await $axios.$get('/api/products')
+    return { products: data }
   }
 }
 </script>

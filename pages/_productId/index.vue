@@ -6,19 +6,19 @@
 import ProductList from '../../components/ProductList'
 
 export default {
-  data() {
-    return {
-      itemId: ''
-    }
-  },
-
   components: {
     ProductList
   },
 
+  data() {
+    return {
+      productId: ''
+    }
+  },
+
   async asyncData({ $axios, params }) {
-    const categoryProducts = await $axios.$get(`/api/category/${params.itemId}`)
-    return categoryProducts
+    const { data } = await $axios.$get(`/api/category/${params.productId}`)
+    return { categoryProducts: data }
   }
 }
 </script>

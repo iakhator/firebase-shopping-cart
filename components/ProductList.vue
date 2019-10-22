@@ -3,7 +3,7 @@
     <div class="product__grid-right">
       <ul class="product__grid-w">
         <li v-for="item in products" :key="item.uid" class="product__grid-w__list">
-          <a class="_p" :href="`/product/${item.categoryId}/${item.id}`">
+          <a class="_p" :href="`/${item.categoryId}/${item.id}`">
             <span class="product__grid-w__list-img">
               <img :src="item.imageUrl" alt />
             </span>
@@ -20,7 +20,6 @@
 export default {
   props: {
     products: {
-      type: Array,
       required: true
     }
   },

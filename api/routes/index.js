@@ -1,6 +1,6 @@
 const express = require('express')
 const { signUp, signIn } = require('../controllers/User')
-const { getProducts } = require('../controllers/Product')
+const { getProducts, getProduct } = require('../controllers/Product')
 
 const {
   getCategories,
@@ -15,6 +15,7 @@ router.post('/signin', signIn)
 
 // product route
 router.get('/products', getProducts)
+router.get('/products/:productId', getProduct)
 
 // category route
 router.get('/categories', getCategories)

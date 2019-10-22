@@ -40,6 +40,18 @@ ul {
   font-size: 100%;
 }
 
+button,
+input,
+select,
+textarea {
+  display: block;
+  box-sizing: border-box;
+  border-radius: 0;
+  outline: none;
+  border: none;
+  background: none;
+  color: inherit;
+}
 ul {
   display: block;
   margin-block-start: 1em;

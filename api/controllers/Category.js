@@ -1,4 +1,5 @@
 const { db } = require('../config/firebaseConfig')
+const { foundSuccess } = require('../helpers/errorHandlers')
 
 exports.getCategories = async (req, res) => {
   try {
@@ -9,9 +10,7 @@ exports.getCategories = async (req, res) => {
       categories.push({ ...cat.data(), id: cat.id })
     })
 
-    res.status(200).json({
-      categories
-    })
+    foundSuccess(res, categories)
   } catch (error) {
     console.log(error)
   }
@@ -30,10 +29,7 @@ exports.getCategoryProducts = async (req, res) => {
     catProducts.forEach((doc) => {
       categoryProducts.push({ ...doc.data(), id: doc.id })
     })
-
-    res.status(200).json({
-      categoryProducts
-    })
+    foundSuccess(res, categoryProducts)
   } catch (error) {
     console.error(error)
   }

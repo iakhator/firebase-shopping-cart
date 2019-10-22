@@ -1,4 +1,5 @@
 const { db, admin, bucket } = require('../config/firebaseConfig')
+const { notFound, foundSuccess } = require('../helpers/errorHandlers')
 
 exports.getProducts = async (req, res) => {
   try {
@@ -7,10 +8,17 @@ exports.getProducts = async (req, res) => {
     allProducts.forEach((product) => {
       products.push({ ...product.data(), id: product.id })
     })
+    foundSuccess(res, products)
+  } catch (error) {
+    console.error(error)
+  }
+}
 
-    res.status(200).json({
-      products
-    })
+exports.getProduct = async (req, res) => {
+  try {
+    const products = await db.collection('products').doc(req.params.productId)
+    const product = await products.get()
+    foundSuccess(res, product.data())
   } catch (error) {
     console.error(error)
   }

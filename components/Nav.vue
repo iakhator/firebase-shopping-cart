@@ -12,17 +12,14 @@
       <el-menu-item index="1" class="el-menu-logo">
         <nuxt-link to="/">Shop Center</nuxt-link>
       </el-menu-item>
-      <el-submenu index="2" class="el-menu-navlist">
-        <template slot="title">
-          <font-awesome-icon icon="user" />
-        </template>
-        <el-menu-item index="2-1">profile</el-menu-item>
-        <el-menu-item index="2-2">history</el-menu-item>
-      </el-submenu>
       <el-menu-item index="3" class="el-menu-navlist" @click="cartDrawer = true">
         <el-badge :value="cartTotal" class="item">
           <font-awesome-icon icon="shopping-bag" class="shopping-bag" />
         </el-badge>
+      </el-menu-item>
+      <el-menu-item index="2" class="el-menu-navlist" @click="accountDrawer = true">
+        Account
+        <font-awesome-icon icon="user" />
       </el-menu-item>
       <el-menu-item index="4" class="el-menu-navlist">
         <nuxt-link to="/orders">Orders</nuxt-link>
@@ -31,6 +28,9 @@
     <product-categories :categories="categories" />
     <el-drawer title="Your Shopping Cart" :visible.sync="cartDrawer" size="35%">
       <div>me</div>
+    </el-drawer>
+    <el-drawer title="Sign In" :visible.sync="accountDrawer" size="35%">
+      <div>Account</div>
     </el-drawer>
   </div>
 </template>
@@ -48,13 +48,14 @@ export default {
       activeIndex2: '1',
       cartTotal: 1,
       cartDrawer: false,
+      accountDrawer: false,
       categories: []
     }
   },
 
   async mounted() {
     const categories = await this.$axios.$get('/api/categories')
-    this.categories = categories.categories
+    this.categories = categories.data
   },
 
   methods: {
