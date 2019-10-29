@@ -133,6 +133,14 @@ body {
   &__list {
     width: 18.95833vw;
 
+    a:hover {
+      border: 1px solid #e4e7ed;
+      padding: 13px;
+      border-radius: 5px;
+      box-shadow: 0 2px 9px #000000;
+      transition: padding 0.1s ease-in;
+    }
+
     span {
       display: block;
       pointer-events: none;

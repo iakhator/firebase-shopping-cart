@@ -18,7 +18,7 @@ exports.getProduct = async (req, res) => {
   try {
     const products = await db.collection('products').doc(req.params.productId)
     const product = await products.get()
-    foundSuccess(res, product.data())
+    foundSuccess(res, { ...product.data(), id: product.id })
   } catch (error) {
     console.error(error)
   }
