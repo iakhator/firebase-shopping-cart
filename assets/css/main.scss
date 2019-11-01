@@ -137,7 +137,7 @@ body {
       border: 1px solid #e4e7ed;
       padding: 13px;
       border-radius: 5px;
-      box-shadow: 0 2px 9px #000000;
+      box-shadow: 0 2px 9px #cdcdcd;
       transition: padding 0.1s ease-in;
     }
 
@@ -172,4 +172,23 @@ body {
       line-height: 0.90278vw;
     }
   }
+}
+
+.el-input-number__decrease:hover:not(.is-disabled)
+  ~ .el-input
+  .el-input__inner:not(.is-disabled),
+.el-input-number__increase:hover:not(.is-disabled)
+  ~ .el-input
+  .el-input__inner:not(.is-disabled) {
+  border-color: none;
+}
+
+.el-input-number__decrease:hover,
+.el-input-number__increase:hover {
+  color: $off-black;
+}
+
+.el-input__inner {
+  background-color: $off-white;
+  color: $off-black;
 }

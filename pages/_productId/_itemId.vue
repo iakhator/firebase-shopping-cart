@@ -17,18 +17,22 @@
           {{ specification }}
         </p>
       </div>
-      <div>
+      <div class="variant">
         <el-form ref="form" :model="form">
-          <el-form-item label="Variant" class="item__contents-spec__variant">
-            <el-radio-group v-model="form.variant">
-              <el-radio
-                v-for="variant in item.variant"
-                :key="variant"
-                :label="variant"
-                :value="variant"
-              ></el-radio>
-            </el-radio-group>
-          </el-form-item>
+          <div class="item__contents-price">
+            <span class="item__contents-spec-variant">Quantity :</span>
+            <el-input-number v-model="form.num" @change="handleChange" :min="1" :max="3"></el-input-number>
+          </div>
+          <p class="item__contents-spec-variant">Select variant:</p>
+          <el-radio-group v-model="form.variant">
+            <el-radio-button
+              v-for="variant in item.variant"
+              :key="variant"
+              :label="variant"
+              :value="variant"
+              size="small"
+            ></el-radio-button>
+          </el-radio-group>
         </el-form>
       </div>
     </el-col>
@@ -41,7 +45,8 @@ export default {
     return {
       itemId: '',
       form: {
-        variant: ''
+        variant: '',
+        num: 1
       }
     }
   },
@@ -49,6 +54,12 @@ export default {
   async asyncData({ $axios, params }) {
     const { data } = await $axios.$get(`/api/products/${params.itemId}`)
     return { item: data }
+  },
+
+  methods: {
+    handleChange(value) {
+      console.log(value)
+    }
   }
 }
 </script>
@@ -57,6 +68,7 @@ export default {
 // variables
 $font-weight-bold: 600;
 $off-black: #1b1a1a;
+$gray: #dcdfe6;
 
 .item__contents {
   padding: 2px 35px;
@@ -67,6 +79,17 @@ $off-black: #1b1a1a;
 
   &-specifications {
     margin-top: 20px;
+    position: relative;
+
+    &:after {
+      content: '';
+      width: 100%;
+      border-bottom: solid 1px $gray;
+      position: absolute;
+      left: 0;
+      top: 107%;
+      z-index: 99;
+    }
 
     p {
       margin-bottom: 4px;
@@ -78,26 +101,27 @@ $off-black: #1b1a1a;
   }
 }
 
-.el-form-item__label {
-  font-size: 16px;
-  color: $off-black !important;
+.variant {
+  margin-top: 20px;
 }
 
-.el-radio {
-  margin-right: 15px;
+.item__contents-spec-variant {
+  font-weight: $font-weight-bold;
+  margin-bottom: 5px;
 }
 
-.el-radio__input.is-checked .el-radio__inner {
-  border-color: $off-black;
-  background: $off-black;
-}
+.item__contents-price {
+  position: relative;
+  margin-bottom: 18px;
 
-.el-radio__inner {
-  width: 18px !important;
-  height: 18px !important;
-}
-
-.el-radio__input.is-checked + .el-radio__label {
-  color: $off-black;
+  &:after {
+    content: '';
+    width: 100%;
+    border-bottom: solid 1px $gray;
+    position: absolute;
+    left: 0;
+    top: 120%;
+    z-index: 99;
+  }
 }
 </style>
