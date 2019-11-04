@@ -1,6 +1,7 @@
 const express = require('express')
 const { signUp, signIn } = require('../controllers/User')
 const { getProducts, getProduct } = require('../controllers/Product')
+const authMiddleware = require('../middlewares/authMiddleware')
 
 const {
   getCategories,

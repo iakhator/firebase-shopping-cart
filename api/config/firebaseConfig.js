@@ -1,4 +1,4 @@
-const dotEnv = require('dotenv').config()
+require('dotenv').config()
 const admin = require('firebase-admin')
 const firebase = require('firebase/app')
 const serviceAccount = require('./serviceAccountKey.js')
