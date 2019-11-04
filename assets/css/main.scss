@@ -183,12 +183,36 @@ body {
   border-color: none;
 }
 
+.el-radio-button__orig-radio:checked + .el-radio-button__inner {
+  color: #fff;
+  background-color: $off-black;
+  border-color: $off-black;
+  box-shadow: -1px 0 0 0 $off-black;
+}
+
+.el-radio-button__inner:hover {
+  color: $off-black;
+}
+
+.el-input-number__decrease,
+.el-input-number__increase {
+  background: $off-black;
+  color: #ffffff;
+  border-radius: 50%;
+}
+
 .el-input-number__decrease:hover,
 .el-input-number__increase:hover {
-  color: $off-black;
+  color: #ffffff;
 }
 
 .el-input__inner {
   background-color: $off-white;
   color: $off-black;
+  border: none;
+}
+
+.el-input-number .el-input__inner {
+  padding-right: 0px;
+  padding-left: 0px;
 }

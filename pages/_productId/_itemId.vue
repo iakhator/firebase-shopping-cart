@@ -19,10 +19,16 @@
       </div>
       <div class="variant">
         <el-form ref="form" :model="form">
-          <div class="item__contents-price">
+          <div class="item__contents-quantity">
             <span class="item__contents-spec-variant">Quantity :</span>
-            <el-input-number v-model="form.num" @change="handleChange" :min="1" :max="3"></el-input-number>
+            <el-input-number v-model="form.num" :min="1" :max="3" @change="handleChange"></el-input-number>
           </div>
+
+          <div class="item__contents-quantity">
+            <span class="item__contents-quantity-label">Price :</span>
+            <span class="item__contents-quantity-price">{{ itemPrice | toUSD }}</span>
+          </div>
+
           <p class="item__contents-spec-variant">Select variant:</p>
           <el-radio-group v-model="form.variant">
             <el-radio-button
@@ -48,6 +54,12 @@ export default {
         variant: '',
         num: 1
       }
+    }
+  },
+
+  computed: {
+    itemPrice() {
+      return this.item.price * this.form.num
     }
   },
 
@@ -80,6 +92,7 @@ $gray: #dcdfe6;
   &-specifications {
     margin-top: 20px;
     position: relative;
+    font-size: 0.89rem;
 
     &:after {
       content: '';
@@ -108,11 +121,13 @@ $gray: #dcdfe6;
 .item__contents-spec-variant {
   font-weight: $font-weight-bold;
   margin-bottom: 5px;
+  font-size: 0.89rem;
 }
 
-.item__contents-price {
+.item__contents-quantity {
   position: relative;
   margin-bottom: 18px;
+  font-size: 0.89rem;
 
   &:after {
     content: '';
@@ -122,6 +137,15 @@ $gray: #dcdfe6;
     left: 0;
     top: 120%;
     z-index: 99;
+  }
+
+  &-price {
+    font-weight: 600;
+    font-size: 1.2rem;
+  }
+
+  &-label {
+    font-weight: 600;
   }
 }
 </style>
