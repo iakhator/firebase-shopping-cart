@@ -216,3 +216,51 @@ body {
   padding-right: 0px;
   padding-left: 0px;
 }
+
+// drawer
+
+.el-drawer__header {
+  margin: auto;
+  padding: 5vw 0 5.55556vw;
+  width: 22.36111vw;
+}
+.el-drawer__body {
+  position: relative;
+  margin: auto;
+  padding: 0 0 5.55556vw;
+  width: 22.36111vw;
+}
+
+// button
+
+.el-button {
+  background: $off-white;
+  color: $off-black;
+  border: 1px solid $off-black;
+  display: flex;
+  text-transform: uppercase;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  font-weight: 500;
+  box-sizing: border-box;
+  overflow: hidden;
+  cursor: pointer;
+  pointer-events: all;
+  transition: opacity 4s ease-in;
+}
+
+.el-button.action-button-buy {
+  color: $off-white;
+  background-color: $off-black;
+}
+
+.el-button.no__cart-btn:focus,
+.el-button.no__cart-btn:hover,
+.el-button.action-button-cart:focus,
+.el-button.action-button-cart:hover {
+  color: $off-white;
+  border-color: $off-black;
+  background-color: $off-black;
+}

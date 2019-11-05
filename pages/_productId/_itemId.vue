@@ -17,8 +17,8 @@
           {{ specification }}
         </p>
       </div>
-      <div class="variant">
-        <el-form ref="form" :model="form">
+      <el-form ref="form" :model="form">
+        <div class="variant">
           <div class="item__contents-quantity">
             <span class="item__contents-spec-variant">Quantity :</span>
             <el-input-number v-model="form.num" :min="1" :max="3" @change="handleChange"></el-input-number>
@@ -29,18 +29,24 @@
             <span class="item__contents-quantity-price">{{ itemPrice | toUSD }}</span>
           </div>
 
-          <p class="item__contents-spec-variant">Select variant:</p>
-          <el-radio-group v-model="form.variant">
-            <el-radio-button
-              v-for="variant in item.variant"
-              :key="variant"
-              :label="variant"
-              :value="variant"
-              size="small"
-            ></el-radio-button>
-          </el-radio-group>
-        </el-form>
-      </div>
+          <div class="item__contents-variant">
+            <p class="item__contents-spec-variant">Select variant:</p>
+            <el-radio-group v-model="form.variant">
+              <el-radio-button
+                v-for="variant in item.variant"
+                :key="variant"
+                :label="variant"
+                :value="variant"
+                size="small"
+              ></el-radio-button>
+            </el-radio-group>
+          </div>
+        </div>
+        <div class="action-button">
+          <el-button round class="action-button-cart" @click="addToCart">Add to cart</el-button>
+          <el-button round class="action-button-buy">Buy now</el-button>
+        </div>
+      </el-form>
     </el-col>
   </el-row>
 </template>
@@ -63,14 +69,23 @@ export default {
     }
   },
 
-  async asyncData({ $axios, params }) {
-    const { data } = await $axios.$get(`/api/products/${params.itemId}`)
-    return { item: data }
+  async asyncData({ $axios, params, error }) {
+    try {
+      const { data } = await $axios.$get(`/api/products/${params.itemId}`)
+      return { item: data }
+    } catch (err) {
+      error({ statusCode: 404, message: 'Post not found' })
+    }
   },
 
   methods: {
     handleChange(value) {
       console.log(value)
+    },
+
+    addToCart() {
+      // console.log(this.item)
+      this.$bus.$emit('add-to-cart', this.item)
     }
   }
 }
@@ -124,9 +139,23 @@ $gray: #dcdfe6;
   font-size: 0.89rem;
 }
 
+.item__contents-variant {
+  position: relative;
+  margin-top: 18px;
+  &:after {
+    content: '';
+    width: 100%;
+    border-bottom: solid 1px $gray;
+    position: absolute;
+    left: 0;
+    top: 120%;
+    z-index: 99;
+  }
+}
+
 .item__contents-quantity {
   position: relative;
-  margin-bottom: 18px;
+  margin-top: 18px;
   font-size: 0.89rem;
 
   &:after {
@@ -147,5 +176,12 @@ $gray: #dcdfe6;
   &-label {
     font-weight: 600;
   }
+}
+
+.action-button {
+  display: flex;
+  margin-top: 25px;
+  align-items: center;
+  justify-content: center;
 }
 </style>

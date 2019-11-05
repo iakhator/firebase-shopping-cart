@@ -1,6 +1,7 @@
 const express = require('express')
 const { signUp, signIn } = require('../controllers/User')
 const { getProducts, getProduct } = require('../controllers/Product')
+const { addToCart, getCart } = require('../controllers/Cart')
 const authMiddleware = require('../middlewares/authMiddleware')
 
 const {
@@ -17,6 +18,10 @@ router.post('/signin', signIn)
 // product route
 router.get('/products', getProducts)
 router.get('/products/:productId', getProduct)
+
+// cart route
+router.post('/cart', addToCart)
+router.get('/cart', getCart)
 
 // category route
 router.get('/categories', getCategories)

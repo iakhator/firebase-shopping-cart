@@ -19,15 +19,21 @@
       </el-menu-item>
       <el-menu-item index="2" class="el-menu-navlist" @click="accountDrawer = true">
         Account
-        <font-awesome-icon icon="user" />
+        <font-awesome-icon icon="user" class="user" />
       </el-menu-item>
       <el-menu-item index="4" class="el-menu-navlist">
         <nuxt-link to="/orders">Orders</nuxt-link>
       </el-menu-item>
     </el-menu>
     <product-categories :categories="categories" />
-    <el-drawer title="Your Shopping Cart" :visible.sync="cartDrawer" size="35%">
-      <div>me</div>
+    <el-drawer title="Your Shopping Cart" :visible.sync="cartDrawer" size="35%" class="cart__body">
+      <div v-show="emptyCart">
+        <h6>Your bag is empty</h6>
+        <font-awesome-icon icon="shopping-bag" class="no__cart" />
+        <el-button round class="no__cart-btn" @click="cartDrawer=false">
+          <nuxt-link to="/">Browse Products</nuxt-link>
+        </el-button>
+      </div>
     </el-drawer>
     <el-drawer title="Sign In" :visible.sync="accountDrawer" size="35%">
       <div>Account</div>
@@ -46,16 +52,30 @@ export default {
   data() {
     return {
       activeIndex2: '1',
-      cartTotal: 1,
+      cartTotal: 0,
       cartDrawer: false,
       accountDrawer: false,
       categories: []
     }
   },
 
+  computed: {
+    emptyCart() {
+      return this.cartTotal <= 0
+    }
+  },
+
   async mounted() {
     const categories = await this.$axios.$get('/api/categories')
     this.categories = categories.data
+  },
+
+  created() {
+    this.$bus.$on('add-to-cart', value => {
+      const cartItems = []
+      cartItems.push(value)
+      this.cartTotal += cartItems.length
+    })
   },
 
   methods: {
@@ -99,5 +119,33 @@ $off-black: #1b1a1a;
 
 .svg-inline--fa {
   color: $off-white;
+}
+
+.no__cart {
+  color: $off-black;
+  width: 5.83333vw;
+  height: 13.33333vh;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  opacity: 0.3;
+
+  path {
+    stroke: rgb(0, 0, 0);
+    stroke-width: 5;
+    fill: none;
+    stroke-linecap: round;
+    fill-rule: evenodd;
+  }
+
+  &-btn {
+    position: absolute;
+    bottom: 0;
+    margin: 0 0 50px;
+    min-height: 40px;
+    width: 100%;
+  }
 }
 </style>

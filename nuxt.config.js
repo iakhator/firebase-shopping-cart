@@ -43,7 +43,8 @@ module.exports = {
   plugins: [
     '@/plugins/element-ui',
     '@/plugins/font-awesome',
-    '@/plugins/custom-filter'
+    '@/plugins/custom-filter',
+    '@/plugins/bus'
   ],
   /*
    ** Nuxt.js modules

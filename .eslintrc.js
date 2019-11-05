@@ -20,6 +20,12 @@ module.exports = {
       }
     ],
     'no-console': 'off',
+    'arrow-parens': [
+      0,
+      {
+        requireForBlockBody: 'as-needed'
+      }
+    ],
     'vue/html-self-closing': [
       {
         html: {
