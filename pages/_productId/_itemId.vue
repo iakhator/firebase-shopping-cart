@@ -83,7 +83,7 @@ export default {
     ...mapMutations(['ADD_ITEM']),
 
     addToCart() {
-      console.log(this.$store.commit('ADD_ITEM', this.form.num))
+      this.ADD_ITEM(this.form.num)
     }
   }
 }
