@@ -13,7 +13,7 @@
         <nuxt-link to="/">Shop Center</nuxt-link>
       </el-menu-item>
       <el-menu-item index="3" class="el-menu-navlist" @click="cartDrawer = true">
-        <el-badge :value="cartTotal" class="item">
+        <el-badge :value="quantity" class="item">
           <font-awesome-icon icon="shopping-bag" class="shopping-bag" />
         </el-badge>
       </el-menu-item>
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import ProductCategories from './ProductCategories'
 
 export default {
@@ -52,7 +53,6 @@ export default {
   data() {
     return {
       activeIndex2: '1',
-      cartTotal: 0,
       cartDrawer: false,
       accountDrawer: false,
       categories: []
@@ -60,22 +60,15 @@ export default {
   },
 
   computed: {
+    ...mapState(['quantity']),
     emptyCart() {
-      return this.cartTotal <= 0
+      return this.$store.state.quantity <= 0
     }
   },
 
   async mounted() {
     const categories = await this.$axios.$get('/api/categories')
     this.categories = categories.data
-  },
-
-  created() {
-    this.$bus.$on('add-to-cart', value => {
-      const cartItems = []
-      cartItems.push(value)
-      this.cartTotal += cartItems.length
-    })
   },
 
   methods: {

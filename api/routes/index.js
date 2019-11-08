@@ -20,8 +20,8 @@ router.get('/products', getProducts)
 router.get('/products/:productId', getProduct)
 
 // cart route
-router.post('/cart', addToCart)
-router.get('/cart', getCart)
+router.post('/cart/:productId', addToCart)
+router.get('/cart/:userId', getCart)
 
 // category route
 router.get('/categories', getCategories)

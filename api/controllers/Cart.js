@@ -1,5 +1,11 @@
-const { db, admin } = require('../config/firebaseConfig')
+const { db } = require('../config/firebaseConfig')
 
-exports.addToCart = (req, res) => {}
+exports.addToCart = async (req, res) => {
+  try {
+    const cart = db.collection
+  } catch (error) {
+    console.error(error)
+  }
+}
 
 exports.getCart = (req, res) => {}

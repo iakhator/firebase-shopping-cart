@@ -21,7 +21,7 @@
         <div class="variant">
           <div class="item__contents-quantity">
             <span class="item__contents-spec-variant">Quantity :</span>
-            <el-input-number v-model="form.num" :min="1" :max="3" @change="handleChange"></el-input-number>
+            <el-input-number v-model="form.num" :min="1" :max="3"></el-input-number>
           </div>
 
           <div class="item__contents-quantity">
@@ -52,13 +52,14 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   data() {
     return {
       itemId: '',
       form: {
         variant: '',
-        num: 1
+        num: ''
       }
     }
   },
@@ -79,13 +80,10 @@ export default {
   },
 
   methods: {
-    handleChange(value) {
-      console.log(value)
-    },
+    ...mapMutations(['ADD_ITEM']),
 
     addToCart() {
-      // console.log(this.item)
-      this.$bus.$emit('add-to-cart', this.item)
+      console.log(this.$store.commit('ADD_ITEM', this.form.num))
     }
   }
 }
