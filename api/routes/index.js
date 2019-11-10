@@ -21,7 +21,7 @@ router.get('/products/:productId', getProduct)
 
 // cart route
 router.post('/cart/:productId', addToCart)
-router.get('/cart/:userId', getCart)
+router.get('/cart', getCart)
 
 // category route
 router.get('/categories', getCategories)

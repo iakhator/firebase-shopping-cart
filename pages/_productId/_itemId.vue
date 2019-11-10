@@ -83,7 +83,20 @@ export default {
     ...mapMutations(['ADD_ITEM']),
 
     addToCart() {
-      this.ADD_ITEM(this.form.num)
+      // this.ADD_ITEM(this.form.num)
+      const cartObject = {
+        variantId: this.form.variant,
+        quantity: this.form.num,
+        price: this.item.price
+      }
+      this.$axios
+        .post(`/api/cart/${this.$route.params.itemId}`, cartObject)
+        .then(data => {
+          console.log(data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
 }

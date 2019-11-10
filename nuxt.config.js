@@ -1,3 +1,6 @@
+const session = require('express-session')
+const bodyParser = require('body-parser')
+
 module.exports = {
   mode: 'universal',
   /*
@@ -69,5 +72,14 @@ module.exports = {
      */
     extend(config, ctx) {}
   },
-  serverMiddleware: ['~/api/index.js']
+  serverMiddleware: [
+    bodyParser.json(),
+    session({
+      secret: 'super-secret-key',
+      resave: false,
+      saveUninitialized: false,
+      cookie: { maxAge: 604800000 }
+    }),
+    '~/api/index.js'
+  ]
 }
