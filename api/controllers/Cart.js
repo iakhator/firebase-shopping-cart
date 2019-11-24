@@ -9,13 +9,14 @@ function Cart(oldCart) {
     let storedItem = this.items[id]
     if (!storedItem) {
       storedItem = this.items[id] = item
-      this.totalQty++
+      this.totalQty += storedItem.quantity
       this.totalPrice += storedItem.price
+      return
     }
-    storedItem.quantity++
-    storedItem.price = storedItem.price * storedItem.quantity
-    this.totalQty++
-    this.totalPrice += storedItem.price
+    storedItem.quantity += item.quantity
+    storedItem.price = item.price * storedItem.quantity
+    // this.totalQty++
+    // this.totalPrice = this.totalPrice * this.totalQty
   }
 
   this.generateArray = function () {
@@ -29,7 +30,7 @@ function Cart(oldCart) {
 
 exports.addToCart = (req, res) => {
   const productId = req.params.productId
-  const cart = new Cart(req.session.cart ? req.session.cart : { items: {} })
+  const cart = new Cart(req.session.cart ? req.session.cart : {})
   cart.add(req.body, productId)
   req.session.cart = cart
   res.json(req.session.cart)
