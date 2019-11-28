@@ -2,21 +2,26 @@ const { db } = require('../config/firebaseConfig')
 
 function Cart(oldCart) {
   this.items = oldCart.items || {}
-  this.totalQty = oldCart.quantity || 0
-  this.totalPrice = oldCart.price || 0
+  this.totalQty = oldCart.totalQty || 0
+  this.totalPrice = oldCart.totalPrice || 0
 
   this.add = function (item, id) {
     let storedItem = this.items[id]
+    let add = 0
+
     if (!storedItem) {
       storedItem = this.items[id] = item
-      this.totalQty += storedItem.quantity
-      this.totalPrice += storedItem.price
-      return
+      storedItem.price = item.price * storedItem.quantity
+    } else {
+      storedItem.quantity += item.quantity
+      storedItem.price = item.price * storedItem.quantity
     }
-    storedItem.quantity += item.quantity
-    storedItem.price = item.price * storedItem.quantity
-    // this.totalQty++
-    // this.totalPrice = this.totalPrice * this.totalQty
+
+    this.totalQty += item.quantity
+     for(const obj in this.items){
+       add += this.items[obj].price
+     }
+     this.totalPrice = add
   }
 
   this.generateArray = function () {
@@ -38,6 +43,8 @@ exports.addToCart = (req, res) => {
 
 exports.getCart = (req, res) => {
   if (req.session.cart) {
-    res.json(req.session.cart)
+    const cart = new Cart(req.session.cart)
+    const cartItem = cart.generateArray(cart)
+    res.json({cartItem, totalQty: cart.totalQty, totalPrice: cart.totalPrice})
   }
 }
