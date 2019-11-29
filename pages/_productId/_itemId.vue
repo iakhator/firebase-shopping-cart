@@ -87,16 +87,22 @@ export default {
       const cartObject = {
         variantId: this.form.variant,
         quantity: this.form.num,
-        price: this.item.price
+        title: this.item.itemTitle,
+        price: this.item.price,
+        itemPhoto: this.item.imageUrl
       }
       this.$axios
         .post(`/api/cart/${this.$route.params.itemId}`, cartObject)
+        .then(data => {
+          return this.$axios.get('/api/cart/')
+        })
         .then(data => {
           console.log(data)
         })
         .catch(err => {
           console.log(err)
         })
+      // console.log(this.item, cartObject)
     }
   }
 }

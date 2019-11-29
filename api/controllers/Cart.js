@@ -18,10 +18,10 @@ function Cart(oldCart) {
     }
 
     this.totalQty += item.quantity
-     for(const obj in this.items){
-       add += this.items[obj].price
-     }
-     this.totalPrice = add
+    for (const obj in this.items) {
+      add += this.items[obj].price
+    }
+    this.totalPrice = add
   }
 
   this.generateArray = function () {
@@ -45,6 +45,6 @@ exports.getCart = (req, res) => {
   if (req.session.cart) {
     const cart = new Cart(req.session.cart)
     const cartItem = cart.generateArray(cart)
-    res.json({cartItem, totalQty: cart.totalQty, totalPrice: cart.totalPrice})
+    res.json({ cartItem, totalQty: cart.totalQty, totalPrice: cart.totalPrice })
   }
 }
