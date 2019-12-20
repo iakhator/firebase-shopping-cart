@@ -14,7 +14,9 @@
       </el-menu-item>
       <el-menu-item index="3" class="el-menu-navlist" @click="cartDrawer = true">
         <el-badge :value="quantity" class="item">
-          <font-awesome-icon icon="shopping-bag" class="shopping-bag" />
+          <!-- <img class="shopping-bag" src="@/assets/images/shopping-bag.svg"> -->
+          <!-- <font-awesome-icon icon="shopping-bag" class="shopping-bag" /> -->
+          <shopping-bag />
         </el-badge>
       </el-menu-item>
       <el-menu-item index="2" class="el-menu-navlist" @click="accountDrawer = true">
@@ -29,7 +31,7 @@
     <el-drawer title="Your Shopping Cart" :visible.sync="cartDrawer" size="35%" class="cart__body">
       <div v-show="emptyCart">
         <h6>Your bag is empty</h6>
-        <font-awesome-icon icon="shopping-bag" class="no__cart" />
+        <img class="no__cart" src="@/assets/images/shopping-bag.png">
         <el-button round class="no__cart-btn" @click="cartDrawer=false">
           <nuxt-link to="/">Browse Products</nuxt-link>
         </el-button>
@@ -44,10 +46,12 @@
 <script>
 import { mapState } from 'vuex'
 import ProductCategories from './ProductCategories'
+import ShoppingBag from './icons/ShoppingBag'
 
 export default {
   components: {
-    ProductCategories
+    ProductCategories,
+    ShoppingBag
   },
 
   data() {
@@ -115,23 +119,13 @@ $off-black: #1b1a1a;
 }
 
 .no__cart {
-  color: $off-black;
-  width: 5.83333vw;
+  width: 10.83333vw;
   height: 13.33333vh;
   position: absolute;
   top: 40%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  opacity: 0.3;
-
-  path {
-    stroke: rgb(0, 0, 0);
-    stroke-width: 5;
-    fill: none;
-    stroke-linecap: round;
-    fill-rule: evenodd;
-  }
 
   &-btn {
     position: absolute;
