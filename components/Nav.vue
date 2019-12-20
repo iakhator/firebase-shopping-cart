@@ -21,7 +21,7 @@
       </el-menu-item>
       <el-menu-item index="2" class="el-menu-navlist" @click="accountDrawer = true">
         Account
-        <font-awesome-icon icon="user" class="user" />
+        <user-icon />
       </el-menu-item>
       <el-menu-item index="4" class="el-menu-navlist">
         <nuxt-link to="/orders">Orders</nuxt-link>
@@ -47,11 +47,13 @@
 import { mapState } from 'vuex'
 import ProductCategories from './ProductCategories'
 import ShoppingBag from './icons/ShoppingBag'
+import UserIcon from './icons/UserIcon'
 
 export default {
   components: {
     ProductCategories,
-    ShoppingBag
+    ShoppingBag,
+    UserIcon
   },
 
   data() {
