@@ -14,8 +14,6 @@
       </el-menu-item>
       <el-menu-item index="3" class="el-menu-navlist" @click="cartDrawer = true">
         <el-badge :value="quantity" class="item">
-          <!-- <img class="shopping-bag" src="@/assets/images/shopping-bag.svg"> -->
-          <!-- <font-awesome-icon icon="shopping-bag" class="shopping-bag" /> -->
           <shopping-bag />
         </el-badge>
       </el-menu-item>
@@ -28,17 +26,12 @@
       </el-menu-item>
     </el-menu>
     <product-categories :categories="categories" />
+
     <el-drawer title="Your Shopping Cart" :visible.sync="cartDrawer" size="35%" class="cart__body">
-      <div v-show="emptyCart">
-        <h6>Your bag is empty</h6>
-        <img class="no__cart" src="@/assets/images/shopping-bag.png">
-        <el-button round class="no__cart-btn" @click="cartDrawer=false">
-          <nuxt-link to="/">Browse Products</nuxt-link>
-        </el-button>
-      </div>
+      <cart-drawer :empty-cart="emptyCart" @close-cart-drawer="closeCartDrawer" />
     </el-drawer>
-    <el-drawer title="Sign In" :visible.sync="accountDrawer" size="35%">
-      <div>Account</div>
+    <el-drawer :visible.sync="accountDrawer" size="35%">
+      <account-drawer />
     </el-drawer>
   </div>
 </template>
@@ -48,12 +41,16 @@ import { mapState } from 'vuex'
 import ProductCategories from './ProductCategories'
 import ShoppingBag from './icons/ShoppingBag'
 import UserIcon from './icons/UserIcon'
+import CartDrawer from './drawer/CartDrawer'
+import AccountDrawer from './drawer/AccountDrawer'
 
 export default {
   components: {
     ProductCategories,
     ShoppingBag,
-    UserIcon
+    UserIcon,
+    CartDrawer,
+    AccountDrawer
   },
 
   data() {
@@ -80,6 +77,11 @@ export default {
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath)
+    },
+
+    closeCartDrawer(value) {
+      this.cartDrawer = value
+      this.$router.push('/')
     }
   }
 }
@@ -118,23 +120,5 @@ $off-black: #1b1a1a;
 
 .svg-inline--fa {
   color: $off-white;
-}
-
-.no__cart {
-  width: 10.83333vw;
-  height: 13.33333vh;
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-
-  &-btn {
-    position: absolute;
-    bottom: 0;
-    margin: 0 0 50px;
-    min-height: 40px;
-    width: 100%;
-  }
 }
 </style>
