@@ -1,9 +1,7 @@
 <template>
   <div class="account">
-    <form>
-      <sign-in ref="signin" :show-register="showRegister" />
-      <register ref="register" :show-sign-in="showSignIn" />
-    </form>
+    <sign-in ref="signin" :show-register="showRegister" />
+    <register ref="register" :show-sign-in="showSignIn" />
   </div>
 </template>
 
@@ -80,5 +78,13 @@ export default {
 
 .signin-hide{
   display: none;
+}
+
+.el-input {
+  margin-top: 10px;
+}
+
+.el-input.password {
+  margin-bottom: 10px;
 }
 </style>
