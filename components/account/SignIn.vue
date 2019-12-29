@@ -9,7 +9,7 @@
     </el-form-item>
 
     <el-form-item class="account__form">
-      <el-button class="account__form-btn">SIGN IN</el-button>
+      <el-button class="account__form-btn" @click="login('ruleForm')">SIGN IN</el-button>
     </el-form-item>
 
     <el-form-item class="account__form sign-register">
@@ -40,9 +40,22 @@ export default {
           { type: 'email', required: true, message: 'Email is required', trigger: 'change' }
         ],
         password: [
-          { type: 'password', required: true, message: 'Password is required', trigger: 'change' }
+          { required: true, message: 'Password is required', trigger: 'change' }
         ]
       }
+    }
+  },
+
+  methods: {
+    login(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          alert('submit!')
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     }
   }
 }

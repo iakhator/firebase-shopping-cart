@@ -8,33 +8,23 @@ exports.signUp = async (req, res) => {
   const {
     email,
     password,
-    displayName,
-    photoURL
+    fullname
   } = req.body
   const data = {
-    email: email,
-    emailVerified: false,
-    password: password,
-    displayName: displayName,
-    photoURL: photoURL,
-    disabled: false
+    email,
+    password,
+    displayName: fullname,
+    photoURL: 'http://www.example.com/12345678/photo.png'
   }
   try {
-    const userDoc = await db.collection('users').doc(displayName).get()
-    if (userDoc.exists && userDoc.id === displayName) {
-      res.status(400).json({
-        message: 'The displayname is already taken'
-      })
-    } else {
-      const userRecord = await admin.auth().createUser(data)
-      const createUser = await db.collection('users').doc(displayName).set(data)
-      const generateToken = await admin.auth().createCustomToken(userRecord.uid)
+    const userRecord = await admin.auth().createUser(data)
+    await db.collection('users').doc(userRecord.uid).set({ email, displayName: fullname })
+    const generateToken = await admin.auth().createCustomToken(userRecord.uid)
 
-      res.status(200).json({
-        message: 'Successfully created new user:',
-        token: generateToken
-      })
-    }
+    return res.status(200).json({
+      message: 'Successfully created new user:',
+      token: generateToken
+    })
   } catch (error) {
     if (error.code === 'auth/email-already-exists') {
       res.status(400).json({

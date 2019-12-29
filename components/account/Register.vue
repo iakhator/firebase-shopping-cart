@@ -1,11 +1,8 @@
 <template>
   <el-form ref="registerForm" :model="registerForm" :rules="rules" class="account__register register">
     <p>Create an account</p>
-    <el-form-item class="account__form firstname" prop="firstname">
-      <el-input v-model="registerForm.firstname" class="account__form-input" placeholder="Firstname" />
-    </el-form-item>
-    <el-form-item class="account__form lastname" prop="lastname">
-      <el-input v-model="registerForm.lastname" class="account__form-input" placeholder="Lastname" />
+    <el-form-item class="account__form lastname" prop="fullname">
+      <el-input v-model="registerForm.fullname" class="account__form-input" placeholder="Fullname" />
     </el-form-item>
     <el-form-item class="account__form email" prop="email">
       <el-input v-model="registerForm.email" class="account__form-input" placeholder="Email" />
@@ -18,7 +15,7 @@
     </el-form-item>
 
     <el-form-item class="account__form">
-      <el-button class="account__form-btn" @click="register('registerForm')">REGISTER</el-button>
+      <el-button class="account__form-btn" @click="register( 'registerForm')">REGISTER</el-button>
     </el-form-item>
 
     <el-form-item class="account__form sign-register">
@@ -39,46 +36,60 @@ export default {
   },
 
   data() {
+    const confirmPassword = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('Confirm password is required'))
+      } else if (value !== this.registerForm.password) {
+        callback(new Error('Passwords doesn\'t match'))
+      } else {
+        callback()
+      }
+    }
     return {
       registerForm: {
-        firstname: '',
-        lastname: '',
+        fullname: '',
         email: '',
         password: '',
         confirm_password: ''
       },
 
       rules: {
-        firstname: [
-          { required: true, message: 'Firstname is required', trigger: 'change' },
-          { min: 3, message: 'Length should be above 3', trigger: 'blur' }
-        ],
-        lastname: [
-          { required: true, message: 'Lastname is required', trigger: 'change' }
+        fullname: [
+          { required: true, message: 'Fullname is required', trigger: 'change' }
         ],
         email: [
           { type: 'email', required: true, message: 'Email is required', trigger: 'change' }
         ],
         password: [
-          { required: true, message: 'Password is required', trigger: 'change' }
+          { required: true, message: 'Password is required', trigger: 'change' },
+          { min: 6, message: 'Length should be atleast 6', trigger: 'change' }
         ],
         confirm_password: [
-          { required: true, message: 'Confirm password is required', trigger: 'change' }
+          { validator: confirmPassword, trigger: 'change' }
         ]
       }
     }
   },
 
   methods: {
-    register(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!')
-        } else {
-          console.log('error submit!!')
-          return false
+    async register(formName) {
+      try {
+        let isValid
+        const userObject = {
+          email: this.registerForm.email,
+          password: this.registerForm.password,
+          fullname: this.registerForm.fullname
         }
-      })
+        this.$refs[formName].validate((valid) => {
+          isValid = valid
+        })
+        if (isValid) {
+          const user = await this.$store.dispatch('login', userObject)
+          console.log(user, 'user')
+        }
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }
