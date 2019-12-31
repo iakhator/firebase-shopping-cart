@@ -23,7 +23,7 @@ exports.signUp = async (req, res) => {
       return admin.auth().createCustomToken(userRecord.uid)
     }).then(generateToken => {
       return res.status(200).json({
-        message: 'Successfully created new user:',
+        message: 'Account successfully created.',
         token: generateToken
       })
     }).catch(error => {

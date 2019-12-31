@@ -47,8 +47,8 @@ module.exports = {
     '@/plugins/element-ui',
     '@/plugins/font-awesome',
     '@/plugins/custom-filter',
-    '@/plugins/bus'
-    // '@/plugins/vuejs-noty'
+    '@/plugins/bus',
+    { src: '@/plugins/noty', mode: 'client' }
   ],
   /*
    ** Nuxt.js modules

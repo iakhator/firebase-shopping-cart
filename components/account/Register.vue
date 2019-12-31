@@ -86,12 +86,13 @@ export default {
       if (isValid) {
         this.$store.dispatch('login', userObject)
           .then(response => {
-            console.log(response, 'user')
+            this.$noty.success(this.$store.state.messages, {
+              timeout: 2500
+            })
           }).catch(error => {
-            // this.$noty.error(error.response.data.error, {
-            //   timeout: 2000
-            // })
-            console.log(error.response, 'error')
+            this.$noty.error(error.response.data.error, {
+              timeout: 3000
+            })
           })
       }
     }
