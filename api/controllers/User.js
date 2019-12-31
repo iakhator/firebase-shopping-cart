@@ -16,22 +16,23 @@ exports.signUp = async (req, res) => {
     displayName: fullname,
     photoURL: 'http://www.example.com/12345678/photo.png'
   }
-  try {
-    const userRecord = await admin.auth().createUser(data)
-    await db.collection('users').doc(userRecord.uid).set({ email, displayName: fullname })
-    const generateToken = await admin.auth().createCustomToken(userRecord.uid)
-
-    return res.status(200).json({
-      message: 'Successfully created new user:',
-      token: generateToken
-    })
-  } catch (error) {
-    if (error.code === 'auth/email-already-exists') {
-      res.status(400).json({
-        message: 'The email address is already in use by another account.'
+  admin.auth().createUser(data)
+    .then(userRecord => userRecord)
+    .then((userRecord) => {
+      db.collection('users').doc(userRecord.uid).set({ email, displayName: fullname })
+      return admin.auth().createCustomToken(userRecord.uid)
+    }).then(generateToken => {
+      return res.status(200).json({
+        message: 'Successfully created new user:',
+        token: generateToken
       })
-    }
-  }
+    }).catch(error => {
+      if (error.code === 'auth/email-already-exists') {
+        res.status(400).json({
+          error: 'Email is already in use.'
+        })
+      }
+    })
 }
 
 exports.signIn = async (req, res) => {

@@ -45,6 +45,7 @@ export default {
         callback()
       }
     }
+
     return {
       registerForm: {
         fullname: '',
@@ -72,25 +73,34 @@ export default {
   },
 
   methods: {
-    async register(formName) {
-      try {
-        let isValid
-        const userObject = {
-          email: this.registerForm.email,
-          password: this.registerForm.password,
-          fullname: this.registerForm.fullname
-        }
-        this.$refs[formName].validate((valid) => {
-          isValid = valid
-        })
-        if (isValid) {
-          const user = await this.$store.dispatch('login', userObject)
-          console.log(user, 'user')
-        }
-      } catch (error) {
-        console.log(error)
+    register(formName) {
+      let isValid
+      const userObject = {
+        email: this.registerForm.email,
+        password: this.registerForm.password,
+        fullname: this.registerForm.fullname
+      }
+      this.$refs[formName].validate((valid) => {
+        isValid = valid
+      })
+      if (isValid) {
+        this.$store.dispatch('login', userObject)
+          .then(response => {
+            console.log(response, 'user')
+          }).catch(error => {
+            // this.$noty.error(error.response.data.error, {
+            //   timeout: 2000
+            // })
+            console.log(error.response, 'error')
+          })
       }
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.invalid {
+  border-color: #F56C6C;
+}
+</style>

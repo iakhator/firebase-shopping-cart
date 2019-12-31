@@ -48,6 +48,7 @@ module.exports = {
     '@/plugins/font-awesome',
     '@/plugins/custom-filter',
     '@/plugins/bus'
+    // '@/plugins/vuejs-noty'
   ],
   /*
    ** Nuxt.js modules

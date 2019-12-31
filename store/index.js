@@ -2,7 +2,6 @@ const state = () => ({
   cartItemList: [],
   quantity: 0,
   token: null,
-  errors: null,
   messages: null
 })
 
@@ -20,19 +19,16 @@ const mutations = {
   }
 }
 
-const actions = {
-  async login({ commit, state }, userDetails) {
-    try {
-      const user = await this.$axios.post('/api/signup', userDetails)
-      commit('ADD_TOKEN', user.data.token)
-      commit('MESSAGE', user.data.message)
-    } catch (error) {
-      console.error(error)
-    }
-  }
+const getters = {
 }
 
-const getters = {}
+const actions = {
+  async login({ commit, state }, userDetails) {
+    const user = await this.$axios.post('/api/signup', userDetails)
+    commit('ADD_TOKEN', user.data.token)
+    commit('MESSAGE', user.data.message)
+  }
+}
 
 export default {
   state,
