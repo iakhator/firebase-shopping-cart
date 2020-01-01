@@ -64,9 +64,16 @@ export default {
 
   computed: {
     ...mapState(['quantity']),
+
     emptyCart() {
       return this.$store.state.quantity <= 0
     }
+  },
+
+  created() {
+    this.$bus.$on('close-account-drawer', (value) => {
+      this.accountDrawer = value
+    })
   },
 
   async mounted() {

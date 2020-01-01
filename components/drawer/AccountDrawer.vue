@@ -1,7 +1,7 @@
 <template>
   <div class="account">
-    <sign-in ref="signin" :show-register="showRegister" />
-    <register ref="register" :show-sign-in="showSignIn" />
+    <sign-in v-if="signin" :show-register="showRegister" />
+    <register v-if="signup" :show-sign-in="showSignIn" />
   </div>
 </template>
 
@@ -15,16 +15,22 @@ export default {
     Register
   },
 
+  data() {
+    return {
+      signup: false,
+      signin: true
+    }
+  },
+
   methods: {
     showRegister() {
-      this.$refs.signin.$el.classList.add('signin-hide')
-      this.$refs.register.$el.classList.remove('register')
+      this.signup = true
+      this.signin = false
     },
 
     showSignIn() {
-      this.$refs.register.$el.classList.add('register')
-      this.$refs.signin.$el.classList.remove('signin-hide')
-      console.log(this.$refs)
+      this.signup = false
+      this.signin = true
     }
   }
 }
@@ -70,14 +76,6 @@ export default {
     font-weight: 600;
     font-size: 0.7rem;
   }
-}
-
-.register {
-  display: none;
-}
-
-.signin-hide{
-  display: none;
 }
 
 .el-input {

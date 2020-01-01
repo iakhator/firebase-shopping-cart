@@ -5,7 +5,10 @@
       <el-input v-model="registerForm.fullname" class="account__form-input" placeholder="Fullname" />
     </el-form-item>
     <el-form-item class="account__form email" prop="email">
-      <el-input v-model="registerForm.email" class="account__form-input" placeholder="Email" />
+      <el-input v-model="registerForm.email" :class="formError ? 'account__form-input invalid' : 'account__form-input'" placeholder="Email" />
+      <div v-if="formError" class="el-form-item__error">
+        {{ formError }}
+      </div>
     </el-form-item>
     <el-form-item class="account__form password" prop="password">
       <el-input v-model="registerForm.password" class="account__form-input" placeholder="Password" show-password />
@@ -47,6 +50,7 @@ export default {
     }
 
     return {
+      formError: '',
       registerForm: {
         fullname: '',
         email: '',
@@ -89,10 +93,9 @@ export default {
             this.$noty.success(this.$store.state.messages, {
               timeout: 2500
             })
+            this.$bus.$emit('close-account-drawer', false)
           }).catch(error => {
-            this.$noty.error(error.response.data.error, {
-              timeout: 3000
-            })
+            this.formError = error.response.data.error
           })
       }
     }
@@ -100,8 +103,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.invalid {
-  border-color: #F56C6C;
+<style lang="scss">
+.invalid.account__form-input .el-input__inner {
+  border-color: #F56C6C !important;
 }
 </style>
