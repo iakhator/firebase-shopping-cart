@@ -13,8 +13,8 @@
         <nuxt-link to="/">Shop Center</nuxt-link>
       </el-menu-item>
       <template v-if="isAuthenticated">
-        <el-menu-item index="4" class="el-menu-navlist">
-          <nuxt-link to="#">Sign out</nuxt-link>
+        <el-menu-item index="4" class="el-menu-navlist" @click="logOut()">
+          Sign out
         </el-menu-item>
         <el-menu-item index="5" class="el-menu-navlist">
           <nuxt-link to="#">Profile <user-icon /></nuxt-link>
@@ -100,6 +100,15 @@ export default {
     closeCartDrawer(value) {
       this.cartDrawer = value
       this.$router.push('/')
+    },
+
+    async logOut() {
+      try {
+        await this.$store.dispatch('logOut')
+        await this.$auth.logout()
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 }

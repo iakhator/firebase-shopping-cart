@@ -8,11 +8,22 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Nav from '../components/Nav'
 
 export default {
   components: {
     Nav
+  },
+
+  computed: {
+    ...mapGetters(['isAuthenticated'])
+  },
+
+  created() {
+    if (this.isAuthenticated) {
+      this.$store.dispatch('getUserId')
+    }
   }
 }
 </script>

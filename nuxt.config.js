@@ -72,7 +72,7 @@ module.exports = {
         endpoints: {
           login: { url: '/api/signin', method: 'post', propertyName: 'token' },
           user: false,
-          logout: false
+          logout: { url: '/api/logout', method: 'post' }
         }
       }
     }

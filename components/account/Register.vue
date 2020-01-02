@@ -76,6 +76,10 @@ export default {
     }
   },
 
+  created() {
+    console.log(this.$auth, 'auth')
+  },
+
   methods: {
     async register(formName) {
       try {
@@ -89,6 +93,8 @@ export default {
             password: this.registerForm.password,
             fullname: this.registerForm.fullname
           })
+
+          await this.$auth.setUserToken(user.data.token)
 
           await this.$auth.loginWith('local', {
             data: {

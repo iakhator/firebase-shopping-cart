@@ -17,14 +17,11 @@ exports.signUp = (req, res) => {
     photoURL: 'http://www.example.com/12345678/photo.png'
   }
   admin.auth().createUser(data)
-    .then(userRecord => userRecord)
     .then((userRecord) => {
       db.collection('users').doc(userRecord.uid).set({ email, displayName: fullname })
-      return admin.auth().createCustomToken(userRecord.uid)
-    }).then(generateToken => {
+    }).then(() => {
       return res.status(200).json({
-        message: 'Account successfully created.',
-        token: generateToken
+        message: 'Account successfully created.'
       })
     }).catch(error => {
       if (error.code === 'auth/email-already-exists') {
@@ -41,9 +38,10 @@ exports.signIn = async (req, res) => {
     password
   } = req.body
   try {
-    const userRecord = await firebase.auth().signInWithEmailAndPassword(email, password)
-    const token = await userRecord.user.getIdToken()
-
+    await firebase.auth().signInWithEmailAndPassword(email, password)
+    const user = admin.auth().getUserByEmail(email)
+    const uid = (await user).toJSON().uid
+    const token = await admin.auth().createCustomToken(uid)
     res.status(200).json({
       token
     })
@@ -63,7 +61,23 @@ exports.signIn = async (req, res) => {
 }
 
 exports.getUserId = (req, res) => {
-  return res.status(200).json({
-    uid: req.uid
-  })
+  if (req.uid) {
+    return res.status(200).json({
+      uid: req.uid
+    })
+  }
+  return res.status(403).json({ message: 'You are not authorized' })
+}
+
+exports.logOut = async (req, res) => {
+  try {
+    await firebase.auth().signOut()
+    res.status(200).json({
+      message: 'logged out!'
+    })
+  } catch (error) {
+    res.status(400).json({
+      message: error.message
+    })
+  }
 }
