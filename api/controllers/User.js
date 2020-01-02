@@ -4,7 +4,7 @@ const {
   firebase
 } = require('../config/firebaseConfig')
 
-exports.signUp = async (req, res) => {
+exports.signUp = (req, res) => {
   const {
     email,
     password,
@@ -60,4 +60,10 @@ exports.signIn = async (req, res) => {
       })
     }
   }
+}
+
+exports.getUserId = (req, res) => {
+  return res.status(200).json({
+    uid: req.uid
+  })
 }

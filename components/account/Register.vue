@@ -77,26 +77,33 @@ export default {
   },
 
   methods: {
-    register(formName) {
-      let isValid
-      const userObject = {
-        email: this.registerForm.email,
-        password: this.registerForm.password,
-        fullname: this.registerForm.fullname
-      }
-      this.$refs[formName].validate((valid) => {
-        isValid = valid
-      })
-      if (isValid) {
-        this.$store.dispatch('login', userObject)
-          .then(response => {
-            this.$noty.success(this.$store.state.messages, {
-              timeout: 2500
-            })
-            this.$bus.$emit('close-account-drawer', false)
-          }).catch(error => {
-            this.formError = error.response.data.error
+    async register(formName) {
+      try {
+        let isValid
+        this.$refs[formName].validate((valid) => {
+          isValid = valid
+        })
+        if (isValid) {
+          const user = await this.$axios.post('/api/signup', {
+            email: this.registerForm.email,
+            password: this.registerForm.password,
+            fullname: this.registerForm.fullname
           })
+
+          await this.$auth.loginWith('local', {
+            data: {
+              email: this.registerForm.email,
+              password: this.registerForm.password
+            }
+          })
+
+          this.$noty.success(user.data.message, {
+            timeout: 2500
+          })
+          this.$bus.$emit('close-account-drawer', false)
+        }
+      } catch (error) {
+        this.formError = error.response.data.error
       }
     }
   }

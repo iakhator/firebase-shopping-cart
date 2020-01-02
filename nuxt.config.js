@@ -56,13 +56,28 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
     '@nuxtjs/eslint-module'
   ],
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
+  axios: {
+  },
+
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: '/api/signin', method: 'post', propertyName: 'token' },
+          user: false,
+          logout: false
+        }
+      }
+    }
+  },
+
   /*
    ** Build configuration
    */
@@ -81,6 +96,6 @@ module.exports = {
       saveUninitialized: false,
       cookie: { maxAge: 604800000 }
     }),
-    '~/api/index.js'
+    '~/api'
   ]
 }

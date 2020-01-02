@@ -12,14 +12,22 @@
       <el-menu-item index="1" class="el-menu-logo">
         <nuxt-link to="/">Shop Center</nuxt-link>
       </el-menu-item>
+      <template v-if="isAuthenticated">
+        <el-menu-item index="4" class="el-menu-navlist">
+          <nuxt-link to="#">Sign out</nuxt-link>
+        </el-menu-item>
+        <el-menu-item index="5" class="el-menu-navlist">
+          <nuxt-link to="#">Profile <user-icon /></nuxt-link>
+        </el-menu-item>
+      </template>
+      <el-menu-item v-else index="2" class="el-menu-navlist" @click="accountDrawer = true">
+        Account
+        <user-icon />
+      </el-menu-item>
       <el-menu-item index="3" class="el-menu-navlist" @click="cartDrawer = true">
         <el-badge :value="quantity" class="item">
           <shopping-bag />
         </el-badge>
-      </el-menu-item>
-      <el-menu-item index="2" class="el-menu-navlist" @click="accountDrawer = true">
-        Account
-        <user-icon />
       </el-menu-item>
       <el-menu-item index="4" class="el-menu-navlist">
         <nuxt-link to="/orders">Orders</nuxt-link>
@@ -30,6 +38,7 @@
     <el-drawer title="Your Shopping Cart" :visible.sync="cartDrawer" size="35%" class="cart__body">
       <cart-drawer :empty-cart="emptyCart" @close-cart-drawer="closeCartDrawer" />
     </el-drawer>
+
     <el-drawer :visible.sync="accountDrawer" size="35%">
       <account-drawer />
     </el-drawer>
@@ -37,7 +46,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import ProductCategories from './ProductCategories'
 import ShoppingBag from './icons/ShoppingBag'
 import UserIcon from './icons/UserIcon'
@@ -64,6 +73,8 @@ export default {
 
   computed: {
     ...mapState(['quantity']),
+
+    ...mapGetters(['isAuthenticated']),
 
     emptyCart() {
       return this.$store.state.quantity <= 0
@@ -118,7 +129,6 @@ $off-black: #1b1a1a;
 
 .item {
   margin-top: -9px;
-  margin-right: 20px;
 }
 
 .shopping-bag {
