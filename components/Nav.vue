@@ -13,14 +13,14 @@
         <nuxt-link to="/">Shop Center</nuxt-link>
       </el-menu-item>
       <template v-if="isAuthenticated">
-        <el-menu-item index="4" class="el-menu-navlist" @click="logOut()">
+        <el-menu-item class="el-menu-navlist" @click="logOut()">
           Sign out
         </el-menu-item>
         <el-menu-item index="5" class="el-menu-navlist">
           <nuxt-link to="#">Profile <user-icon /></nuxt-link>
         </el-menu-item>
       </template>
-      <el-menu-item v-else index="2" class="el-menu-navlist" @click="accountDrawer = true">
+      <el-menu-item v-else class="el-menu-navlist" @click="accountDrawer = true">
         Account
         <user-icon />
       </el-menu-item>

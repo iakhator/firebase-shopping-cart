@@ -94,7 +94,7 @@ export default {
             fullname: this.registerForm.fullname
           })
 
-          await this.$auth.setUserToken(user.data.token)
+          // await this.$auth.setUserToken(user.data.token)
 
           await this.$auth.loginWith('local', {
             data: {

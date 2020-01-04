@@ -47,15 +47,24 @@ export default {
   },
 
   methods: {
-    login(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!')
-        } else {
-          console.log('error submit!!')
-          return false
+    async login(formName) {
+      try {
+        let isValid
+        this.$refs[formName].validate((valid) => {
+          isValid = valid
+        })
+        if (isValid) {
+          await this.$auth.loginWith('local', {
+            data: {
+              email: this.ruleForm.email,
+              password: this.ruleForm.password
+            }
+          })
+          this.$bus.$emit('close-account-drawer', false)
         }
-      })
+      } catch (error) {
+        this.formError = error.response.data.error
+      }
     }
   }
 }

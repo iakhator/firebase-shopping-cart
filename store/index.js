@@ -26,8 +26,8 @@ const getters = {
 
 const actions = {
   async getUserId({ commit, state }) {
-    const userId = await this.$axios.$get('/api/user_id')
-    commit('GET_USERID', userId.uid)
+    const user = await this.$axios.$get('/api/user_id')
+    commit('GET_USERID', user.uid)
   },
 
   async logOut({ commit }) {

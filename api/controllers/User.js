@@ -32,41 +32,47 @@ exports.signUp = (req, res) => {
     })
 }
 
-exports.signIn = async (req, res) => {
+exports.signIn = (req, res) => {
   const {
     email,
     password
   } = req.body
-  try {
-    await firebase.auth().signInWithEmailAndPassword(email, password)
-    const user = admin.auth().getUserByEmail(email)
-    const uid = (await user).toJSON().uid
-    const token = await admin.auth().createCustomToken(uid)
-    res.status(200).json({
-      token
-    })
-  } catch (error) {
-    if (error.code === 'auth/user-not-found') {
-      res.status(400).json({
-        message: error.message
-      })
-    }
 
-    if (error.code === 'auth/wrong-password') {
-      res.status(400).json({
-        message: error.message
+  firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(userRecord => {
+      return userRecord.user.getIdToken()
+    })
+    .then(token => {
+      res.status(200).json({
+        token
       })
-    }
-  }
+    })
+    .catch((error) => {
+      if (error.code === 'auth/user-not-found') {
+        res.status(400).json({
+          message: error.message
+        })
+      }
+
+      if (error.code === 'auth/wrong-password') {
+        res.status(400).json({
+          message: error.message
+        })
+      }
+    })
 }
 
 exports.getUserId = (req, res) => {
-  if (req.uid) {
-    return res.status(200).json({
-      uid: req.uid
-    })
+  try {
+    if (req.uid) {
+      return res.status(200).json({
+        uid: req.uid
+      })
+    }
+    return res.status(403).json({ message: 'You are not authorized' })
+  } catch (error) {
+    console.error(error)
   }
-  return res.status(403).json({ message: 'You are not authorized' })
 }
 
 exports.logOut = async (req, res) => {
