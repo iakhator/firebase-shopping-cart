@@ -1,16 +1,11 @@
 const state = () => ({
   cartItemList: [],
-  quantity: 0,
-  userId: null
+  quantity: 0
 })
 
 const mutations = {
   ADD_ITEM(state, payload) {
     state.quantity += payload
-  },
-
-  GET_USERID(state, userId) {
-    state.userId = userId
   }
 }
 
@@ -19,21 +14,12 @@ const getters = {
     return state.auth.loggedIn
   },
 
-  getUserId(state) {
-    return state.userId
+  loggedInUser(state) {
+    return state.auth.user
   }
 }
 
 const actions = {
-  async getUserId({ commit, state }) {
-    const user = await this.$axios.$get('/api/user_id')
-    commit('GET_USERID', user.uid)
-  },
-
-  async logOut({ commit }) {
-    await this.$axios.$post('/api/logout')
-    commit('GET_USERID', null)
-  }
 }
 
 export default {

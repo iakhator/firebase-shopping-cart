@@ -62,17 +62,13 @@ exports.signIn = (req, res) => {
     })
 }
 
-exports.getUserId = (req, res) => {
-  try {
-    if (req.uid) {
-      return res.status(200).json({
-        uid: req.uid
-      })
-    }
-    return res.status(403).json({ message: 'You are not authorized' })
-  } catch (error) {
+exports.getUser = (req, res) => {
+  admin.auth().getUser(req.uid).then(userRecord => {
+    res.status(200).json(userRecord)
+  }).catch(error => {
     console.error(error)
-  }
+    res.status(500).json(error)
+  })
 }
 
 exports.logOut = async (req, res) => {

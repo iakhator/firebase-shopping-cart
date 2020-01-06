@@ -16,8 +16,8 @@
         <el-menu-item class="el-menu-navlist" @click="logOut()">
           Sign out
         </el-menu-item>
-        <el-menu-item index="5" class="el-menu-navlist">
-          <nuxt-link to="#">Profile <user-icon /></nuxt-link>
+        <el-menu-item class="el-menu-navlist" @click="profileDrawer = true">
+          {{ loggedInUser.displayName }} <user-icon />
         </el-menu-item>
       </template>
       <el-menu-item v-else class="el-menu-navlist" @click="accountDrawer = true">
@@ -29,9 +29,6 @@
           <shopping-bag />
         </el-badge>
       </el-menu-item>
-      <el-menu-item index="4" class="el-menu-navlist">
-        <nuxt-link to="/orders">Orders</nuxt-link>
-      </el-menu-item>
     </el-menu>
     <product-categories :categories="categories" />
 
@@ -41,6 +38,10 @@
 
     <el-drawer :visible.sync="accountDrawer" size="35%">
       <account-drawer />
+    </el-drawer>
+
+    <el-drawer :visible.sync="profileDrawer" size="35%">
+      <profile-drawer />
     </el-drawer>
   </div>
 </template>
@@ -52,6 +53,7 @@ import ShoppingBag from './icons/ShoppingBag'
 import UserIcon from './icons/UserIcon'
 import CartDrawer from './drawer/CartDrawer'
 import AccountDrawer from './drawer/AccountDrawer'
+import ProfileDrawer from './drawer/ProfileDrawer'
 
 export default {
   components: {
@@ -59,7 +61,8 @@ export default {
     ShoppingBag,
     UserIcon,
     CartDrawer,
-    AccountDrawer
+    AccountDrawer,
+    ProfileDrawer
   },
 
   data() {
@@ -67,6 +70,7 @@ export default {
       activeIndex2: '1',
       cartDrawer: false,
       accountDrawer: false,
+      profileDrawer: false,
       categories: []
     }
   },
@@ -74,7 +78,7 @@ export default {
   computed: {
     ...mapState(['quantity']),
 
-    ...mapGetters(['isAuthenticated']),
+    ...mapGetters(['isAuthenticated', 'loggedInUser']),
 
     emptyCart() {
       return this.$store.state.quantity <= 0
@@ -104,7 +108,6 @@ export default {
 
     async logOut() {
       try {
-        await this.$store.dispatch('logOut')
         await this.$auth.logout()
       } catch (error) {
         console.error(error)
