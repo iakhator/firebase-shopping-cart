@@ -91,9 +91,7 @@ export default {
         itemPhoto: this.item.imageUrl,
         itemId: this.$route.params.itemId
       }
-      this.$store.dispatch('addToCart', cartObject).then(data => {
-        console.log(data)
-      })
+      this.$store.dispatch('addToCart', cartObject)
     }
   }
 }
