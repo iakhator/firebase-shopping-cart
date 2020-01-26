@@ -76,10 +76,6 @@ export default {
     }
   },
 
-  created() {
-    console.log(this.$auth, 'auth')
-  },
-
   methods: {
     async register(formName) {
       try {

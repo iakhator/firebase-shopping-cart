@@ -56,7 +56,7 @@ exports.signIn = (req, res) => {
 
       if (error.code === 'auth/wrong-password') {
         res.status(400).json({
-          message: error.message
+          message: 'Invalid email or password'
         })
       }
     })

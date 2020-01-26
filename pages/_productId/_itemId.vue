@@ -36,6 +36,7 @@
                 v-for="variant in item.variant"
                 :key="variant"
                 :label="variant"
+                v-model="form.variant"
                 :value="variant"
                 size="small"
               ></el-radio-button>
@@ -52,7 +53,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+
 export default {
   data() {
     return {
@@ -80,8 +81,6 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['ADD_ITEM']),
-
     addToCart() {
       // this.ADD_ITEM(this.form.num)
       const cartObject = {
@@ -89,20 +88,12 @@ export default {
         quantity: this.form.num,
         title: this.item.itemTitle,
         price: this.item.price,
-        itemPhoto: this.item.imageUrl
+        itemPhoto: this.item.imageUrl,
+        itemId: this.$route.params.itemId
       }
-      this.$axios
-        .post(`/api/cart/${this.$route.params.itemId}`, cartObject)
-        .then(data => {
-          return this.$axios.get('/api/cart/')
-        })
-        .then(data => {
-          console.log(data)
-        })
-        .catch(err => {
-          console.log(err)
-        })
-      // console.log(this.item, cartObject)
+      this.$store.dispatch('addToCart', cartObject).then(data => {
+        console.log(data)
+      })
     }
   }
 }

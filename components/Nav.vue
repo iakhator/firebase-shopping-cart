@@ -76,9 +76,9 @@ export default {
   },
 
   computed: {
-    ...mapState(['quantity']),
+    ...mapState(['cartItems']),
 
-    ...mapGetters(['isAuthenticated', 'loggedInUser']),
+    ...mapGetters(['isAuthenticated', 'loggedInUser', 'quantity']),
 
     emptyCart() {
       return this.$store.state.quantity <= 0

@@ -9,7 +9,7 @@
     </el-form-item>
 
     <el-form-item class="account__form">
-      <el-button class="account__form-btn" @click="login('ruleForm')">SIGN IN</el-button>
+      <el-button class="account__form-btn" :loading="loading" @click="login('ruleForm')">SIGN IN</el-button>
     </el-form-item>
 
     <el-form-item class="account__form sign-register">
@@ -30,6 +30,7 @@ export default {
 
   data() {
     return {
+      loading: false,
       ruleForm: {
         email: '',
         password: ''
@@ -47,24 +48,28 @@ export default {
   },
 
   methods: {
-    async login(formName) {
-      try {
-        let isValid
-        this.$refs[formName].validate((valid) => {
-          isValid = valid
-        })
-        if (isValid) {
-          await this.$auth.loginWith('local', {
+    login(formName) {
+      this.loading = true
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$auth.loginWith('local', {
             data: {
               email: this.ruleForm.email,
               password: this.ruleForm.password
             }
+          }).then(() => {
+            this.$refs[formName].resetFields()
+            this.$bus.$emit('close-account-drawer', false)
+            this.loading = false
+          }).catch((error) => {
+            this.$refs[formName].resetFields()
+            this.loading = false
+            console.log(error.response.data.message)
           })
-          this.$bus.$emit('close-account-drawer', false)
+        } else {
+          return false
         }
-      } catch (error) {
-        this.formError = error.response.data.error
-      }
+      })
     }
   }
 }

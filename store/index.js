@@ -1,12 +1,14 @@
 const state = () => ({
-  cartItemList: [],
-  quantity: 0
+  cartItems: {
+    totalQty: 0
+  }
 })
 
 const mutations = {
   ADD_ITEM(state, payload) {
-    state.quantity += payload
+    state.cartItems = payload
   }
+
 }
 
 const getters = {
@@ -16,10 +18,27 @@ const getters = {
 
   loggedInUser(state) {
     return state.auth.user
+  },
+
+  quantity(state) {
+    return state.cartItems.totalQty
   }
 }
 
 const actions = {
+  async nuxtServerInit({ commit, state, dispatch }, { req }) {
+    if (req.session && req.session.cart) {
+      const { data } = await this.$axios.get('/api/cart/')
+      commit('ADD_ITEM', data)
+    }
+  },
+
+  async addToCart({ commit }, payload) {
+    await this.$axios.$post(`/api/cart/${payload.itemId}`, payload)
+    const { data } = await this.$axios.get('/api/cart/')
+    commit('ADD_ITEM', data)
+    return data
+  }
 }
 
 export default {
