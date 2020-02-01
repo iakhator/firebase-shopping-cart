@@ -41,11 +41,12 @@
                 size="small"
               ></el-radio-button>
             </el-radio-group>
+            <p class="error el-tag--danger" v-if="errorMessage">{{ errorMessage }}</p>
           </div>
         </div>
         <div class="action-button">
           <el-button round class="action-button-cart" @click="addToCart">Add to cart</el-button>
-          <el-button round class="action-button-buy">Buy now</el-button>
+          <el-button round class="black">Buy now</el-button>
         </div>
       </el-form>
     </el-col>
@@ -61,7 +62,8 @@ export default {
       form: {
         variant: '',
         num: ''
-      }
+      },
+      errorMessage: ''
     }
   },
 
@@ -91,7 +93,12 @@ export default {
         itemPhoto: this.item.imageUrl,
         itemId: this.$route.params.itemId
       }
-      this.$store.dispatch('addToCart', cartObject)
+      if (!cartObject.variantId) {
+        this.errorMessage = 'You must select a variant'
+      } else {
+        this.$store.dispatch('addToCart', cartObject)
+        this.errorMessage = ''
+      }
     }
   }
 }
@@ -189,5 +196,10 @@ $gray: #dcdfe6;
   margin-top: 25px;
   align-items: center;
   justify-content: center;
+}
+
+.error{
+  color: #f56c6c;
+  font-size: 0.75rem;
 }
 </style>

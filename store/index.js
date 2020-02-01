@@ -22,6 +22,10 @@ const getters = {
 
   quantity(state) {
     return state.cartItems.totalQty
+  },
+
+  cartItems(state) {
+    return state.cartItems
   }
 }
 

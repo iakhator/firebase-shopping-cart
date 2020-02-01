@@ -17,11 +17,6 @@
   transition: opacity 4s ease-in;
 }
 
-.el-button.action-button-buy {
-  color: $off-white;
-  background-color: $off-black;
-}
-
 .el-button.no__cart-btn:focus,
 .el-button.no__cart-btn:hover,
 .el-button.action-button-cart:focus,
@@ -29,6 +24,41 @@
   color: $off-white;
   border-color: $off-black;
   background-color: $off-black;
+}
+
+.el-button.black{
+  color: $off-white;
+  border-color: $off-black;
+  background-color: $off-black;
+  position: relative;
+
+  &:before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: block;
+      width: 0;
+      padding-top: 0;
+      border-radius: 100%;
+      background-color: rgba(236, 240, 241, .3);
+      -webkit-transform: translate(-50%, -50%);
+      -moz-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      -o-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+
+  &:active{
+    width: inherit;
+    transition: width .2s ease-out, padding-top .2s ease-out;
+
+    &:before {
+       width: 120%;
+      padding-top: 120%;
+      transition: width .2s ease-out, padding-top .2s ease-out;
+    }
+  }
 }
 
 .el-radio-button__orig-radio:checked + .el-radio-button__inner {

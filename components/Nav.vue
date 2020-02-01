@@ -81,7 +81,7 @@ export default {
     ...mapGetters(['isAuthenticated', 'loggedInUser', 'quantity']),
 
     emptyCart() {
-      return this.$store.state.quantity <= 0
+      return this.quantity <= 0
     }
   },
 
