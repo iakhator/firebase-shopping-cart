@@ -33,7 +33,7 @@
     <product-categories :categories="categories" />
 
     <el-drawer title="Your Shopping Cart" :visible.sync="cartDrawer" size="35%" class="cart__body">
-      <cart-drawer :empty-cart="emptyCart" @close-cart-drawer="closeCartDrawer" />
+      <cart-drawer :empty-cart="emptyCart" @close-cart-drawer="closeCartDrawer" @close-on-checkout="closeOnCheckout" />
     </el-drawer>
 
     <el-drawer :visible.sync="accountDrawer" size="35%">
@@ -104,6 +104,10 @@ export default {
     closeCartDrawer(value) {
       this.cartDrawer = value
       this.$router.push('/')
+    },
+
+    closeOnCheckout(value) {
+      this.cartDrawer = value
     },
 
     async logOut() {

@@ -25,8 +25,8 @@
         </div>
       </div>
     </div>
-    <div class="cart__wrapper-total"><span>Total:</span> {{ cartItems.totalPrice | toUSD }}</div>
-    <el-button round class="black checkout">
+    <div class="cart__wrapper-total" v-show="!emptyCart"><span>Total:</span> {{ cartItems.totalPrice | toUSD }}</div>
+    <el-button v-show="!emptyCart" round class="black checkout" @click="checkOut">
       checkout
     </el-button>
     <el-button round class="no__cart-btn" @click="closeCartDrawer">
@@ -58,6 +58,11 @@ export default {
   methods: {
     closeCartDrawer() {
       this.$emit('close-cart-drawer', false)
+    },
+
+    checkOut() {
+      this.$router.push({ path: '/cart/checkout' })
+      this.$emit('close-on-checkout', false)
     }
   }
 }

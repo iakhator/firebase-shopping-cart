@@ -1,4 +1,5 @@
 const { db } = require('../config/firebaseConfig')
+const stripe = require('stripe')('sk_test_gC7SMPO6cYgOj7hot0NF5zKv00UVubkgd0')
 
 function Cart(oldCart) {
   this.items = oldCart.items || {}
@@ -45,6 +46,17 @@ exports.getCart = (req, res) => {
   if (req.session.cart) {
     const cart = new Cart(req.session.cart)
     const cartItem = cart.generateArray(cart)
-    res.json({ cartItem, totalQty: cart.totalQty, totalPrice: cart.totalPrice })
+    res.status(200).json({ cartItem, totalQty: cart.totalQty, totalPrice: cart.totalPrice })
+  } else {
+    res.status(400).json({ message: 'Cart is empty' })
   }
+}
+
+exports.checkOut = async (req, res) => {
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: req.body.amount,
+    currency: 'usd'
+  })
+  // console.log(req.body)
+  res.status(200).json({ clientSecret: paymentIntent.client_secret })
 }
