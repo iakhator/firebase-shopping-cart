@@ -50,7 +50,6 @@
     }
 
   &:active{
-    width: inherit;
     transition: width .2s ease-out, padding-top .2s ease-out;
 
     &:before {

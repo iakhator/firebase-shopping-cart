@@ -1,5 +1,6 @@
-const { db } = require('../config/firebaseConfig')
+
 const stripe = require('stripe')('sk_test_gC7SMPO6cYgOj7hot0NF5zKv00UVubkgd0')
+const { db } = require('../config/firebaseConfig')
 
 function Cart(oldCart) {
   this.items = oldCart.items || {}
@@ -57,6 +58,5 @@ exports.checkOut = async (req, res) => {
     amount: req.body.amount,
     currency: 'usd'
   })
-  // console.log(req.body)
   res.status(200).json({ clientSecret: paymentIntent.client_secret })
 }

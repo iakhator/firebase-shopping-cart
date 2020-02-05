@@ -8,6 +8,13 @@ module.exports = {
    */
   head: {
     title: process.env.npm_package_name || '',
+    script: [
+      {
+        hid: 'stripe',
+        src: 'https://js.stripe.com/v3/',
+        defer: true
+      }
+    ],
     meta: [
       {
         charset: 'utf-8'
@@ -48,6 +55,7 @@ module.exports = {
     '@/plugins/font-awesome',
     '@/plugins/custom-filter',
     '@/plugins/bus',
+    '@/plugins/stripe',
     { src: '@/plugins/noty', mode: 'client' }
   ],
   /*
@@ -63,8 +71,7 @@ module.exports = {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {
-  },
+  axios: {},
 
   auth: {
     strategies: {
