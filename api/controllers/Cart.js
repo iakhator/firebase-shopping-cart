@@ -33,6 +33,10 @@ function Cart(oldCart) {
     }
     return arr
   }
+
+  this.removeFromCart = function (itemId, items) {
+    console.log(items)
+  }
 }
 
 exports.addToCart = (req, res) => {
@@ -59,4 +63,13 @@ exports.checkOut = async (req, res) => {
     currency: 'usd'
   })
   res.status(200).json({ clientSecret: paymentIntent.client_secret })
+}
+
+exports.removeItemCart = (req, res) => {
+  if (req.sesssion.cart) {
+    const cart = new Cart(req.session.cart)
+    cart.removeFromCart(2, cart)
+  } else {
+    console.log('no item in cart')
+  }
 }

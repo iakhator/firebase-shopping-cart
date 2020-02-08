@@ -1,14 +1,18 @@
 const state = () => ({
   cartItems: {
     totalQty: 0
-  }
+  },
+  clientSecret: ''
 })
 
 const mutations = {
   ADD_ITEM(state, payload) {
     state.cartItems = payload
-  }
+  },
 
+  CHECKOUT(state, payload) {
+    state.clientSecret = payload.clientSecret
+  }
 }
 
 const getters = {
@@ -42,6 +46,11 @@ const actions = {
     const { data } = await this.$axios.get('/api/cart/')
     commit('ADD_ITEM', data)
     return data
+  },
+
+  async checkOut({ commit }, payload) {
+    const data = await this.$axios.$post('/api/checkout', payload)
+    commit('CHECKOUT', data)
   }
 }
 

@@ -61,8 +61,13 @@ export default {
     },
 
     checkOut() {
-      this.$router.push({ path: '/cart/checkout' })
-      this.$emit('close-on-checkout', false)
+      this.$store.dispatch('checkOut', { amount: (this.cartItems.totalPrice * 100) })
+        .then(() => {
+          this.$router.push({ path: '/cart/checkout' })
+          this.$emit('close-on-checkout', false)
+        }).catch(err => {
+          console.error(err)
+        })
     }
   }
 }

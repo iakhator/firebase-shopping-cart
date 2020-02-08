@@ -1,7 +1,32 @@
 
 <template>
   <el-row class="checkout__grid pay__grid">
-    <div class="checkout__grid-left">Products</div>
+    <div class="checkout__grid-left">
+      <div class="cart__wrapper" v-for="cartItem in cartItems.cartItem" :key="cartItem.itemId">
+        <p>{{ cartItem.title }}</p>
+        <div class="cart__wrapper-content">
+          <div class="cart__wrapper-image">
+            <img :src="cartItem.itemPhoto" alt="">
+            <p>{{ cartItem.variantId }}</p>
+          </div>
+          <div class="checkout__wrapper-quantity">
+            <span class="cart__quantity">{{ cartItem.quantity }}</span>
+          </div>
+          <div class="cart__wrapper-price">
+            {{ cartItem.price | toUSD }}
+          </div>
+        </div>
+      </div>
+      <div class="checkout__wrapper-subdesc">
+        <div class="cart__wrapper-subtotal">
+          <span>Subtotal:</span> {{ cartItems.totalPrice | toUSD }}
+        </div>
+        <div class="checkout__wrapper-subtotal">
+          <span>Shipping:</span> Free
+        </div>
+        <div class="checkout__wrapper-total"><span>Total:</span> {{ cartItems.totalPrice | toUSD }}</div>
+      </div>
+    </div>
     <div class="checkout__grid-right">
       <p>Payment</p>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
@@ -14,23 +39,11 @@
         <div class="card-details">Card Information</div>
         <div class="form-row">
           <label for="card-number">Card Number</label>
-          <div ref="cardNumber">
+          <div ref="card">
           </div>
         </div>
-        <el-form-item class="form-row">
-          <el-col :span="11" class="card-cvc">
-            <label for="cardcvc">Card Cvc</label>
-            <div ref="cardcvc">
-            </div>
-          </el-col>
-          <el-col :span="12">
-            <label for="cardexp">Card Expiry</label>
-            <div ref="cardexp">
-            </div>
-          </el-col>
-        </el-form-item>
         <div class="pay form-row">
-          <el-button class="el-button black pay__btn">Pay</el-button>
+          <el-button class="el-button black pay__btn" @click="pay">Pay</el-button>
         </div>
       </el-form>
     </div>
@@ -38,9 +51,12 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data() {
     return {
+      card: '',
       ruleForm: {
         name: '',
         address: ''
@@ -56,15 +72,51 @@ export default {
     }
   },
 
+  computed: {
+    ...mapGetters(['isAuthenticated', 'loggedInUser', 'cartItems'])
+  },
+
   mounted() {
-    console.log(this.$stripe, 'refssss')
-    const elements = this.$stripe.elements()
-    const cardNumber = elements.create('cardNumber')
-    const cardCVC = elements.create('cardCvc')
-    const cardExpiry = elements.create('cardExpiry')
-    cardNumber.mount(this.$refs.cardNumber)
-    cardCVC.mount(this.$refs.cardcvc)
-    cardExpiry.mount(this.$refs.cardexp)
+    this.stripeCard()
+  },
+
+  methods: {
+    stripeCard() {
+      console.log(this.$stripe, 'refssss')
+      const elements = this.$stripe.elements()
+      this.card = elements.create('card')
+      this.card.mount(this.$refs.card)
+    },
+
+    pay() {
+      const user = this.isAuthenticated ? this.loggedInUser.displayName : this.ruleForm.name
+
+      const clientSecret = this.$store.state.clientSecret
+      this.$stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: this.card,
+          billing_details: {
+            name: user
+          }
+        }
+      }).then(function (result) {
+        if (result.error) {
+          // Show error to your customer (e.g., insufficient funds)
+          console.log(result.error.message)
+        } else {
+          // The payment has been processed!
+          // eslint-disable-next-line no-lonely-if
+          if (result.paymentIntent.status === 'succeeded') {
+            // Show a success message to your customer
+            // There's a risk of the customer closing the window before callback
+            // execution. Set up a webhook or plugin to listen for the
+            // payment_intent.succeeded event that handles any business critical
+            // post-payment actions.
+            console.log(result, 'yes 0000')
+          }
+        }
+      })
+    }
   }
 }
 </script>
@@ -97,6 +149,7 @@ export default {
  }
 
 .checkout__grid-left {
+  padding: 25px 55px;
   background: #1b1a1a;
   color: #f8f5f2;
 }
@@ -181,5 +234,28 @@ input:focus,
 
 .StripeElement--webkit-autofill {
   background-color: #fefde5 !important;
+}
+
+.checkout__wrapper{
+  &-subdesc {
+    font-size: 12px;
+    float: right;
+  }
+
+  &-total {
+    font-weight: 600;
+  }
+
+  &-subtotal {
+    border-bottom: 1px solid white;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+  }
+
+  &-quantity {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 </style>
