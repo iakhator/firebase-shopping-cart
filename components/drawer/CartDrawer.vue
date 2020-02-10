@@ -163,9 +163,10 @@ export default {
 .el-button.is-circle {
   border:none;
 
-  &:hover{
+  &:hover, &:focus, &:active{
     background: none;
     color: #f78989;
   }
+
 }
 </style>
