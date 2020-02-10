@@ -23,6 +23,7 @@
         <div class="cart__wrapper-price">
           {{ cartItem.price | toUSD }}
         </div>
+        <el-button type="danger" icon="el-icon-delete" circle @click="deleteItem(cartItem.itemId)"></el-button>
       </div>
     </div>
     <div class="cart__wrapper-total" v-show="!emptyCart"><span>Total:</span> {{ cartItems.totalPrice | toUSD }}</div>
@@ -68,6 +69,18 @@ export default {
         }).catch(err => {
           console.error(err)
         })
+    },
+
+    deleteItem(id) {
+      this.$store.dispatch('removeFromCart', { data: { id } }).then(() => {
+        this.$noty.success('Item deleted', {
+          timeout: 500
+        })
+      }).catch((err) => {
+        this.$noty.error(err.response.message, {
+          timeout: 500
+        })
+      })
     }
   }
 }
@@ -101,7 +114,7 @@ export default {
 .cart__wrapper-content{
   display: grid;
   grid-gap: 10px;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 2fr 2fr 2fr 1fr;
 }
 
 .cart__wrapper-price{
@@ -145,5 +158,14 @@ export default {
   border: 1px solid black;
     height: 20px;
    padding: 0 6px;
+}
+
+.el-button.is-circle {
+  border:none;
+
+  &:hover{
+    background: none;
+    color: #f78989;
+  }
 }
 </style>

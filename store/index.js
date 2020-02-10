@@ -51,6 +51,12 @@ const actions = {
   async checkOut({ commit }, payload) {
     const data = await this.$axios.$post('/api/checkout', payload)
     commit('CHECKOUT', data)
+  },
+
+  async removeFromCart({ commit }, payload) {
+    await this.$axios.$delete('/api/deleteItem', payload)
+    const { data } = await this.$axios.get('/api/cart/')
+    commit('ADD_ITEM', data)
   }
 }
 

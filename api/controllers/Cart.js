@@ -26,16 +26,22 @@ function Cart(oldCart) {
     this.totalPrice = add
   }
 
+  this.removeFromCart = function (itemId) {
+    for (const id in this.items) {
+      if (itemId === id) {
+        this.totalPrice = this.totalPrice - this.items[id].price
+        this.totalQty = this.totalQty - this.items[id].quantity
+        delete this.items[id]
+      }
+    }
+  }
+
   this.generateArray = function () {
     const arr = []
     for (const id in this.items) {
       arr.push(this.items[id])
     }
     return arr
-  }
-
-  this.removeFromCart = function (itemId, items) {
-    console.log(items)
   }
 }
 
@@ -50,7 +56,7 @@ exports.addToCart = (req, res) => {
 exports.getCart = (req, res) => {
   if (req.session.cart) {
     const cart = new Cart(req.session.cart)
-    const cartItem = cart.generateArray(cart)
+    const cartItem = cart.generateArray()
     res.status(200).json({ cartItem, totalQty: cart.totalQty, totalPrice: cart.totalPrice })
   } else {
     res.status(400).json({ message: 'Cart is empty' })
@@ -58,17 +64,23 @@ exports.getCart = (req, res) => {
 }
 
 exports.checkOut = async (req, res) => {
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: req.body.amount,
-    currency: 'usd'
-  })
-  res.status(200).json({ clientSecret: paymentIntent.client_secret })
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: req.body.amount,
+      currency: 'usd'
+    })
+    res.status(200).json({ clientSecret: paymentIntent.client_secret })
+  } catch (error) {
+    res.status(500).json({ message: 'There was an error' })
+  }
 }
 
 exports.removeItemCart = (req, res) => {
-  if (req.sesssion.cart) {
+  if (req.session.cart) {
     const cart = new Cart(req.session.cart)
-    cart.removeFromCart(2, cart)
+    cart.removeFromCart(req.body.id)
+    req.session.cart = cart
+    res.status(200).json({ message: 'Item deleted' })
   } else {
     console.log('no item in cart')
   }
