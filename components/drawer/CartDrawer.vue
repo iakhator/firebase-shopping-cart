@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="cart__wrapper-total" v-show="!emptyCart"><span>Total:</span> {{ cartItems.totalPrice | toUSD }}</div>
-    <el-button v-show="!emptyCart" round class="black checkout" @click="checkOut">
+    <el-button v-show="!emptyCart" round class="black checkout" :loading="loading" @click="checkOut">
       checkout
     </el-button>
     <el-button round class="no__cart-btn" @click="closeCartDrawer">
@@ -52,6 +52,12 @@ export default {
     }
   },
 
+  data() {
+    return {
+      loading: false
+    }
+  },
+
   computed: {
     ...mapGetters(['cartItems'])
   },
@@ -62,12 +68,15 @@ export default {
     },
 
     checkOut() {
-      this.$store.dispatch('checkOut', { amount: (this.cartItems.totalPrice * 100) })
+      this.loading = true
+      this.$store.dispatch('checkOut', { amount: (Math.round(this.cartItems.totalPrice * 100)) })
         .then(() => {
           this.$router.push({ path: '/cart/checkout' })
           this.$emit('close-on-checkout', false)
+          this.loading = false
         }).catch(err => {
           console.error(err)
+          this.loading = false
         })
     },
 

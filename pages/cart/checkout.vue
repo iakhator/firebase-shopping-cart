@@ -43,7 +43,7 @@
           </div>
         </div>
         <div class="pay form-row">
-          <el-button class="el-button black pay__btn" @click="pay">Pay</el-button>
+          <el-button class="el-button black pay__btn" :loading="loading" @click="pay">Pay</el-button>
         </div>
       </el-form>
     </div>
@@ -58,6 +58,7 @@ export default {
   data() {
     return {
       card: '',
+      loading: false,
       ruleForm: {
         name: '',
         address: ''
@@ -83,13 +84,19 @@ export default {
 
   methods: {
     stripeCard() {
-      console.log(this.$stripe, 'refssss')
       const elements = this.$stripe.elements()
       this.card = elements.create('card')
       this.card.mount(this.$refs.card)
     },
 
+    saveOrders() {
+      this.$axios.post('/api/saveorder', this.cartItems).then((response) => {
+        this.$router.push('/')
+      }).catch(err => console.error(err))
+    },
+
     pay() {
+      this.loading = true
       const user = this.isAuthenticated ? this.loggedInUser.displayName : this.ruleForm.name
 
       const clientSecret = this.$store.state.clientSecret
@@ -104,16 +111,13 @@ export default {
         if (result.error) {
           // Show error to your customer (e.g., insufficient funds)
           console.log(result.error.message)
+          this.loading = false
         } else {
           // The payment has been processed!
           // eslint-disable-next-line no-lonely-if
           if (result.paymentIntent.status === 'succeeded') {
             // Show a success message to your customer
-            // There's a risk of the customer closing the window before callback
-            // execution. Set up a webhook or plugin to listen for the
-            // payment_intent.succeeded event that handles any business critical
-            // post-payment actions.
-            console.log(result, 'yes 0000')
+            this.saveOrders()
           }
         }
       })

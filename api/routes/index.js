@@ -35,6 +35,6 @@ router.get('/categories', getCategories)
 router.get('/category/:id', getCategoryProducts)
 
 // orders
-router.get('/saveorder', saveOrders)
+router.post('/saveorder', authMiddleware, saveOrders)
 
 module.exports = router
