@@ -1,5 +1,5 @@
 
-const stripe = require('stripe')('sk_test_gC7SMPO6cYgOj7hot0NF5zKv00UVubkgd0')
+const stripe = require('stripe')(process.env.STRIPE_SECRET)
 const { db } = require('../config/firebaseConfig')
 
 function Cart(oldCart) {

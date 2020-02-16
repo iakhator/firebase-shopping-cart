@@ -54,6 +54,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
+  middleware: 'incart',
   data() {
     return {
       card: '',

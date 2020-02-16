@@ -1,4 +1,4 @@
-const { db, admin, bucket } = require('../config/firebaseConfig')
+const { db } = require('../config/firebaseConfig')
 const { notFound, foundSuccess } = require('../helpers/errorHandlers')
 
 exports.getProducts = async (req, res) => {
