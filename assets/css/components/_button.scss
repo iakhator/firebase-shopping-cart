@@ -60,6 +60,40 @@
   }
 }
 
+.el-button.white{
+  color: $off-black;
+  border-color: $off-black;
+  background-color: $off-white;
+  position: relative;
+
+  &:before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: block;
+      width: 0;
+      padding-top: 0;
+      border-radius: 100%;
+      background-color: rgba(236, 240, 241, .3);
+      -webkit-transform: translate(-50%, -50%);
+      -moz-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      -o-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+
+  &:active{
+    transition: width .2s ease-out, padding-top .2s ease-out;
+
+    &:before {
+       width: 120%;
+      padding-top: 120%;
+      transition: width .2s ease-out, padding-top .2s ease-out;
+    }
+  }
+}
+
 .el-radio-button__orig-radio:checked + .el-radio-button__inner {
   color: #fff;
   background-color: $off-black;

@@ -89,38 +89,42 @@ export default {
       this.card.mount(this.$refs.card)
     },
 
-    saveOrders() {
-      this.$axios.post('/api/saveorder', this.cartItems).then((response) => {
-        this.$router.push('/')
-      }).catch(err => console.error(err))
-    },
-
     pay() {
+      const _that = this
       this.loading = true
       const user = this.isAuthenticated ? this.loggedInUser.displayName : this.ruleForm.name
 
       const clientSecret = this.$store.state.clientSecret
-      this.$stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: this.card,
-          billing_details: {
-            name: user
+      this.$axios.post('/api/saveorder', this.cartItems).then((response) => {
+        this.$stripe.confirmCardPayment(clientSecret, {
+          payment_method: {
+            card: this.card,
+            billing_details: {
+              name: user
+            }
           }
-        }
-      }).then(function (result) {
-        if (result.error) {
+        }).then(function (result) {
+          if (result.error) {
           // Show error to your customer (e.g., insufficient funds)
-          console.log(result.error.message)
-          this.loading = false
-        } else {
+            _that.$noty.error(result.error, {
+              timeout: 500
+            })
+            this.loading = false
+          } else {
           // The payment has been processed!
           // eslint-disable-next-line no-lonely-if
-          if (result.paymentIntent.status === 'succeeded') {
+            if (result.paymentIntent.status === 'succeeded') {
             // Show a success message to your customer
-            this.saveOrders()
+              console.log('successful')
+              _that.$store.commit('ADD_ITEM', {
+                totalQty: 0,
+                cartIem: []
+              })
+              _that.$router.push('/payment/success')
+            }
           }
-        }
-      })
+        })
+      }).catch(err => console.error(err))
     }
   }
 }

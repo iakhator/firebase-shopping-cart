@@ -1,4 +1,7 @@
+const redis = require('redis')
 const session = require('express-session')
+const RedisStore = require('connect-redis')(session)
+const redisClient = redis.createClient()
 const bodyParser = require('body-parser')
 
 module.exports = {
@@ -66,7 +69,8 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/eslint-module',
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    '~/modules/api'
   ],
   /*
    ** Axios module configuration
@@ -96,14 +100,19 @@ module.exports = {
      */
     extend(config, ctx) {}
   },
+
   serverMiddleware: [
-    bodyParser.json(),
     session({
+      store: new RedisStore({
+        client: redisClient,
+        host: 'localhost',
+        port: 6380,
+        prefix: 'sess'
+      }),
       secret: 'super-secret-key',
       resave: false,
       saveUninitialized: false,
       cookie: { maxAge: 604800000 }
-    }),
-    '~/api'
+    })
   ]
 }

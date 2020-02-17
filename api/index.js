@@ -8,6 +8,6 @@ app.use(express.urlencoded({
   extended: true
 }))
 
-app.use('/api', routes)
+app.use('/', routes)
 
-module.exports = app
+module.exports = { path: '/api', handler: app }

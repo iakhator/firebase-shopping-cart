@@ -1,7 +1,7 @@
 const state = () => ({
   cartItems: {
     totalQty: 0,
-    cartIem: []
+    cartItem: []
   },
   clientSecret: ''
 })

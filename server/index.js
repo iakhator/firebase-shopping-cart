@@ -29,6 +29,13 @@ async function start() {
   }
 
   // Give nuxt middleware to express
+  app.use(express.json())
+  app.use(
+    express.urlencoded({
+      extended: true
+    })
+  )
+
   app.use(nuxt.render)
 
   // Listen the server
