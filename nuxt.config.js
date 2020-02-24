@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   redis = require('redis').createClient({
     host: 'localhost',
-    port: 6380,
+    port: 6379,
     prefix: 'sess'
   })
 }
