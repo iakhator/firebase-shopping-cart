@@ -103,7 +103,7 @@ module.exports = {
   serverMiddleware: [
     session({
       store:
-        process.env.NODE_ENV === 'production'
+        process.env.REDIS_URL
           ? new RedisStore({
             url: process.env.REDIS_URL,
             client: redisClient
