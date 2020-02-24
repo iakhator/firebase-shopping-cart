@@ -3,6 +3,8 @@ const session = require('express-session')
 const RedisStore = require('connect-redis')(session)
 const redisClient = redis.createClient()
 const bodyParser = require('body-parser')
+const host = 'localhost'
+const port = 6380
 
 module.exports = {
   mode: 'universal',
@@ -103,12 +105,17 @@ module.exports = {
 
   serverMiddleware: [
     session({
-      store: new RedisStore({
-        client: redisClient,
-        host: 'localhost',
-        port: 6380,
-        prefix: 'sess'
-      }),
+      store:
+        process.env.NODE_ENV === 'production'
+          ? new RedisStore({
+            url: process.env.REDIS_URL
+          })
+          : new RedisStore({
+            client: redisClient,
+            host: host,
+            port: port,
+            prefix: 'sess'
+          }),
       secret: 'super-secret-key',
       resave: false,
       saveUninitialized: false,
