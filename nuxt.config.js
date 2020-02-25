@@ -13,12 +13,6 @@ if (process.env.NODE_ENV === 'production') {
   })
 }
 
-if (process.env.NODE_ENV === 'production') {
-  url = process.env.API_URL
-} else {
-  url = 'http://localhost:3000/'
-}
-
 module.exports = {
   mode: 'universal',
   /*
@@ -92,7 +86,7 @@ module.exports = {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: url,
+    baseURL: process.env.API_URL || 'http://localhost:3000/',
   },
 
   auth: {
