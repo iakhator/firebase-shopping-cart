@@ -78,8 +78,7 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/eslint-module',
-    '@nuxtjs/dotenv',
-    '~/modules/api'
+    '@nuxtjs/dotenv'
   ],
   /*
    ** Axios module configuration
@@ -120,6 +119,7 @@ module.exports = {
       resave: false,
       saveUninitialized: false,
       cookie: { maxAge: 604800000 }
-    })
+    }),
+    '~/api'
   ]
 }
