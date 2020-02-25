@@ -86,7 +86,7 @@ module.exports = {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: process.env.API_URL || 'http://localhost:3000/',
+    baseURL: process.env.API_URL,
   },
 
   auth: {
