@@ -85,9 +85,7 @@ module.exports = {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {
-    baseURL: process.env.API_URL,
-  },
+  axios: {},
 
   auth: {
     strategies: {
