@@ -1,7 +1,6 @@
 const session = require('express-session')
 const RedisStore = require('connect-redis')(session)
 let redis
-let url
 
 if (process.env.NODE_ENV === 'production') {
   redis = require('redis').createClient(process.env.REDIS_URL)
@@ -85,7 +84,7 @@ module.exports = {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: process.env._AXIOS_BASE_URL_
+    // baseURL: process.env._AXIOS_BASE_URL_
   },
 
   auth: {
