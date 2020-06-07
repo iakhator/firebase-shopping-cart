@@ -25,7 +25,9 @@ $ yarn dev
 ```
 
 ## Test
-```yarn run test```
+```
+yarn run test
+```
 
 ## Deployment
 ```
