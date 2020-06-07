@@ -1,23 +1,7 @@
-# firecomerce
+# Shop Center
 
-> My funkadelic Nuxt.js project
+> My playaround Nuxt.js project
 
-## Build Setup
-
-``` bash
-# install dependencies
-$ yarn install
-
-# serve with hot reload at localhost:3000
-$ yarn dev
-
-# build for production and launch server
-$ yarn build
-$ yarn start
-
-# generate static project
-$ yarn generate
-```
 
 ## Introduction
 * ShopCenter is an skelental e-commerce platform for mobile phone
