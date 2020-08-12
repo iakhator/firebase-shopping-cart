@@ -1,4 +1,3 @@
-
 const stripe = require('stripe')(process.env.STRIPE_SECRET)
 const { db } = require('../config/firebaseConfig')
 
@@ -7,7 +6,7 @@ function Cart(oldCart) {
   this.totalQty = oldCart.totalQty || 0
   this.totalPrice = oldCart.totalPrice || 0
 
-  this.add = function (item, id) {
+  this.add = function(item, id) {
     let storedItem = this.items[id]
     let add = 0
 
@@ -26,7 +25,7 @@ function Cart(oldCart) {
     this.totalPrice = add
   }
 
-  this.removeFromCart = function (itemId) {
+  this.removeFromCart = function(itemId) {
     for (const id in this.items) {
       if (itemId === id) {
         this.totalPrice = this.totalPrice - this.items[id].price
@@ -36,7 +35,7 @@ function Cart(oldCart) {
     }
   }
 
-  this.generateArray = function () {
+  this.generateArray = function() {
     const arr = []
     for (const id in this.items) {
       arr.push(this.items[id])
@@ -54,10 +53,14 @@ exports.addToCart = (req, res) => {
 }
 
 exports.getCart = (req, res) => {
+  console.log(req.session.cart)
   if (req.session.cart) {
     const cart = new Cart(req.session.cart)
     const cartItem = cart.generateArray()
-    res.status(200).json({ cartItem, totalQty: cart.totalQty, totalPrice: cart.totalPrice })
+    console.log(cartItem)
+    res
+      .status(200)
+      .json({ cartItem, totalQty: cart.totalQty, totalPrice: cart.totalPrice })
   } else {
     res.status(400).json({ message: 'Cart is empty' })
   }

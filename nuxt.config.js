@@ -5,11 +5,12 @@ let redis
 if (process.env.NODE_ENV === 'production') {
   redis = require('redis').createClient(process.env.REDIS_URL)
 } else {
-  redis = require('redis').createClient({
+  redis = {
     host: 'localhost',
     port: 6379,
-    prefix: 'sess'
-  })
+    prefix: 'sess',
+    client: require('redis').createClient()
+  }
 }
 
 module.exports = {
@@ -112,10 +113,9 @@ module.exports = {
 
   serverMiddleware: [
     session({
-      store:
-        new RedisStore({
-          client: redis
-        }),
+      store: new RedisStore({
+        client: redis
+      }),
       secret: 'super-secret-key',
       resave: false,
       saveUninitialized: false,

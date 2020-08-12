@@ -36,9 +36,14 @@ const getters = {
 
 const actions = {
   async nuxtServerInit({ commit, state, dispatch }, { req }) {
-    if (req.session && req.session.cart) {
-      const { data } = await this.$axios.get('/api/cart/')
-      commit('ADD_ITEM', data)
+    try {
+      // console.log(req.session.cart)
+      if (req.session && req.session.cart) {
+        const { data } = await this.$axios.get('/api/cart/')
+        commit('ADD_ITEM', data)
+      }
+    } catch (error) {
+      console.error(error.response.data.message)
     }
   },
 
