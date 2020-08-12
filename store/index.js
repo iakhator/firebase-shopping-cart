@@ -1,3 +1,11 @@
+const generateArray = items => {
+  const arr = []
+  for (const id in items) {
+    arr.push(items[id])
+  }
+  return arr
+}
+
 const state = () => ({
   cartItems: {
     totalQty: 0,
@@ -35,21 +43,22 @@ const getters = {
 }
 
 const actions = {
-  async nuxtServerInit({ commit, state, dispatch }, { req }) {
-    try {
-      // console.log(req.session.cart)
-      if (req.session && req.session.cart) {
-        const { data } = await this.$axios.get('/api/cart/')
-        commit('ADD_ITEM', data)
-      }
-    } catch (error) {
-      console.error(error.response.data.message)
+  nuxtServerInit({ commit, state, dispatch }, { req }) {
+    if (req.session && req.session.cart) {
+      const cart = req.session.cart
+      const cartItem = generateArray(cart.items)
+      commit('ADD_ITEM', {
+        cartItem,
+        totalQty: cart.totalQty,
+        totalPrice: cart.totalPrice
+      })
     }
   },
 
   async addToCart({ commit }, payload) {
     await this.$axios.$post(`/api/cart/${payload.itemId}`, payload)
     const { data } = await this.$axios.get('/api/cart/')
+    console.log(data)
     commit('ADD_ITEM', data)
     return data
   },

@@ -53,11 +53,9 @@ exports.addToCart = (req, res) => {
 }
 
 exports.getCart = (req, res) => {
-  console.log(req.session.cart)
   if (req.session.cart) {
     const cart = new Cart(req.session.cart)
     const cartItem = cart.generateArray()
-    console.log(cartItem)
     res
       .status(200)
       .json({ cartItem, totalQty: cart.totalQty, totalPrice: cart.totalPrice })
