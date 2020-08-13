@@ -6,25 +6,27 @@
         <p>{{ cartItem.title }}</p>
         <div class="cart__wrapper-content">
           <div class="cart__wrapper-image">
-            <img :src="cartItem.itemPhoto" alt="">
+            <img :src="cartItem.itemPhoto" alt />
             <p>{{ cartItem.variantId }}</p>
           </div>
           <div class="checkout__wrapper-quantity">
             <span class="cart__quantity">{{ cartItem.quantity }}</span>
           </div>
-          <div class="cart__wrapper-price">
-            {{ cartItem.price | toUSD }}
-          </div>
+          <div class="cart__wrapper-price">{{ cartItem.price | toUSD }}</div>
         </div>
       </div>
       <div class="checkout__wrapper-subdesc">
         <div class="cart__wrapper-subtotal">
-          <span>Subtotal:</span> {{ cartItems.totalPrice | toUSD }}
+          <span>Subtotal:</span>
+          {{ cartItems.totalPrice | toUSD }}
         </div>
         <div class="checkout__wrapper-subtotal">
           <span>Shipping:</span> Free
         </div>
-        <div class="checkout__wrapper-total"><span>Total:</span> {{ cartItems.totalPrice | toUSD }}</div>
+        <div class="checkout__wrapper-total">
+          <span>Total:</span>
+          {{ cartItems.totalPrice | toUSD }}
+        </div>
       </div>
     </div>
     <div class="checkout__grid-right">
@@ -39,8 +41,7 @@
         <div class="card-details">Card Information</div>
         <div class="form-row">
           <label for="card-number">Card Number</label>
-          <div ref="card">
-          </div>
+          <div ref="card"></div>
         </div>
         <div class="pay form-row">
           <el-button class="el-button black pay__btn" :loading="loading" @click="pay">Pay</el-button>
@@ -60,7 +61,7 @@ export default {
       card: '',
       loading: false,
       ruleForm: {
-        name: '',
+        name: this.$store.state.user.name || '',
         address: ''
       },
       rules: {
@@ -139,23 +140,23 @@ export default {
   font-weight: 500;
 }
 
-.checkout__grid-left{
+.checkout__grid-left {
   width: 50%;
   padding: 10px;
 }
 
- .checkout__grid-right {
-   padding: 10px 20px;;
-   width: 50%;
+.checkout__grid-right {
+  padding: 10px 20px;
+  width: 50%;
 
-    p {
-      text-align: center;
-      font-size: 1.5rem;
-      margin: auto;
-      font-weight: 600;
-      color: #606266;
-    }
- }
+  p {
+    text-align: center;
+    font-size: 1.5rem;
+    margin: auto;
+    font-weight: 600;
+    color: #606266;
+  }
+}
 
 .checkout__grid-left {
   padding: 25px 55px;
@@ -167,12 +168,12 @@ export default {
   border: 1px solid #cdc9c6;
   font-weight: normal;
 
-  &:focus{
+  &:focus {
     border: 1px solid #cdc9c6;
   }
 }
 
-.el-form{
+.el-form {
   margin-top: 20px;
 }
 
@@ -182,7 +183,7 @@ export default {
   font-weight: 600;
 }
 
-.card-details{
+.card-details {
   font-weight: 600;
   font-size: 13px;
   margin-bottom: 10px;
@@ -201,23 +202,25 @@ export default {
   }
 }
 
-.card-cvc{
+.card-cvc {
   margin-right: 13px;
 }
 
-.el-col{
+.el-col {
   line-height: 1.3;
 }
 
-.pay__btn{
+.pay__btn {
   width: 100%;
 
-  &:active, &:focus, &:hover{
-    width: 100%
+  &:active,
+  &:focus,
+  &:hover {
+    width: 100%;
   }
 }
 
-.pay__grid{
+.pay__grid {
   margin-top: 50px;
 }
 
@@ -245,7 +248,7 @@ input:focus,
   background-color: #fefde5 !important;
 }
 
-.checkout__wrapper{
+.checkout__wrapper {
   &-subdesc {
     font-size: 12px;
     float: right;
