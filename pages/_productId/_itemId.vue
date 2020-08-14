@@ -198,7 +198,7 @@ $gray: #dcdfe6;
   justify-content: center;
 }
 
-.error{
+.error {
   color: #f56c6c;
   font-size: 0.75rem;
 }
