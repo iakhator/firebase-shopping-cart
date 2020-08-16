@@ -13,11 +13,10 @@
         <nuxt-link to="/">Shop Center</nuxt-link>
       </el-menu-item>
       <template v-if="isAuthenticated">
-        <el-menu-item class="el-menu-navlist" @click="logOut()">
-          Sign out
-        </el-menu-item>
+        <el-menu-item class="el-menu-navlist" @click="logOut()">Sign out</el-menu-item>
         <el-menu-item class="el-menu-navlist" @click="profileDrawer = true">
-          {{ loggedInUser.displayName }} <user-icon />
+          {{ loggedInUser.displayName }}
+          <user-icon />
         </el-menu-item>
       </template>
       <el-menu-item v-else class="el-menu-navlist" @click="accountDrawer = true">
@@ -33,7 +32,11 @@
     <product-categories :categories="categories" />
 
     <el-drawer title="Your Shopping Cart" :visible.sync="cartDrawer" size="35%" class="cart__body">
-      <cart-drawer :empty-cart="emptyCart" @close-cart-drawer="closeCartDrawer" @close-on-checkout="closeOnCheckout" />
+      <cart-drawer
+        :empty-cart="emptyCart"
+        @close-cart-drawer="closeCartDrawer"
+        @close-on-checkout="closeOnCheckout"
+      />
     </el-drawer>
 
     <el-drawer :visible.sync="accountDrawer" size="35%">
@@ -87,6 +90,11 @@ export default {
 
   created() {
     this.$bus.$on('close-account-drawer', (value) => {
+      this.accountDrawer = value
+    })
+
+    this.$bus.$on('open-account-drawer', (value) => {
+      console.log(value)
       this.accountDrawer = value
     })
   },

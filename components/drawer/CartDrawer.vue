@@ -8,31 +8,30 @@
       <p>{{ cartItem.title }}</p>
       <div class="cart__wrapper-content">
         <div class="cart__wrapper-image">
-          <img :src="cartItem.itemPhoto" alt="">
+          <img :src="cartItem.itemPhoto" alt />
           <p>{{ cartItem.variantId }}</p>
         </div>
         <div class="cart__wrapper-quantity">
-          <button class="quantity__btn">
-            -
-          </button>
+          <button class="quantity__btn">-</button>
           <span class="cart__quantity">{{ cartItem.quantity }}</span>
-          <button class="quantity__btn">
-            +
-          </button>
+          <button class="quantity__btn">+</button>
         </div>
-        <div class="cart__wrapper-price">
-          {{ cartItem.price | toUSD }}
-        </div>
+        <div class="cart__wrapper-price">{{ cartItem.price | toUSD }}</div>
         <el-button type="danger" icon="el-icon-delete" circle @click="deleteItem(cartItem.itemId)"></el-button>
       </div>
     </div>
-    <div class="cart__wrapper-total" v-show="!emptyCart"><span>Total:</span> {{ cartItems.totalPrice | toUSD }}</div>
-    <el-button v-show="!emptyCart" round class="black checkout" :loading="loading" @click="checkOut">
-      checkout
-    </el-button>
-    <el-button round class="no__cart-btn" @click="closeCartDrawer">
-      Browse Products
-    </el-button>
+    <div class="cart__wrapper-total" v-show="!emptyCart">
+      <span>Total:</span>
+      {{ cartItems.totalPrice | toUSD }}
+    </div>
+    <el-button
+      v-show="!emptyCart"
+      round
+      class="black checkout"
+      :loading="loading"
+      @click="checkOut"
+    >checkout</el-button>
+    <el-button round class="no__cart-btn" @click="closeCartDrawer">Browse Products</el-button>
   </div>
 </template>
 
@@ -59,7 +58,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['cartItems'])
+    ...mapGetters(['cartItems', 'isAuthenticated'])
   },
 
   methods: {
@@ -68,16 +67,21 @@ export default {
     },
 
     checkOut() {
-      this.loading = true
-      this.$store.dispatch('checkOut', { amount: (Math.round(this.cartItems.totalPrice * 100)) })
-        .then(() => {
-          this.$router.push({ path: '/cart/checkout' })
-          this.$emit('close-on-checkout', false)
-          this.loading = false
-        }).catch(err => {
-          console.error(err)
-          this.loading = false
-        })
+      if (this.isAuthenticated) {
+        this.loading = true
+        this.$store.dispatch('checkOut', { amount: (Math.round(this.cartItems.totalPrice * 100)) })
+          .then(() => {
+            this.$router.push({ path: '/cart/checkout' })
+            this.$emit('close-on-checkout', false)
+            this.loading = false
+          }).catch(err => {
+            console.error(err)
+            this.loading = false
+          })
+      } else {
+        this.closeCartDrawer()
+        this.$bus.$emit('open-account-drawer', true)
+      }
     },
 
     deleteItem(id) {
@@ -120,13 +124,13 @@ export default {
   padding-bottom: 5px;
 }
 
-.cart__wrapper-content{
+.cart__wrapper-content {
   display: grid;
   grid-gap: 10px;
   grid-template-columns: 2fr 2fr 2fr 1fr;
 }
 
-.cart__wrapper-price{
+.cart__wrapper-price {
   display: flex;
   justify-content: flex-end;
   font-weight: 600;
@@ -140,7 +144,7 @@ export default {
   align-items: center;
 }
 
-.cart__wrapper-total{
+.cart__wrapper-total {
   display: flex;
   justify-content: flex-end;
   margin: 20px 0px;
@@ -151,31 +155,32 @@ export default {
   width: 25.36111vw !important;
 }
 
-.el-button.checkout{
+.el-button.checkout {
   display: block;
   float: right;
 }
 
-.quantity__btn{
+.quantity__btn {
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1.2em;
 }
 
-.quantity__btn{
+.quantity__btn {
   border: 1px solid black;
-    height: 20px;
-   padding: 0 6px;
+  height: 20px;
+  padding: 0 6px;
 }
 
 .el-button.is-circle {
-  border:none;
+  border: none;
 
-  &:hover, &:focus, &:active{
+  &:hover,
+  &:focus,
+  &:active {
     background: none;
     color: #f78989;
   }
-
 }
 </style>

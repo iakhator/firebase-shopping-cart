@@ -61,7 +61,7 @@ export default {
       card: '',
       loading: false,
       ruleForm: {
-        name: this.$store.state.auth.user.displayName || '',
+        name: this.$store.state.auth.user ? this.$store.state.auth.user.displayName : '',
         address: ''
       },
       rules: {
