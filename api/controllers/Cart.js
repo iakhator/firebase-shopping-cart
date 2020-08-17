@@ -25,6 +25,37 @@ function Cart(oldCart) {
     this.totalPrice = add
   }
 
+  this.decrementQty = function(itemId) {
+    for (const id in this.items) {
+      if (itemId === id) {
+        const cartItem = this.items[id]
+        const qtyPrice = cartItem.price / cartItem.quantity
+        if (cartItem.quantity >= 1) {
+          cartItem.quantity -= 1
+          cartItem.price = cartItem.price - qtyPrice
+          this.totalQty -= 1
+          this.totalPrice -= qtyPrice
+        }
+      }
+    }
+  }
+
+  this.incrementQty = function(itemId) {
+    for (const id in this.items) {
+      if (itemId === id) {
+        const cartItem = this.items[id]
+        const qtyPrice = cartItem.price / cartItem.quantity
+        if (cartItem.quantity <= 10) {
+          console.log('memem')
+          cartItem.quantity += 1
+          cartItem.price = cartItem.price + qtyPrice
+          this.totalQty += 1
+          this.totalPrice += qtyPrice
+        }
+      }
+    }
+  }
+
   this.removeFromCart = function(itemId) {
     for (const id in this.items) {
       if (itemId === id) {
@@ -62,6 +93,22 @@ exports.getCart = (req, res) => {
   } else {
     res.status(400).json({ message: 'Cart is empty' })
   }
+}
+
+exports.decrementQty = (req, res) => {
+  const id = req.params.cartId
+  const cart = new Cart(req.session.cart)
+  cart.decrementQty(id)
+  req.session.cart = cart
+  res.status(200).json({ cart })
+}
+
+exports.incrementQty = (req, res) => {
+  const id = req.params.cartId
+  const cart = new Cart(req.session.cart)
+  cart.incrementQty(id)
+  req.session.cart = cart
+  res.status(200).json({ cart })
 }
 
 exports.checkOut = async (req, res) => {

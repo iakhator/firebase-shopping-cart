@@ -1,10 +1,14 @@
 const express = require('express')
 const { signUp, signIn, getUser, logOut } = require('../controllers/User')
 const { getProducts, getProduct } = require('../controllers/Product')
-const { addToCart, getCart, checkOut, removeItemCart } = require('../controllers/Cart')
 const {
-  saveOrders
-} = require('../controllers/Orders')
+  addToCart,
+  getCart,
+  checkOut,
+  removeItemCart,
+  decrementQty
+} = require('../controllers/Cart')
+const { saveOrders } = require('../controllers/Orders')
 const authMiddleware = require('../middlewares/authMiddleware')
 
 const {
@@ -28,6 +32,7 @@ router.get('/products/:productId', getProduct)
 router.post('/cart/:productId', addToCart)
 router.post('/checkout/', checkOut)
 router.get('/cart/', getCart)
+router.post('/decrementQty/:cartId', decrementQty)
 router.delete('/deleteItem', removeItemCart)
 
 // category route

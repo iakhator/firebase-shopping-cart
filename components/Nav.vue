@@ -7,7 +7,6 @@
       background-color="#1B1A1A"
       text-color="#fff"
       active-text-color="#ffd04b"
-      @select="handleSelect"
     >
       <el-menu-item index="1" class="el-menu-logo">
         <nuxt-link to="/">Shop Center</nuxt-link>
@@ -105,10 +104,6 @@ export default {
   },
 
   methods: {
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath)
-    },
-
     closeCartDrawer(value) {
       this.cartDrawer = value
       this.$router.push('/')

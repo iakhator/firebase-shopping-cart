@@ -12,9 +12,9 @@
           <p>{{ cartItem.variantId }}</p>
         </div>
         <div class="cart__wrapper-quantity">
-          <button class="quantity__btn">-</button>
+          <button class="quantity__btn" @click="decreaseCartQty(cartItem.itemId)">-</button>
           <span class="cart__quantity">{{ cartItem.quantity }}</span>
-          <button class="quantity__btn">+</button>
+          <button class="quantity__btn" @click="decreaseCartQty(cartItem.itemId)">+</button>
         </div>
         <div class="cart__wrapper-price">{{ cartItem.price | toUSD }}</div>
         <el-button type="danger" icon="el-icon-delete" circle @click="deleteItem(cartItem.itemId)"></el-button>
@@ -94,6 +94,11 @@ export default {
           timeout: 500
         })
       })
+    },
+
+    decreaseCartQty(id) {
+      console.log(id)
+      this.$store.dispatch('decrementQty', id).then(data => console.log(data))
     }
   }
 }
