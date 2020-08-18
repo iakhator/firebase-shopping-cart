@@ -6,7 +6,8 @@ const {
   getCart,
   checkOut,
   removeItemCart,
-  decrementQty
+  decrementQty,
+  incrementQty
 } = require('../controllers/Cart')
 const { saveOrders } = require('../controllers/Orders')
 const authMiddleware = require('../middlewares/authMiddleware')
@@ -33,6 +34,7 @@ router.post('/cart/:productId', addToCart)
 router.post('/checkout/', checkOut)
 router.get('/cart/', getCart)
 router.post('/decrementQty/:cartId', decrementQty)
+router.post('/incrementQty/:cartId', incrementQty)
 router.delete('/deleteItem', removeItemCart)
 
 // category route

@@ -97,6 +97,11 @@ const actions = {
   async decrementQty({ commit }, payload) {
     const cart = await this.$axios.$post(`/api/decrementQty/${payload}`)
     console.log(cart, 'cart')
+  },
+
+  async incrementQty({ commit }, payload) {
+    const cart = await this.$axios.$post(`/api/incrementQty/${payload}`)
+    console.log(cart, 'cart')
   }
 }
 
