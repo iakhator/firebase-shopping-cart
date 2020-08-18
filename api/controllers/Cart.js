@@ -36,6 +36,9 @@ function Cart(oldCart) {
           this.totalQty -= 1
           this.totalPrice -= qtyPrice
         }
+        if (cartItem.quantity === 0) {
+          delete this.items[id]
+        }
       }
     }
   }
@@ -45,8 +48,7 @@ function Cart(oldCart) {
       if (itemId === id) {
         const cartItem = this.items[id]
         const qtyPrice = cartItem.price / cartItem.quantity
-        if (cartItem.quantity <= 10) {
-          console.log('memem')
+        if (cartItem.quantity <= 4) {
           cartItem.quantity += 1
           cartItem.price = cartItem.price + qtyPrice
           this.totalQty += 1

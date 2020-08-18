@@ -97,13 +97,11 @@ export default {
     },
 
     decreaseCartQty(id) {
-      console.log(id)
-      this.$store.dispatch('decrementQty', id).then(data => console.log(data))
+      this.$store.dispatch('decrementQty', id)
     },
 
     increaseCartQty(id) {
-      console.log(id)
-      this.$store.dispatch('incrementQty', id).then(data => console.log(data))
+      this.$store.dispatch('incrementQty', id)
     }
   }
 }
@@ -181,6 +179,8 @@ export default {
   border: 1px solid black;
   height: 20px;
   padding: 0 6px;
+  cursor: pointer;
+  box-shadow: 1px 1px 0px #a1a1a1;
 }
 
 .el-button.is-circle {

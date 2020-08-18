@@ -66,7 +66,6 @@ const actions = {
   nuxtServerInit({ commit, state, dispatch }, { req }) {
     if (req.session && req.session.cart) {
       const cart = req.session.cart
-      console.log(cart, 'from here')
       const cartItem = generateArray(cart.items)
       commit('ADD_ITEM', {
         cartItem,
@@ -95,13 +94,23 @@ const actions = {
   },
 
   async decrementQty({ commit }, payload) {
-    const cart = await this.$axios.$post(`/api/decrementQty/${payload}`)
-    console.log(cart, 'cart')
+    const { cart } = await this.$axios.$post(`/api/decrementQty/${payload}`)
+    const cartItem = generateArray(cart.items)
+    commit('ADD_ITEM', {
+      cartItem,
+      totalQty: cart.totalQty,
+      totalPrice: cart.totalPrice
+    })
   },
 
   async incrementQty({ commit }, payload) {
-    const cart = await this.$axios.$post(`/api/incrementQty/${payload}`)
-    console.log(cart, 'cart')
+    const { cart } = await this.$axios.$post(`/api/incrementQty/${payload}`)
+    const cartItem = generateArray(cart.items)
+    commit('ADD_ITEM', {
+      cartItem,
+      totalQty: cart.totalQty,
+      totalPrice: cart.totalPrice
+    })
   }
 }
 
