@@ -74,8 +74,8 @@ export default {
             this.$router.push({ path: '/cart/checkout' })
             this.$emit('close-on-checkout', false)
             this.loading = false
-          }).catch(err => {
-            console.error(err)
+          }).catch(error => {
+            console.error(error)
             this.loading = false
           })
       } else {
