@@ -1,5 +1,4 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET)
-const { db } = require('../config/firebaseConfig')
 
 function Cart(oldCart) {
   this.items = oldCart.items || {}
