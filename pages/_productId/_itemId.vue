@@ -21,12 +21,18 @@
         <div class="variant">
           <div class="item__contents-quantity">
             <span class="item__contents-spec-variant">Quantity :</span>
-            <el-input-number v-model="form.num" :min="1" :max="3"></el-input-number>
+            <el-input-number
+              v-model="form.num"
+              :min="1"
+              :max="3"
+            ></el-input-number>
           </div>
 
           <div class="item__contents-quantity">
             <span class="item__contents-quantity-label">Price :</span>
-            <span class="item__contents-quantity-price">{{ itemPrice | toUSD }}</span>
+            <span class="item__contents-quantity-price">{{
+              itemPrice | toUSD
+            }}</span>
           </div>
 
           <div class="item__contents-variant">
@@ -41,12 +47,16 @@
                 size="small"
               ></el-radio-button>
             </el-radio-group>
-            <p class="error el-tag--danger" v-if="errorMessage">{{ errorMessage }}</p>
+            <p class="error el-tag--danger" v-if="errorMessage">
+              {{ errorMessage }}
+            </p>
           </div>
         </div>
         <div class="action-button">
-          <el-button round class="action-button-cart" @click="addToCart">Add to cart</el-button>
-          <el-button round class="black">Buy now</el-button>
+          <el-button round class="action-button-cart" @click="addToCart">
+            Add to cart
+          </el-button>
+          <el-button round class="black" @click="buyNow">Buy now</el-button>
         </div>
       </el-form>
     </el-col>
@@ -54,7 +64,6 @@
 </template>
 
 <script>
-
 export default {
   data() {
     return {
@@ -63,7 +72,8 @@ export default {
         variant: '',
         num: ''
       },
-      errorMessage: ''
+      errorMessage: '',
+      loading: true
     }
   },
 
@@ -83,8 +93,35 @@ export default {
   },
 
   methods: {
+    buyNow() {
+      const cartObject = {
+        variantId: this.form.variant,
+        quantity: this.form.num,
+        title: this.item.itemTitle,
+        price: this.item.price,
+        itemPhoto: this.item.imageUrl,
+        itemId: this.$route.params.itemId
+      }
+
+      if (this.$store.getters.isAuthenticated) {
+        this.loading = true
+        this.$store
+          .dispatch('checkOut', {
+            amount: Math.round(cartObject.price * 100)
+          })
+          .then(() => {
+            this.$router.push({ path: '/cart/checkout' })
+            this.loading = false
+          })
+          .catch(error => {
+            console.error(error)
+            this.loading = false
+          })
+      }
+      console.log(cartObject)
+    },
+
     addToCart() {
-      // this.ADD_ITEM(this.form.num)
       const cartObject = {
         variantId: this.form.variant,
         quantity: this.form.num,

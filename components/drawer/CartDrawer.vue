@@ -4,7 +4,12 @@
       <h6>Your bag is empty</h6>
       <shopping-bag-black class="no__cart" />
     </div>
-    <div v-else class="cart__wrapper" v-for="cartItem in cartItems.cartItem" :key="cartItem.itemId">
+    <div
+      v-else
+      class="cart__wrapper"
+      v-for="cartItem in cartItems.cartItem"
+      :key="cartItem.itemId"
+    >
       <p>{{ cartItem.title }}</p>
       <div class="cart__wrapper-content">
         <div class="cart__wrapper-image">
@@ -12,12 +17,27 @@
           <p>{{ cartItem.variantId }}</p>
         </div>
         <div class="cart__wrapper-quantity">
-          <button class="quantity__btn" @click="decreaseCartQty(cartItem.itemId)">-</button>
+          <button
+            class="quantity__btn"
+            @click="decreaseCartQty(cartItem.itemId)"
+          >
+            -
+          </button>
           <span class="cart__quantity">{{ cartItem.quantity }}</span>
-          <button class="quantity__btn" @click="increaseCartQty(cartItem.itemId)">+</button>
+          <button
+            class="quantity__btn"
+            @click="increaseCartQty(cartItem.itemId)"
+          >
+            +
+          </button>
         </div>
         <div class="cart__wrapper-price">{{ cartItem.price | toUSD }}</div>
-        <el-button type="danger" icon="el-icon-delete" circle @click="deleteItem(cartItem.itemId)"></el-button>
+        <el-button
+          type="danger"
+          icon="el-icon-delete"
+          circle
+          @click="deleteItem(cartItem.itemId)"
+        ></el-button>
       </div>
     </div>
     <div class="cart__wrapper-total" v-show="!emptyCart">
@@ -30,8 +50,12 @@
       class="black checkout"
       :loading="loading"
       @click="checkOut"
-    >checkout</el-button>
-    <el-button round class="no__cart-btn" @click="closeCartDrawer">Browse Products</el-button>
+    >
+      checkout
+    </el-button>
+    <el-button round class="no__cart-btn" @click="closeCartDrawer">
+      Browse Products
+    </el-button>
   </div>
 </template>
 
@@ -69,12 +93,16 @@ export default {
     checkOut() {
       if (this.isAuthenticated) {
         this.loading = true
-        this.$store.dispatch('checkOut', { amount: (Math.round(this.cartItems.totalPrice * 100)) })
+        this.$store
+          .dispatch('checkOut', {
+            amount: Math.round(this.cartItems.totalPrice * 100)
+          })
           .then(() => {
             this.$router.push({ path: '/cart/checkout' })
             this.$emit('close-on-checkout', false)
             this.loading = false
-          }).catch(error => {
+          })
+          .catch(error => {
             console.error(error)
             this.loading = false
           })
@@ -85,15 +113,18 @@ export default {
     },
 
     deleteItem(id) {
-      this.$store.dispatch('removeFromCart', { data: { id } }).then(() => {
-        this.$noty.success('Item deleted', {
-          timeout: 500
+      this.$store
+        .dispatch('removeFromCart', { data: { id } })
+        .then(() => {
+          this.$noty.success('Item deleted', {
+            timeout: 500
+          })
         })
-      }).catch((err) => {
-        this.$noty.error(err.response.message, {
-          timeout: 500
+        .catch(err => {
+          this.$noty.error(err.response.message, {
+            timeout: 500
+          })
         })
-      })
     },
 
     decreaseCartQty(id) {
