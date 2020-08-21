@@ -93,33 +93,7 @@ export default {
   },
 
   methods: {
-    buyNow() {
-      const cartObject = {
-        variantId: this.form.variant,
-        quantity: this.form.num,
-        title: this.item.itemTitle,
-        price: this.item.price,
-        itemPhoto: this.item.imageUrl,
-        itemId: this.$route.params.itemId
-      }
-
-      if (this.$store.getters.isAuthenticated) {
-        this.loading = true
-        this.$store
-          .dispatch('checkOut', {
-            amount: Math.round(cartObject.price * 100)
-          })
-          .then(() => {
-            this.$router.push({ path: '/cart/checkout' })
-            this.loading = false
-          })
-          .catch(error => {
-            console.error(error)
-            this.loading = false
-          })
-      }
-      console.log(cartObject)
-    },
+    buyNow() {},
 
     addToCart() {
       const cartObject = {
