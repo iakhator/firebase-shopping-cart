@@ -8,17 +8,17 @@ import { nextTick } from 'vue'
 
 const products = ref([])
 
-async function fetchProducts() {
-  try {
-    const { data } = await useFetch('/api/products')
-    products.value = data?.products
-  } catch (err) {
-    console.error({ statusCode: 404, message: 'Product not found' })
-  }
-}
+// async function fetchProducts() {
+//   try {
+//     const { data } = await useFetch('/api/products')
+//     products.value = data?.products
+//   } catch (err) {
+//     console.error({ statusCode: 404, message: 'Product not found' })
+//   }
+// }
 
-onMounted(async () => {
-  await nextTick()
-  await fetchProducts()
-})
+// onMounted(async () => {
+//   await nextTick()
+//   await fetchProducts()
+// })
 </script>

@@ -88,3 +88,4 @@ sw.*
 .DS_Store
 
 api/config/serviceAccountKey.json
+server/api/config/serviceAccountKey.json

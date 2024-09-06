@@ -42,7 +42,7 @@
 
     <el-drawer
       title="Your Shopping Cart"
-      :visible.sync="cartDrawer"
+      v-model="cartDrawer"
       size="35%"
       class="cart__body"
     >
@@ -53,11 +53,11 @@
       />
     </el-drawer>
 
-    <el-drawer :visible.sync="accountDrawer" size="35%">
+    <el-drawer v-model="accountDrawer" size="35%">
       <account-drawer />
     </el-drawer>
 
-    <el-drawer :visible.sync="profileDrawer" size="35%">
+    <el-drawer v-model="profileDrawer" size="35%">
       <profile-drawer />
     </el-drawer>
   </div>
