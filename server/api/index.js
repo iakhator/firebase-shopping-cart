@@ -12,6 +12,6 @@ app.use(
   })
 )
 
-app.use('/api', routes)
+app.use('/', routes)
 
-export default fromNodeMiddleware(app)
+export default defineEventHandler(() => fromNodeMiddleware(app))

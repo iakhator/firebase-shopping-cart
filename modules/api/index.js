@@ -5,7 +5,7 @@ export default function (moduleOptions, nuxt) {
       nitroConfig.handlers = nitroConfig.handlers || []
       nitroConfig.handlers.push({
         route: '/api',
-        handler: '~/api/index.js',
+        handler: '~/server/api/index.js',
       })
     })
   }

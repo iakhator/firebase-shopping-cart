@@ -82,13 +82,25 @@ export default {
     ProfileDrawer,
   },
 
+  setup() {
+    const categories = ref([])
+
+    onMounted(async () => {
+      const categories = await useFetch('/api/categories')
+      categories.value = categories.data
+    })
+
+    return {
+      categories,
+    }
+  },
+
   data() {
     return {
       activeIndex2: '1',
       cartDrawer: false,
       accountDrawer: false,
       profileDrawer: false,
-      categories: [],
     }
   },
 
@@ -110,11 +122,6 @@ export default {
     this.$bus.on('open-account-drawer', (value) => {
       this.accountDrawer = value
     })
-  },
-
-  async mounted() {
-    const categories = await this.$axios.$get('/api/categories')
-    this.categories = categories.data
   },
 
   methods: {
