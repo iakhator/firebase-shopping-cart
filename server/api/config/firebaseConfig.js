@@ -10,8 +10,8 @@ const firebaseConfig = {
   databaseURL: process.env.DATABASE_URL,
   projectId: process.env.PROJECT_ID,
   storageBucket: process.env.STORAGE_BUCKET,
-  messagingSenderId: '1031298048826',
-  appId: '1:1031298048826:web:a8032c2f3e357314',
+  messagingSenderId: process.env.MESSAGING_SENDER_ID,
+  appId: process.env.APP_ID,
 }
 
 admin.initializeApp({
