@@ -1,21 +1,18 @@
-const express = require('express')
-const { signUp, signIn, getUser, logOut } = require('../controllers/User')
-const { getProducts, getProduct } = require('../controllers/Product')
-const {
+import express from 'express'
+import { signUp, signIn, getUser, logOut } from '../controllers/User.js'
+import { getProducts, getProduct } from '../controllers/Product.js'
+import {
   addToCart,
   getCart,
   checkOut,
   removeItemCart,
   decrementQty,
-  incrementQty
-} = require('../controllers/Cart')
-const { saveOrders } = require('../controllers/Orders')
-const authMiddleware = require('../middlewares/authMiddleware')
+  incrementQty,
+} from '../controllers/Cart.js'
+import { saveOrders } from '../controllers/Orders.js'
+import authMiddleware from '../middlewares/authMiddleware.js'
 
-const {
-  getCategories,
-  getCategoryProducts
-} = require('../controllers/Category')
+import { getCategories, getCategoryProducts } from '../controllers/Category.js'
 
 const router = express.Router()
 
@@ -44,4 +41,4 @@ router.get('/category/:id', getCategoryProducts)
 // orders
 router.post('/saveorder', authMiddleware, saveOrders)
 
-module.exports = router
+export default router

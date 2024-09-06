@@ -8,11 +8,12 @@ if (process.env.NODE_ENV === 'production') {
   redis = require('redis').createClient({
     host: 'localhost',
     port: 6379,
-    prefix: 'sess'
+    prefix: 'sess',
   })
 }
 
-module.exports = {
+export default defineNuxtConfig({
+  compatibilityDate: '2024-01-01',
   mode: 'universal',
   /*
    ** Headers of the page
@@ -23,41 +24,41 @@ module.exports = {
       {
         hid: 'stripe',
         src: 'https://js.stripe.com/v3/',
-        defer: true
-      }
+        defer: true,
+      },
     ],
     meta: [
       {
-        charset: 'utf-8'
+        charset: 'utf-8',
       },
       {
         name: 'viewport',
-        content: 'width=device-width, initial-scale=1'
+        content: 'width=device-width, initial-scale=1',
       },
       {
         hid: 'description',
         name: 'description',
-        content: process.env.npm_package_description || ''
-      }
+        content: process.env.npm_package_description || '',
+      },
     ],
     link: [
       {
         rel: 'icon',
         type: 'image/x-icon',
-        href: '/favicon.ico'
-      }
-    ]
+        href: '/favicon.ico',
+      },
+    ],
   },
   /*
    ** Customize the progress-bar color
    */
   loading: {
-    color: '#fff'
+    color: '#fff',
   },
   /*
    ** Global CSS
    */
-  css: ['element-ui/lib/theme-chalk/index.css', '~/assets/css/main.scss'],
+  css: ['element-plus/dist/index.css', '~/assets/css/main.scss'],
   /*
    ** Plugins to load before mounting the App
    */
@@ -67,25 +68,24 @@ module.exports = {
     '@/plugins/custom-filter',
     '@/plugins/bus',
     '@/plugins/stripe',
-    { src: '@/plugins/noty', mode: 'client' }
+    '@/plugins/store/index',
+    // { src: '@/plugins/noty', mode: 'client' },
   ],
   /*
    ** Nuxt.js modules
    */
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
-    '@nuxtjs/auth',
-    '@nuxtjs/eslint-module',
-    '@nuxtjs/dotenv',
-    '~/modules/api'
+    // '@nuxtjs/auth',
+    // '@nuxtjs/eslint-module',
+    // '@nuxtjs/dotenv',
+    '~/modules/api/index',
   ],
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: process.env._AXIOS_BASE_URL_
+    baseURL: process.env._AXIOS_BASE_URL_,
   },
 
   auth: {
@@ -94,10 +94,10 @@ module.exports = {
         endpoints: {
           login: { url: '/api/signin', method: 'post', propertyName: 'token' },
           logout: { url: '/api/logout', method: 'post' },
-          user: { url: '/api/user', method: 'get', propertyName: false }
-        }
-      }
-    }
+          user: { url: '/api/user', method: 'get', propertyName: false },
+        },
+      },
+    },
   },
 
   /*
@@ -108,19 +108,19 @@ module.exports = {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {}
+    extend(config, ctx) {},
   },
 
   serverMiddleware: [
     session({
       store: new RedisStore({
-        client: redis
+        client: redis,
       }),
       name: '_redisCart',
       secret: 'super-secret-key',
       resave: false,
       saveUninitialized: false,
-      cookie: { maxAge: 604800000 }
-    })
-  ]
-}
+      cookie: { maxAge: 604800000 },
+    }),
+  ],
+})

@@ -11,10 +11,10 @@ export default {
   async asyncData({ $axios, error }) {
     try {
       const { data } = await $axios.$get('/api/products')
-      return { products: data }
+      return data?.products || []
     } catch (err) {
       error({ statusCode: 404, message: 'Product not found' })
     }
-  }
+  },
 }
 </script>

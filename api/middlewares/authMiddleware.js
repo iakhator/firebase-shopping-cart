@@ -1,6 +1,6 @@
-const { admin } = require('../config/firebaseConfig')
+import { admin } from '../config/firebaseConfig.js'
 
-module.exports = (req, res, next) => {
+export default (req, res, next) => {
   let idToken
   if (
     req.headers.authorization &&

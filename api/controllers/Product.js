@@ -1,7 +1,7 @@
-const { db } = require('../config/firebaseConfig')
-const { notFound, foundSuccess } = require('../helpers/errorHandlers')
+import { db } from '../config/firebaseConfig.js'
+import { notFound, foundSuccess } from '../helpers/errorHandlers.js'
 
-exports.getProducts = async (req, res) => {
+export const getProducts = async (req, res) => {
   try {
     const products = []
     const allProducts = await db.collection('products').get()
@@ -14,7 +14,7 @@ exports.getProducts = async (req, res) => {
   }
 }
 
-exports.getProduct = async (req, res) => {
+export const getProduct = async (req, res) => {
   try {
     const products = await db.collection('products').doc(req.params.productId)
     const product = await products.get()

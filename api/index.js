@@ -1,13 +1,17 @@
-const express = require('express')
-const routes = require('./routes')
+import express from 'express'
+import { fromNodeMiddleware } from 'h3'
+import routes from './routes/index.js'
+
 const app = express()
 
 // setup express
 app.use(express.json())
-app.use(express.urlencoded({
-  extended: true
-}))
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+)
 
-app.use('/', routes)
+app.use('/api', routes)
 
-module.exports = { path: '/api', handler: app }
+export default fromNodeMiddleware(app)

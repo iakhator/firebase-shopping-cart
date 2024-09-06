@@ -1,9 +1,8 @@
-import Vue from 'vue'
+// plugins/mitt.js
+import { defineNuxtPlugin } from '#app'
+import mitt from 'mitt'
 
-const eventBus = {}
-
-eventBus.install = function (Vue) {
-  Vue.prototype.$bus = new Vue()
-}
-
-Vue.use(eventBus)
+export default defineNuxtPlugin((nuxtApp) => {
+  const emitter = mitt()
+  nuxtApp.vueApp.config.globalProperties.$bus = emitter
+})

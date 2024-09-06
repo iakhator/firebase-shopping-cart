@@ -1,5 +1,13 @@
-import Vue from 'vue'
-import Element from 'element-ui'
-import locale from 'element-ui/lib/locale/lang/en'
+import { defineNuxtPlugin } from '#app'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+import en from 'element-plus/es/locale/lang/en'
 
-Vue.use(Element, { locale })
+export default defineNuxtPlugin((nuxtApp) => {
+  nuxtApp.vueApp.provide('ZINDEX_INJECTION_KEY', { current: 0 })
+  nuxtApp.vueApp.provide('ID_INJECTION_KEY', {
+    prefix: 0,
+    current: 1,
+  })
+  nuxtApp.vueApp.use(ElementPlus, { locale: en })
+})

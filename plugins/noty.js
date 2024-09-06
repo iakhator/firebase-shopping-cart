@@ -1,8 +1,11 @@
-import Vue from 'vue'
-import VueNoty from 'vuejs-noty'
-import 'vuejs-noty/dist/vuejs-noty.css'
+// plugins/noty.js
+// import { defineNuxtPlugin } from '#app'
+// import Noty from 'vuejs-noty'
+// import 'vuejs-noty/dist/vuejs-noty.css'
 
-Vue.use(VueNoty, {
-  timeout: 2000,
-  progressBar: true
+export default defineNuxtPlugin((nuxtApp) => {
+  // nuxtApp.vueApp.use(Noty, {
+  //   timeout: 2000,
+  //   progressBar: true,
+  // })
 })

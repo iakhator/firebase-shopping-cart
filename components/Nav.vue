@@ -12,17 +12,27 @@
         <nuxt-link to="/">Shop Center</nuxt-link>
       </el-menu-item>
       <template v-if="isAuthenticated">
-        <el-menu-item class="el-menu-navlist" @click="logOut()">Sign out</el-menu-item>
+        <el-menu-item class="el-menu-navlist" @click="logOut()"
+          >Sign out</el-menu-item
+        >
         <el-menu-item class="el-menu-navlist" @click="profileDrawer = true">
           {{ loggedInUser.displayName }}
           <user-icon />
         </el-menu-item>
       </template>
-      <el-menu-item v-else class="el-menu-navlist" @click="accountDrawer = true">
+      <el-menu-item
+        v-else
+        class="el-menu-navlist"
+        @click="accountDrawer = true"
+      >
         Account
         <user-icon />
       </el-menu-item>
-      <el-menu-item index="3" class="el-menu-navlist" @click="cartDrawer = true">
+      <el-menu-item
+        index="3"
+        class="el-menu-navlist"
+        @click="cartDrawer = true"
+      >
         <el-badge :value="quantity" class="item">
           <shopping-bag />
         </el-badge>
@@ -30,7 +40,12 @@
     </el-menu>
     <product-categories :categories="categories" />
 
-    <el-drawer title="Your Shopping Cart" :visible.sync="cartDrawer" size="35%" class="cart__body">
+    <el-drawer
+      title="Your Shopping Cart"
+      :visible.sync="cartDrawer"
+      size="35%"
+      class="cart__body"
+    >
       <cart-drawer
         :empty-cart="emptyCart"
         @close-cart-drawer="closeCartDrawer"
@@ -64,7 +79,7 @@ export default {
     UserIcon,
     CartDrawer,
     AccountDrawer,
-    ProfileDrawer
+    ProfileDrawer,
   },
 
   data() {
@@ -73,7 +88,7 @@ export default {
       cartDrawer: false,
       accountDrawer: false,
       profileDrawer: false,
-      categories: []
+      categories: [],
     }
   },
 
@@ -84,16 +99,15 @@ export default {
 
     emptyCart() {
       return this.quantity <= 0
-    }
+    },
   },
 
   created() {
-    this.$bus.$on('close-account-drawer', (value) => {
+    this.$bus.on('close-account-drawer', (value) => {
       this.accountDrawer = value
     })
 
-    this.$bus.$on('open-account-drawer', (value) => {
-      console.log(value)
+    this.$bus.on('open-account-drawer', (value) => {
       this.accountDrawer = value
     })
   },
@@ -119,8 +133,8 @@ export default {
       } catch (error) {
         console.error(error)
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

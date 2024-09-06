@@ -31,7 +31,7 @@
             +
           </button>
         </div>
-        <div class="cart__wrapper-price">{{ cartItem.price | toUSD }}</div>
+        <div class="cart__wrapper-price">{{ formatPrice(cartItem.price) }}</div>
         <el-button
           type="danger"
           icon="el-icon-delete"
@@ -42,7 +42,7 @@
     </div>
     <div class="cart__wrapper-total" v-show="!emptyCart">
       <span>Total:</span>
-      {{ cartItems.totalPrice | toUSD }}
+      {{ formatPrice(cartItems.totalPrice) }}
     </div>
     <el-button
       v-show="!emptyCart"
@@ -65,27 +65,31 @@ import ShoppingBagBlack from '../icons/ShoppingBagBlack'
 
 export default {
   components: {
-    ShoppingBagBlack
+    ShoppingBagBlack,
   },
 
   props: {
     emptyCart: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
 
   data() {
     return {
-      loading: false
+      loading: false,
     }
   },
 
   computed: {
-    ...mapGetters(['cartItems', 'isAuthenticated'])
+    ...mapGetters(['cartItems', 'isAuthenticated']),
   },
 
   methods: {
+    formatPrice(value) {
+      console.log(value, 'value')
+      return this.$toUSD(value)
+    },
     closeCartDrawer() {
       this.$emit('close-cart-drawer', false)
     },
@@ -95,20 +99,20 @@ export default {
         this.loading = true
         this.$store
           .dispatch('checkOut', {
-            amount: Math.round(this.cartItems.totalPrice * 100)
+            amount: Math.round(this.cartItems.totalPrice * 100),
           })
           .then(() => {
             this.$router.push({ path: '/cart/checkout' })
             this.$emit('close-on-checkout', false)
             this.loading = false
           })
-          .catch(error => {
+          .catch((error) => {
             console.error(error)
             this.loading = false
           })
       } else {
         this.closeCartDrawer()
-        this.$bus.$emit('open-account-drawer', true)
+        this.$bus.emit('open-account-drawer', true)
       }
     },
 
@@ -116,14 +120,16 @@ export default {
       this.$store
         .dispatch('removeFromCart', { data: { id } })
         .then(() => {
-          this.$noty.success('Item deleted', {
-            timeout: 500
-          })
+          // this.$noty.success('Item deleted', {
+          //   timeout: 500
+          // })
+          TODO: console.log('yeappp')
         })
-        .catch(err => {
-          this.$noty.error(err.response.message, {
-            timeout: 500
-          })
+        .catch((err) => {
+          // this.$noty.error(err.response.message, {
+          //   timeout: 500
+          // })
+          TODO: console.error(err)
         })
     },
 
@@ -133,8 +139,8 @@ export default {
 
     increaseCartQty(id) {
       this.$store.dispatch('incrementQty', id)
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -1,11 +1,11 @@
-exports.notFound = (res, data) => {
+export const notFound = (res, data) => {
   return res.status(200).json({
-    data
+    data,
   })
 }
 
-exports.foundSuccess = (res, data) => {
+export const foundSuccess = (res, data) => {
   return res.status(200).json({
-    data
+    data,
   })
 }

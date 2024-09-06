@@ -1,7 +1,7 @@
-const { db } = require('../config/firebaseConfig')
-const { foundSuccess } = require('../helpers/errorHandlers')
+import { db } from '../config/firebaseConfig.js'
+import { foundSuccess } from '../helpers/errorHandlers.js'
 
-exports.getCategories = async (req, res) => {
+export const getCategories = async (req, res) => {
   try {
     const categories = []
 
@@ -16,7 +16,7 @@ exports.getCategories = async (req, res) => {
   }
 }
 
-exports.getCategoryProducts = async (req, res) => {
+export const getCategoryProducts = async (req, res) => {
   try {
     const categoryProducts = []
     const category = await db.collection('categories').doc(req.params.id)

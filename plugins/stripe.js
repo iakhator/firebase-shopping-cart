@@ -1,5 +1,12 @@
-import Vue from 'vue'
+// plugins/stripe.js
+import { defineNuxtPlugin } from '#app'
+import { loadStripe } from '@stripe/stripe-js'
 
-if (process.client) {
-  Vue.prototype.$stripe = window.Stripe('pk_test_8dxhQBxL0Vr9t6ESfBAL7Zdt00jkJg8Znv')
-}
+export default defineNuxtPlugin(async (nuxtApp) => {
+  if (process.client) {
+    const stripe = await loadStripe(
+      'pk_test_8dxhQBxL0Vr9t6ESfBAL7Zdt00jkJg8Znv'
+    )
+    nuxtApp.provide('stripe', stripe)
+  }
+})

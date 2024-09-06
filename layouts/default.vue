@@ -2,7 +2,7 @@
   <div>
     <Nav />
     <el-container>
-      <nuxt />
+      <slot />
     </el-container>
   </div>
 </template>
@@ -12,8 +12,8 @@ import Nav from '../components/Nav'
 
 export default {
   components: {
-    Nav
-  }
+    Nav,
+  },
 }
 </script>
 

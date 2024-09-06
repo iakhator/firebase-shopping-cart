@@ -1,11 +1,13 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET)
+import Stripe from 'stripe'
+
+const stripe = new Stripe(process.env.STRIPE_SECRET)
 
 function Cart(oldCart) {
   this.items = oldCart.items || {}
   this.totalQty = oldCart.totalQty || 0
   this.totalPrice = oldCart.totalPrice || 0
 
-  this.add = function(item, id) {
+  this.add = function (item, id) {
     let storedItem = this.items[id]
     let add = 0
 
@@ -24,7 +26,7 @@ function Cart(oldCart) {
     this.totalPrice = add
   }
 
-  this.decrementQty = function(itemId) {
+  this.decrementQty = function (itemId) {
     for (const id in this.items) {
       if (itemId === id) {
         const cartItem = this.items[id]
@@ -42,7 +44,7 @@ function Cart(oldCart) {
     }
   }
 
-  this.incrementQty = function(itemId) {
+  this.incrementQty = function (itemId) {
     for (const id in this.items) {
       if (itemId === id) {
         const cartItem = this.items[id]
@@ -57,7 +59,7 @@ function Cart(oldCart) {
     }
   }
 
-  this.removeFromCart = function(itemId) {
+  this.removeFromCart = function (itemId) {
     for (const id in this.items) {
       if (itemId === id) {
         this.totalPrice = this.totalPrice - this.items[id].price
@@ -67,7 +69,7 @@ function Cart(oldCart) {
     }
   }
 
-  this.generateArray = function() {
+  this.generateArray = function () {
     const arr = []
     for (const id in this.items) {
       arr.push(this.items[id])
@@ -76,7 +78,7 @@ function Cart(oldCart) {
   }
 }
 
-exports.addToCart = (req, res) => {
+export const addToCart = (req, res) => {
   const productId = req.params.productId
   const cart = new Cart(req.session.cart ? req.session.cart : {})
   cart.add(req.body, productId)
@@ -84,7 +86,7 @@ exports.addToCart = (req, res) => {
   res.json(req.session.cart)
 }
 
-exports.getCart = (req, res) => {
+export const getCart = (req, res) => {
   if (req.session.cart) {
     const cart = new Cart(req.session.cart)
     const cartItem = cart.generateArray()
@@ -96,7 +98,7 @@ exports.getCart = (req, res) => {
   }
 }
 
-exports.decrementQty = (req, res) => {
+export const decrementQty = (req, res) => {
   const id = req.params.cartId
   const cart = new Cart(req.session.cart)
   cart.decrementQty(id)
@@ -104,7 +106,7 @@ exports.decrementQty = (req, res) => {
   res.status(200).json({ cart })
 }
 
-exports.incrementQty = (req, res) => {
+export const incrementQty = (req, res) => {
   const id = req.params.cartId
   const cart = new Cart(req.session.cart)
   cart.incrementQty(id)
@@ -112,11 +114,11 @@ exports.incrementQty = (req, res) => {
   res.status(200).json({ cart })
 }
 
-exports.checkOut = async (req, res) => {
+export const checkOut = async (req, res) => {
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: req.body.amount,
-      currency: 'usd'
+      currency: 'usd',
     })
     res.status(200).json({ clientSecret: paymentIntent.client_secret })
   } catch (error) {
@@ -124,7 +126,7 @@ exports.checkOut = async (req, res) => {
   }
 }
 
-exports.removeItemCart = (req, res) => {
+export const removeItemCart = (req, res) => {
   if (req.session.cart) {
     const cart = new Cart(req.session.cart)
     cart.removeFromCart(req.body.id)

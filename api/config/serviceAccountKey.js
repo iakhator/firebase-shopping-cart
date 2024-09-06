@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   type: process.env.TYPE,
   project_id: process.env.PROJECT_ID,
   private_key_id: process.env.PRIVATE_KEY_ID,
@@ -8,5 +8,5 @@ module.exports = {
   auth_uri: process.env.AUTH_URI,
   token_uri: process.env.TOKEN_URI,
   auth_provider_x509_cert_url: process.env.AUTH_PROVIDER_CERT_URL,
-  client_x509_cert_url: process.env.CLIENT_CERT_URL
+  client_x509_cert_url: process.env.CLIENT_CERT_URL,
 }
