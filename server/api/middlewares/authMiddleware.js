@@ -1,4 +1,4 @@
-import { admin } from '../config/firebaseConfig.js'
+import { auth } from '../config/firebaseConfig.js'
 
 export default (req, res, next) => {
   let idToken
@@ -11,8 +11,7 @@ export default (req, res, next) => {
     return res.status(403).json({ error: 'Unauthorized' })
   }
 
-  admin
-    .auth()
+  auth
     .verifyIdToken(idToken)
     .then((decodedToken) => {
       req.uid = decodedToken.uid

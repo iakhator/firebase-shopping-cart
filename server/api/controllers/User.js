@@ -1,4 +1,4 @@
-import { db, admin, firebase } from '../config/firebaseConfig.js'
+import { db, auth, firebase } from '../config/firebaseConfig.js'
 
 export const signUp = (req, res) => {
   const { email, password, fullname } = req.body
@@ -8,7 +8,7 @@ export const signUp = (req, res) => {
     displayName: fullname,
     photoURL: 'http://www.example.com/12345678/photo.png',
   }
-  admin
+  auth
     .auth()
     .createUser(data)
     .then((userRecord) => {
@@ -60,7 +60,7 @@ export const signIn = (req, res) => {
 }
 
 export const getUser = (req, res) => {
-  admin
+  auth
     .auth()
     .getUser(req.uid)
     .then((userRecord) => {

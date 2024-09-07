@@ -9,7 +9,7 @@
       active-text-color="#ffd04b"
     >
       <el-menu-item index="1" class="el-menu-logo">
-        <nuxt-link to="/">Shop Center</nuxt-link>
+        <NuxtLink to="/">Shop Center</NuxtLink>
       </el-menu-item>
       <template v-if="isAuthenticated">
         <el-menu-item class="el-menu-navlist" @click="logOut()"
@@ -38,7 +38,7 @@
         </el-badge>
       </el-menu-item>
     </el-menu>
-    <product-categories :categories="categories" />
+    <ProductCategories :categories="categories" />
 
     <el-drawer
       title="Your Shopping Cart"
@@ -63,85 +63,56 @@
   </div>
 </template>
 
-<script>
-import { mapState, mapGetters } from 'vuex'
-import ProductCategories from './ProductCategories'
-import ShoppingBag from './icons/ShoppingBag'
-import UserIcon from './icons/UserIcon'
-import CartDrawer from './drawer/CartDrawer'
-import AccountDrawer from './drawer/AccountDrawer'
-import ProfileDrawer from './drawer/ProfileDrawer'
+<script setup>
+import ShoppingBag from '~/components/icons/ShoppingBag.vue'
+import UserIcon from '~/components/icons/UserIcon.vue'
 
-export default {
-  components: {
-    ProductCategories,
-    ShoppingBag,
-    UserIcon,
-    CartDrawer,
-    AccountDrawer,
-    ProfileDrawer,
-  },
+import { useStore } from 'vuex'
 
-  setup() {
-    const categories = ref([])
+const store = useStore()
+const router = useRouter()
 
-    onMounted(async () => {
-      const categories = await useFetch('/api/categories')
-      categories.value = categories.data
-    })
+const activeIndex2 = ref('1')
+const cartDrawer = ref(false)
+const accountDrawer = ref(false)
+const profileDrawer = ref(false)
+const categories = ref([])
 
-    return {
-      categories,
-    }
-  },
+onMounted(async () => {
+  const bus = useNuxtApp().$bus
+  const { categories: cat } = await $fetch('/api/categories')
+  categories.value = cat
+  console.log(categories, 'categories', store)
 
-  data() {
-    return {
-      activeIndex2: '1',
-      cartDrawer: false,
-      accountDrawer: false,
-      profileDrawer: false,
-    }
-  },
+  bus.on('close-account-drawer', (value) => {
+    accountDrawer.value = value
+  })
+  bus.on('open-account-drawer', (value) => {
+    accountDrawer.value = value
+  })
+})
 
-  computed: {
-    ...mapState(['cartItems']),
+const cartItems = computed(() => store.state.cartItems)
+const isAuthenticated = computed(() => store.getters.isAuthenticated)
+const loggedInUser = computed(() => store.getters.loggedInUser)
+const quantity = computed(() => store.getters.quantity)
+const emptyCart = computed(() => quantity.value <= 0)
 
-    ...mapGetters(['isAuthenticated', 'loggedInUser', 'quantity']),
+function closeCartDrawer(value) {
+  cartDrawer.value = value
+  router.push('/')
+}
 
-    emptyCart() {
-      return this.quantity <= 0
-    },
-  },
+function closeOnCheckout(value) {
+  cartDrawer.value = value
+}
 
-  created() {
-    this.$bus.on('close-account-drawer', (value) => {
-      this.accountDrawer = value
-    })
-
-    this.$bus.on('open-account-drawer', (value) => {
-      this.accountDrawer = value
-    })
-  },
-
-  methods: {
-    closeCartDrawer(value) {
-      this.cartDrawer = value
-      this.$router.push('/')
-    },
-
-    closeOnCheckout(value) {
-      this.cartDrawer = value
-    },
-
-    async logOut() {
-      try {
-        await this.$auth.logout()
-      } catch (error) {
-        console.error(error)
-      }
-    },
-  },
+async function logOut() {
+  try {
+    await auth.logout()
+  } catch (error) {
+    console.error(error)
+  }
 }
 </script>
 

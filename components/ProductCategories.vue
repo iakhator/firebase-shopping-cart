@@ -14,13 +14,13 @@ export default {
   props: {
     categories: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
 
   data() {
     return {
-      activeName: 'first'
+      activeName: 'first',
     }
   },
 
@@ -32,8 +32,8 @@ export default {
         return
       }
       this.$router.push(`/${itemId}`)
-    }
-  }
+    },
+  },
 }
 </script>
 

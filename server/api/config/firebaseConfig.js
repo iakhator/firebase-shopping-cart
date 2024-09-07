@@ -1,12 +1,16 @@
 import 'dotenv/config' // ES module way of loading environment variables
-import admin from 'firebase-admin'
-import { initializeApp } from 'firebase/app'
-import serviceAccount from './serviceAccountKey.js'
+import { initializeApp, cert } from 'firebase-admin/app'
+import { getFirestore } from 'firebase-admin/firestore'
+import { getAuth } from 'firebase-admin/auth'
+import { getStorage } from 'firebase-admin/storage'
+
+import { initializeApp as initApp } from 'firebase/app'
+import serviceAccount from './serviceAccountKey.json'
 import 'firebase/auth'
 
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
-  authDomain: process.env.DATABASE_URL,
+  authDomain: process.env.AUTH_DOMAIN,
   databaseURL: process.env.DATABASE_URL,
   projectId: process.env.PROJECT_ID,
   storageBucket: process.env.STORAGE_BUCKET,
@@ -14,16 +18,16 @@ const firebaseConfig = {
   appId: process.env.APP_ID,
 }
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+initializeApp({
+  credential: cert(serviceAccount),
   databaseURL: process.env.DATABASE_URL,
   storageBucket: process.env.STORAGE_BUCKET,
 })
 
-const firebase = initializeApp(firebaseConfig)
+const firebase = initApp(firebaseConfig)
 
-const db = admin.firestore()
+const db = getFirestore()
+const auth = getAuth()
+const bucket = getStorage().bucket()
 
-const bucket = admin.storage().bucket()
-
-export { admin, db, firebase, bucket }
+export { db, auth, bucket, firebase }

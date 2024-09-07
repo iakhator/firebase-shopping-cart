@@ -1,6 +1,6 @@
 <template>
   <el-form
-    ref="registerForm"
+    ref="registerFormRef"
     :model="registerForm"
     :rules="rules"
     class="account__register register"
@@ -46,7 +46,7 @@
     </el-form-item>
 
     <el-form-item class="account__form">
-      <el-button class="account__form-btn" @click="register('registerForm')"
+      <el-button class="account__form-btn" @click="register(registerFormRef)"
         >REGISTER</el-button
       >
     </el-form-item>
@@ -60,97 +60,109 @@
   </el-form>
 </template>
 
-<script>
-export default {
-  props: {
-    showSignIn: {
-      type: Function,
-      default: () => {},
+<script setup>
+const props = defineProps({
+  showSignIn: {
+    type: Function,
+    default: () => {},
+  },
+})
+
+const formError = ref('')
+const registerFormRef = ref()
+const registerForm = ref({
+  fullname: '',
+  email: '',
+  password: '',
+  confirm_password: '',
+})
+
+const confirmPassword = (rule, value, callback) => {
+  if (value === '') {
+    callback(new Error('Confirm password is required'))
+  } else if (value !== registerForm.value.password) {
+    callback(new Error("Passwords doesn't match"))
+  } else {
+    callback()
+  }
+}
+
+const rules = reactive({
+  fullname: [
+    {
+      required: true,
+      message: 'Fullname is required',
+      trigger: 'change',
     },
-  },
-
-  data() {
-    const confirmPassword = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('Confirm password is required'))
-      } else if (value !== this.registerForm.password) {
-        callback(new Error("Passwords doesn't match"))
-      } else {
-        callback()
-      }
-    }
-
-    return {
-      formError: '',
-      registerForm: {
-        fullname: '',
-        email: '',
-        password: '',
-        confirm_password: '',
-      },
-
-      rules: {
-        fullname: [
-          {
-            required: true,
-            message: 'Fullname is required',
-            trigger: 'change',
-          },
-        ],
-        email: [
-          {
-            type: 'email',
-            required: true,
-            message: 'Email is required',
-            trigger: 'change',
-          },
-        ],
-        password: [
-          {
-            required: true,
-            message: 'Password is required',
-            trigger: 'change',
-          },
-          { min: 6, message: 'Length should be atleast 6', trigger: 'change' },
-        ],
-        confirm_password: [{ validator: confirmPassword, trigger: 'change' }],
-      },
-    }
-  },
-
-  methods: {
-    async register(formName) {
-      try {
-        let isValid
-        this.$refs[formName].validate((valid) => {
-          isValid = valid
-        })
-        if (isValid) {
-          const user = await this.$axios.post('/api/signup', {
-            email: this.registerForm.email,
-            password: this.registerForm.password,
-            fullname: this.registerForm.fullname,
-          })
-
-          // await this.$auth.setUserToken(user.data.token)
-
-          await this.$auth.loginWith('local', {
-            data: {
-              email: this.registerForm.email,
-              password: this.registerForm.password,
-            },
-          })
-
-          // this.$noty.success(user.data.message, {
-          //   timeout: 2500
-          // })
-          TODO: this.$bus.emit('close-account-drawer', false)
-        }
-      } catch (error) {
-        this.formError = error.response.data.error
-      }
+  ],
+  email: [
+    {
+      type: 'email',
+      required: true,
+      message: 'Email is required',
+      trigger: 'change',
     },
-  },
+  ],
+  password: [
+    {
+      required: true,
+      message: 'Password is required',
+      trigger: 'change',
+    },
+    { min: 6, message: 'Length should be atleast 6', trigger: 'change' },
+  ],
+  confirm_password: [{ validator: confirmPassword, trigger: 'change' }],
+})
+
+const loading = ref(false)
+const authenticated = ref(false)
+
+async function register(formEl) {
+  console.log(formEl, 'formEl')
+  try {
+    let isValid
+    if (!formEl) return
+    await formEl.validate((valid) => {
+      isValid = valid
+    })
+
+    if (isValid) {
+      const { data, pending } = await useFetch('/api/user/register', {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: {
+          email: registerForm.value.email,
+          password: registerForm.value.password,
+          fullname: registerForm.value.fullname,
+        },
+      })
+
+      loading.value = pending
+
+      console.log(data, 'data')
+      if (data.value) {
+        const token = useCookie('token')
+        token.value = data?.value?.token
+        authenticated.value = true
+      }
+
+      //   // await this.$auth.setUserToken(user.data.token)
+
+      //   await this.$auth.loginWith('local', {
+      //     data: {
+      //       email: registerForm.value.email,
+      //       password: registerForm.value.password,
+      //     },
+      //   })
+
+      //   // this.$noty.success(user.data.message, {
+      //   //   timeout: 2500
+      //   // })
+      //   TODO: this.$bus.emit('close-account-drawer', false)
+    }
+  } catch (error) {
+    formError.value = error.response?.data?.error || 'Something happened'
+  }
 }
 </script>
 
