@@ -1,11 +1,11 @@
-import 'dotenv/config' // ES module way of loading environment variables
+import 'dotenv/config'
 import { initializeApp, cert } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
 import { getAuth } from 'firebase-admin/auth'
 import { getStorage } from 'firebase-admin/storage'
 
 import { initializeApp as initApp } from 'firebase/app'
-import serviceAccount from './serviceAccountKey.json'
+import serviceAccount from './serviceAccountKey.js'
 import 'firebase/auth'
 
 const firebaseConfig = {
