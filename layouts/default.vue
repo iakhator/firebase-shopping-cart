@@ -2,19 +2,13 @@
   <div>
     <Nav />
     <el-container>
-      <slot />
+      <NuxtPage />
     </el-container>
   </div>
 </template>
 
-<script>
+<script setup>
 import Nav from '../components/Nav'
-
-export default {
-  components: {
-    Nav,
-  },
-}
 </script>
 
 <style>

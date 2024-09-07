@@ -9,31 +9,25 @@
   </el-tabs>
 </template>
 
-<script>
-export default {
-  props: {
-    categories: {
-      type: Array,
-      required: true,
-    },
-  },
+<script setup>
+const router = useRouter()
 
-  data() {
-    return {
-      activeName: 'first',
-    }
+const props = defineProps({
+  categories: {
+    type: Array,
+    required: true,
   },
+})
 
-  methods: {
-    handleClick(tab) {
-      const itemId = tab.$el.id.split('-')[1]
-      if (itemId === 'all') {
-        this.$router.push('/')
-        return
-      }
-      this.$router.push(`/${itemId}`)
-    },
-  },
+const activeName = ref('first')
+
+function handleClick(tab) {
+  const categoryId = tab.paneName
+  if (categoryId === 'all') {
+    router.push('/')
+    return
+  }
+  router.push(`/categories/${categoryId}`)
 }
 </script>
 

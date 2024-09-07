@@ -1,66 +1,61 @@
 <template>
-  <div>
-    <el-menu
-      :default-active="activeIndex2"
-      class="el-menu-demo"
-      mode="horizontal"
-      background-color="#1B1A1A"
-      text-color="#fff"
-      active-text-color="#ffd04b"
-    >
-      <el-menu-item index="1" class="el-menu-logo">
-        <NuxtLink to="/">Shop Center</NuxtLink>
-      </el-menu-item>
-      <template v-if="isAuthenticated">
-        <el-menu-item class="el-menu-navlist" @click="logOut()"
-          >Sign out</el-menu-item
-        >
-        <el-menu-item class="el-menu-navlist" @click="profileDrawer = true">
-          {{ loggedInUser.displayName }}
-          <user-icon />
-        </el-menu-item>
-      </template>
-      <el-menu-item
-        v-else
-        class="el-menu-navlist"
-        @click="accountDrawer = true"
+  <el-menu
+    :default-active="activeIndex2"
+    class="el-menu-demo"
+    mode="horizontal"
+    background-color="#1B1A1A"
+    text-color="#fff"
+    active-text-color="#ffd04b"
+  >
+    <el-menu-item index="1" class="el-menu-logo">
+      <NuxtLink to="/">Shop Center</NuxtLink>
+    </el-menu-item>
+    <template v-if="isAuthenticated">
+      <el-menu-item index="2" class="el-menu-navlist" @click="logOut()"
+        >Sign out</el-menu-item
       >
-        Account
+      <el-menu-item class="el-menu-navlist" @click="profileDrawer = true">
+        {{ loggedInUser.displayName }}
         <user-icon />
       </el-menu-item>
-      <el-menu-item
-        index="3"
-        class="el-menu-navlist"
-        @click="cartDrawer = true"
-      >
-        <el-badge :value="quantity" class="item">
-          <shopping-bag />
-        </el-badge>
-      </el-menu-item>
-    </el-menu>
-    <ProductCategories :categories="categories" />
-
-    <el-drawer
-      title="Your Shopping Cart"
-      v-model="cartDrawer"
-      size="35%"
-      class="cart__body"
+    </template>
+    <el-menu-item
+      v-else
+      index="2"
+      class="el-menu-navlist"
+      @click="accountDrawer = true"
     >
-      <cart-drawer
-        :empty-cart="emptyCart"
-        @close-cart-drawer="closeCartDrawer"
-        @close-on-checkout="closeOnCheckout"
-      />
-    </el-drawer>
+      Account
+      <user-icon />
+    </el-menu-item>
+    <el-menu-item index="3" class="el-menu-navlist" @click="cartDrawer = true">
+      <el-badge :value="quantity" class="item">
+        <shopping-bag />
+      </el-badge>
+    </el-menu-item>
+  </el-menu>
+  <ProductCategories :categories="categories" />
 
-    <el-drawer v-model="accountDrawer" size="35%">
-      <account-drawer />
-    </el-drawer>
+  <el-drawer
+    title="Your Shopping Cart"
+    v-model="cartDrawer"
+    size="35%"
+    class="cart__body"
+  >
+    <cart-drawer
+      :empty-cart="emptyCart"
+      @close-cart-drawer="closeCartDrawer"
+      @close-on-checkout="closeOnCheckout"
+    />
+  </el-drawer>
 
-    <el-drawer v-model="profileDrawer" size="35%">
-      <profile-drawer />
-    </el-drawer>
-  </div>
+  <el-drawer v-model="accountDrawer" size="35%">
+    <account-drawer />
+  </el-drawer>
+
+  <el-drawer v-model="profileDrawer" size="35%">
+    <profile-drawer />
+  </el-drawer>
 </template>
 
 <script setup>
@@ -82,7 +77,6 @@ onMounted(async () => {
   const bus = useNuxtApp().$bus
   const { categories: cat } = await $fetch('/api/categories')
   categories.value = cat
-  console.log(categories, 'categories', store)
 
   bus.on('close-account-drawer', (value) => {
     accountDrawer.value = value

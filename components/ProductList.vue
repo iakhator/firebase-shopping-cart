@@ -2,13 +2,21 @@
   <el-row class="product__grid">
     <div class="product__grid-right">
       <ul class="product__grid-w">
-        <li v-for="item in products" :key="item.uid" class="product__grid-w__list">
+        <li
+          v-for="item in products"
+          :key="item.uid"
+          class="product__grid-w__list"
+        >
           <a class="_p" :href="`/${item.categoryId}/${item.id}`">
             <span class="product__grid-w__list-img">
               <img :src="item.imageUrl" alt />
             </span>
-            <span class="product__grid-w__list-title">{{ item.itemTitle }}</span>
-            <span class="product__grid-w__list-price">Price: {{ item.price | toUSD }}</span>
+            <span class="product__grid-w__list-title">{{
+              item.itemTitle
+            }}</span>
+            <span class="product__grid-w__list-price"
+              >Price: {{ item.price | toUSD }}</span
+            >
           </a>
         </li>
       </ul>
@@ -16,17 +24,13 @@
   </el-row>
 </template>
 
-<script>
-export default {
-  props: {
-    products: {
-      type: Array,
-      required: true
-    }
+<script setup>
+defineProps({
+  products: {
+    type: Array,
+    default: () => [],
   },
-
-  methods: {}
-}
+})
 </script>
 
 <style lang="scss" scoped>
