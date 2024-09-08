@@ -1,5 +1,6 @@
 <template>
   <el-row class="product__grid">
+    <pre>{{ item }} {{ form.num }} hello</pre>
     <el-col :md="10">
       <div>
         <img
@@ -31,7 +32,7 @@
           <div class="item__contents-quantity">
             <span class="item__contents-quantity-label">Price :</span>
             <span class="item__contents-quantity-price">{{
-              itemPrice | toUSD
+              toUSD(itemPrice)
             }}</span>
           </div>
 
@@ -63,56 +64,50 @@
   </el-row>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      itemId: '',
-      form: {
-        variant: '',
-        num: ''
-      },
-      errorMessage: '',
-      loading: true
-    }
-  },
+<script setup>
+import { useStore } from 'vuex'
 
-  computed: {
-    itemPrice() {
-      return this.item.price * this.form.num
-    }
-  },
+const store = useStore()
+const route = useRoute()
+const { toUSD } = useCurrency()
 
-  async asyncData({ $axios, params, error }) {
-    try {
-      const { data } = await $axios.$get(`/api/products/${params.itemId}`)
-      return { item: data }
-    } catch (err) {
-      error({ statusCode: 404, message: 'Post not found' })
-    }
-  },
+// const item = ref({})
+const form = ref({
+  variant: '',
+  num: 1,
+})
+const errorMessage = ref('')
+const loading = ref(true)
 
-  methods: {
-    buyNow() {},
+const productId = route.params.itemId
 
-    addToCart() {
-      const cartObject = {
-        variantId: this.form.variant,
-        quantity: this.form.num,
-        title: this.item.itemTitle,
-        price: this.item.price,
-        itemPhoto: this.item.imageUrl,
-        itemId: this.$route.params.itemId
-      }
-      if (!cartObject.variantId) {
-        this.errorMessage = 'You must select a variant'
-      } else {
-        this.$store.dispatch('addToCart', cartObject)
-        this.errorMessage = ''
-      }
-    }
+const itemPrice = computed(() => {
+  console.log(form.value.num, 'items')
+  return item.value.price * form.value.num
+})
+
+const { data: item } = await useAsyncData('items', () =>
+  $fetch(`/api/products/${productId}`)
+)
+
+function addToCart() {
+  const cartObject = {
+    variantId: form.value.variant,
+    quantity: form.value.num,
+    title: item.itemTitle,
+    price: item.price,
+    itemPhoto: item.imageUrl,
+    itemId: productId,
+  }
+  if (!cartObject.variantId) {
+    errorMessage = 'You must select a variant'
+  } else {
+    store.dispatch('addToCart', cartObject)
+    errorMessage.value = ''
   }
 }
+
+function buyNow() {}
 </script>
 
 <style scoped lang="scss">
