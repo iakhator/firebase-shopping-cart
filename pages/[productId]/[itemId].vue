@@ -1,6 +1,5 @@
 <template>
-  <el-row class="product__grid">
-    <pre>{{ item }} {{ form.num }} hello</pre>
+  <el-row class="product__grid product">
     <el-col :md="10">
       <div>
         <img
@@ -71,8 +70,7 @@ const store = useStore()
 const route = useRoute()
 const { toUSD } = useCurrency()
 
-// const item = ref({})
-const form = ref({
+const form = reactive({
   variant: '',
   num: 1,
 })
@@ -81,10 +79,7 @@ const loading = ref(true)
 
 const productId = route.params.itemId
 
-const itemPrice = computed(() => {
-  console.log(form.value.num, 'items')
-  return item.value.price * form.value.num
-})
+const itemPrice = computed(() => item.value.price * form.num)
 
 const { data: item } = await useAsyncData('items', () =>
   $fetch(`/api/products/${productId}`)
@@ -92,8 +87,8 @@ const { data: item } = await useAsyncData('items', () =>
 
 function addToCart() {
   const cartObject = {
-    variantId: form.value.variant,
-    quantity: form.value.num,
+    variantId: form.variant,
+    quantity: form.num,
     title: item.itemTitle,
     price: item.price,
     itemPhoto: item.imageUrl,

@@ -9,6 +9,10 @@
   }
 }
 
+.product__grid.product {
+  width: 66.778vw;
+}
+
 .product__grid-w__list:not(:nth-child(3n + 1)) {
   margin-left: 2.15278vw;
 }
