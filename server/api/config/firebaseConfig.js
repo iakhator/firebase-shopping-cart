@@ -6,7 +6,10 @@ import { getStorage } from 'firebase-admin/storage'
 
 import { initializeApp as initApp } from 'firebase/app'
 import serviceAccount from './serviceAccountKey.js'
-import 'firebase/auth'
+import {
+  getAuth as firebaseAuth,
+  signInWithEmailAndPassword,
+} from 'firebase/auth'
 
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
@@ -26,8 +29,10 @@ initializeApp({
 
 const firebase = initApp(firebaseConfig)
 
+const fireAuth = firebaseAuth()
+
 const db = getFirestore()
 const auth = getAuth()
 const bucket = getStorage().bucket()
 
-export { db, auth, bucket, firebase }
+export { db, auth, bucket, firebase, fireAuth, signInWithEmailAndPassword }

@@ -1,6 +1,6 @@
 <template>
   <el-form
-    ref="ruleForm"
+    ref="ruleFormRef"
     :model="ruleForm"
     :rules="rules"
     class="account__signin signin"
@@ -26,7 +26,7 @@
       <el-button
         class="account__form-btn"
         :loading="loading"
-        @click="login('ruleForm')"
+        @click="login(ruleFormRef)"
         >SIGN IN</el-button
       >
     </el-form-item>
@@ -41,6 +41,7 @@
 </template>
 
 <script setup>
+const { signIn } = useAuth()
 defineProps({
   showRegister: {
     type: Function,
@@ -49,7 +50,8 @@ defineProps({
 })
 
 const loading = ref(false)
-const ruleForm = reactive({
+const ruleFormRef = ref()
+const ruleForm = ref({
   email: '',
   password: '',
 })
@@ -72,40 +74,13 @@ const rules = reactive({
   ],
 })
 
-function login(formEl) {
-  loading.value = true
-  formEl.validate((valid) => {
-    if (valid) {
-      this.$auth
-        .loginWith('local', {
-          data: {
-            email: ruleForm.email,
-            password: ruleForm.password,
-          },
-        })
-        .then(() => {
-          formName.resetFields()
-          bus.emit('close-account-drawer', false)
-          loading.value = false
-        })
-        .catch((error) => {
-          formName.resetFields()
-          loading.value = false
-          console.log(error.response.data.message)
-        })
-    } else {
-      return false
-    }
-  })
-}
-
-const login = async (formEl) => {
-  const { $bus } = useNuxtApp()
-  const auth = useAuth() // Replace this with your authentication method
+async function login(formEl) {
   loading.value = true
 
-  const isValid = await new Promise((resolve) => {
-    formEl.validate((valid) => resolve(valid))
+  let isValid
+  if (!formEl) return
+  await formEl.validate((valid) => {
+    isValid = valid
   })
 
   if (!isValid) {
@@ -114,18 +89,17 @@ const login = async (formEl) => {
   }
 
   try {
-    await auth.loginWith('local', {
-      data: {
-        email: ruleForm.email,
-        password: ruleForm.password,
-      },
+    await signIn({
+      email: ruleForm.value.email,
+      password: ruleForm.value.password,
     })
-
-    formName.resetFields()
+    formEl.resetFields()
     $bus.emit('close-account-drawer', false)
   } catch (error) {
-    formName.resetFields()
-    console.error(error.response?.data?.message || 'Login failed')
+    formEl.resetFields()
+    console.error(
+      error.response?.data?.message || 'An error occurred during login'
+    )
   } finally {
     loading.value = false
   }

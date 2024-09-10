@@ -118,7 +118,6 @@ const loading = ref(false)
 const authenticated = ref(false)
 
 async function register(formEl) {
-  console.log(formEl, 'formEl')
   try {
     let isValid
     if (!formEl) return

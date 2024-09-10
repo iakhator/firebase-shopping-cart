@@ -1,26 +1,44 @@
 import { auth } from '../config/firebaseConfig.js'
 
-export default (req, res, next) => {
-  let idToken
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer ')
-  ) {
-    idToken = req.headers.authorization.split('Bearer ')[1]
-  } else {
-    return res.status(403).json({ error: 'Unauthorized' })
+export default defineEventHandler(async (event) => {
+  const authorizationHeader = event.node.req.headers['authorization']
+
+  // Check if the Authorization header exists and starts with "Bearer "
+  if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+    return sendError(
+      event,
+      createError({
+        statusCode: 403,
+        statusMessage: 'Unauthorized',
+      })
+    )
   }
 
-  auth
-    .verifyIdToken(idToken)
-    .then((decodedToken) => {
-      req.uid = decodedToken.uid
-      next()
-    })
-    .catch((err) => {
-      if (err.code === 'auth/id-token-expired') {
-        return res.status(403).json({ error: 'Token has expired.' })
-      }
-      return res.status(403).json({ error: err.code })
-    })
-}
+  const idToken = authorizationHeader.split('Bearer ')[1]
+
+  try {
+    // Verify the Firebase ID token
+    const decodedToken = await auth.verifyIdToken(idToken)
+    // Attach user ID to the request object for future use
+    event.context.uid = decodedToken.uid
+  } catch (err) {
+    // Handle different error cases from Firebase
+    if (err.code === 'auth/id-token-expired') {
+      return sendError(
+        event,
+        createError({
+          statusCode: 403,
+          statusMessage: 'Token has expired.',
+        })
+      )
+    }
+
+    return sendError(
+      event,
+      createError({
+        statusCode: 403,
+        statusMessage: err.code || 'Authentication failed',
+      })
+    )
+  }
+})
