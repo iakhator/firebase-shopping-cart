@@ -11,29 +11,36 @@
     <el-menu-item index="1" class="el-menu-logo">
       <NuxtLink to="/">Shop Center</NuxtLink>
     </el-menu-item>
-    <template v-if="isAuthenticated">
-      <el-menu-item index="2" class="el-menu-navlist" @click="logOut()"
-        >Sign out</el-menu-item
+
+    <div>
+      <template v-if="isAuthenticated">
+        <el-menu-item index="2" class="el-menu-navlist" @click="logOut()"
+          >Sign out</el-menu-item
+        >
+        <el-menu-item class="el-menu-navlist" @click="profileDrawer = true">
+          {{ loggedInUser.displayName }}
+          <user-icon />
+        </el-menu-item>
+      </template>
+      <el-menu-item
+        v-else
+        index="2"
+        class="el-menu-navlist"
+        @click="accountDrawer = true"
       >
-      <el-menu-item class="el-menu-navlist" @click="profileDrawer = true">
-        {{ loggedInUser.displayName }}
+        Account
         <user-icon />
       </el-menu-item>
-    </template>
-    <el-menu-item
-      v-else
-      index="2"
-      class="el-menu-navlist"
-      @click="accountDrawer = true"
-    >
-      Account
-      <user-icon />
-    </el-menu-item>
-    <el-menu-item index="3" class="el-menu-navlist" @click="cartDrawer = true">
-      <el-badge :value="quantity" class="item">
-        <shopping-bag />
-      </el-badge>
-    </el-menu-item>
+      <el-menu-item
+        index="3"
+        class="el-menu-navlist"
+        @click="cartDrawer = true"
+      >
+        <el-badge :value="quantity" class="item">
+          <shopping-bag />
+        </el-badge>
+      </el-menu-item>
+    </div>
   </el-menu>
   <ProductCategories :categories="categories" />
 
@@ -63,6 +70,7 @@
 import ShoppingBag from '~/components/icons/ShoppingBag.vue'
 import UserIcon from '~/components/icons/UserIcon.vue'
 import AccountDrawer from '~/components/drawer/AccountDrawer.vue'
+import CartDrawer from '~/components/drawer/CartDrawer.vue'
 
 import { useStore } from 'vuex'
 
@@ -136,11 +144,7 @@ $off-black: #1b1a1a;
 }
 
 .item {
-  margin-top: -9px;
-}
-
-.shopping-bag {
-  position: absolute;
+  margin-top: -30px;
 }
 
 .svg-inline--fa {

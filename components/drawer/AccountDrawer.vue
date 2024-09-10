@@ -83,9 +83,9 @@ export default {
   }
 }
 
-.el-input {
-  margin-top: 10px;
-}
+// .el-input {
+//   // margin-top: 10px;
+// }
 
 .el-input.password {
   margin-bottom: 10px;

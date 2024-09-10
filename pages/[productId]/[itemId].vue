@@ -22,7 +22,7 @@
           <div class="item__contents-quantity">
             <span class="item__contents-spec-variant">Quantity :</span>
             <el-input-number
-              v-model="form.num"
+              v-model="form.qty"
               :min="1"
               :max="3"
             ></el-input-number>
@@ -42,9 +42,7 @@
                 v-for="variant in item.variant"
                 :key="variant"
                 :label="variant"
-                v-model="form.variant"
                 :value="variant"
-                size="small"
               ></el-radio-button>
             </el-radio-group>
             <p class="error el-tag--danger" v-if="errorMessage">
@@ -72,14 +70,14 @@ const { toUSD } = useCurrency()
 
 const form = reactive({
   variant: '',
-  num: 1,
+  qty: 1,
 })
 const errorMessage = ref('')
 const loading = ref(true)
 
 const productId = route.params.itemId
 
-const itemPrice = computed(() => item.value.price * form.num)
+const itemPrice = computed(() => item.value.price * form.qty)
 
 const { data: item } = await useAsyncData('items', () =>
   $fetch(`/api/products/${productId}`)
@@ -88,7 +86,7 @@ const { data: item } = await useAsyncData('items', () =>
 function addToCart() {
   const cartObject = {
     variantId: form.variant,
-    quantity: form.num,
+    quantity: form.qty,
     title: item.itemTitle,
     price: item.price,
     itemPhoto: item.imageUrl,

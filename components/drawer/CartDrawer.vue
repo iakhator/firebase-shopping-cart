@@ -87,7 +87,6 @@ export default {
 
   methods: {
     formatPrice(value) {
-      console.log(value, 'value')
       return this.$toUSD(value)
     },
     closeCartDrawer() {
@@ -145,6 +144,9 @@ export default {
 </script>
 
 <style lang="scss">
+.el-button + .el-button.no__cart-btn {
+  margin-left: 0 !important;
+}
 .no__cart {
   width: 100px;
   position: absolute;
