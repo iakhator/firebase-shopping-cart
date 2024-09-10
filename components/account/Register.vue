@@ -49,6 +49,9 @@
       <el-button class="account__form-btn" @click="register(registerFormRef)"
         >REGISTER</el-button
       >
+      <el-button class="account__form-btn" @click="checkbus"
+        >checkbus</el-button
+      >
     </el-form-item>
 
     <el-form-item class="account__form sign-register">
@@ -61,6 +64,8 @@
 </template>
 
 <script setup>
+const { $bus } = useNuxtApp()
+
 const props = defineProps({
   showSignIn: {
     type: Function,
@@ -118,6 +123,7 @@ const loading = ref(false)
 const authenticated = ref(false)
 
 async function register(formEl) {
+  loading.value = true
   try {
     let isValid
     if (!formEl) return
@@ -135,8 +141,6 @@ async function register(formEl) {
           fullname: registerForm.value.fullname,
         },
       })
-
-      loading.value = pending
 
       if (data.value) {
         const token = useCookie('token')
@@ -156,10 +160,14 @@ async function register(formEl) {
       //   // this.$noty.success(user.data.message, {
       //   //   timeout: 2500
       //   // })
-      bus.emit('close-account-drawer', false)
+
+      $bus.emit('close-account-drawer', false)
     }
   } catch (error) {
+    console.log(error, 'error')
     formError.value = error.response?.data?.error || 'Something happened'
+  } finally {
+    loading.value = false
   }
 }
 </script>

@@ -1,4 +1,5 @@
 <template>
+  <pre>{{ data }}</pre>
   <el-menu
     :default-active="activeIndex2"
     class="el-menu-demo"
@@ -67,6 +68,7 @@ import { useStore } from 'vuex'
 
 const store = useStore()
 const router = useRouter()
+const { data } = useAuth()
 
 const activeIndex2 = ref('1')
 const cartDrawer = ref(false)
@@ -88,8 +90,8 @@ onMounted(async () => {
 })
 
 const cartItems = computed(() => store.state.cartItems)
-const isAuthenticated = computed(() => store.getters.isAuthenticated)
-const loggedInUser = computed(() => store.getters.loggedInUser)
+const isAuthenticated = computed(() => data.value !== undefined)
+const loggedInUser = computed(() => data.value?.user || {})
 const quantity = computed(() => store.getters.quantity)
 const emptyCart = computed(() => quantity.value <= 0)
 

@@ -93,9 +93,10 @@ export default defineNuxtConfig({
     provider: {
       type: 'local',
       endpoints: {
-        signIn: { url: '/auth/login', method: 'post' },
-        signOut: { url: '/auth/logout', method: 'post' },
-        user: { url: '/api/user', method: 'get', propertyName: false },
+        signIn: { url: '/login', method: 'post' },
+        signOut: { url: '/logout', method: 'post' },
+        user: { url: '/user', method: 'get', propertyName: false },
+        getSession: { url: '/session', method: 'get' },
       },
     },
   },

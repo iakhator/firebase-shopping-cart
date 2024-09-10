@@ -32,7 +32,10 @@ export default defineEventHandler(async (event) => {
     if (error.code === 'auth/email-already-exists') {
       return sendError(
         event,
-        createError({ statusCode: 400, message: 'Email is already in use' })
+        createError({
+          statusCode: 400,
+          statusMessage: 'Email is already in use',
+        })
       )
     }
 
@@ -41,7 +44,7 @@ export default defineEventHandler(async (event) => {
       event,
       createError({
         statusCode: 400,
-        message: 'An error occurred while creating the account.',
+        statusMessage: 'An error occurred while creating the account.',
       })
     )
   }

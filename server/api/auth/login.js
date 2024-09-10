@@ -21,7 +21,6 @@ export default defineEventHandler(async (event) => {
       token,
     }
   } catch (error) {
-    console.log(error, 'error')
     if (error.code === 'auth/user-not-found') {
       return sendError(
         event,

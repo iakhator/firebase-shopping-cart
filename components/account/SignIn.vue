@@ -41,7 +41,10 @@
 </template>
 
 <script setup>
-const { signIn } = useAuth()
+import { useStore } from 'vuex'
+const { signIn, getSession, data } = useAuth()
+const { $bus } = useNuxtApp()
+
 defineProps({
   showRegister: {
     type: Function,
@@ -89,14 +92,18 @@ async function login(formEl) {
   }
 
   try {
-    await signIn({
-      email: ruleForm.value.email,
-      password: ruleForm.value.password,
-    })
+    const token = await signIn(
+      {
+        email: ruleForm.value.email,
+        password: ruleForm.value.password,
+      },
+      { callbackUrl: '/' }
+    )
+    // await getSession(token)
     formEl.resetFields()
     $bus.emit('close-account-drawer', false)
   } catch (error) {
-    formEl.resetFields()
+    console.log(error)
     console.error(
       error.response?.data?.message || 'An error occurred during login'
     )
