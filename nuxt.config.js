@@ -75,10 +75,10 @@ export default defineNuxtConfig({
    ** Nuxt.js modules
    */
   modules: [
-    // '@nuxtjs/auth',
     // '@nuxtjs/eslint-module',
     // '@nuxtjs/dotenv',
     '~/modules/api/index',
+    '@sidebase/nuxt-auth',
   ],
   /*
    ** Axios module configuration
@@ -89,13 +89,12 @@ export default defineNuxtConfig({
   },
 
   auth: {
-    strategies: {
-      local: {
-        endpoints: {
-          login: { url: '/api/signin', method: 'post', propertyName: 'token' },
-          logout: { url: '/api/logout', method: 'post' },
-          user: { url: '/api/user', method: 'get', propertyName: false },
-        },
+    provider: {
+      type: 'local',
+      endpoints: {
+        login: { url: '/api/signin', method: 'post', propertyName: 'token' },
+        logout: { url: '/api/logout', method: 'post' },
+        user: { url: '/api/user', method: 'get', propertyName: false },
       },
     },
   },

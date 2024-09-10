@@ -40,70 +40,94 @@
   </el-form>
 </template>
 
-<script>
-export default {
-  props: {
-    showRegister: {
-      type: Function,
-      default: () => {},
-    },
+<script setup>
+defineProps({
+  showRegister: {
+    type: Function,
+    default: () => {},
   },
+})
 
-  data() {
-    return {
-      loading: false,
-      ruleForm: {
-        email: '',
-        password: '',
-      },
+const loading = ref(false)
+const ruleForm = reactive({
+  email: '',
+  password: '',
+})
 
-      rules: {
-        email: [
-          {
-            type: 'email',
-            required: true,
-            message: 'Email is required',
-            trigger: 'change',
+const rules = reactive({
+  email: [
+    {
+      type: 'email',
+      required: true,
+      message: 'Email is required',
+      trigger: 'change',
+    },
+  ],
+  password: [
+    {
+      required: true,
+      message: 'Password is required',
+      trigger: 'change',
+    },
+  ],
+})
+
+function login(formEl) {
+  loading.value = true
+  formEl.validate((valid) => {
+    if (valid) {
+      this.$auth
+        .loginWith('local', {
+          data: {
+            email: ruleForm.email,
+            password: ruleForm.password,
           },
-        ],
-        password: [
-          {
-            required: true,
-            message: 'Password is required',
-            trigger: 'change',
-          },
-        ],
-      },
+        })
+        .then(() => {
+          formName.resetFields()
+          bus.emit('close-account-drawer', false)
+          loading.value = false
+        })
+        .catch((error) => {
+          formName.resetFields()
+          loading.value = false
+          console.log(error.response.data.message)
+        })
+    } else {
+      return false
     }
-  },
+  })
+}
 
-  methods: {
-    login(formName) {
-      this.loading = true
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$auth
-            .loginWith('local', {
-              data: {
-                email: this.ruleForm.email,
-                password: this.ruleForm.password,
-              },
-            })
-            .then(() => {
-              this.$refs[formName].resetFields()
-              this.$bus.emit('close-account-drawer', false)
-              this.loading = false
-            })
-            .catch((error) => {
-              this.$refs[formName].resetFields()
-              this.loading = false
-              console.log(error.response.data.message)
-            })
-        } else {
-          return false
-        }
-      })
-    },
-  },
+const login = async (formEl) => {
+  const { $bus } = useNuxtApp()
+  const auth = useAuth() // Replace this with your authentication method
+  loading.value = true
+
+  const isValid = await new Promise((resolve) => {
+    formEl.validate((valid) => resolve(valid))
+  })
+
+  if (!isValid) {
+    loading.value = false
+    return false
+  }
+
+  try {
+    await auth.loginWith('local', {
+      data: {
+        email: ruleForm.email,
+        password: ruleForm.password,
+      },
+    })
+
+    formName.resetFields()
+    $bus.emit('close-account-drawer', false)
+  } catch (error) {
+    formName.resetFields()
+    console.error(error.response?.data?.message || 'Login failed')
+  } finally {
+    loading.value = false
+  }
 }
 </script>

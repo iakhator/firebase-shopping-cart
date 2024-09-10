@@ -12,13 +12,13 @@ import Register from '../account/Register'
 export default {
   components: {
     SignIn,
-    Register
+    Register,
   },
 
   data() {
     return {
       signup: false,
-      signin: true
+      signin: true,
     }
   },
 
@@ -31,28 +31,32 @@ export default {
     showSignIn() {
       this.signup = false
       this.signin = true
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style lang="scss">
-.account__signin, .account__register {
-  p{
+.account__signin,
+.account__register {
+  p {
     font-weight: 600;
     margin-bottom: 20px;
   }
 }
 
-.email, .firstname, .lastname, .password {
+.email,
+.firstname,
+.lastname,
+.password {
   margin-bottom: 10px;
 }
 
 .account__form-input .el-input__inner {
-    color: #1b1a1a;
-    margin-top: 5px;
-    border: 1px solid #cdc9c6;
-    border-radius: 0px;
+  color: #1b1a1a;
+  margin-top: 5px;
+  border: 1px solid #cdc9c6;
+  border-radius: 0px;
 }
 
 .account__form-btn.el-button {
@@ -62,9 +66,10 @@ export default {
   margin-top: 15px;
   transition: background 0.1s ease-in;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background: #1b1a1a;
-    border-color: #1b1a1a;;
+    border-color: #1b1a1a;
     color: #ecf5ff;
   }
 }
@@ -72,7 +77,7 @@ export default {
 .sign-register {
   margin-top: 50px;
 
-  .info{
+  .info {
     font-weight: 600;
     font-size: 0.7rem;
   }

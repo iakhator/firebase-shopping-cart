@@ -61,6 +61,7 @@
 <script setup>
 import ShoppingBag from '~/components/icons/ShoppingBag.vue'
 import UserIcon from '~/components/icons/UserIcon.vue'
+import AccountDrawer from '~/components/drawer/AccountDrawer.vue'
 
 import { useStore } from 'vuex'
 

@@ -15,7 +15,7 @@
               item.itemTitle
             }}</span>
             <span class="product__grid-w__list-price"
-              >Price: {{ item.price | toUSD }}</span
+              >Price: {{ toUSD(item.price) }}</span
             >
           </a>
         </li>
@@ -25,6 +25,8 @@
 </template>
 
 <script setup>
+const { toUSD } = useCurrency()
+
 defineProps({
   products: {
     type: Array,

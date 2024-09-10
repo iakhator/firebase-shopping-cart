@@ -127,7 +127,7 @@ async function register(formEl) {
     })
 
     if (isValid) {
-      const { data, pending } = await useFetch('/api/user/register', {
+      const { data, pending } = await useFetch('/api/auth/register', {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
         body: {
@@ -139,7 +139,6 @@ async function register(formEl) {
 
       loading.value = pending
 
-      console.log(data, 'data')
       if (data.value) {
         const token = useCookie('token')
         token.value = data?.value?.token
@@ -158,7 +157,7 @@ async function register(formEl) {
       //   // this.$noty.success(user.data.message, {
       //   //   timeout: 2500
       //   // })
-      //   TODO: this.$bus.emit('close-account-drawer', false)
+      bus.emit('close-account-drawer', false)
     }
   } catch (error) {
     formError.value = error.response?.data?.error || 'Something happened'
