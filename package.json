@@ -20,6 +20,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.0",
     "@nuxtjs/auth": "^4.8.5",
     "@sidebase/nuxt-auth": "^0.9.2",
+    "@sidebase/nuxt-session": "^0.2.8",
     "@stripe/stripe-js": "^4.4.0",
     "body-parser": "^1.20.2",
     "connect-redis": "^6.0.0",

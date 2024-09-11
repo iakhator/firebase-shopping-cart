@@ -25,6 +25,7 @@
               v-model="form.qty"
               :min="1"
               :max="3"
+              @change="handleQtyChange"
             ></el-input-number>
           </div>
 
@@ -37,7 +38,7 @@
 
           <div class="item__contents-variant">
             <p class="item__contents-spec-variant">Select variant:</p>
-            <el-radio-group v-model="form.variant">
+            <el-radio-group v-model="variant">
               <el-radio-button
                 v-for="variant in item.variant"
                 :key="variant"
@@ -68,11 +69,11 @@ const store = useStore()
 const route = useRoute()
 const { toUSD } = useCurrency()
 
+const variant = ref('')
 const form = reactive({
-  variant: '',
   qty: 1,
 })
-const errorMessage = ref('')
+let errorMessage = ref('')
 const loading = ref(true)
 
 const productId = route.params.itemId
@@ -83,17 +84,21 @@ const { data: item } = await useAsyncData('items', () =>
   $fetch(`/api/products/${productId}`)
 )
 
+function handleQtyChange(value) {
+  form.qty = value
+}
+
 function addToCart() {
   const cartObject = {
-    variantId: form.variant,
+    variantId: variant.value,
     quantity: form.qty,
-    title: item.itemTitle,
-    price: item.price,
-    itemPhoto: item.imageUrl,
-    itemId: productId,
+    title: item.value.itemTitle,
+    price: itemPrice.value || item.value.price,
+    itemPhoto: item.value.imageUrl || '',
+    productId: productId,
   }
   if (!cartObject.variantId) {
-    errorMessage = 'You must select a variant'
+    errorMessage.value = 'You must select a variant'
   } else {
     store.dispatch('addToCart', cartObject)
     errorMessage.value = ''

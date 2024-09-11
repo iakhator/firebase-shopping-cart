@@ -78,6 +78,7 @@ export default defineNuxtConfig({
     // '@nuxtjs/eslint-module',
     // '@nuxtjs/dotenv',
     '@sidebase/nuxt-auth',
+    '@sidebase/nuxt-session',
     '~/modules/api/index',
   ],
   /*

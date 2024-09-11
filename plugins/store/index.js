@@ -87,11 +87,39 @@ const store = createStore({
       }
     },
 
+    // async addToCart({ commit }, payload) {
+    //   console.log(payload, 'payload')
+    //   await $fetch('/api/cart', {
+    //     method: 'POST',
+    //     body: payload,
+    //   })
+    //   const { data } = await $fetch('/api/cart', { method: 'GET' })
+    //   commit('ADD_ITEM', data)
+    //   return data
+    // },
+
     async addToCart({ commit }, payload) {
-      await this.$axios.$post(`/api/cart/${payload.itemId}`, payload)
-      const { data } = await this.$axios.get('/api/cart/')
-      commit('ADD_ITEM', data)
-      return data
+      try {
+        const postResponse = await $fetch('/api/cart', {
+          method: 'POST',
+          body: payload,
+        })
+
+        console.log(postResponse, 'response')
+
+        if (postResponse) {
+          const { cart } = await $fetch('/api/cart', { method: 'GET' })
+
+          commit('ADD_ITEM', cart)
+
+          return cart
+        } else {
+          throw new Error('Failed to add item to the cart.')
+        }
+      } catch (error) {
+        console.error('Error in addToCart:', error)
+        throw new Error('An error occurred. Please try again.')
+      }
     },
 
     async checkOut({ commit }, payload) {

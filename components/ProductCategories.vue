@@ -33,12 +33,13 @@ function handleClick(tab) {
 
 <style lang="scss">
 .el-tabs {
-  position: sticky;
+  position: fixed;
   top: 50px;
   padding: 12px;
   z-index: 1000;
   background: #f8f5f2;
-  margin-bottom: 95px;
+  // margin-bottom: 95px;
+  width: 100%;
 }
 .el-tabs__nav-scroll {
   overflow: hidden;
