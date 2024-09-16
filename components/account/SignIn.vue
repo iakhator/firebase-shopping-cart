@@ -103,7 +103,6 @@ async function login(formEl) {
     formEl.resetFields()
     $bus.emit('close-account-drawer', false)
   } catch (error) {
-    console.log(error)
     console.error(
       error.response?.data?.message || 'An error occurred during login'
     )

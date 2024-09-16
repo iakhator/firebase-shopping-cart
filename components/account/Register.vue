@@ -164,7 +164,6 @@ async function register(formEl) {
       $bus.emit('close-account-drawer', false)
     }
   } catch (error) {
-    console.log(error, 'error')
     formError.value = error.response?.data?.error || 'Something happened'
   } finally {
     loading.value = false

@@ -1,5 +1,5 @@
 // plugins/filters.js
-import { defineNuxtPlugin } from '#app'
+// import { defineNuxtPlugin } from '#app'
 
 export default defineNuxtPlugin((nuxtApp) => {
   // Define the toUSD function as a global method

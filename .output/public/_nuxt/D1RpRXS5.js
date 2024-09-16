@@ -1,0 +1,1 @@
+import{_ as r,P as s,c as t,t as o,o as a}from"./BO5pRF5d.js";const u={middleware:"auth",data(){return{userId:""}},created(){this.userId=(this._.provides[s]||this.$route).params.userId}};function c(d,n,i,p,e,_){return a(),t("div",null,"user profile "+o(e.userId),1)}const f=r(u,[["render",c]]);export{f as default};

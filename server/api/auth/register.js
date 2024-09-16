@@ -28,7 +28,6 @@ export default defineEventHandler(async (event) => {
       message: 'Account successfully created.',
     }
   } catch (error) {
-    console.log(error, 'error')
     if (error.code === 'auth/email-already-exists') {
       return sendError(
         event,

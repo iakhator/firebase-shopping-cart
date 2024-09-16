@@ -1,0 +1,1 @@
+import{P as e}from"./BR5f3JW8.js";import{n as c,r,G as u,v as n,z as s,o as p}from"./BO5pRF5d.js";const l={__name:"[categoryId]",setup(d){const a=c();r("");const t=r([]);return u(async()=>{const o=await $fetch(`/api/categories/${a.params.categoryId}`);t.value=o.products}),(o,_)=>(p(),n(s(e),{products:s(t)},null,8,["products"]))}};export{l as default};

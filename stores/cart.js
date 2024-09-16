@@ -79,7 +79,6 @@ export const useCartStore = defineStore('cart', {
     incrementQty(itemId) {
       const { update } = useStorage('cart')
       const item = this.cart.items[itemId]
-      console.log(itemId, 'hello')
       if (item && item.quantity <= 4) {
         const qtyPrice = item.price / item.quantity
         item.quantity += 1

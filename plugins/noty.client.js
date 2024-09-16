@@ -1,5 +1,4 @@
 // plugins/noty.js
-// import { defineNuxtPlugin } from '#app'
 // import Noty from 'vuejs-noty'
 // import 'vuejs-noty/dist/vuejs-noty.css'
 
