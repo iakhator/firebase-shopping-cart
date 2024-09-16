@@ -71,12 +71,11 @@ import ShoppingBag from '~/components/icons/ShoppingBag.vue'
 import UserIcon from '~/components/icons/UserIcon.vue'
 import AccountDrawer from '~/components/drawer/AccountDrawer.vue'
 import CartDrawer from '~/components/drawer/CartDrawer.vue'
+import { useCartStore } from '~/stores/cart'
 
-import { useStore } from 'vuex'
-
-const store = useStore()
 const router = useRouter()
 const { data } = useAuth()
+const cartStore = useCartStore()
 
 const activeIndex2 = ref('1')
 const cartDrawer = ref(false)
@@ -95,12 +94,14 @@ onMounted(async () => {
   bus.on('open-account-drawer', (value) => {
     accountDrawer.value = value
   })
+
+  cartStore.getCart()
 })
 
-const cartItems = computed(() => store.state.cartItems)
+const cartItems = computed(() => cartStore.state.cartItems)
+const quantity = computed(() => cartStore.totalQty)
 const isAuthenticated = computed(() => data.value !== undefined)
 const loggedInUser = computed(() => data.value?.user || {})
-const quantity = computed(() => store.getters.quantity)
 const emptyCart = computed(() => quantity.value <= 0)
 
 function closeCartDrawer(value) {

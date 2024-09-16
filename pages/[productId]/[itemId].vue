@@ -52,7 +52,7 @@
           </div>
         </div>
         <div class="action-button">
-          <el-button round class="action-button-cart" @click="addToCart">
+          <el-button round class="action-button-cart" @click="updateCart">
             Add to cart
           </el-button>
           <el-button round class="black" @click="buyNow">Buy now</el-button>
@@ -63,9 +63,9 @@
 </template>
 
 <script setup>
-import { useStore } from 'vuex'
+import { useCartStore } from '~/stores/cart'
 
-const store = useStore()
+const cartStore = useCartStore()
 const route = useRoute()
 const { toUSD } = useCurrency()
 
@@ -88,19 +88,20 @@ function handleQtyChange(value) {
   form.qty = value
 }
 
-function addToCart() {
+function updateCart() {
   const cartObject = {
     variantId: variant.value,
     quantity: form.qty,
     title: item.value.itemTitle,
     price: itemPrice.value || item.value.price,
     itemPhoto: item.value.imageUrl || '',
-    productId: productId,
+    productId,
   }
   if (!cartObject.variantId) {
     errorMessage.value = 'You must select a variant'
   } else {
-    store.dispatch('addToCart', cartObject)
+    // store.dispatch('addToCart', cartObject)
+    cartStore.addToCart(cartObject, productId)
     errorMessage.value = ''
   }
 }

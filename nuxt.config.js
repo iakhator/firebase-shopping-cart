@@ -68,7 +68,7 @@ export default defineNuxtConfig({
     '@/plugins/custom-filter',
     '@/plugins/bus',
     '@/plugins/stripe',
-    '@/plugins/store/index',
+    // '@/plugins/store/index',
     // { src: '@/plugins/noty', mode: 'client' },
   ],
   /*
@@ -78,8 +78,8 @@ export default defineNuxtConfig({
     // '@nuxtjs/eslint-module',
     // '@nuxtjs/dotenv',
     '@sidebase/nuxt-auth',
-    '@sidebase/nuxt-session',
-    '~/modules/api/index',
+    '@pinia/nuxt',
+    // '~/modules/api/index',
   ],
   /*
    ** Axios module configuration
