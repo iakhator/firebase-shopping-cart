@@ -2,7 +2,7 @@
   <div>
     <Nav />
     <el-container>
-      <NuxtPage />
+      <!-- <NuxtPage /> -->
     </el-container>
   </div>
 </template>

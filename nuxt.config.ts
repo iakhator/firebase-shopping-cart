@@ -48,7 +48,6 @@ export default defineNuxtConfig({
    */
   plugins: [
     '~/plugins/element-ui.client',
-    '~/plugins/font-awesome.client',
     '~/plugins/custom-filter.client',
     '~/plugins/bus.client',
     '~/plugins/stripe.client',
@@ -57,7 +56,7 @@ export default defineNuxtConfig({
   /*
    ** Nuxt.js modules
    */
-  modules: ['@sidebase/nuxt-auth', '@pinia/nuxt'],
+  modules: ['@sidebase/nuxt-auth', '@pinia/nuxt', '@element-plus/nuxt'],
 
   auth: {
     baseURL: '/api/auth',
