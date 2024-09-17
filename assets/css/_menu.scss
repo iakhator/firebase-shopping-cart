@@ -1,5 +1,11 @@
 .el-menu {
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
   background: $off-black;
+  position:fixed;
+  z-index:3000;
+  width: 100%;
 }
 
 .el-menu-logo {

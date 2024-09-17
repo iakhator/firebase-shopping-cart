@@ -1,8 +1,11 @@
-
 <template>
   <el-row class="checkout__grid pay__grid">
     <div class="checkout__grid-left">
-      <div class="cart__wrapper" v-for="cartItem in cartItems.cartItem" :key="cartItem.itemId">
+      <div
+        class="cart__wrapper"
+        v-for="cartItem in cartItems.cartItem"
+        :key="cartItem.itemId"
+      >
         <p>{{ cartItem.title }}</p>
         <div class="cart__wrapper-content">
           <div class="cart__wrapper-image">
@@ -31,12 +34,25 @@
     </div>
     <div class="checkout__grid-right">
       <p>Payment</p>
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+      <el-form
+        :model="ruleForm"
+        :rules="rules"
+        ref="ruleForm"
+        class="demo-ruleForm"
+      >
         <el-form-item label="Name" prop="name">
-          <el-input class="form__input" v-model="ruleForm.name" autocomplete="off"></el-input>
+          <el-input
+            class="form__input"
+            v-model="ruleForm.name"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
         <el-form-item label="Address" prop="address">
-          <el-input class="form__input" v-model="ruleForm.address" autocomplete="off"></el-input>
+          <el-input
+            class="form__input"
+            v-model="ruleForm.address"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
         <div class="card-details">Card Information</div>
         <div class="form-row">
@@ -44,7 +60,12 @@
           <div ref="card"></div>
         </div>
         <div class="pay form-row">
-          <el-button class="el-button black pay__btn" :loading="loading" @click="pay">Pay</el-button>
+          <el-button
+            class="el-button black pay__btn"
+            :loading="loading"
+            @click="pay"
+            >Pay</el-button
+          >
         </div>
       </el-form>
     </div>
@@ -61,22 +82,20 @@ export default {
       card: '',
       loading: false,
       ruleForm: {
-        name: this.$store.state.auth.user ? this.$store.state.auth.user.displayName : '',
-        address: ''
+        name: this.$store.state.auth.user
+          ? this.$store.state.auth.user.displayName
+          : '',
+        address: '',
       },
       rules: {
-        name: [
-          { message: 'is required', trigger: 'blur' }
-        ],
-        address: [
-          { message: 'is required', trigger: 'blur' }
-        ]
-      }
+        name: [{ message: 'is required', trigger: 'blur' }],
+        address: [{ message: 'is required', trigger: 'blur' }],
+      },
     }
   },
 
   computed: {
-    ...mapGetters(['isAuthenticated', 'loggedInUser', 'cartItems'])
+    ...mapGetters(['isAuthenticated', 'loggedInUser', 'cartItems']),
   },
 
   mounted() {
@@ -93,41 +112,47 @@ export default {
     pay() {
       const _that = this
       this.loading = true
-      const user = this.isAuthenticated ? this.loggedInUser.displayName : this.ruleForm.name
+      const user = this.isAuthenticated
+        ? this.loggedInUser.displayName
+        : this.ruleForm.name
 
       const clientSecret = this.$store.state.clientSecret
-      this.$axios.post('/api/saveorder', this.cartItems).then((response) => {
-        this.$stripe.confirmCardPayment(clientSecret, {
-          payment_method: {
-            card: this.card,
-            billing_details: {
-              name: user
-            }
-          }
-        }).then(function (result) {
-          if (result.error) {
-          // Show error to your customer (e.g., insufficient funds)
-            _that.$noty.error(result.error, {
-              timeout: 500
+      this.$axios
+        .post('/api/saveorder', this.cartItems)
+        .then((response) => {
+          this.$stripe
+            .confirmCardPayment(clientSecret, {
+              payment_method: {
+                card: this.card,
+                billing_details: {
+                  name: user,
+                },
+              },
             })
-            this.loading = false
-          } else {
-          // The payment has been processed!
-          // eslint-disable-next-line no-lonely-if
-            if (result.paymentIntent.status === 'succeeded') {
-            // Show a success message to your customer
-              console.log('successful')
-              _that.$store.commit('ADD_ITEM', {
-                totalQty: 0,
-                cartIem: []
-              })
-              _that.$router.push('/payment/success')
-            }
-          }
+            .then(function (result) {
+              if (result.error) {
+                // Show error to your customer (e.g., insufficient funds)
+                _that.$noty.error(result.error, {
+                  timeout: 500,
+                })
+                this.loading = false
+              } else {
+                // The payment has been processed!
+                // eslint-disable-next-line no-lonely-if
+                if (result.paymentIntent.status === 'succeeded') {
+                  // Show a success message to your customer
+                  _that.$store.commit('ADD_ITEM', {
+                    totalQty: 0,
+                    cartIem: [],
+                  })
+                  _that.$router.push('/payment/success')
+                }
+              }
+            })
         })
-      }).catch(err => console.error(err))
-    }
-  }
+        .catch((err) => console.error(err))
+    },
+  },
 }
 </script>
 

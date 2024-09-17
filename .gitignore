@@ -87,4 +87,5 @@ sw.*
 # Mac OSX
 .DS_Store
 
-.env
+api/config/serviceAccountKey.json
+server/api/config/serviceAccountKey.json

@@ -1,3 +1,90 @@
+<script setup>
+import ShoppingBagBlack from '../icons/ShoppingBagBlack'
+import { useCartStore } from '~/stores/cart.js'
+import { useCurrency } from '~/composables/useCurrency.js'
+
+defineProps({
+  emptyCart: {
+    type: Boolean,
+    required: true,
+  },
+})
+
+const emit = defineEmits(['close-cart-drawer'])
+
+const cartStore = useCartStore()
+const { toUSD } = useCurrency(0)
+
+const loading = ref(false)
+const cartItems = computed(() => cartStore.cartItems)
+const totalPrice = computed(() => cartStore.totalPrice)
+
+function closeCartDrawer() {
+  emit('close-cart-drawer', false)
+}
+
+//   computed: {
+//     ...mapGetters(['cartItems', 'isAuthenticated']),
+//   },
+
+//   methods: {
+//     formatPrice(value) {
+//       return this.$toUSD(value)
+//     },
+//     closeCartDrawer() {
+//       this.$emit('close-cart-drawer', false)
+//     },
+
+//     checkOut() {
+//       if (this.isAuthenticated) {
+//         this.loading = true
+//         this.$store
+//           .dispatch('checkOut', {
+//             amount: Math.round(this.cartItems.totalPrice * 100),
+//           })
+//           .then(() => {
+//             this.$router.push({ path: '/cart/checkout' })
+//             this.$emit('close-on-checkout', false)
+//             this.loading = false
+//           })
+//           .catch((error) => {
+//             console.error(error)
+//             this.loading = false
+//           })
+//       } else {
+//         this.closeCartDrawer()
+//         this.$bus.emit('open-account-drawer', true)
+//       }
+//     },
+
+//     deleteItem(id) {
+//       this.$store
+//         .dispatch('removeFromCart', { data: { id } })
+//         .then(() => {
+//           // this.$noty.success('Item deleted', {
+//           //   timeout: 500
+//           // })
+//           TODO: console.log('yeappp')
+//         })
+//         .catch((err) => {
+//           // this.$noty.error(err.response.message, {
+//           //   timeout: 500
+//           // })
+//           TODO: console.error(err)
+//         })
+//     },
+
+//     decreaseCartQty(id) {
+//       this.$store.dispatch('decrementQty', id)
+//     },
+
+//     increaseCartQty(id) {
+//       this.$store.dispatch('incrementQty', id)
+//     },
+//   },
+// }
+</script>
+
 <template>
   <div>
     <div v-if="emptyCart">
@@ -7,7 +94,7 @@
     <div
       v-else
       class="cart__wrapper"
-      v-for="cartItem in cartItems.cartItem"
+      v-for="cartItem in cartItems"
       :key="cartItem.itemId"
     >
       <p>{{ cartItem.title }}</p>
@@ -19,30 +106,30 @@
         <div class="cart__wrapper-quantity">
           <button
             class="quantity__btn"
-            @click="decreaseCartQty(cartItem.itemId)"
+            @click="cartStore.decrementQty(cartItem.productId)"
           >
             -
           </button>
           <span class="cart__quantity">{{ cartItem.quantity }}</span>
           <button
             class="quantity__btn"
-            @click="increaseCartQty(cartItem.itemId)"
+            @click="cartStore.incrementQty(cartItem.productId)"
           >
             +
           </button>
         </div>
-        <div class="cart__wrapper-price">{{ cartItem.price | toUSD }}</div>
+        <div class="cart__wrapper-price">{{ toUSD(cartItem.price) }}</div>
         <el-button
           type="danger"
           icon="el-icon-delete"
           circle
-          @click="deleteItem(cartItem.itemId)"
+          @click="cartStore.removeFromCart(cartItem.productId)"
         ></el-button>
       </div>
     </div>
     <div class="cart__wrapper-total" v-show="!emptyCart">
       <span>Total:</span>
-      {{ cartItems.totalPrice | toUSD }}
+      {{ toUSD(totalPrice) }}
     </div>
     <el-button
       v-show="!emptyCart"
@@ -59,86 +146,10 @@
   </div>
 </template>
 
-<script>
-import { mapGetters } from 'vuex'
-import ShoppingBagBlack from '../icons/ShoppingBagBlack'
-
-export default {
-  components: {
-    ShoppingBagBlack
-  },
-
-  props: {
-    emptyCart: {
-      type: Boolean,
-      required: true
-    }
-  },
-
-  data() {
-    return {
-      loading: false
-    }
-  },
-
-  computed: {
-    ...mapGetters(['cartItems', 'isAuthenticated'])
-  },
-
-  methods: {
-    closeCartDrawer() {
-      this.$emit('close-cart-drawer', false)
-    },
-
-    checkOut() {
-      if (this.isAuthenticated) {
-        this.loading = true
-        this.$store
-          .dispatch('checkOut', {
-            amount: Math.round(this.cartItems.totalPrice * 100)
-          })
-          .then(() => {
-            this.$router.push({ path: '/cart/checkout' })
-            this.$emit('close-on-checkout', false)
-            this.loading = false
-          })
-          .catch(error => {
-            console.error(error)
-            this.loading = false
-          })
-      } else {
-        this.closeCartDrawer()
-        this.$bus.$emit('open-account-drawer', true)
-      }
-    },
-
-    deleteItem(id) {
-      this.$store
-        .dispatch('removeFromCart', { data: { id } })
-        .then(() => {
-          this.$noty.success('Item deleted', {
-            timeout: 500
-          })
-        })
-        .catch(err => {
-          this.$noty.error(err.response.message, {
-            timeout: 500
-          })
-        })
-    },
-
-    decreaseCartQty(id) {
-      this.$store.dispatch('decrementQty', id)
-    },
-
-    increaseCartQty(id) {
-      this.$store.dispatch('incrementQty', id)
-    }
-  }
-}
-</script>
-
 <style lang="scss">
+.el-button + .el-button.no__cart-btn {
+  margin-left: 0 !important;
+}
 .no__cart {
   width: 100px;
   position: absolute;

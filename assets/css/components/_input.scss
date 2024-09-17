@@ -12,8 +12,8 @@
 .el-input-number__increase {
   background: $off-black;
   color: #ffffff;
-  border-radius: 50%;
-  top: 10px;
+  // border-radius: 50%;
+  // top: 10px;
 }
 
 .el-input-number__decrease:hover,
@@ -27,7 +27,16 @@
   border: none;
 }
 
+.account__form-input .el-input__inner {
+  margin-top: 0 !important;
+  border: none !important;
+}
+
 .el-input-number .el-input__inner {
   padding-right: 0px;
   padding-left: 0px;
+}
+
+.el-input__wrapper {
+  background-color: transparent !important;
 }

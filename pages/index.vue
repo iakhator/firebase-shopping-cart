@@ -2,19 +2,23 @@
   <product-list :products="products" />
 </template>
 
-<script>
+<script setup>
 import ProductList from '../components/ProductList'
+import { nextTick } from 'vue'
 
-export default {
-  components: { ProductList },
+const products = ref([])
 
-  async asyncData({ $axios, error }) {
-    try {
-      const { data } = await $axios.$get('/api/products')
-      return { products: data }
-    } catch (err) {
-      error({ statusCode: 404, message: 'Product not found' })
-    }
+async function fetchProducts() {
+  try {
+    const { data } = await useFetch('/api/products')
+    products.value = data?.value?.products
+  } catch (err) {
+    console.error({ statusCode: 404, message: 'Product not found' })
   }
 }
+
+onMounted(async () => {
+  await nextTick()
+  await fetchProducts()
+})
 </script>

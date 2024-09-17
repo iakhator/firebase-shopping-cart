@@ -1,12 +1,17 @@
 .product__grid {
-  margin: -1px auto 0;
-  width: 61.77778vw;
+  margin: 10px auto ;
+  width: 85.77778vw;
   display: flex;
   font-weight: 500;
+  margin-top: 130px;
 
   &-right {
     width: 100%;
   }
+}
+
+.product__grid.product {
+  width: 66.778vw;
 }
 
 .product__grid-w__list:not(:nth-child(3n + 1)) {

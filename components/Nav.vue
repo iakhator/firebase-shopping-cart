@@ -1,125 +1,123 @@
 <template>
-  <div>
-    <el-menu
-      :default-active="activeIndex2"
-      class="el-menu-demo"
-      mode="horizontal"
-      background-color="#1B1A1A"
-      text-color="#fff"
-      active-text-color="#ffd04b"
-    >
-      <el-menu-item index="1" class="el-menu-logo">
-        <nuxt-link to="/">Shop Center</nuxt-link>
-      </el-menu-item>
+  <pre>{{ data }}</pre>
+  <el-menu
+    :default-active="activeIndex2"
+    class="el-menu-demo"
+    mode="horizontal"
+    background-color="#1B1A1A"
+    text-color="#fff"
+    active-text-color="#ffd04b"
+  >
+    <el-menu-item index="1" class="el-menu-logo">
+      <NuxtLink to="/">Shop Center</NuxtLink>
+    </el-menu-item>
+
+    <div>
       <template v-if="isAuthenticated">
-        <el-menu-item class="el-menu-navlist" @click="logOut()">Sign out</el-menu-item>
+        <el-menu-item index="2" class="el-menu-navlist" @click="logOut()"
+          >Sign out</el-menu-item
+        >
         <el-menu-item class="el-menu-navlist" @click="profileDrawer = true">
           {{ loggedInUser.displayName }}
           <user-icon />
         </el-menu-item>
       </template>
-      <el-menu-item v-else class="el-menu-navlist" @click="accountDrawer = true">
+      <el-menu-item
+        v-else
+        index="2"
+        class="el-menu-navlist"
+        @click="accountDrawer = true"
+      >
         Account
         <user-icon />
       </el-menu-item>
-      <el-menu-item index="3" class="el-menu-navlist" @click="cartDrawer = true">
+      <el-menu-item
+        index="3"
+        class="el-menu-navlist"
+        @click="cartDrawer = true"
+      >
         <el-badge :value="quantity" class="item">
           <shopping-bag />
         </el-badge>
       </el-menu-item>
-    </el-menu>
-    <product-categories :categories="categories" />
+    </div>
+  </el-menu>
+  <ProductCategories :categories="categories" />
 
-    <el-drawer title="Your Shopping Cart" :visible.sync="cartDrawer" size="35%" class="cart__body">
-      <cart-drawer
-        :empty-cart="emptyCart"
-        @close-cart-drawer="closeCartDrawer"
-        @close-on-checkout="closeOnCheckout"
-      />
-    </el-drawer>
+  <el-drawer
+    title="Your Shopping Cart"
+    v-model="cartDrawer"
+    size="35%"
+    class="cart__body"
+  >
+    <cart-drawer
+      :empty-cart="emptyCart"
+      @close-cart-drawer="closeCartDrawer"
+      @close-on-checkout="closeOnCheckout"
+    />
+  </el-drawer>
 
-    <el-drawer :visible.sync="accountDrawer" size="35%">
-      <account-drawer />
-    </el-drawer>
+  <el-drawer v-model="accountDrawer" size="35%">
+    <account-drawer />
+  </el-drawer>
 
-    <el-drawer :visible.sync="profileDrawer" size="35%">
-      <profile-drawer />
-    </el-drawer>
-  </div>
+  <el-drawer v-model="profileDrawer" size="35%">
+    <profile-drawer />
+  </el-drawer>
 </template>
 
-<script>
-import { mapState, mapGetters } from 'vuex'
-import ProductCategories from './ProductCategories'
-import ShoppingBag from './icons/ShoppingBag'
-import UserIcon from './icons/UserIcon'
-import CartDrawer from './drawer/CartDrawer'
-import AccountDrawer from './drawer/AccountDrawer'
-import ProfileDrawer from './drawer/ProfileDrawer'
+<script setup>
+import ShoppingBag from '~/components/icons/ShoppingBag.vue'
+import UserIcon from '~/components/icons/UserIcon.vue'
+import AccountDrawer from '~/components/drawer/AccountDrawer.vue'
+import CartDrawer from '~/components/drawer/CartDrawer.vue'
+import { useCartStore } from '~/stores/cart'
 
-export default {
-  components: {
-    ProductCategories,
-    ShoppingBag,
-    UserIcon,
-    CartDrawer,
-    AccountDrawer,
-    ProfileDrawer
-  },
+const router = useRouter()
+const { data } = useAuth()
+const cartStore = useCartStore()
 
-  data() {
-    return {
-      activeIndex2: '1',
-      cartDrawer: false,
-      accountDrawer: false,
-      profileDrawer: false,
-      categories: []
-    }
-  },
+const activeIndex2 = ref('1')
+const cartDrawer = ref(false)
+const accountDrawer = ref(false)
+const profileDrawer = ref(false)
+const categories = ref([])
 
-  computed: {
-    ...mapState(['cartItems']),
+onMounted(async () => {
+  const bus = useNuxtApp().$bus
+  const { categories: cat } = await $fetch('/api/categories')
+  categories.value = cat
 
-    ...mapGetters(['isAuthenticated', 'loggedInUser', 'quantity']),
+  bus.on('close-account-drawer', (value) => {
+    accountDrawer.value = value
+  })
+  bus.on('open-account-drawer', (value) => {
+    accountDrawer.value = value
+  })
 
-    emptyCart() {
-      return this.quantity <= 0
-    }
-  },
+  cartStore.getCart()
+})
 
-  created() {
-    this.$bus.$on('close-account-drawer', (value) => {
-      this.accountDrawer = value
-    })
+const cartItems = computed(() => cartStore.state.cartItems)
+const quantity = computed(() => cartStore.totalQty)
+const isAuthenticated = computed(() => data.value !== undefined)
+const loggedInUser = computed(() => data.value?.user || {})
+const emptyCart = computed(() => quantity.value <= 0)
 
-    this.$bus.$on('open-account-drawer', (value) => {
-      console.log(value)
-      this.accountDrawer = value
-    })
-  },
+function closeCartDrawer(value) {
+  cartDrawer.value = value
+  router.push('/')
+}
 
-  async mounted() {
-    const categories = await this.$axios.$get('/api/categories')
-    this.categories = categories.data
-  },
+function closeOnCheckout(value) {
+  cartDrawer.value = value
+}
 
-  methods: {
-    closeCartDrawer(value) {
-      this.cartDrawer = value
-      this.$router.push('/')
-    },
-
-    closeOnCheckout(value) {
-      this.cartDrawer = value
-    },
-
-    async logOut() {
-      try {
-        await this.$auth.logout()
-      } catch (error) {
-        console.error(error)
-      }
-    }
+async function logOut() {
+  try {
+    await auth.logout()
+  } catch (error) {
+    console.error(error)
   }
 }
 </script>
@@ -147,11 +145,7 @@ $off-black: #1b1a1a;
 }
 
 .item {
-  margin-top: -9px;
-}
-
-.shopping-bag {
-  position: absolute;
+  margin-top: -30px;
 }
 
 .svg-inline--fa {
