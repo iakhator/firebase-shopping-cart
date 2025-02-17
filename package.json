@@ -25,12 +25,9 @@
     "mitt": "^3.0.1",
     "nuxt": "^3.13.2",
     "pinia": "^2.2.2",
-    "redis": "^4.6.7",
     "sass": "^1.64.1",
     "sass-loader": "^13.3.0",
-    "stripe": "^12.5.0",
-    "vuejs-noty": "^0.1.4",
-    "vuex": "^4.0.2"
+    "stripe": "^12.5.0"
   },
   "devDependencies": {
     "@element-plus/nuxt": "^1.0.10",

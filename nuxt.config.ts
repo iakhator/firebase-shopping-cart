@@ -3,6 +3,9 @@ import path from 'path'
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-01-01',
+  vite: {
+    logLevel: 'info',
+  },
   /*
    ** Headers of the page
    */
@@ -46,13 +49,13 @@ export default defineNuxtConfig({
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [
-    '~/plugins/element-ui.client',
-    '~/plugins/custom-filter.client',
-    '~/plugins/bus.client',
-    '~/plugins/stripe.client',
-    { src: '~/plugins/noty.client', mode: 'client' },
-  ],
+  // plugins: [
+  //   '~/plugins/element-ui.client',
+  //   '~/plugins/custom-filter.client',
+  //   '~/plugins/bus.client',
+  //   '~/plugins/stripe.client',
+  //   { src: '~/plugins/noty.client', mode: 'client' },
+  // ],
   /*
    ** Nuxt.js modules
    */
@@ -63,10 +66,9 @@ export default defineNuxtConfig({
     provider: {
       type: 'local',
       endpoints: {
-        signIn: { url: '/login', method: 'post' },
-        signOut: { url: '/logout', method: 'post' },
-        user: { url: '/user', method: 'get', propertyName: false },
-        getSession: { url: '/session', method: 'get' },
+        signIn: { path: '/login', method: 'post' },
+        signOut: { path: '/logout', method: 'post' },
+        getSession: { path: '/session', method: 'get' },
       },
     },
   },
@@ -77,9 +79,9 @@ export default defineNuxtConfig({
   build: {
     transpile: ['element-plus'],
   },
-  alias: {
-    '@': path.resolve(__dirname, './'),
-    '~': path.resolve(__dirname, './'),
-  },
-  serverMiddleware: [],
+  // alias: {
+  //   '@': path.resolve(__dirname, './'),
+  //   '~': path.resolve(__dirname, './'),
+  //   '#': path.resolve(__dirname, './'),
+  // },
 })

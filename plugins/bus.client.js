@@ -1,5 +1,4 @@
 // plugins/mitt.js
-// import { defineNuxtPlugin } from '#app'
 import mitt from 'mitt'
 
 export default defineNuxtPlugin((nuxtApp) => {
