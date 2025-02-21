@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import { useStorage } from '~/composables/useStorage.js'
-import Stripe from 'stripe'
+// import Stripe from 'stripe'
 
 // Initialize Stripe
-const stripe = new Stripe(process.env.STRIPE_SECRET)
+// const stripe = new Stripe(process.env.STRIPE_SECRET)
 
 export const useCartStore = defineStore('cart', {
   state: () => {
@@ -17,24 +17,21 @@ export const useCartStore = defineStore('cart', {
   },
   actions: {
     getCart() {
-      const { get } = useStorage('cart')
-
-      const isEmptyObject = (obj) => {
-        return (
-          obj && Object.keys(obj).length === 0 && obj.constructor === Object
-        )
-      }
-
-      const storedCart = get('cart')
-
-      this.cart =
-        !storedCart || isEmptyObject(storedCart)
-          ? {
-              items: {},
-              totalQty: 0,
-              totalPrice: 0,
-            }
-          : storedCart
+      // const { get } = useStorage('cart')
+      // const isEmptyObject = (obj) => {
+      //   return (
+      //     obj && Object.keys(obj).length === 0 && obj.constructor === Object
+      //   )
+      // }
+      // const storedCart = get('cart')
+      // this.cart =
+      //   !storedCart || isEmptyObject(storedCart)
+      //     ? {
+      //         items: {},
+      //         totalQty: 0,
+      //         totalPrice: 0,
+      //       }
+      //     : storedCart
     },
     addToCart(product, id) {
       const { update } = useStorage('cart')
@@ -104,15 +101,15 @@ export const useCartStore = defineStore('cart', {
     },
 
     async checkOut(amount) {
-      try {
-        const paymentIntent = await stripe.paymentIntents.create({
-          amount,
-          currency: 'usd',
-        })
-        return paymentIntent.client_secret
-      } catch (error) {
-        throw new Error(error.message)
-      }
+      // try {
+      //   const paymentIntent = await stripe.paymentIntents.create({
+      //     amount,
+      //     currency: 'usd',
+      //   })
+      //   return paymentIntent.client_secret
+      // } catch (error) {
+      //   throw new Error(error.message)
+      // }
     },
   },
   getters: {

@@ -41,7 +41,6 @@
 </template>
 
 <script setup>
-import { useStore } from 'vuex'
 const { signIn, getSession, data } = useAuth()
 const { $bus } = useNuxtApp()
 

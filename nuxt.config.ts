@@ -12,13 +12,13 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: process.env.npm_package_name || '',
-      script: [
-        {
-          hid: 'stripe',
-          src: 'https://js.stripe.com/v3/',
-          defer: true,
-        },
-      ],
+      // script: [
+      //   {
+      //     hid: 'stripe',
+      //     src: 'https://js.stripe.com/v3/',
+      //     defer: true,
+      //   },
+      // ],
       meta: [
         {
           charset: 'utf-8',
@@ -46,16 +46,7 @@ export default defineNuxtConfig({
    ** Global CSS
    */
   css: ['element-plus/dist/index.css', '~/assets/css/main.scss'],
-  /*
-   ** Plugins to load before mounting the App
-   */
-  // plugins: [
-  //   '~/plugins/element-ui.client',
-  //   '~/plugins/custom-filter.client',
-  //   '~/plugins/bus.client',
-  //   '~/plugins/stripe.client',
-  //   { src: '~/plugins/noty.client', mode: 'client' },
-  // ],
+
   /*
    ** Nuxt.js modules
    */
