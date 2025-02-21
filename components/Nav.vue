@@ -1,5 +1,4 @@
 <template>
-  <pre>{{ data }}</pre>
   <el-menu
     :default-active="activeIndex2"
     class="el-menu-demo"
@@ -72,9 +71,11 @@ import UserIcon from '~/components/icons/UserIcon.vue'
 import AccountDrawer from '~/components/drawer/AccountDrawer.vue'
 import CartDrawer from '~/components/drawer/CartDrawer.vue'
 import { useCartStore } from '~/stores/cart'
+import { useAuthStore } from '~/stores/authStore'
+// const data = ref({})
 
 const router = useRouter()
-const { data } = useAuth()
+const authStore = useAuthStore()
 const cartStore = useCartStore()
 
 const activeIndex2 = ref('1')
@@ -100,8 +101,8 @@ onMounted(async () => {
 
 const cartItems = computed(() => cartStore.state.cartItems)
 const quantity = computed(() => cartStore.totalQty)
-const isAuthenticated = computed(() => data.value !== undefined)
-const loggedInUser = computed(() => data.value?.user || {})
+const isAuthenticated = computed(() => authStore.isAuthenticated)
+const loggedInUser = computed(() => authStore.user || {})
 const emptyCart = computed(() => quantity.value <= 0)
 
 function closeCartDrawer(value) {
@@ -115,7 +116,7 @@ function closeOnCheckout(value) {
 
 async function logOut() {
   try {
-    await auth.logout()
+    await authStore.logout()
   } catch (error) {
     console.error(error)
   }
@@ -125,6 +126,10 @@ async function logOut() {
 <style lang="scss" scoped>
 $off-white: #f8f5f2;
 $off-black: #1b1a1a;
+
+.el-menu-demo {
+  position: fixed;
+}
 
 .el-menu-demo .el-menu-navlist {
   float: right;

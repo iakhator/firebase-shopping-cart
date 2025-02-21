@@ -1,4 +1,5 @@
-import { db } from '../config/firebaseConfig.js'
+import { adminFirestore as db } from '~/server/utils/firebaseAdmin'
+
 import { notFound, foundSuccess } from '../helpers/errorHandlers.js'
 
 export const getProducts = async (req, res) => {

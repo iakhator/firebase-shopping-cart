@@ -1,5 +1,5 @@
 // import { setResponseStatus } from 'nuxt/app'
-import { auth } from '../api/config/firebaseConfig.js'
+// import { auth } from '../api/config/firebaseConfig.js'
 
 export default defineEventHandler(async (event) => {
   // try {

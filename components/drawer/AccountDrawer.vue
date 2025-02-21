@@ -45,12 +45,12 @@ export default {
   }
 }
 
-.email,
-.firstname,
-.lastname,
-.password {
-  margin-bottom: 10px;
-}
+// .email,
+// .firstname,
+// .lastname,
+// .password {
+//   margin-bottom: 10px;
+// }
 
 .account__form-input .el-input__inner {
   color: #1b1a1a;
@@ -77,9 +77,14 @@ export default {
 .sign-register {
   margin-top: 50px;
 
+  .role-button {
+    cursor: pointer;
+  }
+
   .info {
     font-weight: 600;
     font-size: 0.7rem;
+    margin-right: 5px;
   }
 }
 

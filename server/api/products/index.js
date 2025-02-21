@@ -1,4 +1,4 @@
-import { db } from '../config/firebaseConfig.js'
+import { adminFirestore as db } from '~/server/utils/firebaseAdmin'
 
 export default defineEventHandler(async () => {
   const products = []

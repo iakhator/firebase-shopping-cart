@@ -33,16 +33,24 @@
 
     <el-form-item class="account__form sign-register">
       <span class="info">You don't have an account?</span>
-      <el-button class="account__form-btn" @click="showRegister"
-        >REGISTER</el-button
-      >
+      <div role="button" class="role-button" @click="showRegister">
+        Register
+      </div>
     </el-form-item>
   </el-form>
 </template>
 
 <script setup>
-const { signIn, getSession, data } = useAuth()
+// const { signIn, getSession, data } = useAuth()
+import { useAuthStore } from '~/stores/authStore'
+
 const { $bus } = useNuxtApp()
+
+const authStore = useAuthStore()
+const router = useRouter()
+const route = useRoute()
+
+console.log(route, 'hello')
 
 defineProps({
   showRegister: {
@@ -90,23 +98,14 @@ async function login(formEl) {
     return false
   }
 
-  try {
-    const token = await signIn(
-      {
-        email: ruleForm.value.email,
-        password: ruleForm.value.password,
-      },
-      { callbackUrl: '/' }
-    )
-    // await getSession(token)
+  const response = await authStore.signIn(ruleForm.value)
+
+  // await getSession(token)
+  if (response) {
     formEl.resetFields()
     $bus.emit('close-account-drawer', false)
-  } catch (error) {
-    console.error(
-      error.response?.data?.message || 'An error occurred during login'
-    )
-  } finally {
-    loading.value = false
+
+    router.replace(route.path)
   }
 }
 </script>

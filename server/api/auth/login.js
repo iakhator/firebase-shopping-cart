@@ -1,47 +1,22 @@
-import { sendError } from 'h3'
-import {
-  fireAuth,
-  signInWithEmailAndPassword,
-} from '../config/firebaseConfig.js'
+import { adminAuth } from '~/server/utils/firebaseAdmin'
 
 export default defineEventHandler(async (event) => {
+  const { idToken } = await readBody(event)
+  if (!idToken) return { error: 'ID Token is required' }
+
   try {
-    const { email, password } = await readBody(event)
+    const decodedToken = await adminAuth.verifyIdToken(idToken)
+    const sessionCookie = await adminAuth.createSessionCookie(idToken, {
+      expiresIn: 60 * 60 * 24 * 5 * 1000,
+    }) // 5 Days
 
-    // Sign in the user using Firebase Authentication
-    const userRecord = await signInWithEmailAndPassword(
-      fireAuth,
-      email,
-      password
-    )
-    const token = await userRecord.user.getIdToken()
-
-    // Return the token as a response
-    return {
-      token,
-    }
+    setCookie(event, 'session', sessionCookie, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 60 * 60 * 24 * 5,
+    })
+    return { success: true, user: decodedToken }
   } catch (error) {
-    if (error.code === 'auth/user-not-found') {
-      return sendError(
-        event,
-        createError({ statusCode: 400, statusMessage: 'User not found' })
-      )
-    }
-
-    if (error.code === 'auth/invalid-credential') {
-      return sendError(
-        event,
-        createError({
-          statusCode: 400,
-          statusMessage: 'Invalid email or password',
-        })
-      )
-    }
-
-    // Handle other errors
-    return sendError(
-      event,
-      createError({ statusCode: 500, statusMessage: 'An error occurred' })
-    )
+    return { error: 'Invalid token' }
   }
 })

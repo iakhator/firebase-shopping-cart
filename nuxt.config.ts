@@ -1,5 +1,6 @@
 import { defineNuxtConfig } from 'nuxt/config'
-import path from 'path'
+import { fileURLToPath } from 'url'
+import { resolve } from 'path'
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-01-01',
@@ -50,19 +51,19 @@ export default defineNuxtConfig({
   /*
    ** Nuxt.js modules
    */
-  modules: ['@sidebase/nuxt-auth', '@pinia/nuxt', '@element-plus/nuxt'],
+  modules: ['@pinia/nuxt', '@element-plus/nuxt'],
 
-  auth: {
-    baseURL: '/api/auth',
-    provider: {
-      type: 'local',
-      endpoints: {
-        signIn: { path: '/login', method: 'post' },
-        signOut: { path: '/logout', method: 'post' },
-        getSession: { path: '/session', method: 'get' },
-      },
-    },
-  },
+  // auth: {
+  //   baseURL: '/api/auth',
+  //   provider: {
+  //     type: 'local',
+  //     endpoints: {
+  //       signIn: { path: '/login', method: 'post' },
+  //       signOut: { path: '/logout', method: 'post' },
+  //       getSession: { path: '/session', method: 'get' },
+  //     },
+  //   },
+  // },
 
   /*
    ** Build configuration
@@ -70,9 +71,20 @@ export default defineNuxtConfig({
   build: {
     transpile: ['element-plus'],
   },
+
+  runtimeConfig: {
+    public: {
+      FIREBASE_DATABASE_URL: process.env.DATABASE_URL,
+      API_KEY: process.env.API_KEY,
+      AUTH_DOMAIN: process.env.AUTH_DOMAIN,
+      PROJECT_ID: process.env.PROJECT_ID,
+      STORAGE_BUCKET: process.env.STORAGE_BUCKET,
+      MESSAGING_SENDER_ID: process.env.MESSAGING_SENDER_ID,
+      APP_ID: process.env.APP_ID,
+      MEASUREMENT_ID: process.env.MEASUREMENT_ID,
+    },
+  },
   // alias: {
-  //   '@': path.resolve(__dirname, './'),
-  //   '~': path.resolve(__dirname, './'),
-  //   '#': path.resolve(__dirname, './'),
+  //   '~': resolve(__dirname, './'),
   // },
 })
