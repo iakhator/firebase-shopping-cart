@@ -1,22 +1,17 @@
 import { adminAuth } from '~/server/utils/firebaseAdmin'
 
 export default defineEventHandler(async (event) => {
-  const sessionCookie = getCookie(event, 'session')
-  if (!sessionCookie) return { success: false, message: 'No active session' }
+  const authToken = getCookie(event, 'token')
+  if (!authToken) return { success: false, message: 'No active session' }
 
   try {
-    const decoded = await adminAuth.verifySessionCookie(sessionCookie, true)
+    await adminAuth.verifyIdToken(authToken, true)
 
-    await adminAuth.revokeRefreshTokens(decoded.uid)
+    deleteCookie(event, 'token', { path: '/' })
 
-    deleteCookie(event, 'session')
-
-    return { success: true, message: 'User logged out and token revoked' }
+    return { success: true }
   } catch (error) {
-    return {
-      success: false,
-      message: 'Failed to revoke token',
-      error: error.message,
-    }
+    console.log(error, 'error')
+    throw createError({ statusCode: 500, message: 'Failed to log out' })
   }
 })

@@ -31,6 +31,15 @@
           >
             <user-icon />
           </el-menu-item>
+
+          <!-- <el-menu-item
+            v-else
+            index="5"
+            class="el-menu-navlist"
+            @click="dialogVisible = true"
+          >
+            <user-icon />
+          </el-menu-item> -->
           <el-menu-item
             index="3"
             class="el-menu-navlist"
@@ -66,6 +75,17 @@
   <el-drawer v-model="profileDrawer" size="35%">
     <profile-drawer />
   </el-drawer>
+
+  <!-- <Teleport to="body">
+    <el-dialog
+      v-model="dialogVisible"
+      title="Tips"
+      width="500"
+      :before-close="handleClose"
+    >
+      <login />
+    </el-dialog>
+  </Teleport> -->
 </template>
 
 <script setup>
@@ -73,6 +93,7 @@ import ShoppingBag from '~/components/icons/ShoppingBag.vue'
 import UserIcon from '~/components/icons/UserIcon.vue'
 import AccountDrawer from '~/components/drawer/AccountDrawer.vue'
 import CartDrawer from '~/components/drawer/CartDrawer.vue'
+import Login from '~/components/account/Login.vue'
 import { useCartStore } from '~/stores/cart'
 import { useAuthStore } from '~/stores/authStore'
 // const data = ref({})
@@ -81,6 +102,7 @@ const router = useRouter()
 const authStore = useAuthStore()
 const cartStore = useCartStore()
 
+const dialogVisible = ref(false)
 const activeIndex2 = ref('1')
 const cartDrawer = ref(false)
 const accountDrawer = ref(false)

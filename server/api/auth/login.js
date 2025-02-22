@@ -6,14 +6,16 @@ export default defineEventHandler(async (event) => {
 
   try {
     const decodedToken = await adminAuth.verifyIdToken(idToken)
-    const sessionCookie = await adminAuth.createSessionCookie(idToken, {
-      expiresIn: 60 * 60 * 24 * 5 * 1000,
-    }) // 5 Days
+    // const sessionCookie = await adminAuth.createSessionCookie(idToken, {
+    //   expiresIn: 60 * 60 * 24 * 5 * 1000,
+    // }) // 5 Days
 
-    setCookie(event, 'session', sessionCookie, {
+    setCookie(event, 'token', idToken, {
+      Samesite: 'Strict',
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       maxAge: 60 * 60 * 24 * 5,
+      path: '/',
     })
     return { success: true, user: decodedToken }
   } catch (error) {

@@ -22,7 +22,7 @@ export const useAuthStore = defineStore('auth', {
           body: { idToken },
         })
 
-        await this.fetchUser()
+        await this.restoreSession()
 
         return response.success
       } catch (error) {
@@ -54,9 +54,10 @@ export const useAuthStore = defineStore('auth', {
         const response = await $fetch('/api/auth/login', {
           method: 'POST',
           body: { idToken },
+          credentials: true,
         })
 
-        await this.fetchUser()
+        await this.restoreSession()
 
         return response.success
       } catch (error) {
@@ -72,6 +73,8 @@ export const useAuthStore = defineStore('auth', {
     async logout() {
       try {
         const response = await $fetch('/api/auth/logout', { method: 'POST' })
+
+        await signOut(firebaseAuth)
         if (response.success) {
           this.isAuthenticated = false
           this.user = null
@@ -81,13 +84,13 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async fetchUser() {
+    async restoreSession() {
       try {
         const response = await $fetch('/api/auth/session')
         this.isAuthenticated = response.authenticated
-        this.user = response.authenticated ? response.user : null
+        this.user = response.user || null
       } catch (error) {
-        error.message = 'Failed to fetch user'
+        this.isAuthenticated = false
       }
     },
   },

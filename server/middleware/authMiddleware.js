@@ -2,6 +2,7 @@
 // import { auth } from '../api/config/firebaseConfig.js'
 
 export default defineEventHandler(async (event) => {
+  console.log('I got here firest')
   // try {
   //   const req = event.node.req
   //   let idToken

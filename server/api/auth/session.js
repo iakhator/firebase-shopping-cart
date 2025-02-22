@@ -39,14 +39,19 @@ import { adminAuth } from '~/server/utils/firebaseAdmin'
 // })
 
 export default defineEventHandler(async (event) => {
-  const session = getCookie(event, 'session')
-  if (!session) return { authenticated: false }
+  const authToken = getCookie(event, 'token')
+  if (!authToken) return { authenticated: false }
 
   try {
-    const decoded = await adminAuth.verifySessionCookie(session, true)
-    return { authenticated: true, user: decoded }
+    const decodedToken = await adminAuth.verifyIdToken(authToken, true)
+    return { authenticated: true, user: decodedToken }
   } catch (error) {
-    deleteCookie(event, 'session')
+    deleteCookie(event, 'token')
+
+    if (error.code === 'auth/id-token-expired') {
+      setResponseStatus(event, 403)
+      return { error: 'Token has expired.', authenticated: false }
+    }
     return { authenticated: false }
   }
 })
