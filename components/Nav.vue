@@ -1,48 +1,50 @@
 <template>
-  <el-menu
-    :default-active="activeIndex2"
-    class="el-menu-demo"
-    mode="horizontal"
-    background-color="#1B1A1A"
-    text-color="#fff"
-    active-text-color="#ffd04b"
-  >
-    <el-menu-item index="1" class="el-menu-logo">
-      <NuxtLink to="/">Shop Center</NuxtLink>
-    </el-menu-item>
-
-    <div>
-      <template v-if="isAuthenticated">
-        <el-menu-item index="2" class="el-menu-navlist" @click="logOut()"
-          >Sign out</el-menu-item
-        >
-        <el-menu-item class="el-menu-navlist" @click="profileDrawer = true">
-          {{ loggedInUser.displayName }}
-          <user-icon />
+  <nav class="el-menu-demo">
+    <el-menu
+      :default-active="activeIndex2"
+      mode="horizontal"
+      background-color="#1B1A1A"
+      text-color="#fff"
+      class="custom-menu"
+      active-text-color="#ffd04b"
+    >
+      <div class="el-menu-top" role="li">
+        <el-menu-item index="1" class="el-menu-logo">
+          <NuxtLink to="/">Shop Center</NuxtLink>
         </el-menu-item>
-      </template>
-      <el-menu-item
-        v-else
-        index="2"
-        class="el-menu-navlist"
-        @click="accountDrawer = true"
-      >
-        Account
-        <user-icon />
-      </el-menu-item>
-      <el-menu-item
-        index="3"
-        class="el-menu-navlist"
-        @click="cartDrawer = true"
-      >
-        <el-badge :value="quantity" class="item">
-          <shopping-bag />
-        </el-badge>
-      </el-menu-item>
-    </div>
 
+        <div class="el-menu-right">
+          <template v-if="isAuthenticated">
+            <el-menu-item index="2" class="el-menu-navlist" @click="logOut()"
+              >Sign out</el-menu-item
+            >
+            <el-menu-item class="el-menu-navlist" @click="profileDrawer = true">
+              {{ loggedInUser.displayName }}
+              <user-icon />
+            </el-menu-item>
+          </template>
+          <el-menu-item
+            v-else
+            index="2"
+            class="el-menu-navlist"
+            @click="accountDrawer = true"
+          >
+            <user-icon />
+          </el-menu-item>
+          <el-menu-item
+            index="3"
+            class="el-menu-navlist"
+            @click="cartDrawer = true"
+          >
+            <el-badge :value="quantity" class="item">
+              <shopping-bag />
+            </el-badge>
+          </el-menu-item>
+        </div>
+      </div>
+    </el-menu>
     <ProductCategories :categories="categories" />
-  </el-menu>
+  </nav>
 
   <el-drawer
     title="Your Shopping Cart"
@@ -128,8 +130,21 @@ async function logOut() {
 $off-white: #f8f5f2;
 $off-black: #1b1a1a;
 
+.custom-menu {
+  display: flex;
+  justify-content: center;
+}
 .el-menu-demo {
   position: fixed;
+  width: 100%;
+  z-index: 1000;
+}
+
+.el-menu-top {
+  width: 1600px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .el-menu-demo .el-menu-navlist {
