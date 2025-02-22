@@ -33,31 +33,10 @@
         show-password
       />
     </el-form-item>
-    <el-form-item
-      class="account__form confirm_password"
-      prop="confirm_password"
-    >
-      <el-input
-        v-model="registerForm.confirm_password"
-        class="account__form-input"
-        placeholder="Confirm password"
-        show-password
-      />
-    </el-form-item>
 
     <el-form-item class="account__form">
       <el-button class="account__form-btn" @click="register(registerFormRef)"
         >REGISTER</el-button
-      >
-      <el-button class="account__form-btn" @click="checkbus"
-        >checkbus</el-button
-      >
-    </el-form-item>
-
-    <el-form-item class="account__form sign-register">
-      <span class="info">You have an account already?</span>
-      <el-button class="account__form-btn" @click="showSignIn"
-        >SIGN IN</el-button
       >
     </el-form-item>
   </el-form>
@@ -79,18 +58,7 @@ const registerForm = ref({
   fullname: '',
   email: '',
   password: '',
-  confirm_password: '',
 })
-
-const confirmPassword = (rule, value, callback) => {
-  if (value === '') {
-    callback(new Error('Confirm password is required'))
-  } else if (value !== registerForm.value.password) {
-    callback(new Error("Passwords doesn't match"))
-  } else {
-    callback()
-  }
-}
 
 const rules = reactive({
   fullname: [
@@ -116,7 +84,6 @@ const rules = reactive({
     },
     { min: 6, message: 'Length should be atleast 6', trigger: 'change' },
   ],
-  confirm_password: [{ validator: confirmPassword, trigger: 'change' }],
 })
 
 const loading = ref(false)

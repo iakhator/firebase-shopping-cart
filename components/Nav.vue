@@ -23,23 +23,23 @@
               <user-icon />
             </el-menu-item>
           </template>
-          <el-menu-item
+          <!-- <el-menu-item
             v-else
             index="2"
             class="el-menu-navlist"
             @click="accountDrawer = true"
           >
             <user-icon />
-          </el-menu-item>
+          </el-menu-item> -->
 
-          <!-- <el-menu-item
+          <el-menu-item
             v-else
             index="5"
             class="el-menu-navlist"
             @click="dialogVisible = true"
           >
             <user-icon />
-          </el-menu-item> -->
+          </el-menu-item>
           <el-menu-item
             index="3"
             class="el-menu-navlist"
@@ -68,31 +68,22 @@
     />
   </el-drawer>
 
-  <el-drawer v-model="accountDrawer" size="35%">
-    <account-drawer />
-  </el-drawer>
-
   <el-drawer v-model="profileDrawer" size="35%">
     <profile-drawer />
   </el-drawer>
 
-  <!-- <Teleport to="body">
-    <el-dialog
-      v-model="dialogVisible"
-      title="Tips"
-      width="500"
-      :before-close="handleClose"
-    >
-      <login />
+  <Teleport to="body">
+    <el-dialog v-model="dialogVisible" width="400" :before-close="handleClose">
+      <AuthModal @close-dialog-visible="handleClose" />
     </el-dialog>
-  </Teleport> -->
+  </Teleport>
 </template>
 
 <script setup>
 import ShoppingBag from '~/components/icons/ShoppingBag.vue'
 import UserIcon from '~/components/icons/UserIcon.vue'
-import AccountDrawer from '~/components/drawer/AccountDrawer.vue'
 import CartDrawer from '~/components/drawer/CartDrawer.vue'
+import AuthModal from '~/components/account/AuthModal.vue'
 import Login from '~/components/account/Login.vue'
 import { useCartStore } from '~/stores/cart'
 import { useAuthStore } from '~/stores/authStore'
@@ -137,6 +128,11 @@ function closeCartDrawer(value) {
 
 function closeOnCheckout(value) {
   cartDrawer.value = value
+}
+
+function handleClose() {
+  console.log('yeppppp')
+  dialogVisible.value = false
 }
 
 async function logOut() {

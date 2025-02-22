@@ -72,15 +72,16 @@ export const useAuthStore = defineStore('auth', {
 
     async logout() {
       try {
+        const { $auth } = useNuxtApp()
         const response = await $fetch('/api/auth/logout', { method: 'POST' })
 
-        await signOut(firebaseAuth)
         if (response.success) {
+          await $auth.signOut()
           this.isAuthenticated = false
           this.user = null
         }
       } catch (error) {
-        this.errorMessage = error.message
+        console.error(error)
       }
     },
 

@@ -33,6 +33,10 @@ defineProps({
     default: () => [],
   },
 })
+
+function handleHello() {
+  console.log('hello one')
+}
 </script>
 
 <style lang="scss" scoped>

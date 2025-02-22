@@ -1,42 +1,36 @@
 <template>
-  <div class="account">
-    <sign-in v-if="signin" :show-register="showRegister" />
-    <register v-if="signup" :show-sign-in="showSignIn" />
-  </div>
+  <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tab-pane label="Login" name="login">
+      <Login />
+    </el-tab-pane>
+    <el-tab-pane label="Register" name="register"><Register /></el-tab-pane>
+  </el-tabs>
 </template>
 
-<script>
-import SignIn from '../account/SignIn'
-import Register from '../account/Register'
+<script setup>
+import Login from './Login.vue'
+import Register from './Register.vue'
+import { ref } from 'vue'
 
-export default {
-  components: {
-    SignIn,
-    Register,
-  },
+const activeName = ref('login')
 
-  data() {
-    return {
-      signup: false,
-      signin: true,
-    }
-  },
-
-  methods: {
-    showRegister() {
-      this.signup = true
-      this.signin = false
-    },
-
-    showSignIn() {
-      this.signup = false
-      this.signin = true
-    },
-  },
+const handleClick = (tab, event) => {
+  console.log(tab, event)
 }
 </script>
 
 <style lang="scss">
+.demo-tabs > .el-tabs__content {
+  padding: 32px;
+  color: #6b778c;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.el-tabs {
+  width: 100%;
+}
+
 .account__signin,
 .account__register {
   p {
@@ -75,8 +69,6 @@ export default {
 }
 
 .sign-register {
-  margin-top: 50px;
-
   .role-button {
     cursor: pointer;
   }
