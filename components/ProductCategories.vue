@@ -37,9 +37,10 @@ function handleClick(tab) {
   top: 50px;
   padding: 12px;
   z-index: 1000;
-  background: #f8f5f2;
+  // background: #f8f5f2;
   // margin-bottom: 95px;
-  width: 100%;
+  width: 1600px;
+  margin: 0 auto;
 }
 .el-tabs__nav-scroll {
   overflow: hidden;

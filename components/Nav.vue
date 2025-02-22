@@ -40,8 +40,9 @@
         </el-badge>
       </el-menu-item>
     </div>
+
+    <ProductCategories :categories="categories" />
   </el-menu>
-  <ProductCategories :categories="categories" />
 
   <el-drawer
     title="Your Shopping Cart"

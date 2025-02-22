@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@nuxtjs/auth": "^1.0.2",
+    "@nuxtjs/style-resources": "^1.2.2",
     "@pinia/nuxt": "^0.5.4",
     "@sidebase/nuxt-auth": "^0.6.7",
     "@sidebase/nuxt-session": "^0.2.8",

@@ -70,6 +70,10 @@ export default defineNuxtConfig({
    */
   build: {
     transpile: ['element-plus'],
+    // styleResources: {
+    //   scss: [],
+    //   hoistUseStatements: true, // Hoists the "@use" imports. Applies only to "sass", "scss" and "less". Default: false.
+    // },
   },
 
   runtimeConfig: {
