@@ -9,6 +9,7 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     async signIn({ email, password }) {
+      this.errorMessage = ''
       try {
         const { $auth, $signInWithEmailAndPassword } = useNuxtApp()
         const userCredential = await $signInWithEmailAndPassword(
@@ -28,11 +29,11 @@ export const useAuthStore = defineStore('auth', {
       } catch (error) {
         if (error.code === 'auth/user-not-found') {
           this.errorMessage = 'User not found'
-          return
+          return error.message
         }
 
         if (error.code === 'auth/invalid-credential') {
-          this.errorMessage = 'Invalid credentials'
+          this.errorMessage = 'Invalid Login  credentials'
           return
         }
 
@@ -41,6 +42,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async signUp({ email, password, displayName }) {
+      this.errorMessage = ''
       try {
         const { $auth, $signInWithEmailAndPassword } = useNuxtApp()
         const userCredential = await $signInWithEmailAndPassword(

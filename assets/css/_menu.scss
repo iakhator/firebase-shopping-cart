@@ -17,6 +17,7 @@
   font-size: 12px !important;
 
   &:hover::after {
-    color: $black;
+    color: $black !important;
+    border-bottom: 1px solid $black !important;
   }
 }

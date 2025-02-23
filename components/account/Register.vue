@@ -1,41 +1,34 @@
 <template>
   <el-form
     ref="registerFormRef"
-    :model="registerForm"
+    :model="ruleForm"
     :rules="rules"
     class="account__register register"
   >
     <p>Create an account</p>
-    <el-form-item class="account__form lastname" prop="fullname">
-      <el-input
-        v-model="registerForm.fullname"
-        class="account__form-input"
-        placeholder="Fullname"
-      />
-    </el-form-item>
-    <el-form-item class="account__form email" prop="email">
-      <el-input
-        v-model="registerForm.email"
-        :class="
-          formError ? 'account__form-input invalid' : 'account__form-input'
-        "
-        placeholder="Email"
-      />
-      <div v-if="formError" class="el-form-item__error">
-        {{ formError }}
-      </div>
-    </el-form-item>
-    <el-form-item class="account__form password" prop="password">
-      <el-input
-        v-model="registerForm.password"
-        class="account__form-input"
-        placeholder="Password"
-        show-password
-      />
-    </el-form-item>
+    <Input v-model="ruleForm.email" prop="email" placeholder="Email" />
+    <Input
+      v-model="ruleForm.firstname"
+      prop="firstname"
+      placeholder="FirstName"
+    />
+    <Input v-model="ruleForm.lastname" prop="lastname" placeholder="LastName" />
+    <Input
+      v-model="ruleForm.password"
+      prop="password"
+      placeholder="Password"
+      type="password"
+    />
+
+    <div v-if="formError" class="el-form-item__error">
+      {{ formError }}
+    </div>
 
     <el-form-item class="account__form">
-      <el-button class="account__form-btn" @click="register(registerFormRef)"
+      <el-button
+        class="account__form-btn"
+        size="large"
+        @click="register(registerFormRef)"
         >REGISTER</el-button
       >
     </el-form-item>
@@ -44,6 +37,7 @@
 
 <script setup>
 const { $bus } = useNuxtApp()
+const authStore = useAuthStore()
 
 const props = defineProps({
   showSignIn: {
@@ -54,17 +48,25 @@ const props = defineProps({
 
 const formError = ref('')
 const registerFormRef = ref()
-const registerForm = ref({
-  fullname: '',
+const ruleForm = ref({
+  firstname: '',
+  lastname: '',
   email: '',
   password: '',
 })
 
 const rules = reactive({
-  fullname: [
+  firstname: [
     {
       required: true,
-      message: 'Fullname is required',
+      message: 'FirstName is required',
+      trigger: 'change',
+    },
+  ],
+  lastname: [
+    {
+      required: true,
+      message: 'LastName is required',
       trigger: 'change',
     },
   ],
@@ -87,7 +89,7 @@ const rules = reactive({
 })
 
 const loading = ref(false)
-const authenticated = ref(false)
+// const authenticated = ref(false)
 
 async function register(formEl) {
   loading.value = true
@@ -99,21 +101,29 @@ async function register(formEl) {
     })
 
     if (isValid) {
-      const { data, pending } = await useFetch('/api/auth/register', {
-        method: 'post',
-        headers: { 'Content-Type': 'application/json' },
-        body: {
-          email: registerForm.value.email,
-          password: registerForm.value.password,
-          fullname: registerForm.value.fullname,
-        },
-      })
-
-      if (data.value) {
-        const token = useCookie('token')
-        token.value = data?.value?.token
-        authenticated.value = true
+      const data = {
+        email: ruleForm.value.email,
+        password: ruleForm.value.password,
+        firstname: ruleForm.value.fullname,
+        lastname: ruleForm.value.lastname,
       }
+      await authStore.register(...data)
+      // const { data, pending } = await useFetch('/api/auth/register', {
+      //   method: 'post',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: {
+      //     email: ruleForm.value.email,
+      //     password: ruleForm.value.password,
+      //     firstname: ruleForm.value.fullname,
+      //     lastname: ruleForm.value.lastname
+      //   },
+      // })
+
+      // if (data.value) {
+      //   const token = useCookie('token')
+      //   token.value = data?.value?.token
+      //   authenticated.value = true
+      // }
 
       //   // await this.$auth.setUserToken(user.data.token)
 

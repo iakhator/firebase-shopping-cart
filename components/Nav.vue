@@ -74,7 +74,7 @@
 
   <Teleport to="body">
     <el-dialog v-model="dialogVisible" width="400" :before-close="handleClose">
-      <AuthModal @close-dialog-visible="handleClose" />
+      <AuthModal @close-dialog="handleClose" />
     </el-dialog>
   </Teleport>
 </template>
@@ -131,7 +131,6 @@ function closeOnCheckout(value) {
 }
 
 function handleClose() {
-  console.log('yeppppp')
   dialogVisible.value = false
 }
 

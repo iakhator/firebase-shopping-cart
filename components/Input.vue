@@ -2,6 +2,7 @@
   <div class="input-wrapper">
     <el-form-item :label="label" :prop="prop" :error="error" class=".el-input">
       <el-input
+        class="custom-input"
         :id="id"
         v-model="inputValue"
         :type="type"
@@ -55,5 +56,13 @@ const handleBlur = () => emit('blur')
 <style scoped>
 .input-wrapper {
   width: 100%;
+}
+
+.el-input {
+  height: 40px;
+}
+
+:deep(.el-input__wrapper.is-focus) {
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5) inset;
 }
 </style>

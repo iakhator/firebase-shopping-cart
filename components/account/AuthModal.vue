@@ -1,9 +1,11 @@
 <template>
   <el-tabs v-model="activeName" @tab-click="handleClick">
     <el-tab-pane label="Login" name="login">
-      <Login />
+      <Login @close-dialog="handleClose" />
     </el-tab-pane>
-    <el-tab-pane label="Register" name="register"><Register /></el-tab-pane>
+    <el-tab-pane label="Register" name="register"
+      ><Register @close-dialog="handleClose"
+    /></el-tab-pane>
   </el-tabs>
 </template>
 
@@ -14,8 +16,13 @@ import { ref } from 'vue'
 
 const activeName = ref('login')
 
+const emit = defineEmits(['close-dialog'])
+
 const handleClick = (tab, event) => {
-  console.log(tab, event)
+  // console.log(tab.paneName)
+}
+const handleClose = () => {
+  emit('close-dialog')
 }
 </script>
 
@@ -34,57 +41,32 @@ const handleClick = (tab, event) => {
 .account__signin,
 .account__register {
   p {
-    font-weight: 600;
     margin-bottom: 20px;
   }
 }
 
-// .email,
-// .firstname,
-// .lastname,
-// .password {
-//   margin-bottom: 10px;
-// }
-
 .account__form-input .el-input__inner {
   color: #1b1a1a;
   margin-top: 5px;
-  border: 1px solid #cdc9c6;
+  border: 1px solid red !important;
   border-radius: 0px;
+  height: 40px;
 }
 
-.account__form-btn.el-button {
-  border-radius: 0px;
-  width: 100%;
-  border: 1px solid #cdc9c6;
-  margin-top: 15px;
-  transition: background 0.1s ease-in;
-
-  &:hover,
-  &:focus {
-    background: #1b1a1a;
-    border-color: #1b1a1a;
-    color: #ecf5ff;
-  }
+.el__error {
+  color: #f46a6a;
+  font-size: 12px;
 }
 
-.sign-register {
-  .role-button {
-    cursor: pointer;
-  }
+// .sign-register {
+//   .role-button {
+//     cursor: pointer;
+//   }
 
-  .info {
-    font-weight: 600;
-    font-size: 0.7rem;
-    margin-right: 5px;
-  }
-}
-
-// .el-input {
-//   // margin-top: 10px;
-// }
-
-// .el-input.password {
-//   margin-bottom: 10px;
+//   .info {
+//     font-weight: 600;
+//     font-size: 0.7rem;
+//     margin-right: 5px;
+//   }
 // }
 </style>

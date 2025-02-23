@@ -6,13 +6,14 @@
     class="account__signin signin"
   >
     <p>Sign into your acccount</p>
-    <Input
-      v-model="ruleForm.username"
-      prop="username"
-      placeholder="Enter your username"
-    />
+
     <Input v-model="ruleForm.email" prop="email" placeholder="Email" />
-    <Input v-model="ruleForm.password" prop="password" placeholder="Password" />
+    <Input
+      v-model="ruleForm.password"
+      prop="password"
+      placeholder="Password"
+      type="password"
+    />
 
     <!-- <span class="info">Forgot your password</span> -->
     <el-link role="button" class="info" @click="showRegister">
@@ -22,11 +23,13 @@
     <el-form-item class="account__form">
       <el-button
         class="account__form-btn"
+        size="large"
         :loading="loading"
         @click="login(ruleFormRef)"
         >SIGN IN</el-button
       >
     </el-form-item>
+    <p v-if="errorMessage" class="el__error">{{ errorMessage }}</p>
   </el-form>
 </template>
 
@@ -34,7 +37,7 @@
 // import { useAuthStore } from '~/stores/authStore'
 
 // const { $bus } = useNuxtApp()
-const emit = defineEmits(['close-dialog-visible'])
+const emit = defineEmits(['close-dialog'])
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -52,8 +55,9 @@ const ruleFormRef = ref()
 const ruleForm = ref({
   email: '',
   password: '',
-  username: '',
 })
+
+const errorMessage = computed(() => authStore.errorMessage)
 
 const rules = reactive({
   email: [
@@ -71,37 +75,30 @@ const rules = reactive({
       trigger: 'change',
     },
   ],
-  username: [
-    {
-      required: true,
-      message: 'Username is required',
-      trigger: 'change',
-    },
-  ],
 })
 
 async function login(formEl) {
   loading.value = true
 
-  let isValid
-  if (!formEl) return
-  await formEl.validate((valid) => {
-    isValid = valid
-  })
-
-  if (!isValid) {
+  try {
+    let isValid
+    if (!formEl) return
+    await formEl.validate((valid) => {
+      isValid = valid
+    })
+    if (!isValid) {
+      loading.value = false
+      return false
+    }
+    const response = await authStore.signIn(ruleForm.value)
+    if (response) {
+      formEl.resetFields()
+      emit('close-dialog')
+    }
+  } catch (error) {
+    console.log(error.response, 'error')
+  } finally {
     loading.value = false
-    return false
-  }
-
-  const response = await authStore.signIn(ruleForm.value)
-
-  if (response) {
-    formEl.resetFields()
-    $bus.emit('close-account-drawer', false)
-    emit('close-dialog-visible', true)
-
-    router.replace(route.path)
   }
 }
 </script>
