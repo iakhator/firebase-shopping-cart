@@ -1,7 +1,16 @@
+// :root {
+//   --el-color-primary: #ff6600; // Changes primary theme color
+//   --el-tabs-header-active-color: #ff6600; // Active tab text color
+//   --el-tabs-active-bar-color: #ff6600; // Active underline color
+//   --el-tabs-hover-color: #ff6600;
+// }
+
 @import url('https://fonts.googleapis.com/css?family=Montserrat:300i,400,500,700&display=swap');
 @import 'variables';
 @import 'reset';
 @import 'menu';
+@import 'tab';
+@import 'dialog';
 @import 'layout/product';
 @import 'components/drawer';
 @import 'components/button';

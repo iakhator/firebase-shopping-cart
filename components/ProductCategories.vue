@@ -1,5 +1,9 @@
 <template>
-  <el-tabs v-model="activeName" @tab-click="handleClick">
+  <el-tabs
+    v-model="activeName"
+    @tab-click="handleClick"
+    class="el-tabs-categories"
+  >
     <el-tab-pane
       v-for="category in categories"
       :key="category.id"
@@ -31,8 +35,8 @@ function handleClick(tab) {
 }
 </script>
 
-<style lang="scss">
-.el-tabs {
+<style lang="scss" scoped>
+.el-tabs-categories {
   // background: #f8f5f2;
   // margin-bottom: 95px;
   width: 1600px;

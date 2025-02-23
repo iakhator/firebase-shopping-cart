@@ -1,5 +1,6 @@
-$fontMonseratt: 'Montserrat', sans-serif;
 
+$fontMonseratt: 'Montserrat', sans-serif;
+$primary-color: #000000;
 $white: #ffffff;
 $base-color: #ffcf4b;
 $off-white: #f8f5f2;
@@ -9,3 +10,13 @@ $off-black: #1b1a1a;
 //font weight
 $font-weight-light: 300;
 $font-weight-bold: 600;
+
+:root {
+  --el-color-success: #4caf50;  // ✅ Success (green)
+  --el-color-warning: #ffcc00;  // ⚠️ Warning (yellow)
+  --el-color-danger: #ff4d4f;   // ❌ Danger (red)
+  --el-color-info: #00bcd4;     // ℹ️ Info (cyan)
+  --el-color-primary: $primary-color;
+
+  --el-color-secondary: #1e90ff; // 🔵 Secondary color (e.g., blue)
+}
