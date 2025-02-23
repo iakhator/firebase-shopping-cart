@@ -11,3 +11,12 @@
 .el-menu-logo {
   font-size: 1.3rem;
 }
+
+.el-link {
+  color: $black !important;
+  font-size: 12px !important;
+
+  &:hover::after {
+    color: $black;
+  }
+}

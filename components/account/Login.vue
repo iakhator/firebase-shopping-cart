@@ -6,31 +6,18 @@
     class="account__signin signin"
   >
     <p>Sign into your acccount</p>
-    <el-form-item class="account__form email" prop="email">
-      <el-input
-        v-model="ruleForm.email"
-        class="account__form-input"
-        placeholder="Email"
-      ></el-input>
-    </el-form-item>
-    <el-form-item class="account__form password" prop="password">
-      <el-input
-        v-model="ruleForm.password"
-        class="account__form-input"
-        placeholder="Password"
-        show-password
-      ></el-input>
-    </el-form-item>
+    <Input
+      v-model="ruleForm.username"
+      prop="username"
+      placeholder="Enter your username"
+    />
+    <Input v-model="ruleForm.email" prop="email" placeholder="Email" />
+    <Input v-model="ruleForm.password" prop="password" placeholder="Password" />
 
-    <el-form-item
-      class="account__form sign-register"
-      style="margin-bottom: -10px"
-    >
-      <!-- <span class="info">Forgot your password</span> -->
-      <el-link role="button" class="info" @click="showRegister">
-        Forgot your password?
-      </el-link>
-    </el-form-item>
+    <!-- <span class="info">Forgot your password</span> -->
+    <el-link role="button" class="info" @click="showRegister">
+      Forgot your password?
+    </el-link>
 
     <el-form-item class="account__form">
       <el-button
@@ -65,6 +52,7 @@ const ruleFormRef = ref()
 const ruleForm = ref({
   email: '',
   password: '',
+  username: '',
 })
 
 const rules = reactive({
@@ -80,6 +68,13 @@ const rules = reactive({
     {
       required: true,
       message: 'Password is required',
+      trigger: 'change',
+    },
+  ],
+  username: [
+    {
+      required: true,
+      message: 'Username is required',
       trigger: 'change',
     },
   ],

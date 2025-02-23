@@ -84,7 +84,7 @@ const handleClick = (tab, event) => {
 //   // margin-top: 10px;
 // }
 
-.el-input.password {
-  margin-bottom: 10px;
-}
+// .el-input.password {
+//   margin-bottom: 10px;
+// }
 </style>
