@@ -16,9 +16,14 @@
                 item.itemTitle
               }}</span>
 
-              <span class="product__grid-w__list-price">{{
-                toUSD(item.price)
-              }}</span>
+              <div class="product__grid-w__list-price_fav">
+                <span class="product__grid-w__list-price">{{
+                  toUSD(item.price)
+                }}</span>
+                <span class="product__grid-w__list-favourite"
+                  ><heart-icon
+                /></span>
+              </div>
               <div>
                 <el-button @click.prevent="handleHello">
                   Add To Cart
@@ -34,6 +39,9 @@
 </template>
 
 <script setup>
+import HeartIcon from '~/components/icons/HeartIcon.vue'
+
+const favRef = ref('#000')
 const { toUSD } = useCurrency()
 
 defineProps({
@@ -51,6 +59,16 @@ function handleHello() {
 <style lang="scss" scoped>
 $off-black: #1b1a1a;
 $white: #ffffff;
+
+.product__grid-w__list-price_fav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.product__grid-w__list-favourite:hover {
+  background: red;
+}
 
 .el-col {
   border-radius: 4px;
