@@ -33,6 +33,7 @@
   "devDependencies": {
     "@element-plus/nuxt": "^1.0.10",
     "@nuxt/devtools": "^1.4.1",
-    "element-plus": "^2.8.3"
+    "element-plus": "^2.8.3",
+    "vite-plugin-svg-sprite": "^0.6.2"
   }
 }

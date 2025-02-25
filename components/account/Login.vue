@@ -15,7 +15,6 @@
       type="password"
     />
 
-    <!-- <span class="info">Forgot your password</span> -->
     <el-link role="button" class="info" @click="showRegister">
       Forgot your password?
     </el-link>
@@ -34,9 +33,6 @@
 </template>
 
 <script setup>
-// import { useAuthStore } from '~/stores/authStore'
-
-// const { $bus } = useNuxtApp()
 const emit = defineEmits(['close-dialog'])
 
 const authStore = useAuthStore()

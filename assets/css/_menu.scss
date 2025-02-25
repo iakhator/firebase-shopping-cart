@@ -1,3 +1,4 @@
+// menu and badge
 .el-menu {
   display:flex;
   align-items: center;
@@ -20,4 +21,9 @@
     color: $black !important;
     border-bottom: 1px solid $black !important;
   }
+}
+
+.el-badge__content {
+  background: $white !important;
+  font-size: 10px !important;
 }

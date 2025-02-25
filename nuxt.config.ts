@@ -53,18 +53,6 @@ export default defineNuxtConfig({
    */
   modules: ['@pinia/nuxt', '@element-plus/nuxt'],
 
-  // auth: {
-  //   baseURL: '/api/auth',
-  //   provider: {
-  //     type: 'local',
-  //     endpoints: {
-  //       signIn: { path: '/login', method: 'post' },
-  //       signOut: { path: '/logout', method: 'post' },
-  //       getSession: { path: '/session', method: 'get' },
-  //     },
-  //   },
-  // },
-
   /*
    ** Build configuration
    */
@@ -88,7 +76,4 @@ export default defineNuxtConfig({
       MEASUREMENT_ID: process.env.MEASUREMENT_ID,
     },
   },
-  // alias: {
-  //   '~': resolve(__dirname, './'),
-  // },
 })

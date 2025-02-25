@@ -183,7 +183,10 @@ $off-black: #1b1a1a;
 }
 
 .item {
-  margin-top: -30px;
+  // margin-top: -30px;
+  display: flex;
+  align-items: baseline;
+  justify-content: baseline;
 }
 
 .svg-inline--fa {

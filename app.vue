@@ -1,15 +1,12 @@
 <template>
   <div>
-    <Nav />
-    <el-container>
+    <NuxtLayout>
       <NuxtPage />
-    </el-container>
+    </NuxtLayout>
   </div>
 </template>
 
-<script setup>
-import Nav from '../components/Nav'
-</script>
+<script setup></script>
 
 <style>
 html {
@@ -22,6 +19,10 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
+}
+
+ul {
+  padding-inline-start: 0 !important;
 }
 
 *,

@@ -10,24 +10,11 @@
   }
 }
 
-.product__grid.product {
-  width: 66.778vw;
-}
-
-// .product__grid-w__list:not(:nth-child(3n + 1)) {
-//   margin-left: 2.15278vw;
-// }
-
-// .product__grid-w__list:nth-child(n + 4) {
-//   margin-top: 4.30556vw;
-// }
 
 .product__grid-w {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   gap: 40px;
-  // display: flex;
-  // flex-wrap: wrap;
 
   &__list {
     // width: 18.95833vw;
@@ -54,11 +41,6 @@
       margin-bottom: 10px;
 
       img {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
         border-radius: 15px;
       }
     }

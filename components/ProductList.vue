@@ -19,6 +19,12 @@
               <span class="product__grid-w__list-price">{{
                 toUSD(item.price)
               }}</span>
+              <div>
+                <el-button @click.prevent="handleHello">
+                  Add To Cart
+                </el-button>
+                <el-button @click.prevent="handleHello"> Buy Now </el-button>
+              </div>
             </div>
           </a>
         </li>
@@ -103,5 +109,9 @@ $white: #ffffff;
   to {
     transform: translateY(-15px);
   }
+}
+
+:deep(.el-button + .el-button) {
+  margin-left: 0;
 }
 </style>
