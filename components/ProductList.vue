@@ -9,14 +9,17 @@
         >
           <a class="_p" :href="`/${item.categoryId}/${item.id}`">
             <span class="product__grid-w__list-img">
-              <img :src="item.imageUrl" alt />
+              <img :src="item.imageUrl" alt="" loading="lazy" />
             </span>
-            <span class="product__grid-w__list-title">{{
-              item.itemTitle
-            }}</span>
-            <span class="product__grid-w__list-price"
-              >Price: {{ toUSD(item.price) }}</span
-            >
+            <div class="product__grid-w__list-content">
+              <span class="product__grid-w__list-title multi-line-ellipsis">{{
+                item.itemTitle
+              }}</span>
+
+              <span class="product__grid-w__list-price">{{
+                toUSD(item.price)
+              }}</span>
+            </div>
           </a>
         </li>
       </ul>
