@@ -2,23 +2,14 @@
   <product-list :products="categoryProducts" />
 </template>
 
-<script>
-import ProductList from '../../components/ProductList'
+<script setup>
+import ProductList from '~/components/ProductList'
 
-export default {
-  components: {
-    ProductList
-  },
+defineOptions({
+  name: ProductList,
+})
 
-  data() {
-    return {
-      productId: ''
-    }
-  },
-
-  async asyncData({ $axios, params }) {
-    const { data } = await $axios.$get(`/api/category/${params.productId}`)
-    return { categoryProducts: data }
-  }
-}
+const { data: categoryProducts } = await useAsyncData('categoryProducts', () =>
+  $fetch(`/api/category/${route.params.productId}`)
+)
 </script>

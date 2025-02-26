@@ -94,7 +94,7 @@ function updateCart() {
     quantity: form.qty,
     title: item.value.itemTitle,
     price: itemPrice.value || item.value.price,
-    itemPhoto: item.value.imageUrl || '',
+    itemPhoto: item.value?.imageUrl || '',
     productId,
   }
   if (!cartObject.variantId) {

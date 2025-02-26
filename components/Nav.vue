@@ -16,8 +16,8 @@
         <div class="el-menu-right">
           <template v-if="isAuthenticated">
             <el-menu-item class="el-menu-navlist" @click="profileDrawer = true">
-              {{ loggedInUser }}
               <user-icon />
+              <span>{{ capitalizeName(loggedInUser) }}</span>
             </el-menu-item>
           </template>
 
@@ -136,6 +136,7 @@ $off-black: #1b1a1a;
   position: fixed;
   width: 100%;
   z-index: 1000;
+  top: 0;
 }
 
 .el-menu-top {
@@ -151,6 +152,9 @@ $off-black: #1b1a1a;
   a {
     text-decoration: none;
     color: $off-white;
+  }
+  span {
+    margin-left: 3px;
   }
 }
 

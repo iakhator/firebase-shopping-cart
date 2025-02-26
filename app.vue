@@ -23,6 +23,7 @@ html {
 
 ul {
   padding-inline-start: 0 !important;
+  margin-block-start: 0 !important;
 }
 
 *,
