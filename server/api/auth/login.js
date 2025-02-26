@@ -19,6 +19,6 @@ export default defineEventHandler(async (event) => {
     })
     return { success: true, user: decodedToken }
   } catch (error) {
-    return { error: 'Invalid token' }
+    return { success: false, error: 'Invalid token' }
   }
 })

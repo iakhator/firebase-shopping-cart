@@ -41,35 +41,18 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async signUp({ email, password, displayName }) {
+    async signUp({ email, password, firstName, lastName }) {
       this.errorMessage = ''
-      try {
-        const { $auth, $signInWithEmailAndPassword } = useNuxtApp()
-        const userCredential = await $signInWithEmailAndPassword(
-          $auth,
-          email,
-          password
-        )
-        await updateProfile(userCredential.user, { displayName })
+      const response = await $fetch('/api/auth/register', {
+        method: 'POST',
+        body: { email, firstName, lastName, password },
+      })
 
-        const idToken = await userCredential.user.getIdToken()
-        const response = await $fetch('/api/auth/login', {
-          method: 'POST',
-          body: { idToken },
-          credentials: true,
-        })
-
-        await this.restoreSession()
-
-        return response.success
-      } catch (error) {
-        if (error.code === 'auth/email-already-exists') {
-          this.errorMessage = 'Email already exists'
-          return
-        }
-
-        this.errorMessage = error.message
+      if (response) {
+        await this.signIn({ email, password })
       }
+
+      return response.success
     },
 
     async logout() {

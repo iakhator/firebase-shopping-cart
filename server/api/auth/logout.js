@@ -11,7 +11,6 @@ export default defineEventHandler(async (event) => {
 
     return { success: true }
   } catch (error) {
-    console.log(error, 'error')
     throw createError({ statusCode: 500, message: 'Failed to log out' })
   }
 })

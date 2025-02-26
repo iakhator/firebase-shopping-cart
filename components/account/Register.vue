@@ -28,6 +28,7 @@
       <el-button
         class="account__form-btn"
         size="large"
+        :loading="loading"
         @click="register(registerFormRef)"
         >REGISTER</el-button
       >
@@ -39,6 +40,7 @@
 const { $bus } = useNuxtApp()
 const authStore = useAuthStore()
 
+const emit = defineEmits(['close-dialog'])
 const props = defineProps({
   showSignIn: {
     type: Function,
@@ -104,41 +106,16 @@ async function register(formEl) {
       const data = {
         email: ruleForm.value.email,
         password: ruleForm.value.password,
-        firstname: ruleForm.value.fullname,
-        lastname: ruleForm.value.lastname,
+        firstName: ruleForm.value.firstname,
+        lastName: ruleForm.value.lastname,
       }
-      await authStore.register(...data)
-      // const { data, pending } = await useFetch('/api/auth/register', {
-      //   method: 'post',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: {
-      //     email: ruleForm.value.email,
-      //     password: ruleForm.value.password,
-      //     firstname: ruleForm.value.fullname,
-      //     lastname: ruleForm.value.lastname
-      //   },
-      // })
 
-      // if (data.value) {
-      //   const token = useCookie('token')
-      //   token.value = data?.value?.token
-      //   authenticated.value = true
-      // }
-
-      //   // await this.$auth.setUserToken(user.data.token)
-
-      //   await this.$auth.loginWith('local', {
-      //     data: {
-      //       email: registerForm.value.email,
-      //       password: registerForm.value.password,
-      //     },
-      //   })
-
-      //   // this.$noty.success(user.data.message, {
-      //   //   timeout: 2500
-      //   // })
-
-      $bus.emit('close-account-drawer', false)
+      const response = await authStore.signUp(data)
+      console.log(response, 'response')
+      if (response) {
+        formEl.resetFields()
+        emit('close-dialog')
+      }
     }
   } catch (error) {
     formError.value = error.response?.data?.error || 'Something happened'
