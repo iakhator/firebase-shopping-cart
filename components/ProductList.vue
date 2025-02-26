@@ -9,7 +9,7 @@
         >
           <a class="_p" :href="`/${item.categoryId}/${item.id}`">
             <span class="product__grid-w__list-img">
-              <img :src="item.imageUrl" alt="" loading="lazy" />
+              <img :src="item?.imageUrl" alt="" loading="lazy" />
             </span>
             <div class="product__grid-w__list-content">
               <span class="product__grid-w__list-title multi-line-ellipsis">{{

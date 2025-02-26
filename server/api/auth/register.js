@@ -9,14 +9,14 @@ export default defineEventHandler(async (event) => {
       email,
       password,
       displayName: fullname,
+      firstName,
+      lastName,
       photoURL: 'http://www.example.com/12345678/photo.png',
     }
 
     const userRecord = await adminAuth.createUser(data)
     if (userRecord) {
-      db.collection('users')
-        .doc(userRecord.uid)
-        .set({ email, displayName: fullname, firstName, lastName })
+      db.collection('users').doc(userRecord.uid).set(data)
     }
     return { success: true }
   } catch (error) {

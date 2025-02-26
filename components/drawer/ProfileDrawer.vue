@@ -1,20 +1,39 @@
-<template>
-  <div>
-    <ul class="el-menu-logo">
-      <li><nuxt-link :to="`/profile/${loggedInUser.uid}`">Profile</nuxt-link></li>
-      <li class="el-menu-navlist">
-        <nuxt-link to="/orders">Orders</nuxt-link>
-      </li>
-    </ul>
-  </div>
-</template>
+<script setup>
+defineOptions({
+  name: 'ProfileDrawer',
+})
+const emit = defineEmits(['close-profile-drawer'])
+const authStore = useAuthStore()
 
-<script>
-import { mapGetters } from 'vuex'
+const userId = computed(() => authStore.user.uid)
 
-export default {
-  computed: {
-    ...mapGetters(['loggedInUser'])
+async function logOut() {
+  try {
+    await authStore.logout()
+  } catch (error) {
+    console.error(error)
   }
 }
+
+function handleNavigation(route) {
+  navigateTo(route)
+  emit('close-profile-drawer', route)
+}
 </script>
+
+<template>
+  <div class="el-menu-navlist" @click="logOut()">Sign out</div>
+
+  <ul class="el-menu-logo">
+    <li>
+      <nuxt-link
+        role="button"
+        @click="() => handleNavigation(`/profile/${userId}`)"
+        >Profile</nuxt-link
+      >
+    </li>
+    <li class="el-menu-navlist">
+      <nuxt-link to="/orders">Orders</nuxt-link>
+    </li>
+  </ul>
+</template>

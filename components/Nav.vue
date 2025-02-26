@@ -15,22 +15,11 @@
 
         <div class="el-menu-right">
           <template v-if="isAuthenticated">
-            <el-menu-item index="2" class="el-menu-navlist" @click="logOut()"
-              >Sign out</el-menu-item
-            >
             <el-menu-item class="el-menu-navlist" @click="profileDrawer = true">
-              {{ loggedInUser.displayName }}
+              {{ loggedInUser }}
               <user-icon />
             </el-menu-item>
           </template>
-          <!-- <el-menu-item
-            v-else
-            index="2"
-            class="el-menu-navlist"
-            @click="accountDrawer = true"
-          >
-            <user-icon />
-          </el-menu-item> -->
 
           <el-menu-item
             v-else
@@ -68,8 +57,13 @@
     />
   </el-drawer>
 
-  <el-drawer v-model="profileDrawer" size="35%">
-    <profile-drawer />
+  <el-drawer
+    v-model="profileDrawer"
+    size="35%"
+    v-if="isAuthenticated"
+    :title="loggedInUser"
+  >
+    <profile-drawer @close-profile-drawer="closeProfileDrawer" />
   </el-drawer>
 
   <Teleport to="body">
@@ -83,11 +77,8 @@
 import ShoppingBag from '~/components/icons/ShoppingBag.vue'
 import UserIcon from '~/components/icons/UserIcon.vue'
 import CartDrawer from '~/components/drawer/CartDrawer.vue'
+import ProfileDrawer from '~/components/drawer/ProfileDrawer.vue'
 import AuthModal from '~/components/account/AuthModal.vue'
-import Login from '~/components/account/Login.vue'
-import { useCartStore } from '~/stores/cart'
-import { useAuthStore } from '~/stores/authStore'
-// const data = ref({})
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -96,34 +87,32 @@ const cartStore = useCartStore()
 const dialogVisible = ref(false)
 const activeIndex2 = ref('1')
 const cartDrawer = ref(false)
-const accountDrawer = ref(false)
+// const accountDrawer = ref(false)
 const profileDrawer = ref(false)
 const categories = ref([])
 
 onMounted(async () => {
-  const bus = useNuxtApp().$bus
   const { categories: cat } = await $fetch('/api/categories')
   categories.value = cat
-
-  bus.on('close-account-drawer', (value) => {
-    accountDrawer.value = value
-  })
-  bus.on('open-account-drawer', (value) => {
-    accountDrawer.value = value
-  })
 
   cartStore.getCart()
 })
 
-const cartItems = computed(() => cartStore.state.cartItems)
+const cartItems = computed(() => cartStore.cartItems)
 const quantity = computed(() => cartStore.totalQty)
 const isAuthenticated = computed(() => authStore.isAuthenticated)
-const loggedInUser = computed(() => authStore.user || {})
+const loggedInUser = computed(
+  () => authStore.user?.name || authStore.user?.displayName || ''
+)
 const emptyCart = computed(() => quantity.value <= 0)
 
 function closeCartDrawer(value) {
   cartDrawer.value = value
   router.push('/')
+}
+
+function closeProfileDrawer(value) {
+  profileDrawer.value = false
 }
 
 function closeOnCheckout(value) {
@@ -132,14 +121,6 @@ function closeOnCheckout(value) {
 
 function handleClose() {
   dialogVisible.value = false
-}
-
-async function logOut() {
-  try {
-    await authStore.logout()
-  } catch (error) {
-    console.error(error)
-  }
 }
 </script>
 
