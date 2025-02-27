@@ -14,17 +14,6 @@
         </el-menu-item>
 
         <div class="el-menu-right">
-          <!-- <template v-if="isAuthenticated">
-            <el-menu-item class="el-menu-navlist" @click="profileDrawer = true">
-              <user-icon />
-              <pop-over>
-                <template #trigger>
-                  <span>{{ capitalizeName(loggedInUser) }}</span></template
-                >
-              </pop-over>
-            </el-menu-item>
-          </template> -->
-
           <template v-if="isAuthenticated">
             <el-menu-item class="el-menu-navlist">
               <user-icon />
@@ -35,13 +24,6 @@
                 <template #content>
                   <p>{{ capitalizeName(loggedInUser) }}</p>
                   <div>
-                    <el-button
-                      class="account__form-btn"
-                      size="large"
-                      @click="login(ruleFormRef)"
-                      >SIGN OUT</el-button
-                    >
-
                     <UIButton
                       variant="primary"
                       size="large"
@@ -66,7 +48,7 @@
           <el-menu-item
             index="3"
             class="el-menu-navlist"
-            @click="cartDrawer = true"
+            @click="() => navigateTo('/cart')"
           >
             <el-badge :value="quantity" class="item">
               <shopping-bag />
@@ -78,28 +60,6 @@
     <ProductCategories :categories="categories" />
   </nav>
 
-  <el-drawer
-    title="Your Shopping Cart"
-    v-model="cartDrawer"
-    size="35%"
-    class="cart__body"
-  >
-    <cart-drawer
-      :empty-cart="emptyCart"
-      @close-cart-drawer="closeCartDrawer"
-      @close-on-checkout="closeOnCheckout"
-    />
-  </el-drawer>
-
-  <el-drawer
-    v-model="profileDrawer"
-    size="35%"
-    v-if="isAuthenticated"
-    :title="loggedInUser"
-  >
-    <profile-drawer @close-profile-drawer="closeProfileDrawer" />
-  </el-drawer>
-
   <Teleport to="body">
     <el-dialog v-model="dialogVisible" width="400" :before-close="handleClose">
       <AuthModal @close-dialog="handleClose" />
@@ -110,8 +70,6 @@
 <script setup>
 import ShoppingBag from '~/components/icons/ShoppingBag.vue'
 import UserIcon from '~/components/icons/UserIcon.vue'
-import CartDrawer from '~/components/drawer/CartDrawer.vue'
-import ProfileDrawer from '~/components/drawer/ProfileDrawer.vue'
 import AuthModal from '~/components/account/AuthModal.vue'
 import PopOver from '~/components/ui/PopOver.vue'
 import UIButton from '~/components/ui/UIButton.vue'
@@ -122,38 +80,19 @@ const cartStore = useCartStore()
 
 const dialogVisible = ref(false)
 const activeIndex2 = ref('1')
-const cartDrawer = ref(false)
-// const accountDrawer = ref(false)
-const profileDrawer = ref(false)
+// const profileDrawer = ref(false)
 const categories = ref([])
 
 onMounted(async () => {
   const { categories: cat } = await $fetch('/api/categories')
   categories.value = cat
-
-  cartStore.getCart()
 })
 
-const cartItems = computed(() => cartStore.cartItems)
 const quantity = computed(() => cartStore.totalQty)
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 const loggedInUser = computed(
   () => authStore.user?.name || authStore.user?.displayName || ''
 )
-const emptyCart = computed(() => quantity.value <= 0)
-
-function closeCartDrawer(value) {
-  cartDrawer.value = value
-  router.push('/')
-}
-
-function closeProfileDrawer(value) {
-  profileDrawer.value = false
-}
-
-function closeOnCheckout(value) {
-  cartDrawer.value = value
-}
 
 function handleClose() {
   dialogVisible.value = false

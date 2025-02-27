@@ -1,10 +1,10 @@
 <template>
   <el-popover
     v-model:visible="visible"
-    placement="bottom"
+    placement="top-start"
     :width="width"
-    :height="height"
     trigger="click"
+    style="height: 400px"
   >
     <template #reference> <slot name="trigger" /></template>
 
@@ -21,18 +21,18 @@ import { Close } from '@element-plus/icons-vue'
 const props = defineProps({
   width: {
     type: Number,
-    default: 400,
-  },
-  height: {
-    type: Number,
-    default: 500,
+    default: 350,
   },
 })
 
 const visible = ref(false)
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+:deep(.el-popper.el-popover) {
+  height: 400px !important;
+}
+
 .popover-content {
   display: flex;
   justify-content: space-between;
@@ -45,8 +45,8 @@ const visible = ref(false)
   color: #000;
   transition: color 0.2s;
   position: absolute;
-  right: 5px;
-  top: 0;
+  right: 10px;
+  top: 15;
 }
 
 .close-icon:hover {

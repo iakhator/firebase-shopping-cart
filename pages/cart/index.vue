@@ -1,27 +1,21 @@
 <script setup>
-import ShoppingBagBlack from '../icons/ShoppingBagBlack'
-import { useCartStore } from '~/stores/cart.js'
+import ShoppingBagBlack from '~/components/icons/ShoppingBagBlack'
+// import { useCartStore } from '~/stores/cart.js'
 import { useCurrency } from '~/composables/useCurrency.js'
-
-defineProps({
-  emptyCart: {
-    type: Boolean,
-    required: true,
-  },
-})
-
-const emit = defineEmits(['close-cart-drawer'])
 
 const cartStore = useCartStore()
 const { toUSD } = useCurrency(0)
 
 const loading = ref(false)
+
+const emptyCart = computed(() => quantity.value <= 0)
+const quantity = computed(() => cartStore.totalQty)
 const cartItems = computed(() => cartStore.cartItems)
 const totalPrice = computed(() => cartStore.totalPrice)
 
-function closeCartDrawer() {
-  emit('close-cart-drawer', false)
-}
+// function closeCartDrawer() {
+//   emit('close-cart-drawer', false)
+// }
 
 //   computed: {
 //     ...mapGetters(['cartItems', 'isAuthenticated']),
@@ -147,9 +141,10 @@ function closeCartDrawer() {
 </template>
 
 <style lang="scss">
-.el-button + .el-button.no__cart-btn {
-  margin-left: 0 !important;
+.cart-wrapper {
+  // position: relative;
 }
+
 .no__cart {
   width: 100px;
   position: absolute;
