@@ -14,10 +14,44 @@
         </el-menu-item>
 
         <div class="el-menu-right">
-          <template v-if="isAuthenticated">
+          <!-- <template v-if="isAuthenticated">
             <el-menu-item class="el-menu-navlist" @click="profileDrawer = true">
               <user-icon />
-              <span>{{ capitalizeName(loggedInUser) }}</span>
+              <pop-over>
+                <template #trigger>
+                  <span>{{ capitalizeName(loggedInUser) }}</span></template
+                >
+              </pop-over>
+            </el-menu-item>
+          </template> -->
+
+          <template v-if="isAuthenticated">
+            <el-menu-item class="el-menu-navlist">
+              <user-icon />
+              <pop-over>
+                <template #trigger>
+                  <span>{{ capitalizeName(loggedInUser) }}</span></template
+                >
+                <template #content>
+                  <p>{{ capitalizeName(loggedInUser) }}</p>
+                  <div>
+                    <el-button
+                      class="account__form-btn"
+                      size="large"
+                      @click="login(ruleFormRef)"
+                      >SIGN OUT</el-button
+                    >
+
+                    <UIButton
+                      variant="primary"
+                      size="large"
+                      @click="login(ruleFormRef)"
+                    >
+                      SIGN OUT
+                    </UIButton>
+                  </div>
+                </template>
+              </pop-over>
             </el-menu-item>
           </template>
 
@@ -79,6 +113,8 @@ import UserIcon from '~/components/icons/UserIcon.vue'
 import CartDrawer from '~/components/drawer/CartDrawer.vue'
 import ProfileDrawer from '~/components/drawer/ProfileDrawer.vue'
 import AuthModal from '~/components/account/AuthModal.vue'
+import PopOver from '~/components/ui/PopOver.vue'
+import UIButton from '~/components/ui/UIButton.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
