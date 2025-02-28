@@ -23,15 +23,24 @@
                 >
                 <template #content>
                   <p>{{ capitalizeName(loggedInUser) }}</p>
-                  <div>
-                    <UIButton
-                      variant="primary"
-                      size="large"
-                      @click="login(ruleFormRef)"
-                    >
-                      SIGN OUT
-                    </UIButton>
+                  <div class="el-menu-link">
+                    <NuxtLink class="link" to="/profile">Profile</NuxtLink>
+                    <NuxtLink class="link" to="/order">Order</NuxtLink>
+                    <NuxtLink class="link" to="/about">Preference</NuxtLink>
                   </div>
+                  <UIButton
+                    variant="primary"
+                    size="large"
+                    style="
+                      position: absolute;
+                      bottom: 0;
+                      width: 100px;
+                      right: 0;
+                    "
+                    @click="login(ruleFormRef)"
+                  >
+                    SIGN OUT
+                  </UIButton>
                 </template>
               </pop-over>
             </el-menu-item>
@@ -112,6 +121,17 @@ $off-black: #1b1a1a;
   width: 100%;
   z-index: 1000;
   top: 0;
+}
+
+.el-menu-link {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  a:hover {
+    text-decoration: underline;
+  }
 }
 
 .el-menu-top {

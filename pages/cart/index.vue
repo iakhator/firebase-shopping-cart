@@ -13,6 +13,10 @@ const quantity = computed(() => cartStore.totalQty)
 const cartItems = computed(() => cartStore.cartItems)
 const totalPrice = computed(() => cartStore.totalPrice)
 
+function checkOut() {
+  console.log('checkot')
+}
+
 // function closeCartDrawer() {
 //   emit('close-cart-drawer', false)
 // }
@@ -80,10 +84,11 @@ const totalPrice = computed(() => cartStore.totalPrice)
 </script>
 
 <template>
-  <div>
-    <div v-if="emptyCart">
-      <h6>Your bag is empty</h6>
-      <shopping-bag-black class="no__cart" />
+  <div class="cart">
+    <h3>SHOPPING BAG</h3>
+    <div v-if="emptyCart" class="cart__empty">
+      <span><shopping-bag-black class="no__cart" /></span>
+      <p>Your bag is empty</p>
     </div>
     <div
       v-else
@@ -134,31 +139,32 @@ const totalPrice = computed(() => cartStore.totalPrice)
     >
       checkout
     </el-button>
-    <el-button round class="no__cart-btn" @click="closeCartDrawer">
-      Browse Products
-    </el-button>
+    <!-- <el-button class="no__cart-btn" large> Browse Products </el-button> -->
   </div>
 </template>
 
 <style lang="scss">
-.cart-wrapper {
+h3 {
+  margin-bottom: 10px;
+}
+.cart {
   // position: relative;
+  // height: 90vh;
+  // min-height: 90vh;
+
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+  }
 }
 
 .no__cart {
-  width: 100px;
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-
   &-btn {
-    position: absolute;
-    bottom: 0;
-    margin: 0 0 50px;
-    min-height: 40px;
-    width: 100%;
+    // position: absolute;
+    // width: 100%;
   }
 }
 
