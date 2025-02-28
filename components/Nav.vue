@@ -21,12 +21,18 @@
                 <template #trigger>
                   <span>{{ capitalizeName(loggedInUser) }}</span></template
                 >
-                <template #content>
+                <template #content="{ close }">
                   <p>{{ capitalizeName(loggedInUser) }}</p>
                   <div class="el-menu-link">
-                    <NuxtLink class="link" to="/profile">Profile</NuxtLink>
-                    <NuxtLink class="link" to="/order">Order</NuxtLink>
-                    <NuxtLink class="link" to="/about">Preference</NuxtLink>
+                    <NuxtLink class="link" to="/profile" @click="close"
+                      >Profile</NuxtLink
+                    >
+                    <NuxtLink class="link" to="/order" @click="close"
+                      >Order</NuxtLink
+                    >
+                    <NuxtLink class="link" to="/about" @click="close"
+                      >Preference</NuxtLink
+                    >
                   </div>
                   <UIButton
                     variant="primary"
@@ -37,7 +43,7 @@
                       width: 100px;
                       right: 0;
                     "
-                    @click="login(ruleFormRef)"
+                    @click="signOut"
                   >
                     SIGN OUT
                   </UIButton>
@@ -106,11 +112,16 @@ const loggedInUser = computed(
 function handleClose() {
   dialogVisible.value = false
 }
+
+async function signOut() {
+  await authStore.logout()
+  navigateTo('/')
+}
 </script>
 
 <style lang="scss" scoped>
-$off-white: #f8f5f2;
-$off-black: #1b1a1a;
+// $off-white: #f8f5f2;
+// $off-black: #1b1a1a;
 
 .custom-menu {
   display: flex;
@@ -123,16 +134,16 @@ $off-black: #1b1a1a;
   top: 0;
 }
 
-.el-menu-link {
-  margin: 20px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+// .el-menu-link {
+//   margin: 20px 0;
+//   display: flex;
+//   flex-direction: column;
+//   gap: 10px;
 
-  a:hover {
-    text-decoration: underline;
-  }
-}
+//   a:hover {
+//     text-decoration: underline;
+//   }
+// }
 
 .el-menu-top {
   width: 1600px;
@@ -157,10 +168,18 @@ $off-black: #1b1a1a;
   border-bottom: solid 1px $off-black;
 }
 
-.el-menu--horizontal > .el-menu-item a {
-  text-decoration: none;
+.el-menu-item.is-active a {
   color: $off-white;
+
+  &:hover {
+    text-decoration: none;
+  }
 }
+
+// .el-menu--horizontal > .el-menu-item a {
+//   text-decoration: none;
+//   color: $off-white;
+// }
 
 .item {
   // margin-top: -30px;

@@ -15,6 +15,7 @@
 
 <script setup>
 const router = useRouter()
+const route = useRoute()
 
 const props = defineProps({
   categories: {
@@ -23,7 +24,11 @@ const props = defineProps({
   },
 })
 
-const activeName = ref('first')
+const activeName = ref('all')
+
+onMounted(() => {
+  activeName.value = route.params.categoryId
+})
 
 function handleClick(tab) {
   const categoryId = tab.paneName

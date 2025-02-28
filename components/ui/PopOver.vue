@@ -11,7 +11,7 @@
 
     <div class="popover-content">
       <el-icon class="close-icon" @click="visible = false"><Close /></el-icon>
-      <slot name="content" />
+      <slot name="content" :close="closePopover" />
     </div>
   </el-popover>
 </template>
@@ -27,6 +27,10 @@ const props = defineProps({
 })
 
 const visible = ref(false)
+
+const closePopover = () => {
+  visible.value = false
+}
 </script>
 
 <style lang="scss" scoped>

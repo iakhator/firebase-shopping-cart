@@ -4,7 +4,7 @@
       <ul class="product__grid-w">
         <li
           v-for="item in products"
-          :key="item.uid"
+          :key="item.id"
           class="product__grid-w__list"
         >
           <a class="_p" :href="`/${item.categoryId}/${item.id}`">
@@ -20,9 +20,16 @@
                 <span class="product__grid-w__list-price">{{
                   toUSD(item.price)
                 }}</span>
-                <span class="product__grid-w__list-favourite"
+                <el-button
+                  text
+                  circle
+                  @click.prevent="addToWishlist"
+                  @mouseenter="isFavHovered = item.id"
+                  @mouseleave="isFavHovered = ''"
+                  class="product__grid-w__list-favourite"
                   ><heart-icon
-                /></span>
+                    :fill="isFavHovered === item.id ? '#000' : 'none'"
+                /></el-button>
               </div>
               <div>
                 <el-button @click.prevent="handleHello">
@@ -41,7 +48,7 @@
 <script setup>
 import HeartIcon from '~/components/icons/HeartIcon.vue'
 
-const favRef = ref('#000')
+const isFavHovered = ref('')
 const { toUSD } = useCurrency()
 
 defineProps({
@@ -51,23 +58,28 @@ defineProps({
   },
 })
 
+function addToWishlist() {
+  console.log('wish list')
+}
+
 function handleHello() {
   console.log('hello one')
 }
 </script>
 
 <style lang="scss" scoped>
-$off-black: #1b1a1a;
-$white: #ffffff;
-
 .product__grid-w__list-price_fav {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.product__grid-w__list-favourite:hover {
-  background: red;
+.el-button.product__grid-w__list-favourite {
+  background: $off-white;
+
+  &:hover {
+    background: $off-white !important;
+  }
 }
 
 .el-col {
@@ -80,15 +92,7 @@ $white: #ffffff;
     animation: bounce 1s infinite alternate;
   }
 }
-.bg-purple-dark {
-  background: #99a9bf;
-}
-.bg-purple {
-  background: #d3dce6;
-}
-.bg-purple-light {
-  background: #e5e9f2;
-}
+
 .grid-content {
   border-radius: 4px;
   min-height: 36px;

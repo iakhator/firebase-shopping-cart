@@ -6,6 +6,13 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-01-01',
   vite: {
     logLevel: 'info',
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@import "~/assets/scss/variables.scss";`, // Auto-import variables
+        },
+      },
+    },
   },
   /*
    ** Headers of the page
@@ -46,7 +53,7 @@ export default defineNuxtConfig({
   /*
    ** Global CSS
    */
-  css: ['element-plus/dist/index.css', '~/assets/css/main.scss'],
+  css: ['element-plus/dist/index.css', '~/assets/scss/main.scss'],
 
   /*
    ** Nuxt.js modules
