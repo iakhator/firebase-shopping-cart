@@ -134,16 +134,16 @@ async function signOut() {
   top: 0;
 }
 
-// .el-menu-link {
-//   margin: 20px 0;
-//   display: flex;
-//   flex-direction: column;
-//   gap: 10px;
+.el-menu-link {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 
-//   a:hover {
-//     text-decoration: underline;
-//   }
-// }
+  a:hover {
+    text-decoration: underline;
+  }
+}
 
 .el-menu-top {
   width: 1600px;

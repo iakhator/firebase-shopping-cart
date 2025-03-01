@@ -1,3 +1,6 @@
 .el-dialog__close:hover {
   color: $primary-color !important;
 }
+.el-dialog__headerbtn .el-dialog__close { 
+  color: $primary-color !important;
+}

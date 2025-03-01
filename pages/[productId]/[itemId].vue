@@ -10,7 +10,7 @@
       </div>
     </el-col>
     <el-col :md="14" class="item__contents">
-      <h3>{{ item.title }}</h3>
+      <h3>{{ item.itemTitle }}</h3>
       <div class="item__contents-specifications">
         <p v-for="(specification, key) in item.specification" :key="key">
           <span class="item__contents-spec">{{ key }} :</span>
@@ -58,6 +58,13 @@
           <el-button round class="black" @click="buyNow">Buy now</el-button>
         </div>
       </el-form>
+    </el-col>
+    <el-col>
+      <el-tabs class="el-card-options">
+        <el-tab-pane label="Product Details">Product Detials</el-tab-pane>
+        <el-tab-pane label="Ratings/Review">Ratings/Review</el-tab-pane>
+        <el-tab-pane label="FAQ">FAQ</el-tab-pane>
+      </el-tabs>
     </el-col>
   </el-row>
 </template>
@@ -114,6 +121,12 @@ function buyNow() {}
 $font-weight-bold: 600;
 $off-black: #1b1a1a;
 $gray: #dcdfe6;
+
+:deep(.el-tabs__nav) {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 40px;
+}
 
 .item__contents {
   padding: 2px 35px;
