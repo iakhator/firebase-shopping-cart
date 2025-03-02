@@ -9,14 +9,10 @@
         />
       </div>
     </el-col>
-    <el-col :md="14" class="item__contents">
-      <h3>{{ item.itemTitle }}</h3>
-      <div class="item__contents-specifications">
-        <p v-for="(specification, key) in item.specification" :key="key">
-          <span class="item__contents-spec">{{ key }} :</span>
-          {{ specification }}
-        </p>
-      </div>
+    <el-col :md="8" class="item__contents">
+      <h3 class="capitalize item__contents-name">{{ item.name }}</h3>
+      <span class="item__contents-quantity-price">{{ toUSD(itemPrice) }}</span>
+      <p class="item__contents-description">{{ item.description }}</p>
       <el-form ref="form" :model="form">
         <div class="variant">
           <div class="item__contents-quantity">
@@ -27,13 +23,6 @@
               :max="3"
               @change="handleQtyChange"
             ></el-input-number>
-          </div>
-
-          <div class="item__contents-quantity">
-            <span class="item__contents-quantity-label">Price :</span>
-            <span class="item__contents-quantity-price">{{
-              toUSD(itemPrice)
-            }}</span>
           </div>
 
           <div class="item__contents-variant">
@@ -59,9 +48,19 @@
         </div>
       </el-form>
     </el-col>
+    <el-col :md="6"> Shipped to you by <strong>Monaco</strong> </el-col>
+  </el-row>
+  <el-row>
     <el-col>
       <el-tabs class="el-card-options">
-        <el-tab-pane label="Product Details">Product Detials</el-tab-pane>
+        <el-tab-pane label="Product Details">
+          <div class="item__contents-specifications">
+            <p v-for="(specification, key) in item.specification" :key="key">
+              <span class="item__contents-spec">{{ key }} :</span>
+              {{ specification }}
+            </p>
+          </div>
+        </el-tab-pane>
         <el-tab-pane label="Ratings/Review">Ratings/Review</el-tab-pane>
         <el-tab-pane label="FAQ">FAQ</el-tab-pane>
       </el-tabs>
@@ -133,6 +132,7 @@ $gray: #dcdfe6;
 
   h3 {
     font-weight: $font-weight-bold;
+    font-size: 1.5rem;
   }
 
   &-specifications {
@@ -200,8 +200,10 @@ $gray: #dcdfe6;
   }
 
   &-price {
-    font-weight: 600;
-    font-size: 1.2rem;
+    display: flex;
+    // font-weight: 600;
+    font-size: 1.8rem;
+    margin-top: 10px;
   }
 
   &-label {
