@@ -33,7 +33,7 @@
   }
 
   &.is-plain {
-    &:hover {
+    &.is-active, &:hover {
      border: 1.5px solid $black !important;
      background: $white !important;
      color: $black !important;
@@ -44,7 +44,7 @@
      background: inherit !important;
      color: $black !important;
  
-     &:hover {
+     &.is-active, &:hover {
        border:1.5px solid $black !important;
        background: inherit !important;
        color: $black !important;

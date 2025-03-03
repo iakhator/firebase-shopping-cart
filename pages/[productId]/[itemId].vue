@@ -20,17 +20,22 @@
       <el-form ref="form" :model="form">
         <div class="variant">
           <el-col class="item__contents-variant">
-            <div class="item__contents-bundle">
+            <div
+              v-if="item && item.bundles.length > 0"
+              class="item__contents-bundle"
+            >
               <p class="item__contents-spec-variant">
                 <span>Bundles </span>: 16GB/256GB
               </p>
 
               <UIButton
-                v-for="variant in item.variant"
-                :key="variant"
+                :class="{ 'is-active': itemBundle.id === item.id }"
+                v-for="item in item.bundles"
+                @click="handleBundleChange(item)"
+                :key="item.id"
+                :label="`${item.ram}/${item.storage}`"
                 variant="transparent"
                 size="large"
-                :label="variant"
               />
             </div>
             <div class="item__contents-variants">
@@ -98,7 +103,7 @@ const cartStore = useCartStore()
 const route = useRoute()
 const { toUSD } = useCurrency()
 
-const itemBundle = ref('')
+const itemBundle = ref({})
 const variant = ref('')
 const form = reactive({
   qty: 1,
@@ -108,11 +113,20 @@ const loading = ref(true)
 
 const productId = route.params.itemId
 
-const itemPrice = computed(() => item.value.price * form.qty)
+const itemPrice = computed(() => itemBundle.value.price * form.qty)
 
 const { data: item } = await useAsyncData('items', () =>
   $fetch(`/api/products/${productId}`)
 )
+
+onMounted(() => {
+  itemBundle.value = item.value?.bundles ? item.value?.bundles[0] : {}
+  variant.value = item.value.variant ? item.value.variant[0] : ''
+})
+
+function handleBundleChange(item) {
+  itemBundle.value = item
+}
 
 function handleQtyChange(value) {
   form.qty = value
