@@ -7,6 +7,7 @@
     @click="$emit('click')"
   >
     <slot />
+    {{ label }}
   </el-button>
 </template>
 
@@ -16,11 +17,14 @@ const props = defineProps({
   size: { type: String, default: 'default' }, // "small" | "default" | "large"
   icon: { type: Object, default: null },
   disabled: { type: Boolean, default: false },
+  label: { type: String, default: 'Save' },
 })
 
 const buttonClass = computed(() => ({
   primary: props.variant === 'primary',
   secondary: props.variant === 'secondary',
+  'is-plain': props.variant === 'plain',
+  'is-transparent': props.variant === 'transparent',
 }))
 </script>
 
@@ -39,7 +43,7 @@ const buttonClass = computed(() => ({
 }
 
 /* Secondary Button */
-.econdary {
+.secondary {
   background: white;
   color: #000;
   border: 1px solid #303133;

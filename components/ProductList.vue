@@ -13,7 +13,7 @@
             </span>
             <div class="product__grid-w__list-content">
               <span class="product__grid-w__list-title multi-line-ellipsis">{{
-                item.itemTitle
+                item.name
               }}</span>
 
               <div class="product__grid-w__list-price_fav">

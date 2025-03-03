@@ -10,13 +10,49 @@
       </div>
     </el-col>
     <el-col :md="8" class="item__contents">
-      <h3 class="capitalize item__contents-name">{{ item.name }}</h3>
-      <span class="item__contents-quantity-price">{{ toUSD(itemPrice) }}</span>
-      <p class="item__contents-description">{{ item.description }}</p>
+      <div class="item__contents-head">
+        <h3 class="capitalize item__contents-name">{{ item.name }}</h3>
+        <span class="item__contents-quantity-price">{{
+          toUSD(itemPrice)
+        }}</span>
+        <p class="item__contents-description">{{ item.description }}</p>
+      </div>
       <el-form ref="form" :model="form">
         <div class="variant">
+          <el-col class="item__contents-variant">
+            <div class="item__contents-bundle">
+              <p class="item__contents-spec-variant">
+                <span>Bundles </span>: 16GB/256GB
+              </p>
+
+              <UIButton
+                v-for="variant in item.variant"
+                :key="variant"
+                variant="transparent"
+                size="large"
+                :label="variant"
+              />
+            </div>
+            <div class="item__contents-variants">
+              <p class="item__contents-spec-variant">
+                <span>Color</span>: White
+              </p>
+              <el-radio-group v-model="variant">
+                <el-radio-button
+                  v-for="variant in item.variant"
+                  :key="variant"
+                  :label="variant"
+                  :value="variant"
+                ></el-radio-button>
+              </el-radio-group>
+              <p class="error el-tag--danger" v-if="errorMessage">
+                {{ errorMessage }}
+              </p>
+            </div>
+          </el-col>
+        </div>
+        <div class="action">
           <div class="item__contents-quantity">
-            <span class="item__contents-spec-variant">Quantity :</span>
             <el-input-number
               v-model="form.qty"
               :min="1"
@@ -24,27 +60,13 @@
               @change="handleQtyChange"
             ></el-input-number>
           </div>
-
-          <div class="item__contents-variant">
-            <p class="item__contents-spec-variant">Select variant:</p>
-            <el-radio-group v-model="variant">
-              <el-radio-button
-                v-for="variant in item.variant"
-                :key="variant"
-                :label="variant"
-                :value="variant"
-              ></el-radio-button>
-            </el-radio-group>
-            <p class="error el-tag--danger" v-if="errorMessage">
-              {{ errorMessage }}
-            </p>
-          </div>
-        </div>
-        <div class="action-button">
-          <el-button round class="action-button-cart" @click="updateCart">
-            Add to cart
-          </el-button>
-          <el-button round class="black" @click="buyNow">Buy now</el-button>
+          <UIButton
+            round
+            size="large"
+            class="black"
+            @click="updateCart"
+            label="Add to cart"
+          />
         </div>
       </el-form>
     </el-col>
@@ -69,12 +91,14 @@
 </template>
 
 <script setup>
+import UIButton from '~/components/ui/UIButton'
 import { useCartStore } from '~/stores/cart'
 
 const cartStore = useCartStore()
 const route = useRoute()
 const { toUSD } = useCurrency()
 
+const itemBundle = ref('')
 const variant = ref('')
 const form = reactive({
   qty: 1,
@@ -121,6 +145,16 @@ $font-weight-bold: 600;
 $off-black: #1b1a1a;
 $gray: #dcdfe6;
 
+@mixin pseudo-border($border-color) {
+  content: '';
+  width: 100%;
+  border-bottom: solid 1px $border-color;
+  position: absolute;
+  left: 0;
+  top: 120%;
+  z-index: 99;
+}
+
 :deep(.el-tabs__nav) {
   display: flex;
   justify-content: space-around;
@@ -158,10 +192,18 @@ $gray: #dcdfe6;
       font-weight: $font-weight-bold;
     }
   }
+
+  &-bundle {
+    margin-bottom: 10px;
+  }
 }
 
 .variant {
-  margin-top: 20px;
+  margin: 20px 0;
+  position: relative;
+  border-bottom: 1px solid $gray;
+  border-top: 1px solid $gray;
+  padding: 20px;
 }
 
 .item__contents-spec-variant {
@@ -171,17 +213,6 @@ $gray: #dcdfe6;
 }
 
 .item__contents-variant {
-  position: relative;
-  margin-top: 18px;
-  &:after {
-    content: '';
-    width: 100%;
-    border-bottom: solid 1px $gray;
-    position: absolute;
-    left: 0;
-    top: 120%;
-    z-index: 99;
-  }
 }
 
 .item__contents-quantity {

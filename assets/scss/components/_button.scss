@@ -31,6 +31,25 @@
     border-color: #1b1a1a !important;
     color: #ecf5ff !important;
   }
+
+  &.is-plain {
+    &:hover {
+     border: 1.5px solid $black !important;
+     background: $white !important;
+     color: $black !important;
+    }
+   }
+ 
+   &.is-transparent {
+     background: inherit !important;
+     color: $black !important;
+ 
+     &:hover {
+       border:1.5px solid $black !important;
+       background: inherit !important;
+       color: $black !important;
+     }
+   }
 }
 
 // .el-button.no__cart-btn:focus,
