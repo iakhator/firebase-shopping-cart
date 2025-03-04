@@ -25,19 +25,18 @@
     </div>
 
     <el-form-item class="account__form">
-      <el-button
-        class="account__form-btn"
+      <UIButton
         size="large"
+        class="black"
         :loading="loading"
         @click="register(registerFormRef)"
-        >REGISTER</el-button
-      >
+        label="REGISTER"
+      />
     </el-form-item>
   </el-form>
 </template>
 
 <script setup>
-const { $bus } = useNuxtApp()
 const authStore = useAuthStore()
 
 const emit = defineEmits(['close-dialog'])

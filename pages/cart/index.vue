@@ -16,11 +16,9 @@
             <p class="price">${{ item.price }}</p>
           </div>
           <div class="item-actions">
-            <button @click="decreaseQuantity(item)">-</button>
-            <span>{{ item.quantity }}</span>
-            <button @click="increaseQuantity(item)">+</button>
+            <UICounter v-model="item.quantity" />
+            <button class="delete-btn" @click="removeItem(item)">🗑</button>
           </div>
-          <button class="delete-btn" @click="removeItem(item)">🗑</button>
         </div>
       </div>
 
@@ -46,7 +44,13 @@
           <button>Apply</button>
         </div>
 
-        <button class="checkout-btn">Go to Checkout →</button>
+        <UIButton
+          size="large"
+          class="black checkout-btn"
+          :loading="loading"
+          @click="register(registerFormRef)"
+          label="Go to Checkout →"
+        />
       </div>
     </div>
   </div>
@@ -109,11 +113,8 @@ const removeItem = (item) => {
   margin: 20px auto;
   align-items: flex-start;
 
-  // padding: 20px;
-
   .cart-items {
     flex: 2;
-    // background: #fff;
     border-radius: 12px;
     padding: 20px;
     border: 1px solid #cac1c1;
@@ -161,22 +162,7 @@ const removeItem = (item) => {
 
       .item-actions {
         display: flex;
-        align-items: center;
-        background: #f5f5f5;
-        border-radius: 10px;
-        padding: 5px 10px;
-
-        button {
-          background: none;
-          border: none;
-          font-size: 18px;
-          cursor: pointer;
-        }
-
-        span {
-          margin: 0 10px;
-          font-weight: bold;
-        }
+        gap: 20px;
       }
 
       .delete-btn {
@@ -254,15 +240,6 @@ const removeItem = (item) => {
 
     .checkout-btn {
       margin-top: 15px;
-      width: 100%;
-      padding: 12px;
-      background: black;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
     }
   }
 }

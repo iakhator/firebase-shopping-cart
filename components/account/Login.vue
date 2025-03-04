@@ -20,13 +20,12 @@
     </el-link>
 
     <el-form-item class="account__form">
-      <el-button
-        class="account__form-btn"
+      <UIButton
         size="large"
-        :loading="loading"
+        class="black"
         @click="login(ruleFormRef)"
-        >SIGN IN</el-button
-      >
+        label="SIGN IN"
+      />
     </el-form-item>
     <p v-if="errorMessage" class="el__error">{{ errorMessage }}</p>
   </el-form>
