@@ -17,63 +17,60 @@
         }}</span>
         <p class="item__contents-description">{{ item.description }}</p>
       </div>
-      <el-form ref="form" :model="form">
-        <div class="variant">
-          <el-col class="item__contents-variant">
-            <div
-              v-if="item && item.bundles.length > 0"
-              class="item__contents-bundle"
-            >
-              <p class="item__contents-spec-variant">
-                <span>Bundles </span>: 16GB/256GB
-              </p>
+      <div class="variant">
+        <el-col class="item__contents-variant">
+          <div
+            v-if="item && item.bundles.length > 0"
+            class="item__contents-bundle"
+          >
+            <p class="item__contents-spec-variant">
+              <span>Bundles </span>: 16GB/256GB
+            </p>
 
-              <UIButton
-                :class="{ 'is-active': itemBundle.id === item.id }"
-                v-for="item in item.bundles"
-                @click="handleBundleChange(item)"
-                :key="item.id"
-                :label="`${item.ram}/${item.storage}`"
-                variant="transparent"
-                size="large"
-              />
-            </div>
-            <div class="item__contents-variants">
-              <p class="item__contents-spec-variant">
-                <span>Color</span>: White
-              </p>
-              <el-radio-group v-model="variant">
-                <el-radio-button
-                  v-for="variant in item.variant"
-                  :key="variant"
-                  :label="variant"
-                  :value="variant"
-                ></el-radio-button>
-              </el-radio-group>
-              <p class="error el-tag--danger" v-if="errorMessage">
-                {{ errorMessage }}
-              </p>
-            </div>
-          </el-col>
-        </div>
-        <div class="action">
-          <div class="item__contents-quantity">
-            <el-input-number
-              v-model="form.qty"
-              :min="1"
-              :max="3"
-              @change="handleQtyChange"
-            ></el-input-number>
+            <UIButton
+              :class="{ 'is-active': itemBundle.id === item.id }"
+              v-for="item in item.bundles"
+              @click="handleBundleChange(item)"
+              :key="item.id"
+              :label="`${item.ram}/${item.storage}`"
+              variant="transparent"
+              size="large"
+            />
           </div>
-          <UIButton
-            round
-            size="large"
-            class="black"
-            @click="updateCart"
-            label="Add to cart"
-          />
-        </div>
-      </el-form>
+          <div class="item__contents-variants">
+            <p class="item__contents-spec-variant"><span>Color</span>: White</p>
+            <el-radio-group v-model="variant">
+              <el-radio-button
+                v-for="variant in item.variant"
+                :key="variant"
+                :label="variant"
+                :value="variant"
+              ></el-radio-button>
+            </el-radio-group>
+            <p class="error el-tag--danger" v-if="errorMessage">
+              {{ errorMessage }}
+            </p>
+          </div>
+        </el-col>
+      </div>
+      <div class="action-qty">
+        <UICounter v-model="qty" />
+        <!-- <el-input-number
+          class="item__contents-quantity"
+          v-model="qty"
+          :min="1"
+          :max="3"
+          size="large"
+          @change="handleQtyChange"
+        ></el-input-number> -->
+        <UIButton
+          round
+          size="large"
+          class="black"
+          @click="updateCart"
+          label="Add to cart"
+        />
+      </div>
     </el-col>
     <el-col :md="6"> Shipped to you by <strong>Monaco</strong> </el-col>
   </el-row>
@@ -97,7 +94,7 @@
 
 <script setup>
 import UIButton from '~/components/ui/UIButton'
-import { useCartStore } from '~/stores/cart'
+import UICounter from '~/components/ui/UICounter'
 
 const cartStore = useCartStore()
 const route = useRoute()
@@ -105,15 +102,14 @@ const { toUSD } = useCurrency()
 
 const itemBundle = ref({})
 const variant = ref('')
-const form = reactive({
-  qty: 1,
-})
+const qty = ref(1)
+
 let errorMessage = ref('')
 const loading = ref(true)
 
 const productId = route.params.itemId
 
-const itemPrice = computed(() => itemBundle.value.price * form.qty)
+const itemPrice = computed(() => itemBundle.value.price * qty.value)
 
 const { data: item } = await useAsyncData('items', () =>
   $fetch(`/api/products/${productId}`)
@@ -129,7 +125,7 @@ function handleBundleChange(item) {
 }
 
 function handleQtyChange(value) {
-  form.qty = value
+  qty.value = value
 }
 
 function updateCart() {
@@ -209,6 +205,9 @@ $gray: #dcdfe6;
 
   &-bundle {
     margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 }
 
@@ -217,7 +216,7 @@ $gray: #dcdfe6;
   position: relative;
   border-bottom: 1px solid $gray;
   border-top: 1px solid $gray;
-  padding: 20px;
+  padding: 20px 0;
 }
 
 .item__contents-spec-variant {
@@ -230,19 +229,19 @@ $gray: #dcdfe6;
 }
 
 .item__contents-quantity {
-  position: relative;
-  margin-top: 18px;
   font-size: 0.89rem;
+  border-bottom: solid 1px $gray;
+  flex: 0 0 30%;
 
-  &:after {
-    content: '';
-    width: 100%;
-    border-bottom: solid 1px $gray;
-    position: absolute;
-    left: 0;
-    top: 120%;
-    z-index: 99;
-  }
+  // &:after {
+  //   content: '';
+  //   width: 100%;
+  //   border-bottom: solid 1px $gray;
+  //   position: absolute;
+  //   left: 0;
+  //   top: 120%;
+  //   z-index: 99;
+  // }
 
   &-price {
     display: flex;
@@ -256,12 +255,19 @@ $gray: #dcdfe6;
   }
 }
 
-.action-button {
+.action-qty {
   display: flex;
-  margin-top: 25px;
   align-items: center;
   justify-content: center;
+  gap: 20px;
 }
+
+// .item__contents-quantity {
+//   flex: 0 0 30%;
+//   font-size: 0.89rem;
+//   border-bottom: solid 1px $gray;
+
+// }
 
 .error {
   color: #f56c6c;
