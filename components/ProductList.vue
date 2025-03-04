@@ -12,13 +12,16 @@
               <img :src="item?.imageUrl" alt="" loading="lazy" />
             </span>
             <div class="product__grid-w__list-content">
-              <span class="product__grid-w__list-title multi-line-ellipsis">{{
-                item.name
-              }}</span>
+              <span class="product__grid-w__list-title multi-line-ellipsis"
+                >{{ item.name }}
+              </span>
+              <p>
+                {{ item?.bundles[0]?.ram }} / {{ item?.bundles[0]?.storage }}
+              </p>
 
               <div class="product__grid-w__list-price_fav">
                 <span class="product__grid-w__list-price">{{
-                  toUSD(item.price)
+                  toUSD(item?.bundles[0]?.price || item.price)
                 }}</span>
                 <el-button
                   text
@@ -31,7 +34,7 @@
                     :fill="isFavHovered === item.id ? '#000' : 'none'"
                 /></el-button>
               </div>
-              <div>
+              <div class="product__grid-btn">
                 <el-button @click.prevent="handleHello">
                   Add To Cart
                 </el-button>
@@ -68,6 +71,19 @@ function handleHello() {
 </script>
 
 <style lang="scss" scoped>
+.product__grid {
+  a {
+    &:hover {
+      text-decoration: none;
+    }
+  }
+  &-btn {
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+    flex-direction: column;
+  }
+}
 .product__grid-w__list-price_fav {
   display: flex;
   align-items: center;

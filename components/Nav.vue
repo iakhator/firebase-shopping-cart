@@ -19,10 +19,10 @@
               <user-icon />
               <pop-over>
                 <template #trigger>
-                  <span>{{ capitalizeName(loggedInUser) }}</span></template
+                  <span>{{ capitalize(loggedInUser) }}</span></template
                 >
                 <template #content="{ close }">
-                  <p>{{ capitalizeName(loggedInUser) }}</p>
+                  <p>{{ capitalize(loggedInUser) }}</p>
                   <div class="el-menu-link">
                     <NuxtLink class="link" to="/profile" @click="close"
                       >Profile</NuxtLink

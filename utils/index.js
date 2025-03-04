@@ -1,4 +1,4 @@
-export const capitalizeName = (name) => {
+export const capitalize = (name) => {
   return name
     .toLowerCase()
     .split(' ')

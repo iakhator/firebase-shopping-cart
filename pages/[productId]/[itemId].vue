@@ -20,7 +20,7 @@
       <div class="variant">
         <el-col class="item__contents-variant">
           <div
-            v-if="item && item.bundles.length > 0"
+            v-if="item && item.bundles?.length > 0"
             class="item__contents-bundle"
           >
             <p class="item__contents-spec-variant">
@@ -38,15 +38,14 @@
             />
           </div>
           <div class="item__contents-variants">
-            <p class="item__contents-spec-variant"><span>Color</span>: White</p>
-            <el-radio-group v-model="variant">
-              <el-radio-button
-                v-for="variant in item.variant"
-                :key="variant"
-                :label="variant"
-                :value="variant"
-              ></el-radio-button>
-            </el-radio-group>
+            <p class="item__contents-spec-variant">
+              <span>Color</span>: {{ capitalize(selectedColor) }}
+            </p>
+            <UIColorBox
+              :variants="item.variant"
+              :activeVariant="selectedColor"
+              @update:activeVariant="selectedColor = $event"
+            />
             <p class="error el-tag--danger" v-if="errorMessage">
               {{ errorMessage }}
             </p>
@@ -55,14 +54,6 @@
       </div>
       <div class="action-qty">
         <UICounter v-model="qty" />
-        <!-- <el-input-number
-          class="item__contents-quantity"
-          v-model="qty"
-          :min="1"
-          :max="3"
-          size="large"
-          @change="handleQtyChange"
-        ></el-input-number> -->
         <UIButton
           round
           size="large"
@@ -95,13 +86,14 @@
 <script setup>
 import UIButton from '~/components/ui/UIButton'
 import UICounter from '~/components/ui/UICounter'
+import UIColorBox from '~/components/ui/UIColorBox'
 
 const cartStore = useCartStore()
 const route = useRoute()
 const { toUSD } = useCurrency()
 
 const itemBundle = ref({})
-const variant = ref('')
+const selectedColor = ref('')
 const qty = ref(1)
 
 let errorMessage = ref('')
@@ -117,7 +109,9 @@ const { data: item } = await useAsyncData('items', () =>
 
 onMounted(() => {
   itemBundle.value = item.value?.bundles ? item.value?.bundles[0] : {}
-  variant.value = item.value.variant ? item.value.variant[0] : ''
+  selectedColor.value = item.value.variant
+    ? item.value.variant[Object.keys(item.value?.variant)[0]]
+    : ''
 })
 
 function handleBundleChange(item) {
@@ -130,8 +124,8 @@ function handleQtyChange(value) {
 
 function updateCart() {
   const cartObject = {
-    variantId: variant.value,
-    quantity: form.qty,
+    variantId: selectedColor.value,
+    quantity: qty.value,
     title: item.value.itemTitle,
     price: itemPrice.value || item.value.price,
     itemPhoto: item.value?.imageUrl || '',
