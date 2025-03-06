@@ -1,5 +1,6 @@
 <template>
   <el-row class="product__grid">
+    <button @click="handleHello">hello</button>
     <div class="product__grid-right">
       <ul class="product__grid-w">
         <li
@@ -53,6 +54,7 @@ import HeartIcon from '~/components/icons/HeartIcon.vue'
 
 const isFavHovered = ref('')
 const { toUSD } = useCurrency()
+const { $toast } = useNuxtApp()
 
 defineProps({
   products: {
@@ -66,7 +68,8 @@ function addToWishlist() {
 }
 
 function handleHello() {
-  console.log('hello one')
+  // console.log('hello one', $noty)
+  $toast.success('Hello')
 }
 </script>
 
