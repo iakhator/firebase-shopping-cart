@@ -89,6 +89,8 @@ import UICounter from '~/components/ui/UICounter'
 import UIColorBox from '~/components/ui/UIColorBox'
 
 const cartStore = useCartStore()
+const productStore = useProductStore()
+
 const route = useRoute()
 const { toUSD } = useCurrency()
 
@@ -101,11 +103,11 @@ const loading = ref(true)
 
 const productId = route.params.itemId
 
+const item = computed(() => productStore.product)
 const itemPrice = computed(() => itemBundle.value.price * qty.value)
 
-const { data: item } = await useAsyncData('items', () =>
-  $fetch(`/api/products/${productId}`)
-)
+// get product
+productStore.getProduct(productId)
 
 onMounted(() => {
   itemBundle.value = item.value?.bundles ? item.value?.bundles[0] : {}

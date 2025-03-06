@@ -15,6 +15,6 @@ export default defineEventHandler(async (event) => {
 
     // Return an error response
     setResponseStatus(event, 500)
-    return { error: 'Failed to fetch products' }
+    return { message: 'Failed to fetch products' }
   }
 })

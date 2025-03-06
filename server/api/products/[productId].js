@@ -8,21 +8,20 @@ export default defineEventHandler(async (event) => {
     const productDoc = await db.collection('products').doc(productId).get()
 
     if (!productDoc.exists) {
-      throw new H3Error({
-        statusCode: 404,
-        statusMessage: 'Product not found',
-      })
+      // Return a 404 response if the product is not found
+      setResponseStatus(event, 404)
+      return { message: 'Product not found' }
     }
 
     // Return the product data with its ID
-    return { ...productDoc.data(), id: productDoc.id }
+    return { product: { ...productDoc.data(), id: productDoc.id } }
   } catch (error) {
     console.error('Error fetching product:', error)
 
     // Handle error and return a 500 response
-    throw new H3Error({
-      statusCode: 500,
-      statusMessage: 'Failed to fetch product',
-    })
+    setResponseStatus(event, 500)
+    return {
+      message: 'Failed to fetch product',
+    }
   }
 })
