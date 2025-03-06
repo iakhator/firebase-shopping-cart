@@ -71,6 +71,7 @@ function handleHello() {
 </script>
 
 <style lang="scss" scoped>
+//  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 .product__grid {
   a {
     &:hover {

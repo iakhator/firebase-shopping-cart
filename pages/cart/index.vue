@@ -47,7 +47,6 @@
         <UIButton
           size="large"
           class="black checkout-btn"
-          :loading="loading"
           @click="register(registerFormRef)"
           label="Go to Checkout →"
         />
