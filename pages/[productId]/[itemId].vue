@@ -124,22 +124,20 @@ function handleQtyChange(value) {
   qty.value = value
 }
 
-function updateCart() {
-  const cartObject = {
-    variantId: selectedColor.value,
-    quantity: qty.value,
-    title: item.value.itemTitle,
-    price: itemPrice.value || item.value.price,
-    itemPhoto: item.value?.imageUrl || '',
-    productId,
-  }
-  if (!cartObject.variantId) {
-    errorMessage.value = 'You must select a variant'
-  } else {
-    // store.dispatch('addToCart', cartObject)
-    cartStore.addToCart(cartObject, productId)
-    errorMessage.value = ''
-  }
+async function updateCart() {
+  const { data, error } = await useFetch('/api/cart/add', {
+    method: 'post',
+    body: {
+      userId: 1,
+      productId: item.value.id,
+      quantity: qty.value,
+      name: item.value.name,
+      price: itemPrice.value || item.value.price,
+      variant: selectedColor.value,
+    },
+  })
+
+  console.log(data, 'data')
 }
 
 function buyNow() {}

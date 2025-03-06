@@ -4,7 +4,6 @@
     :size="size"
     :icon="icon"
     :disabled="disabled"
-    @click="$emit('click')"
   >
     <slot />
     {{ label }}
