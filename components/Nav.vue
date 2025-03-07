@@ -103,7 +103,7 @@ onMounted(async () => {
   categories.value = cat
 })
 
-const quantity = computed(() => cartStore.totalQty)
+const quantity = computed(() => 0)
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 const loggedInUser = computed(
   () => authStore.user?.name || authStore.user?.displayName || ''

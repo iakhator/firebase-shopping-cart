@@ -125,19 +125,22 @@ function handleQtyChange(value) {
 }
 
 async function updateCart() {
-  const { data, error } = await useFetch('/api/cart/add', {
-    method: 'post',
-    body: {
-      userId: 1,
-      productId: item.value.id,
-      quantity: qty.value,
-      name: item.value.name,
-      price: itemPrice.value || item.value.price,
-      variant: selectedColor.value,
-    },
-  })
+  if (!selectedColor.value) {
+    errorMessage.value = 'Please select a color'
+    return
+  }
 
-  console.log(data, 'data')
+  const product = {
+    userId: 1,
+    productId: item.value.id,
+    quantity: qty.value,
+    name: item.value.name,
+    price: itemPrice.value || item.value.price,
+    variant: selectedColor.value,
+    bundle: `${itemBundle.value.ram}/${itemBundle.value.storage}`,
+  }
+
+  cartStore.addToCart(product)
 }
 
 function buyNow() {}
