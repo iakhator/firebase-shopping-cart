@@ -8,6 +8,19 @@ export const useCartStore = defineStore('cart', {
   },
 
   actions: {
+    async fetchCart(userId) {
+      try {
+        const { cart } = await $fetch(`/api/cart/get`, {
+          params: { userId, guestId: this.guestId },
+        })
+
+        this.cart = cart
+
+        this.updateTotals()
+      } catch (error) {
+        console.error('Error fetching cart:', error)
+      }
+    },
     async addToCart(product) {
       const { $toast } = useNuxtApp()
       try {
@@ -23,7 +36,8 @@ export const useCartStore = defineStore('cart', {
           return
         }
 
-        console.log(data.value, 'data')
+        console.log(data.value.cartItem, 'cartItem', product.variant, 'variant')
+
         const existingIndex = this.cart.findIndex(
           (item) =>
             item.productId === data.value.cartItem.productId &&
@@ -31,9 +45,11 @@ export const useCartStore = defineStore('cart', {
             item.bundle === data.value.cartItem.bundle
         )
 
+        console.log(existingIndex, 'existingIndex')
+
         if (existingIndex !== -1) {
-          this.cart[existingIndex].quantity += data.value?.cartItem.quantity
-          this.cart[existingIndex].price += data.value?.cartItem.price
+          this.cart[existingIndex].quantity = data.value?.cartItem.quantity
+          this.cart[existingIndex].price = data.value?.cartItem.price
         } else {
           this.cart.push(data.value?.cartItem)
         }

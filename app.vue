@@ -15,6 +15,12 @@
 
 <script setup>
 import { Toaster } from 'vue-sonner'
+
+const cartStore = useCartStore()
+
+onMounted(() => {
+  cartStore.fetchCart(1)
+})
 </script>
 
 <style></style>
