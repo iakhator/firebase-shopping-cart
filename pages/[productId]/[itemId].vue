@@ -1,87 +1,113 @@
 <template>
     <el-row class="product__grid product">
-        <el-col :md="10">
-            <div>
-                <img
-                    :src="item.imageUrl"
-                    class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}"
-                    alt
-                />
-            </div>
-        </el-col>
-        <el-col :md="8" class="item__contents">
-            <div class="item__contents-head">
-                <h3 class="capitalize item__contents-name">{{ item.name }}</h3>
-                <span class="item__contents-quantity-price">{{
-                    toUSD(itemPrice)
-                }}</span>
-                <p class="item__contents-description">{{ item.description }}</p>
-            </div>
-            <div class="variant">
-                <el-col class="item__contents-variant">
-                    <div
-                        v-if="item && item.bundles?.length > 0"
-                        class="item__contents-bundle"
-                    >
-                        <p class="item__contents-spec-variant">
-                            <span>Bundles </span>: 16GB/256GB
-                        </p>
-
-                        <UIButton
-                            :class="{ 'is-active': itemBundle.id === item.id }"
-                            v-for="item in item.bundles"
-                            @click="handleBundleChange(item)"
-                            :key="item.id"
-                            :label="`${item.ram}/${item.storage}`"
-                            variant="transparent"
-                            size="large"
+        <el-col>
+            <el-row>
+                <el-col :md="10">
+                    <div>
+                        <img
+                            :src="item.imageUrl"
+                            class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}"
+                            alt
                         />
-                    </div>
-                    <div class="item__contents-variants">
-                        <p class="item__contents-spec-variant">
-                            <span>Color</span>: {{ capitalize(selectedColor) }}
-                        </p>
-                        <UIColorBox
-                            :variants="item.variant"
-                            :activeVariant="selectedColor"
-                            @update:activeVariant="selectedColor = $event"
-                        />
-                        <p class="error el-tag--danger" v-if="errorMessage">
-                            {{ errorMessage }}
-                        </p>
                     </div>
                 </el-col>
-            </div>
-            <div class="action-qty">
-                <UICounter v-model="qty" />
-                <UIButton
-                    round
-                    size="large"
-                    class="black"
-                    @click="updateCart"
-                    label="Add to cart"
-                />
-            </div>
-        </el-col>
-        <el-col :md="6"> Shipped to you by <strong>Monaco</strong> </el-col>
-    </el-row>
-    <el-row>
-        <el-col>
-            <el-tabs class="el-card-options">
-                <el-tab-pane label="Product Details">
-                    <div class="item__contents-specifications">
-                        <p
-                            v-for="(specification, key) in item.specification"
-                            :key="key"
-                        >
-                            <span class="item__contents-spec">{{ key }} :</span>
-                            {{ specification }}
+                <el-col :md="8" class="item__contents">
+                    <div class="item__contents-head">
+                        <h3 class="capitalize item__contents-name">
+                            {{ item.name }}
+                        </h3>
+                        <span class="item__contents-quantity-price">{{
+                            toUSD(itemPrice)
+                        }}</span>
+                        <p class="item__contents-description">
+                            {{ item.description }}
                         </p>
                     </div>
-                </el-tab-pane>
-                <el-tab-pane label="Ratings/Review">Ratings/Review</el-tab-pane>
-                <el-tab-pane label="FAQ">FAQ</el-tab-pane>
-            </el-tabs>
+                    <div class="variant">
+                        <el-col class="item__contents-variant">
+                            <div
+                                v-if="item && item.bundles?.length > 0"
+                                class="item__contents-bundle"
+                            >
+                                <p class="item__contents-spec-variant">
+                                    <span>Bundles </span>: 16GB/256GB
+                                </p>
+
+                                <UIButton
+                                    :class="{
+                                        'is-active': itemBundle.id === item.id,
+                                    }"
+                                    v-for="item in item.bundles"
+                                    @click="handleBundleChange(item)"
+                                    :key="item.id"
+                                    :label="`${item.ram}/${item.storage}`"
+                                    variant="transparent"
+                                    size="large"
+                                />
+                            </div>
+                            <div class="item__contents-variants">
+                                <p class="item__contents-spec-variant">
+                                    <span>Color</span>:
+                                    {{ capitalize(selectedColor) }}
+                                </p>
+                                <UIColorBox
+                                    :variants="item.variant"
+                                    :activeVariant="selectedColor"
+                                    @update:activeVariant="
+                                        selectedColor = $event
+                                    "
+                                />
+                                <p
+                                    class="error el-tag--danger"
+                                    v-if="errorMessage"
+                                >
+                                    {{ errorMessage }}
+                                </p>
+                            </div>
+                        </el-col>
+                    </div>
+                    <div class="action-qty">
+                        <UICounter v-model="qty" />
+                        <UIButton
+                            round
+                            size="large"
+                            class="black"
+                            @click="updateCart"
+                            label="Add to cart"
+                        />
+                    </div>
+                </el-col>
+                <el-col :md="6">
+                    Shipped to you by <strong>Monaco</strong>
+                </el-col>
+            </el-row>
+        </el-col>
+        <el-col>
+            <el-row>
+                <el-col>
+                    <el-tabs class="el-card-options">
+                        <el-tab-pane label="Product Details">
+                            <div class="item__contents-specifications">
+                                <p
+                                    v-for="(
+                                        specification, key
+                                    ) in item.specification"
+                                    :key="key"
+                                >
+                                    <span class="item__contents-spec"
+                                        >{{ key }} :</span
+                                    >
+                                    {{ specification }}
+                                </p>
+                            </div>
+                        </el-tab-pane>
+                        <el-tab-pane label="Ratings/Review"
+                            >Ratings/Review</el-tab-pane
+                        >
+                        <el-tab-pane label="FAQ">FAQ</el-tab-pane>
+                    </el-tabs>
+                </el-col>
+            </el-row>
         </el-col>
     </el-row>
 </template>

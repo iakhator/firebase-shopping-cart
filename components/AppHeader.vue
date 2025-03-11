@@ -11,31 +11,41 @@
             @select="handleSelect"
             aria-label="Main Navigation Menu"
         >
-            <el-menu-item index="0">
-                <nuxt-link to="/" class="logo-link" aria-label="Home">
-                    <span class="brand-name">Your Brand</span>
-                </nuxt-link>
-            </el-menu-item>
+            <div class="el-top-menu">
+                <el-menu-item index="0">
+                    <nuxt-link to="/" class="logo-link" aria-label="Home">
+                        <span class="brand-name">Your Brand</span>
+                    </nuxt-link>
+                </el-menu-item>
 
-            <!-- Desktop Menu Items (hidden on mobile) -->
-            <div class="flex-grow" />
-            <div class="desktop-menu">
-                <el-menu-item
-                    index="5"
-                    class="el-menu-navlist"
-                    @click="dialogVisible = true"
-                >
-                    <user-icon />
-                </el-menu-item>
-                <el-menu-item
-                    index="3"
-                    class="el-menu-navlist"
-                    @click="() => navigateTo('/cart')"
-                >
-                    <el-badge :value="quantity" class="item">
-                        <shopping-bag />
-                    </el-badge>
-                </el-menu-item>
+                <!-- Desktop Menu Items (hidden on mobile) -->
+                <div class="flex-grow" />
+                <div class="desktop-menu">
+                    <el-menu-item
+                        index="5"
+                        role="button"
+                        @click="
+                            isAuthenticated
+                                ? toggleDrawer()
+                                : (dialogVisible = true)
+                        "
+                        class="el-menu-navlist"
+                    >
+                        <p class="display-name">
+                            {{ capitalize(loggedInUser) }}
+                        </p>
+                        <user-icon />
+                    </el-menu-item>
+                    <el-menu-item
+                        index="3"
+                        class="el-menu-navlist"
+                        @click="() => navigateTo('/cart')"
+                    >
+                        <el-badge :value="quantity" class="item">
+                            <shopping-bag />
+                        </el-badge>
+                    </el-menu-item>
+                </div>
             </div>
 
             <!-- Mobile Menu Button -->
@@ -50,51 +60,29 @@
                         <shopping-bag />
                     </el-badge>
                 </el-menu-item>
+                <el-menu-item
+                    v-if="!isAuthenticated"
+                    index="5"
+                    role="button"
+                    @click="() => navigateTo('/auth/login')"
+                    class="el-menu-navlist"
+                >
+                    <user-icon />
+                </el-menu-item>
                 <el-button
+                    v-else
                     type="primary"
                     circle
-                    @click="toggleMobileMenu"
+                    @click="toggleDrawer"
                     aria-label="Toggle mobile menu"
                     aria-expanded="false"
                     aria-controls="mobile-menu"
                 >
-                    <el-icon v-if="mobileMenuOpen"><Close /></el-icon>
+                    <el-icon v-if="profileOpen"><Close /></el-icon>
                     <el-icon v-else><Menu /></el-icon>
                 </el-button>
             </div>
         </el-menu>
-
-        <!-- Mobile Menu Drawer -->
-        <el-drawer
-            v-model="mobileMenuOpen"
-            title="Menu"
-            direction="rtl"
-            size="70%"
-            id="mobile-menu"
-        >
-            <el-menu
-                :default-active="activeIndex"
-                class="mobile-menu-items"
-                @select="handleMobileSelect"
-            >
-                <el-menu-item index="1">
-                    <nuxt-link to="/" aria-label="Home">Home</nuxt-link>
-                </el-menu-item>
-                <el-menu-item index="2">
-                    <nuxt-link to="/about" aria-label="About">About</nuxt-link>
-                </el-menu-item>
-                <el-menu-item index="3">
-                    <nuxt-link to="/services" aria-label="Services"
-                        >Services</nuxt-link
-                    >
-                </el-menu-item>
-                <el-menu-item index="4">
-                    <nuxt-link to="/contact" aria-label="Contact"
-                        >Contact</nuxt-link
-                    >
-                </el-menu-item>
-            </el-menu>
-        </el-drawer>
     </el-header>
 
     <Teleport to="body">
@@ -106,6 +94,37 @@
             <AuthModal @close-dialog="handleClose" />
         </el-dialog>
     </Teleport>
+
+    <!-- Profile Drawer -->
+    <el-drawer v-model="profileOpen" direction="rtl" id="mobile-menu">
+        <!-- <template #header="{ close, titleId, titleClass, title }">
+            <b>{{ title }}</b>
+        </template> -->
+        <div class="profile-content">
+            <div class="profile-avatar">
+                <el-avatar :icon="UserFilled" :size="70" />
+                <p>{{ capitalize(loggedInUser) }}</p>
+            </div>
+            <div class="el-menu-link">
+                <NuxtLink class="link" to="/profile" @click="close">
+                    <el-icon><Avatar /></el-icon><span>Profile</span></NuxtLink
+                >
+                <NuxtLink class="link" to="/order" @click="close"
+                    ><el-icon><Grid /></el-icon><span>Order</span></NuxtLink
+                >
+                <NuxtLink class="link" to="/about" @click="close"
+                    ><el-icon><Setting /></el-icon>
+                    <span>Preference</span></NuxtLink
+                >
+            </div>
+        </div>
+        <UIButton
+            variant="primary"
+            size="large"
+            @click="signOut"
+            label="SIGN OUT"
+        />
+    </el-drawer>
 </template>
 
 <script setup>
@@ -115,6 +134,7 @@ import UserIcon from '~/components/icons/UserIcon.vue'
 import AuthModal from '~/components/account/AuthModal.vue'
 import PopOver from '~/components/ui/PopOver.vue'
 import UIButton from '~/components/ui/UIButton.vue'
+import { UserFilled, Setting, Grid, Avatar } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -126,7 +146,7 @@ const dialogVisible = ref(false)
 const categories = ref([])
 
 const activeIndex = ref('1')
-const mobileMenuOpen = ref(false)
+const profileOpen = ref(false)
 
 // Handle desktop menu selection
 const handleSelect = (key) => {
@@ -140,8 +160,9 @@ const handleMobileSelect = (key) => {
 }
 
 // Toggle mobile menu
-const toggleMobileMenu = () => {
-    mobileMenuOpen.value = !mobileMenuOpen.value
+const toggleDrawer = () => {
+    console.log('toggleDrawer')
+    profileOpen.value = !profileOpen.value
 }
 
 onMounted(async () => {
@@ -162,20 +183,29 @@ function handleClose() {
 async function signOut() {
     await authStore.logout()
     navigateTo('/')
+    await nextTick()
+    toggleDrawer()
 }
 </script>
 
 <style lang="scss" scoped>
-.app-header {
-    position: sticky;
+/* .el-menu-demo {
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
     top: 0;
+} */
+
+.app-header {
+    position: fixed;
+    width: 100vw;
     z-index: 100;
     padding: 0;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     background-color: $black;
 }
 
-.el-menu-demo {
+.el-top-menu {
     width: 1600px;
     display: flex;
     align-items: center;
@@ -217,6 +247,27 @@ async function signOut() {
     display: flex;
     align-items: baseline;
     justify-content: baseline;
+}
+
+.display-name {
+    margin-right: 5px;
+    color: $white;
+}
+
+.profile-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-direction: column;
+}
+
+.el-avatar {
+    background-color: $black;
+
+    &--icon {
+        font-size: 40px;
+    }
 }
 
 /* Mobile styles */
@@ -264,5 +315,9 @@ button:focus {
     height: 100%;
     text-decoration: none;
     color: inherit;
+}
+
+.profile-content {
+    flex: 1;
 }
 </style>

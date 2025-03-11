@@ -93,6 +93,7 @@ const removeItem = (item) => {
         border-radius: 12px;
         padding: 20px;
         border: 1px solid #cac1c1;
+        width: 100%;
 
         .cart-item {
             display: flex;
@@ -100,6 +101,7 @@ const removeItem = (item) => {
             gap: 15px;
             padding: 10px 0;
             border-bottom: 1px solid #cac1c1;
+            width: 100%;
 
             &:last-child {
                 border-bottom: none;
@@ -138,6 +140,11 @@ const removeItem = (item) => {
             .item-actions {
                 display: flex;
                 gap: 20px;
+
+                @media (max-width: 768px) {
+                    flex-direction: column;
+                    align-items: end;
+                }
             }
 
             .delete-btn {

@@ -74,11 +74,6 @@ const rules = reactive({
 async function login(formEl) {
     loading.value = true
 
-    setTimeout(() => {
-        console.log('timeout')
-        console.log(loading.value, 'loading')
-    }, 2000)
-
     try {
         let isValid
         if (!formEl) return
@@ -89,13 +84,12 @@ async function login(formEl) {
             loading.value = false
             return false
         }
-        // const response = await authStore.signIn(ruleForm.value)
-        // if (response) {
-        //   formEl.resetFields()
-        //   emit('close-dialog')
-        // }
-        //
-        console.log('meeting', ruleForm.value.email)
+        const response = await authStore.signIn(ruleForm.value)
+        if (response) {
+            formEl.resetFields()
+            navigateTo('/')
+            emit('close-dialog')
+        }
     } catch (error) {
         console.log(error.response, 'error')
     } finally {
@@ -103,3 +97,9 @@ async function login(formEl) {
     }
 }
 </script>
+
+<style lang="scss">
+.info {
+    margin-bottom: 0.5rem;
+}
+</style>

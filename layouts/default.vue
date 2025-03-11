@@ -1,11 +1,13 @@
 <template>
-    <AppHeader />
-    <el-container class="app-layout">
-        <!-- <Nav /> -->
-        <el-main class="container-wrapper">
-            <slot />
-        </el-main>
-    </el-container>
+    <div class="app-layout">
+        <el-container>
+            <AppHeader />
+            <!-- <Nav /> -->
+            <div class="container-wrapper">
+                <slot />
+            </div>
+        </el-container>
+    </div>
 </template>
 
 <script setup>
@@ -20,7 +22,14 @@ import AppHeader from '~/components/AppHeader'
 
 .container-wrapper {
     width: 1600px;
-    max-width: 1600px;
-    margin: 30px auto;
+    /* max-width: 1600px; */
+    margin: 80px auto 30px auto;
+    padding: 20px;
 }
+/*
+.el-main {
+    flex-basis: 100%;
+    flex-grow: 0;
+    flex-shrink: 0;
+} */
 </style>

@@ -18,12 +18,12 @@ export const useAuthStore = defineStore('auth', {
           password,
         )
 
-        console.log(userCredential.user.refreshToken, 'user credentials')
-        // const idToken = await userCredential.user.getIdToken()
-        // const response = await $fetch('/api/auth/login', {
-        //   method: 'POST',
-        //   body: { idToken },
-        // })
+        // console.log(userCredential.user.refreshToken, 'user credentials')
+        const idToken = await userCredential.user.getIdToken()
+        const response = await $fetch('/api/auth/login', {
+          method: 'POST',
+          body: { idToken },
+        })
 
         await this.restoreSession()
 
