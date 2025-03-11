@@ -97,9 +97,6 @@
 
     <!-- Profile Drawer -->
     <el-drawer v-model="profileOpen" direction="rtl" id="mobile-menu">
-        <!-- <template #header="{ close, titleId, titleClass, title }">
-            <b>{{ title }}</b>
-        </template> -->
         <div class="profile-content">
             <div class="profile-avatar">
                 <el-avatar :icon="UserFilled" :size="70" />

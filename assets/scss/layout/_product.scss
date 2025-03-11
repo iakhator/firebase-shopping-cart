@@ -1,68 +1,75 @@
 .product__grid {
-  margin: 10px auto ;
-  width: 1600px;
-  display: flex;
-  font-weight: 500;
-  // margin-top: 130px;
+    margin: 10px auto;
+    width: 1600px;
 
-  &-right {
-    width: 100%;
-  }
+    @media (max-width: 768px) {
+        width: 100%;
+    }
+    @media (max-width: 480px) {
+        flex-direction: column;
+    }
+
+    display: flex;
+    font-weight: 500;
+    // margin-top: 130px;
+
+    &-right {
+        width: 100%;
+    }
 }
 
-
 .product__grid-w {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-  gap: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 40px;
 
-  &__list {
-    // width: 18.95833vw;
-    // background-color: $white;
-    // border-radius: 10px;
+    &__list {
+        // width: 18.95833vw;
+        // background-color: $white;
+        // border-radius: 10px;
 
-    a:hover {
-      // border: 1px solid #e4e7ed;
-      // padding: 13px;
-      border-radius: 5px;
-      // box-shadow: 0 2px 9px #cdcdcd;
-      transition: padding 0.1s ease-in;
+        a:hover {
+            // border: 1px solid #e4e7ed;
+            // padding: 13px;
+            border-radius: 5px;
+            // box-shadow: 0 2px 9px #cdcdcd;
+            transition: padding 0.1s ease-in;
+        }
+
+        span {
+            display: flex;
+            pointer-events: none;
+        }
+
+        &-img {
+            height: 270px;
+            position: relative;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 15px;
+            margin-bottom: 10px;
+
+            img {
+                border-radius: 15px;
+            }
+        }
+        &-content {
+            padding: 10px;
+        }
+
+        &-title {
+            padding: 10px 0 0;
+            font-size: 14px;
+            line-height: 1.25em;
+            max-width: 200px;
+        }
+
+        &-price {
+            padding: 10px 0 0;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 0.5em;
+            margin: 10px 0;
+        }
     }
-
-    span {
-      display: flex;
-      pointer-events: none;
-    }
-
-    &-img {
-      height: 270px;
-      position: relative;
-      width: 100%;
-      background: #ffffff;
-      border-radius:15px;
-      margin-bottom: 10px;
-
-      img {
-        border-radius: 15px;
-      }
-    }
-   &-content {
-      padding: 10px;
-   }
-
-    &-title {
-      padding: 10px 0 0;
-      font-size: 14px;
-      line-height: 1.25em;
-      max-width: 200px;
-    }
-
-    &-price {
-      padding: 10px 0 0;
-      font-size: 16px;
-      font-weight: 600;
-      line-height: 0.5em;
-      margin: 10px 0;
-    }
-  }
 }
