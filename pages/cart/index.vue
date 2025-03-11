@@ -14,7 +14,7 @@
                         class="item-image"
                     />
                     <div class="item-details">
-                        <h3>{{ item.name }}</h3>
+                        <p class="item-name">{{ item.name }}</p>
                         <p>Bundle: {{ item.bundle }}</p>
                         <p>Color: {{ item.variant }}</p>
                         <p class="price">${{ item.price }}</p>
@@ -29,7 +29,7 @@
             </div>
 
             <div class="order-summary">
-                <h2>Order Summary</h2>
+                <h3>Order Summary</h3>
                 <div class="summary-row">
                     <span>Subtotal</span> <span>${{ subtotal }}</span>
                 </div>
@@ -216,6 +216,11 @@ const removeItem = (item) => {
         .checkout-btn {
             margin-top: 15px;
         }
+    }
+
+    .item-name {
+        font-weight: bold;
+        font-size: 0.865rem;
     }
 }
 
