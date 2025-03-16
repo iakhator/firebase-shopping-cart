@@ -18,16 +18,14 @@ export const useAuthStore = defineStore('auth', {
           password,
         )
 
-        // console.log(userCredential.user.refreshToken, 'user credentials')
         const idToken = await userCredential.user.getIdToken()
-        const response = await $fetch('/api/auth/login', {
+        const refreshToken = userCredential.user.refreshToken
+        const response = await $fetch('/api/auth/session', {
           method: 'POST',
-          body: { idToken },
+          body: { idToken, refreshToken },
         })
 
-        await this.restoreSession()
-
-        return response.success
+        await this.fetchUser()
       } catch (error) {
         if (error.code === 'auth/user-not-found') {
           this.errorMessage = 'User not found'
@@ -44,26 +42,56 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async signUp({ email, password, firstName, lastName }) {
-      this.errorMessage = ''
-      const response = await $fetch('/api/auth/register', {
-        method: 'POST',
-        body: { email, firstName, lastName, password },
-      })
+      try {
+        const { $auth, $createUserWithEmailAndPassword } = useNuxtApp()
+        const userCred = await $createUserWithEmailAndPassword(
+          $auth,
+          email,
+          password,
+        )
+        const idToken = await userCred.user.getIdToken()
+        const refreshToken = userCred.user.refreshToken
 
-      if (response) {
-        await this.signIn({ email, password })
+        const response = await $fetch('/api/auth/session', {
+          method: 'POST',
+          body: { idToken, refreshToken },
+        })
+
+        await $fetch('/api/user', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${idToken}`, // Secure with token
+          },
+          body: {
+            uid: userCred.user.uid,
+            email: userCred.user.email,
+            firstName: firstName,
+            lastName: lastName,
+            createdDate: new Date().toISOString(),
+          },
+        })
+
+        await this.fetchUser()
+
+        return response.success
+      } catch (error) {
+        if (error.code === 'auth/email-already-in-use') {
+          this.errorMessage = 'Email already in use'
+          return
+        }
+
+        this.errorMessage = error.message
       }
-
-      return response.success
     },
 
     async logout() {
       try {
         const { $auth } = useNuxtApp()
+
+        // await $auth.signOut()
         const response = await $fetch('/api/auth/logout', { method: 'POST' })
 
         if (response.success) {
-          await $auth.signOut()
           this.isAuthenticated = false
           this.user = null
         }
@@ -72,9 +100,9 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async restoreSession() {
+    async fetchUser() {
       try {
-        const response = await $fetch('/api/auth/session')
+        const response = await $fetch('/api/user')
         this.isAuthenticated = response.authenticated
         this.user = response.user || null
       } catch (error) {

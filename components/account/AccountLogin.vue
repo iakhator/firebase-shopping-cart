@@ -72,26 +72,22 @@ const rules = reactive({
 })
 
 async function login(formEl) {
+    if (!formEl) return
+
     loading.value = true
 
     try {
-        let isValid
-        if (!formEl) return
-        await formEl.validate((valid) => {
-            isValid = valid
+        const isValid = await new Promise((resolve) => {
+            formEl.validate((valid) => resolve(valid))
         })
-        if (!isValid) {
-            loading.value = false
-            return false
-        }
-        const response = await authStore.signIn(ruleForm.value)
-        if (response) {
-            formEl.resetFields()
-            navigateTo('/')
-            emit('close-dialog')
-        }
-    } catch (error) {
-        console.log(error.response, 'error')
+
+        if (!isValid) return
+
+        await authStore.signIn(ruleForm.value)
+
+        formEl.resetFields()
+        emit('close-dialog')
+        navigateTo('/')
     } finally {
         loading.value = false
     }

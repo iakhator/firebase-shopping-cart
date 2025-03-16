@@ -23,6 +23,10 @@
     grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
     gap: 40px;
 
+    @media (max-width: 480px) {
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    }
+
     &__list {
         // width: 18.95833vw;
         // background-color: $white;
@@ -48,6 +52,10 @@
             background: #ffffff;
             border-radius: 15px;
             margin-bottom: 10px;
+
+            @media (max-width: 480px) {
+                height: 170px;
+            }
 
             img {
                 border-radius: 15px;

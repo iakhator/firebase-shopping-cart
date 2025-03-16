@@ -124,6 +124,7 @@ async function register(formEl) {
         formError.value = error.response?.data?.error || 'Something happened'
     } finally {
         loading.value = false
+        emit('close-dialog')
     }
 }
 </script>

@@ -26,13 +26,13 @@ export default defineNuxtPlugin(() => {
   const auth = getAuth(firebaseApp)
   const firestore = getFirestore(firebaseApp)
 
-  // setPersistence(auth, inMemoryPersistence)
-  //   .then(() => {
-  //     console.log('🔐 Auth persistence set')
-  //   })
-  //   .catch((error) => {
-  //     console.error('❌ Failed to set auth persistence:', error)
-  //   })
+  setPersistence(auth, inMemoryPersistence)
+    .then(() => {
+      console.log('🔐 Auth persistence set')
+    })
+    .catch((error) => {
+      console.error('❌ Failed to set auth persistence:', error)
+    })
 
   return {
     provide: {
