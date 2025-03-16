@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-  const refreshToken = getCookie(event, 'refreshToken')
+  const refreshToken = getCookie(event, 'refresh_token')
 
   if (!refreshToken) {
     return { success: false, message: 'No refresh token found' }
@@ -23,12 +23,25 @@ export default defineEventHandler(async (event) => {
     const newIdToken = refreshed.id_token
     const newRefreshToken = refreshed.refresh_token // May or may not change
 
+    console.log(
+      getCookie(event, 'auth_token'),
+      'old token',
+      newIdToken,
+      'refreshed',
+    )
+
     // Store the new tokens securely
-    setCookie(event, 'authToken', newIdToken, { httpOnly: true, secure: true })
-    setCookie(event, 'refreshToken', newRefreshToken, {
+    setCookie(event, 'auth_token', newIdToken, {
       httpOnly: true,
       secure: true,
+      sameSite: 'strict',
+      path: '/',
+      maxAge: 3600,
     })
+    // setCookie(event, 'refreshToken', newRefreshToken, {
+    //   httpOnly: true,
+    //   secure: true,
+    // })
 
     return { success: true, token: newIdToken }
   } catch (error) {
