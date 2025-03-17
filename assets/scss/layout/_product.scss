@@ -1,6 +1,12 @@
 .product__grid {
     margin: 10px auto;
-    width: 1600px;
+    width: 100%;
+    display: flex;
+    font-weight: 500;
+
+    &-right {
+        width: 100%;
+    }
 
     @media (max-width: 768px) {
         width: 100%;
@@ -9,13 +15,7 @@
         flex-direction: column;
     }
 
-    display: flex;
-    font-weight: 500;
     // margin-top: 130px;
-
-    &-right {
-        width: 100%;
-    }
 }
 
 .product__grid-w {

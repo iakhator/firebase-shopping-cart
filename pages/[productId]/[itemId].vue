@@ -69,7 +69,6 @@
                     <div class="action-qty">
                         <UICounter v-model="qty" />
                         <UIButton
-                            round
                             size="large"
                             class="black"
                             @click="updateCart"
@@ -190,6 +189,11 @@ $gray: #dcdfe6;
     left: 0;
     top: 120%;
     z-index: 99;
+}
+
+img {
+    background: inherit;
+    mix-blend-mode: multiply;
 }
 
 :deep(.el-tabs__nav) {

@@ -7,17 +7,21 @@
                 <slot />
             </div>
         </el-container>
+        <!-- <AppFooter /> -->
     </div>
 </template>
 
 <script setup>
 import Nav from '~/components/Nav'
 import AppHeader from '~/components/AppHeader'
+import AppFooter from '~/components/AppFooter'
 </script>
 
 <style scoped>
 .app-layout {
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .container-wrapper {

@@ -158,7 +158,6 @@ const handleMobileSelect = (key) => {
 
 // Toggle mobile menu
 const toggleDrawer = () => {
-    console.log('toggleDrawer')
     profileOpen.value = !profileOpen.value
 }
 
