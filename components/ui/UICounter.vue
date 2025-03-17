@@ -4,6 +4,7 @@ import { Plus, Minus } from '@element-plus/icons-vue'
 const props = defineProps({
     modelValue: Number,
     min: { type: Number, default: 1 },
+    readonly: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['update:modelValue', 'increment', 'decrement'])
@@ -20,6 +21,11 @@ const decrease = () => {
 }
 
 const handleInput = (event) => {
+    if (props.readonly) {
+        event.preventDefault()
+        event.target.innerText = props.modelValue
+        return
+    }
     const selection = window.getSelection()
     const range = selection.getRangeAt(0)
     const offset = range.startOffset
@@ -69,11 +75,12 @@ const allowOnlyNumbers = (event) => {
         </div>
         <span
             class="count"
-            contenteditable="true"
+            :contenteditable="!readonly"
             ref="countSpan"
             @input="handleInput"
             @blur="validateInput"
             @keypress="allowOnlyNumbers"
+            :class="{ readonly: readonly }"
             >{{ modelValue }}</span
         >
         <div @click="increase" class="btn" role="button" tabindex="0">
@@ -99,6 +106,10 @@ const allowOnlyNumbers = (event) => {
     color: black;
     text-align: center;
     outline: none;
+}
+
+.count.readonly {
+    user-select: none;
 }
 
 .btn {

@@ -75,16 +75,60 @@ export const useCartStore = defineStore('cart', {
           },
         })
 
-        console.log(data, 'store')
         this.cart[itemIndex].quantity = data.value?.cartItem.quantity
         this.cart[itemIndex].price = data.value?.cartItem.price
         this.updateTotals()
       }
     },
-    decrementCartItem(id) {
-      const item = this.cart.find((item) => item.id === id)
-      if (item && item.quantity > 1) {
-        item.quantity--
+    async decrementCartItem({ userId, productId, bundle, variant }) {
+      const itemIndex = this.cart.findIndex(
+        (item) =>
+          item.productId === productId &&
+          item.variant === variant &&
+          item.bundle === bundle,
+      )
+
+      if (itemIndex !== -1) {
+        const { data } = await useFetch('/api/cart/decrement', {
+          method: 'POST',
+          body: {
+            userId,
+            productId,
+            bundle,
+            variant,
+          },
+        })
+
+        if (data.value?.cartItem.quantity <= 0) {
+          this.cart.splice(itemIndex, 1)
+        } else {
+          this.cart[itemIndex].quantity = data.value?.cartItem.quantity
+          this.cart[itemIndex].price = data.value?.cartItem.price
+        }
+        this.updateTotals()
+      }
+    },
+    async removeCartItem({ userId, productId, bundle, variant }) {
+      const itemIndex = this.cart.findIndex(
+        (item) =>
+          item.productId === productId &&
+          item.variant === variant &&
+          item.bundle === bundle,
+      )
+
+      if (itemIndex !== -1) {
+        const { data } = await useFetch('/api/cart/delete', {
+          method: 'POST',
+          body: {
+            userId,
+            productId,
+            bundle,
+            variant,
+          },
+        })
+
+        this.cart.splice(itemIndex, 1)
+
         this.updateTotals()
       }
     },

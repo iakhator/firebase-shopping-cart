@@ -1,11 +1,14 @@
 <template>
     <h3>YOUR BAG</h3>
     <div class="cart">
-        <!-- <div v-if="emptyCart" class="cart__empty">
-      <span><shopping-bag-black class="no__cart" /></span>
-      <p>Your bag is empty</p>
-    </div> -->
-        <div class="cart-container">
+        <div v-if="!cartItems.length" class="cart__empty">
+            <span><shopping-bag-black class="no__cart" /></span>
+            <p>Your bag is empty</p>
+            <nuxt-link to="/" class="btn btn-primary black"
+                >Start Shopping</nuxt-link
+            >
+        </div>
+        <div v-else class="cart-container">
             <div class="cart-items">
                 <div v-for="item in cartItems" :key="item.id" class="cart-item">
                     <img
@@ -22,6 +25,7 @@
                     <div class="item-actions">
                         <UICounter
                             v-model="item.quantity"
+                            :readonly="true"
                             @increment="() => increaseQuantity(item)"
                             @decrement="() => decreaseQuantity(item)"
                         />
@@ -67,6 +71,7 @@
 
 <script setup>
 import { Delete } from '@element-plus/icons-vue'
+import ShoppingBagBlack from '~/components/icons/ShoppingBagBlack.vue'
 const cartStore = useCartStore()
 
 const deliveryFee = 15
@@ -85,13 +90,20 @@ const increaseQuantity = (item) => {
     })
 }
 const decreaseQuantity = (item) => {
-    // cartStore.decrementCartItem({
-    //     userId: 1,
-    //     productId: item.productId,
-    // })
+    cartStore.decrementCartItem({
+        userId: 1,
+        productId: item.productId,
+        variant: item.variant,
+        bundle: item.bundle,
+    })
 }
 const removeItem = (item) => {
-    cartItems.value = cartItems.value.filter((i) => i.id !== item.id)
+    cartStore.removeCartItem({
+        userId: 1,
+        productId: item.productId,
+        variant: item.variant,
+        bundle: item.bundle,
+    })
 }
 </script>
 
@@ -243,6 +255,19 @@ const removeItem = (item) => {
     .item-name {
         font-weight: bold;
         font-size: 0.865rem;
+    }
+}
+
+.cart__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+
+    p {
+        font-size: 14px;
+        margin-top: 10px;
     }
 }
 
