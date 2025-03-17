@@ -6,13 +6,17 @@ const props = defineProps({
     min: { type: Number, default: 1 },
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'increment', 'decrement'])
 
 const countSpan = ref(null) // Reference to the span element
 
-const increase = () => emit('update:modelValue', props.modelValue + 1)
+const increase = () => {
+    emit('update:modelValue', props.modelValue + 1)
+    emit('increment')
+}
 const decrease = () => {
     if (props.modelValue > 1) emit('update:modelValue', props.modelValue - 1)
+    emit('decrement')
 }
 
 const handleInput = (event) => {

@@ -20,7 +20,11 @@
                         <p class="price">${{ item.price }}</p>
                     </div>
                     <div class="item-actions">
-                        <UICounter v-model="item.quantity" />
+                        <UICounter
+                            v-model="item.quantity"
+                            @increment="() => increaseQuantity(item)"
+                            @decrement="() => decreaseQuantity(item)"
+                        />
                         <button class="delete-btn" @click="removeItem(item)">
                             <el-icon><Delete /></el-icon>
                         </button>
@@ -72,9 +76,20 @@ const subtotal = computed(() => cartStore.totalPrice)
 const discount = computed(() => Math.round(subtotal.value * 0.05))
 const total = computed(() => subtotal.value - discount.value + deliveryFee)
 
-const increaseQuantity = (item) => item.quantity++
-const decreaseQuantity = (item) =>
-    item.quantity > 1 ? item.quantity-- : removeItem(item)
+const increaseQuantity = (item) => {
+    cartStore.incrementCartItem({
+        userId: 1,
+        productId: item.productId,
+        variant: item.variant,
+        bundle: item.bundle,
+    })
+}
+const decreaseQuantity = (item) => {
+    // cartStore.decrementCartItem({
+    //     userId: 1,
+    //     productId: item.productId,
+    // })
+}
 const removeItem = (item) => {
     cartItems.value = cartItems.value.filter((i) => i.id !== item.id)
 }

@@ -42,4 +42,10 @@ export const useProductStore = defineStore('product', {
       }
     },
   },
+
+  getters: {
+    getProducts: (state) => {
+      return state.products
+    },
+  },
 })
