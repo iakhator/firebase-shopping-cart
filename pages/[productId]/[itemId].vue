@@ -2,7 +2,7 @@
     <el-row class="product__grid product">
         <el-col>
             <el-row>
-                <el-col :md="10">
+                <el-col :md="12">
                     <div>
                         <img
                             :src="item.imageUrl"
@@ -11,14 +11,18 @@
                         />
                     </div>
                 </el-col>
-                <el-col :md="8" class="item__contents">
+                <el-col :md="12" class="item__contents">
                     <div class="item__contents-head">
                         <h3 class="capitalize item__contents-name">
                             {{ item.name }}
                         </h3>
+                    </div>
+                    <div class="item__contents-quantity-price">
                         <span class="item__contents-quantity-price">{{
                             toUSD(itemPrice)
                         }}</span>
+                    </div>
+                    <div class="item__contents-description">
                         <p class="item__contents-description">
                             {{ item.description }}
                         </p>
@@ -30,20 +34,23 @@
                                 class="item__contents-bundle"
                             >
                                 <p class="item__contents-spec-variant">
-                                    <span>Bundles </span>: 16GB/256GB
+                                    <span>Bundle Options </span>: 16GB/256GB
                                 </p>
 
-                                <UIButton
-                                    :class="{
-                                        'is-active': itemBundle.id === item.id,
-                                    }"
-                                    v-for="item in item.bundles"
-                                    @click="handleBundleChange(item)"
-                                    :key="item.id"
-                                    :label="`${item.ram}/${item.storage}`"
-                                    variant="transparent"
-                                    size="large"
-                                />
+                                <div class="item__contents-bundle-options">
+                                    <UIButton
+                                        :class="{
+                                            'is-active':
+                                                itemBundle.id === item.id,
+                                        }"
+                                        v-for="item in item.bundles"
+                                        @click="handleBundleChange(item)"
+                                        :key="item.id"
+                                        :label="`${item.ram}/${item.storage}`"
+                                        variant="transparent"
+                                        size="large"
+                                    />
+                                </div>
                             </div>
                             <div class="item__contents-variants">
                                 <p class="item__contents-spec-variant">
@@ -64,21 +71,38 @@
                                     {{ errorMessage }}
                                 </p>
                             </div>
+                            <div class="item__contents-quantity">
+                                <p class=""><span>Quantity</span>:</p>
+                                <UICounter v-model="qty" />
+                            </div>
                         </el-col>
                     </div>
                     <div class="action-qty">
-                        <UICounter v-model="qty" />
                         <UIButton
                             size="large"
-                            class="black"
+                            class="black flex-3"
                             @click="updateCart"
                             label="Add to cart"
-                        />
+                        >
+                            <template #icon>
+                                <el-icon class="mr-2"><ShoppingCart /></el-icon>
+                            </template>
+                        </UIButton>
+                        <UIButton
+                            size="large"
+                            @click="addToWhishlist"
+                            variant="secondary"
+                            label="Add to wishlist"
+                        >
+                            <template #icon>
+                                <el-icon class="mr-2"><Star /></el-icon>
+                            </template>
+                        </UIButton>
                     </div>
                 </el-col>
-                <el-col :md="6">
+                <!-- <el-col :md="6">
                     Shipped to you by <strong>Monaco</strong>
-                </el-col>
+                </el-col> -->
             </el-row>
         </el-col>
         <el-col>
@@ -115,6 +139,7 @@
 import UIButton from '~/components/ui/UIButton'
 import UICounter from '~/components/ui/UICounter'
 import UIColorBox from '~/components/ui/UIColorBox'
+import { ShoppingCart, Star, Van } from '@element-plus/icons-vue'
 
 const cartStore = useCartStore()
 const productStore = useProductStore()
@@ -208,7 +233,12 @@ img {
 
     h3 {
         font-weight: $font-weight-bold;
-        font-size: 1.5rem;
+        font-size: 1.875rem;
+    }
+
+    &-description {
+        margin-top: 1.5rem;
+        color: $--text-gray-600;
     }
 
     &-specifications {
@@ -240,6 +270,29 @@ img {
         display: flex;
         flex-direction: column;
         gap: 10px;
+
+        &-options {
+            margin-bottom: 10px;
+            display: flex;
+            gap: 10px;
+        }
+    }
+
+    &-quantity {
+        margin-bottom: 5px;
+        margin-top: 10px;
+
+        p {
+            margin-bottom: 8px;
+            font-size: $text-sm;
+        }
+
+        &-price {
+            display: flex;
+            font-weight: 700;
+            font-size: $text-2xl;
+            margin-top: 10px;
+        }
     }
 }
 
@@ -252,7 +305,6 @@ img {
 }
 
 .item__contents-spec-variant {
-    font-weight: $font-weight-bold;
     margin-bottom: 5px;
     font-size: 0.89rem;
 }
@@ -261,9 +313,8 @@ img {
 }
 
 .item__contents-quantity {
-    font-size: 0.89rem;
-    border-bottom: solid 1px $gray;
-    flex: 0 0 30%;
+    /* font-size: 0.89rem;
+    flex: 0 0 30%; */
 
     // &:after {
     //   content: '';

@@ -1,5 +1,27 @@
+/* font family */
+$font-brand: 'Bricolage Grotesque', sans-serif;
+$font-body: 'Montserrat', sans-serif;
+$font-fallback:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+    Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
 $fontMonseratt: 'Montserrat', sans-serif;
+
+// Font Stacks
+$font-stack-brand:
+    #{$font-brand},
+    #{$font-fallback};
+$font-stack-body:
+    #{$font-body},
+    #{$font-fallback};
+
+// Font Weights
+$font-light: 300;
+$font-regular: 400;
+$font-medium: 500;
+$font-semibold: 600;
+$font-bold: 700;
+
 $primary-color: #000000;
 $white: #ffffff;
 $base-color: #ffcf4b;
@@ -7,16 +29,37 @@ $off-white: #f8f5f2;
 $black: #000000;
 $off-black: #1b1a1a;
 
-//font weight
+/* color */
+$--text-gray-600: #333333;
+$--text-gray-700: #666666;
+$--text-gray-800: #999999;
+$--text-gray-900: #cccccc;
+$--primary-color: #000000;
+$--secondary-color: #1e90ff;
+
+/* font weight */
 $font-weight-light: 300;
 $font-weight-bold: 600;
 
-:root {
-  --el-color-success: #4caf50;  // ✅ Success (green)
-  --el-color-warning: #ffcc00;  // ⚠️ Warning (yellow)
-  --el-color-danger: #ff4d4f;   // ❌ Danger (red)
-  --el-color-info: #00bcd4;     // ℹ️ Info (cyan)
-  --el-color-primary: $primary-color;
+/* font sizes in rem */
+$text-xxs: 0.625rem; // 10px
+$text-xs: 0.75rem; // 12px
+$text-sm: 0.875rem; // 14px
+$text-base: 1rem; // 16px
+$text-md: 1.125rem; // 18px
+$text-lg: 1.25rem; // 20px
+$text-xl: 1.5rem; // 24px
+$text-2xl: 1.875rem; // 30px
+$text-3xl: 2rem; // 32px
+$text-4xl: 2.5rem; // 40px
+$text-5xl: 3rem; // 48px
 
-  --el-color-secondary: #1e90ff; // 🔵 Secondary color (e.g., blue)
-}
+/* :root {
+    --el-color-success: #4caf50; // ✅ Success (green)
+    --el-color-warning: #ffcc00; // ⚠️ Warning (yellow)
+    --el-color-danger: #ff4d4f; // ❌ Danger (red)
+    --el-color-info: #00bcd4; // ℹ️ Info (cyan)
+    --el-color-primary: $primary-color;
+
+    --el-color-secondary: #1e90ff; // 🔵 Secondary color (e.g., blue)
+} */

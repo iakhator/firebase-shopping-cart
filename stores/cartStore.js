@@ -61,7 +61,10 @@ export const useCartStore = defineStore('cart', {
 
     async incrementCartItem({ userId, productId, bundle, variant }) {
       const itemIndex = this.cart.findIndex(
-        (item) => item.productId === productId,
+        (item) =>
+          item.productId === productId &&
+          item.variant === variant &&
+          item.bundle === bundle,
       )
 
       if (itemIndex !== -1) {
