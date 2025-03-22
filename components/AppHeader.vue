@@ -14,28 +14,47 @@
             <div class="el-top-menu">
                 <el-menu-item index="0">
                     <nuxt-link to="/" class="logo-link" aria-label="Home">
-                        <span class="brand-name">Your Brand</span>
+                        <span class="brand-name">RingCart</span>
                     </nuxt-link>
                 </el-menu-item>
 
                 <!-- Desktop Menu Items (hidden on mobile) -->
                 <div class="flex-grow" />
                 <div class="desktop-menu">
-                    <el-menu-item
-                        index="5"
-                        role="button"
-                        @click="
-                            isAuthenticated
-                                ? toggleDrawer()
-                                : (dialogVisible = true)
-                        "
-                        class="el-menu-navlist"
-                    >
-                        <p class="display-name">
-                            {{ capitalize(loggedInUser) }}
-                        </p>
-                        <user-icon />
-                    </el-menu-item>
+                    <ClientOnly>
+                        <el-menu-item
+                            index="5"
+                            role="button"
+                            @click="
+                                isAuthenticated
+                                    ? toggleDrawer()
+                                    : (dialogVisible = true)
+                            "
+                            class="el-menu-navlist"
+                        >
+                            <p class="display-name">
+                                {{ capitalize(loggedInUser) }}
+                            </p>
+                            <user-icon />
+                        </el-menu-item>
+                        <el-menu-item
+                            index="3"
+                            class="el-menu-navlist"
+                            @click="() => navigateTo('/cart')"
+                        >
+                            <el-badge :value="quantity" class="item">
+                                <shopping-bag />
+                            </el-badge>
+                        </el-menu-item>
+                    </ClientOnly>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Button -->
+
+            <ClientOnly>
+                <div class="mobile-menu-button">
+                    <
                     <el-menu-item
                         index="3"
                         class="el-menu-navlist"
@@ -45,83 +64,74 @@
                             <shopping-bag />
                         </el-badge>
                     </el-menu-item>
+                    <el-menu-item
+                        v-if="!isAuthenticated"
+                        index="5"
+                        role="button"
+                        @click="() => navigateTo('/auth/login')"
+                        class="el-menu-navlist"
+                    >
+                        <user-icon />
+                    </el-menu-item>
+                    <el-button
+                        v-else
+                        type="primary"
+                        circle
+                        @click="toggleDrawer"
+                        aria-label="Toggle mobile menu"
+                        aria-expanded="false"
+                        aria-controls="mobile-menu"
+                    >
+                        <el-icon v-if="profileOpen"><Close /></el-icon>
+                        <el-icon v-else><Menu /></el-icon>
+                    </el-button>
                 </div>
-            </div>
-
-            <!-- Mobile Menu Button -->
-            <div class="mobile-menu-button">
-                <
-                <el-menu-item
-                    index="3"
-                    class="el-menu-navlist"
-                    @click="() => navigateTo('/cart')"
-                >
-                    <el-badge :value="quantity" class="item">
-                        <shopping-bag />
-                    </el-badge>
-                </el-menu-item>
-                <el-menu-item
-                    v-if="!isAuthenticated"
-                    index="5"
-                    role="button"
-                    @click="() => navigateTo('/auth/login')"
-                    class="el-menu-navlist"
-                >
-                    <user-icon />
-                </el-menu-item>
-                <el-button
-                    v-else
-                    type="primary"
-                    circle
-                    @click="toggleDrawer"
-                    aria-label="Toggle mobile menu"
-                    aria-expanded="false"
-                    aria-controls="mobile-menu"
-                >
-                    <el-icon v-if="profileOpen"><Close /></el-icon>
-                    <el-icon v-else><Menu /></el-icon>
-                </el-button>
-            </div>
+            </ClientOnly>
         </el-menu>
     </el-header>
 
-    <Teleport to="body">
-        <el-dialog
-            v-model="dialogVisible"
-            width="400"
-            :before-close="handleClose"
-        >
-            <AuthModal @close-dialog="handleClose" />
-        </el-dialog>
-    </Teleport>
+    <ClientOnly>
+        <Teleport to="body">
+            <el-dialog
+                v-model="dialogVisible"
+                width="400"
+                :before-close="handleClose"
+            >
+                <AuthModal @close-dialog="handleClose" />
+            </el-dialog>
+        </Teleport>
+    </ClientOnly>
 
     <!-- Profile Drawer -->
-    <el-drawer v-model="profileOpen" direction="rtl" id="mobile-menu">
-        <div class="profile-content">
-            <div class="profile-avatar">
-                <el-avatar :icon="UserFilled" :size="70" />
-                <p>{{ capitalize(loggedInUser) }}</p>
+    <ClientOnly>
+        <el-drawer v-model="profileOpen" direction="rtl" id="mobile-menu">
+            <div class="profile-content">
+                <div class="profile-avatar">
+                    <el-avatar :icon="UserFilled" :size="70" />
+                    <p>{{ capitalize(loggedInUser) }}</p>
+                </div>
+                <div class="el-menu-link">
+                    <NuxtLink class="link" to="/profile" @click="toggleDrawer">
+                        <el-icon><Avatar /></el-icon
+                        ><span>Profile</span></NuxtLink
+                    >
+                    <NuxtLink class="link" to="/order" @click="toggleDrawer"
+                        ><el-icon><Grid /></el-icon><span>Order</span></NuxtLink
+                    >
+                    <NuxtLink class="link" to="/about" @click="toggleDrawer"
+                        ><el-icon><Setting /></el-icon>
+                        <span>Preference</span></NuxtLink
+                    >
+                </div>
             </div>
-            <div class="el-menu-link">
-                <NuxtLink class="link" to="/profile" @click="close">
-                    <el-icon><Avatar /></el-icon><span>Profile</span></NuxtLink
-                >
-                <NuxtLink class="link" to="/order" @click="close"
-                    ><el-icon><Grid /></el-icon><span>Order</span></NuxtLink
-                >
-                <NuxtLink class="link" to="/about" @click="close"
-                    ><el-icon><Setting /></el-icon>
-                    <span>Preference</span></NuxtLink
-                >
-            </div>
-        </div>
-        <UIButton
-            variant="primary"
-            size="large"
-            @click="signOut"
-            label="SIGN OUT"
-        />
-    </el-drawer>
+            <UIButton
+                variant="primary"
+                size="large"
+                @click="signOut"
+                label="SIGN OUT"
+            />
+        </el-drawer>
+    </ClientOnly>
 </template>
 
 <script setup>
@@ -209,6 +219,11 @@ async function signOut() {
     margin: 0 auto;
 }
 
+.el-menu-item.is-active {
+    border: none;
+    color: $--text-white;
+}
+
 .flex-grow {
     flex-grow: 1;
 }
@@ -227,7 +242,8 @@ async function signOut() {
 
 .brand-name {
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
+    font-family: $font-stack-brand;
 }
 
 /* Desktop styles */
@@ -293,7 +309,7 @@ async function signOut() {
     }
 
     .brand-name {
-        font-size: 1rem;
+        font-size: $text-base;
     }
 }
 

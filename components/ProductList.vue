@@ -41,12 +41,30 @@
                                 /></el-button>
                             </div>
                             <div class="product__grid-btn">
-                                <el-button @click.prevent="handleHello">
-                                    Add To Cart
-                                </el-button>
-                                <el-button @click.prevent="handleHello">
-                                    Buy Now
-                                </el-button>
+                                <UIButton
+                                    size="large"
+                                    class="black flex-3"
+                                    @click.prevent="handleHello"
+                                    label="Add to cart"
+                                >
+                                    <template #icon>
+                                        <el-icon class="mr-2"
+                                            ><ShoppingCart
+                                        /></el-icon>
+                                    </template>
+                                </UIButton>
+                                <UIButton
+                                    size="large"
+                                    @click="handleHello"
+                                    variant="secondary"
+                                    label="Buy Now"
+                                >
+                                    <template #icon>
+                                        <el-icon class="mr-2"
+                                            ><Wallet
+                                        /></el-icon>
+                                    </template>
+                                </UIButton>
                             </div>
                         </div>
                     </a>
@@ -57,6 +75,8 @@
 </template>
 
 <script setup>
+import UIButton from '~/components/ui/UIButton'
+import { ShoppingCart, Star, Wallet } from '@element-plus/icons-vue'
 import HeartIcon from '~/components/icons/HeartIcon.vue'
 
 const isFavHovered = ref('')

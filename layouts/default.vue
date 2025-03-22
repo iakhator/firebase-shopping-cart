@@ -2,7 +2,6 @@
     <div class="app-layout">
         <el-container>
             <AppHeader />
-            <!-- <Nav /> -->
             <div class="container-wrapper">
                 <slot />
             </div>
@@ -12,7 +11,6 @@
 </template>
 
 <script setup>
-import Nav from '~/components/Nav'
 import AppHeader from '~/components/AppHeader'
 import AppFooter from '~/components/AppFooter'
 </script>

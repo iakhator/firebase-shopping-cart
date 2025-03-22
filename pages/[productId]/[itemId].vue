@@ -19,7 +19,7 @@
                     </div>
                     <div class="item__contents-quantity-price">
                         <span class="item__contents-quantity-price">{{
-                            toUSD(itemPrice)
+                            toUSD(itemPrice || 0)
                         }}</span>
                     </div>
                     <div class="item__contents-description">
@@ -175,6 +175,11 @@ function handleBundleChange(item) {
 
 function handleQtyChange(value) {
     qty.value = value
+}
+
+function addToWhishlist() {
+    // wishlistStore.addToWishlist(item.value.id)
+    console.log('Added to wishlist')
 }
 
 async function updateCart() {
