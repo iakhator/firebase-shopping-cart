@@ -1,15 +1,15 @@
 <template>
     <div class="box-container" role="radiogroup" aria-label="Color Variants">
         <div
-            v-for="(color, variant) in variants"
-            :key="variant"
+            v-for="(variant, index) in variants"
+            :key="variant.color"
             class="box"
-            :class="{ active: activeVariant === variant }"
-            :style="{ backgroundColor: color }"
+            :class="{ active: activeVariant.color === variant.color }"
+            :style="{ backgroundColor: variant.code || variant.color }"
             role="radio"
-            :aria-checked="activeVariant === variant"
-            :tabindex="activeVariant === variant ? '0' : '-1'"
-            @click="setActive(variant)"
+            :aria-checked="activeVariant.color === variant.color"
+            :tabindex="activeVariant.color === variant.color ? '0' : '-1'"
+            @click="setActive(variant, index)"
             @keydown="handleKeydown($event, variant)"
         ></div>
     </div>
@@ -22,15 +22,15 @@ const props = defineProps({
         required: true,
     },
     activeVariant: {
-        type: String,
-        default: null,
+        type: Object,
+        default: () => ({}),
     },
 })
 
 const emit = defineEmits(['update:activeVariant'])
 
-const setActive = (variant) => {
-    if (props.activeVariant !== variant) {
+const setActive = (variant, index) => {
+    if (props.activeVariant.color !== variant.color) {
         emit('update:activeVariant', variant)
     }
 }

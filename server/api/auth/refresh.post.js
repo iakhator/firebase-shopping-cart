@@ -23,13 +23,6 @@ export default defineEventHandler(async (event) => {
     const newIdToken = refreshed.id_token
     const newRefreshToken = refreshed.refresh_token // May or may not change
 
-    console.log(
-      getCookie(event, 'auth_token'),
-      'old token',
-      newIdToken,
-      'refreshed',
-    )
-
     // Store the new tokens securely
     setCookie(event, 'auth_token', newIdToken, {
       httpOnly: true,

@@ -12,14 +12,14 @@
             <div class="cart-items">
                 <div v-for="item in cartItems" :key="item.id" class="cart-item">
                     <img
-                        :src="item.imageUrl"
+                        :src="item.variant?.imageUrl"
                         :alt="item.name"
                         class="item-image"
                     />
                     <div class="item-details">
                         <p class="item-name">{{ item.name }}</p>
                         <p>Bundle: {{ item.bundle }}</p>
-                        <p>Color: {{ item.variant }}</p>
+                        <p>Color: {{ item.variant?.color }}</p>
                         <p class="price">${{ item.price }}</p>
                     </div>
                     <div class="item-actions">

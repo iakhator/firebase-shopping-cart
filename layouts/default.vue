@@ -6,7 +6,7 @@
                 <slot />
             </div>
         </el-container>
-        <!-- <AppFooter /> -->
+        <AppFooter />
     </div>
 </template>
 

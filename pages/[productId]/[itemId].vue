@@ -3,10 +3,10 @@
         <el-col>
             <el-row>
                 <el-col :md="12">
-                    <div>
+                    <div class="item-image">
                         <img
-                            :src="item.imageUrl"
-                            class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}"
+                            :src="itemImageUrl"
+                            class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle"
                             alt
                         />
                     </div>
@@ -55,13 +55,13 @@
                             <div class="item__contents-variants">
                                 <p class="item__contents-spec-variant">
                                     <span>Color</span>:
-                                    {{ capitalize(selectedColor) }}
+                                    {{ capitalize(selectedVariant.color) }}
                                 </p>
                                 <UIColorBox
                                     :variants="item.variant"
-                                    :activeVariant="selectedColor"
+                                    :activeVariant="selectedVariant"
                                     @update:activeVariant="
-                                        selectedColor = $event
+                                        selectedVariant = $event
                                     "
                                 />
                                 <p
@@ -148,7 +148,7 @@ const route = useRoute()
 const { toUSD } = useCurrency()
 
 const itemBundle = ref({})
-const selectedColor = ref('')
+const selectedVariant = ref({})
 const qty = ref(1)
 
 let errorMessage = ref('')
@@ -158,15 +158,16 @@ const productId = route.params.itemId
 
 const item = computed(() => productStore.product)
 const itemPrice = computed(() => itemBundle.value.price * qty.value)
+const itemImageUrl = computed(() =>
+    selectedVariant.value ? selectedVariant.value?.imageUrl : '',
+)
 
 // get product
 productStore.getProduct(productId)
 
 onMounted(() => {
     itemBundle.value = item.value?.bundles ? item.value?.bundles[0] : {}
-    selectedColor.value = item.value.variant
-        ? item.value.variant[Object.keys(item.value?.variant)[0]]
-        : ''
+    selectedVariant.value = item.value.variant ? item.value?.variant[0] : {}
 })
 
 function handleBundleChange(item) {
@@ -183,7 +184,7 @@ function addToWhishlist() {
 }
 
 async function updateCart() {
-    if (!selectedColor.value) {
+    if (!selectedVariant.value) {
         errorMessage.value = 'Please select a color'
         return
     }
@@ -195,7 +196,7 @@ async function updateCart() {
         originalPrice: item.value.price,
         name: item.value.name,
         price: itemPrice.value || item.value.price,
-        variant: selectedColor.value,
+        variant: selectedVariant.value,
         bundle: `${itemBundle.value.ram}/${itemBundle.value.storage}`,
         imageUrl: item.value.imageUrl || '',
     }
@@ -222,9 +223,17 @@ $gray: #dcdfe6;
     z-index: 99;
 }
 
+.item-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 img {
     background: inherit;
     mix-blend-mode: multiply;
+    height: 75%;
+    width: 75%;
 }
 
 :deep(.el-tabs__nav) {
