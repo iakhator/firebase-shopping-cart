@@ -11,7 +11,7 @@ export const useProductStore = defineStore('product', {
       try {
         const { data, error } = await useFetch('/api/products')
 
-        if (error.value) {
+        if (error && error?.value) {
           $toast.error(error.value)
 
           return
@@ -29,23 +29,23 @@ export const useProductStore = defineStore('product', {
       try {
         const { data, error } = await useFetch(`/api/products/${productId}`)
 
-        if (error.value) {
-          $toast.error(error.value)
+        if (error && error?.value) {
+          if ($toast) $toast.error(error?.value)
 
           return
         }
 
         this.product = data.value.product
       } catch (err) {
-        this.errorMessage = err.message
-        $toast.error(err.message) // Notify the user
+        this.errorMessage = err?.message || 'An error occurred'
+        if ($toast) $toast.error(err?.message) // Notify the user
       }
     },
   },
 
   getters: {
     getProducts: (state) => {
-      return state.products
+      return state?.products || []
     },
   },
 })

@@ -193,7 +193,7 @@ async function updateCart() {
         userId: 1,
         productId: item.value.id,
         quantity: qty.value,
-        originalPrice: item.value.price,
+        originalPrice: itemBundle.value?.price,
         name: item.value.name,
         price: itemPrice.value || item.value.price,
         variant: selectedVariant.value,

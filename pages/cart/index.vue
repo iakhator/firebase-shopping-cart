@@ -39,10 +39,11 @@
             <div class="order-summary">
                 <h3>Order Summary</h3>
                 <div class="summary-row">
-                    <span>Subtotal</span> <span>${{ subtotal }}</span>
+                    <span>Subtotal</span>
+                    <span>${{ Number(subtotal.toFixed(2)) }}</span>
                 </div>
                 <div class="summary-row discount">
-                    <span>Discount (-20%)</span>
+                    <span>Discount (-5%)</span>
                     <span class="discount-amount">-${{ discount }}</span>
                 </div>
                 <div class="summary-row">
@@ -50,7 +51,8 @@
                 </div>
                 <hr />
                 <div class="summary-row total">
-                    <span>Total</span> <span>${{ total }}</span>
+                    <span>Total</span>
+                    <span>${{ Number(total.toFixed(2)) }}</span>
                 </div>
 
                 <div class="promo-code">

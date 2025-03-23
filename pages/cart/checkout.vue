@@ -308,7 +308,10 @@ input:focus,
 
                 <div class="product-card" v-for="item in cartItems">
                     <div class="product-image">
-                        <img :src="item.imageUrl" alt="OnePlus 12 Dual 5G" />
+                        <img
+                            :src="item.variant?.imageUrl"
+                            alt="OnePlus 12 Dual 5G"
+                        />
                     </div>
                     <div class="product-details">
                         <h3>{{ item.name }}</h3>
@@ -554,9 +557,10 @@ input:focus,
                     </p>
                     <p class="order-number">Order #: ORD-{{ orderNumber }}</p>
                     <p>
-                        A confirmation email has been sent to {{ form.email }}
+                        A confirmation email has been sent to
+                        {{ ruleForm.email }}
                     </p>
-                    <el-button type="primary" @click="goToOrders"
+                    <el-button type="primary" size="large" @click="goToOrders"
                         >View Order Details</el-button
                     >
                 </div>
@@ -566,6 +570,7 @@ input:focus,
 </template>
 
 <script setup>
+import UIButton from '@/components/ui/UIButton.vue'
 import {
     User,
     CreditCard,
@@ -701,7 +706,7 @@ const goToOrders = () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .checkout-container {
     display: flex;
     min-height: 60vh;
@@ -745,7 +750,7 @@ const goToOrders = () => {
 
 .product-title,
 .payment-title {
-    font-size: 1.8rem;
+    font-size: $text-lg;
     margin-bottom: 2rem;
     font-weight: 600;
 }
@@ -755,7 +760,7 @@ const goToOrders = () => {
 }
 
 .section-title {
-    font-size: 1.2rem;
+    font-size: $text-md;
     margin: 1.5rem 0 1rem;
     font-weight: 500;
     color: #333;
@@ -792,7 +797,7 @@ const goToOrders = () => {
 }
 
 .product-details h3 {
-    font-size: 1.1rem;
+    font-size: $text-base;
     margin: 0 0 0.3rem 0;
 }
 

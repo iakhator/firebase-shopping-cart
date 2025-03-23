@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
     const parsed = JSON.parse(item)
     return (
       parsed.productId === productId &&
-      parsed.variant === variant &&
+      parsed.variant.color === variant.color &&
       parsed.bundle === bundle
     )
   })

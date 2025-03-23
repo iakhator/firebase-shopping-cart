@@ -3,6 +3,7 @@ export default defineEventHandler(async (event) => {
   if (!userId) return { error: 'User ID required' }
 
   const cartKey = `cart:${userId}`
+
   const cartItems = await redis.lrange(cartKey, 0, -1)
 
   // Find index of the target item
@@ -10,7 +11,7 @@ export default defineEventHandler(async (event) => {
     const parsed = JSON.parse(item)
     return (
       parsed.productId === productId &&
-      parsed.variant === variant &&
+      parsed.variant?.color === variant?.color &&
       parsed.bundle === bundle
     )
   })
