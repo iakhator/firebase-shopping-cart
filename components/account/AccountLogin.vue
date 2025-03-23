@@ -5,7 +5,9 @@
         :rules="rules"
         class="account__signin signin"
     >
-        <p>Sign into your acccount</p>
+        <div class="icon-container">
+            <el-icon :size="50" class="form-icon"><User /></el-icon>
+        </div>
 
         <Input v-model="ruleForm.email" prop="email" placeholder="Email" />
         <Input
@@ -33,6 +35,7 @@
 </template>
 
 <script setup>
+import { User } from '@element-plus/icons-vue'
 const emit = defineEmits(['close-dialog'])
 
 const authStore = useAuthStore()

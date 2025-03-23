@@ -5,62 +5,61 @@ export default defineEventHandler(async (event) => {
   try {
     // Get product data from the request body
     const productData = {
-      name: 'SAMSUNG Galaxy S25 Ultra',
+      name: 'Google Pixel 9',
       bundles: [
         {
           id: uuidv4(),
           ram: '12GB',
-          price: 1081.99,
-          storage: '126GB',
+          price: 639.9,
+          storage: '128GB',
         },
         {
           id: uuidv4(),
           ram: '12GB',
-          price: 1129.99,
-          storage: '512GB',
+          price: 748.45,
+          storage: '256GB',
         },
       ],
       imageUrl:
         'https://firebasestorage.googleapis.com/v0/b/fredl-c8ccd.appspot.com/o/products%2Fs24ultera.jpg?alt=media&token=841d0e05-f555-4736-b5f4-1e0455daa40d',
       description:
-        'OnePlus 12,16GB RAM+512GB,Dual-SIM,Unlocked Android Smartphone,Supports 50W Wireless Charging,Latest Mobile Processor,Advanced Hasselblad Camera,5400 mAh battery,2024',
-      categoryId: 'oneplus',
+        'Google Pixel 9Android Smartphone with Gemini, 24-Hour Battery, Advanced Camera, and 6.3" Actua Display',
+      categoryId: 'pixel',
       variant: [
         {
-          color: 'Titanium',
+          color: 'obsidian',
+          code: '#0B0C0C',
           imageUrl:
-            'https://firebasestorage.googleapis.com/v0/b/fredl-c8ccd.appspot.com/o/products%2Fs24ultera.jpg?alt=media&token=841d0e05-f555-4736-b5f4-1e0455daa40d',
+            'https://firebasestorage.googleapis.com/v0/b/fredl-c8ccd.appspot.com/o/products%2Fpixel9_black.jpg?alt=media&token=17437fd6-9d79-4af3-853d-5d87490c8a88',
         },
         {
-          color: 'navy',
+          color: 'wintergreen',
+          code: '#56806F',
           imageUrl:
-            'https://firebasestorage.googleapis.com/v0/b/fredl-c8ccd.appspot.com/o/products%2Fs24_navy.jpg?alt=media&token=1232ae73-1780-4a32-8be2-4f1e0371b1aa',
+            'https://firebasestorage.googleapis.com/v0/b/fredl-c8ccd.appspot.com/o/products%2Fpixel9_wintergreen.jpg?alt=media&token=2bf27388-e128-47d3-8dc6-464ad5e4341a',
         },
         {
-          color: 'black',
+          color: 'peony',
+          code: '#D94F70',
           imageUrl:
-            'https://firebasestorage.googleapis.com/v0/b/fredl-c8ccd.appspot.com/o/products%2Fs24_black.jpg?alt=media&token=39d7e82f-56f6-48e4-b72d-e8f36db83aca',
+            'https://firebasestorage.googleapis.com/v0/b/fredl-c8ccd.appspot.com/o/products%2Fpixel9_pheony.jpg?alt=media&token=37ea9a7c-dd74-4184-b90a-9a5e4b3bdf4d',
         },
         {
-          color: 'icyblue',
+          color: 'porcelain',
+          code: '#F8F4F0',
           imageUrl:
-            'https://firebasestorage.googleapis.com/v0/b/fredl-c8ccd.appspot.com/o/products%2Fs24_icy.jpg?alt=media&token=2d3beb17-3d28-40c8-b7e6-c4b9e32959cf',
-        },
-        {
-          color: 'mint',
-          imageUrl:
-            'https://firebasestorage.googleapis.com/v0/b/fredl-c8ccd.appspot.com/o/products%2Fs24_mint.jpg?alt=media&token=d0eb3411-0e08-41b9-a4df-a971b7c1b6aa',
+            'https://firebasestorage.googleapis.com/v0/b/fredl-c8ccd.appspot.com/o/products%2Fpixel9_porcelain.jpg?alt=media&token=d9aeee72-7e80-4419-bd87-357f27a013a0',
         },
       ],
       specification: {
-        OS: 'One UI 7, Android 15',
+        OS: 'Android 14',
         Camera: '50MP main camera, 12MP ultra-wide camera',
         Battery: '5400mAh, 50W wireless charging',
-        Display: '6.7 inches, 120Hz refresh rate',
+        Display: '6.3 inches, 120Hz refresh rate',
         Processor: 'Snapdragon',
         RAM: '12GB',
-        Storage: '256GB/512GB',
-        Resolution: '2960 x 1440',
+        Storage: '128GB/256GB',
+        Resolution: 'either `1080 x 2340` or `2160 x 1080`',
       },
     }
 

@@ -61,7 +61,7 @@
                 <UIButton
                     size="large"
                     class="black checkout-btn"
-                    @click="register(registerFormRef)"
+                    @click="navigateTo('/cart/checkout')"
                     label="Go to Checkout →"
                 />
             </div>
@@ -81,7 +81,7 @@ const subtotal = computed(() => cartStore.totalPrice)
 const discount = computed(() => Math.round(subtotal.value * 0.05))
 const total = computed(() => subtotal.value - discount.value + deliveryFee)
 
-const increaseQuantity = (item) => {
+function increaseQuantity(item) {
     cartStore.incrementCartItem({
         userId: 1,
         productId: item.productId,
@@ -89,7 +89,7 @@ const increaseQuantity = (item) => {
         bundle: item.bundle,
     })
 }
-const decreaseQuantity = (item) => {
+function decreaseQuantity(item) {
     cartStore.decrementCartItem({
         userId: 1,
         productId: item.productId,
@@ -97,7 +97,7 @@ const decreaseQuantity = (item) => {
         bundle: item.bundle,
     })
 }
-const removeItem = (item) => {
+function removeItem(item) {
     cartStore.removeCartItem({
         userId: 1,
         productId: item.productId,

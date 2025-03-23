@@ -5,7 +5,9 @@
         :rules="rules"
         class="account__register register"
     >
-        <p>Create an account</p>
+        <div class="icon-container">
+            <el-icon :size="50" class="form-icon"><User /></el-icon>
+        </div>
         <Input v-model="ruleForm.email" prop="email" placeholder="Email" />
         <Input
             v-model="ruleForm.firstname"
@@ -41,6 +43,7 @@
 </template>
 
 <script setup>
+import { User, Message, Lock } from '@element-plus/icons-vue'
 const authStore = useAuthStore()
 
 const emit = defineEmits(['close-dialog'])

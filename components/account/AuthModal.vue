@@ -69,4 +69,11 @@ const handleClose = () => {
 //     margin-right: 5px;
 //   }
 // }
+
+.icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
 </style>
