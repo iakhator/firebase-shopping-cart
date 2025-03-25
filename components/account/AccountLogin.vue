@@ -6,7 +6,7 @@
         class="account__signin signin"
     >
         <div class="icon-container">
-            <el-icon :size="50" class="form-icon"><User /></el-icon>
+            <el-icon :size="40" class="form-icon"><User /></el-icon>
         </div>
 
         <Input v-model="ruleForm.email" prop="email" placeholder="Email" />
@@ -86,11 +86,14 @@ async function login(formEl) {
 
         if (!isValid) return
 
-        await authStore.signIn(ruleForm.value)
+        const response = await authStore.signIn(ruleForm.value)
+        console.log(response)
 
-        formEl.resetFields()
-        emit('close-dialog')
-        navigateTo('/')
+        if (!errorMessage.value) {
+            formEl.resetFields()
+            emit('close-dialog')
+            navigateTo('/')
+        }
     } finally {
         loading.value = false
     }

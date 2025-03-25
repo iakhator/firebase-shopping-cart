@@ -1,5 +1,5 @@
-// import { auth } from '../config/firebaseConfig.js'
 import { adminAuth } from '~/server/utils/firebaseAdmin'
+import { redis } from '~/server/utils/redisClient'
 
 export default defineEventHandler(async (event) => {
   // const authToken = getCookie(event, 'token')
@@ -21,6 +21,9 @@ export default defineEventHandler(async (event) => {
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
     })
+
+    // Sync cart on login/register
+    await syncCartOnLogin(event, decodedToken.uid, redis)
 
     return { authenticated: true, user: decodedToken }
   } catch (error) {

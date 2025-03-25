@@ -1,8 +1,9 @@
+import { getUserOrGuestId } from '~/server/utils/authUtils'
+
 export default defineEventHandler(async (event) => {
-  const { userId } = getQuery(event)
+  const userId = await getUserOrGuestId(event)
 
   if (!userId) return { error: 'User ID required' }
-
   const cartKey = `cart:${userId}`
 
   try {

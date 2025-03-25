@@ -32,9 +32,14 @@
 
 //   return { message: 'Quantity decreased or item removed' }
 // })
+//
+
+// import { adminAuth } from '~/server/utils/firebaseAdmin'
+import { getUserOrGuestId } from '~/server/utils/authUtils'
 
 export default defineEventHandler(async (event) => {
-  const { userId, productId, variant, bundle } = await readBody(event)
+  const userId = await getUserOrGuestId(event, adminAuth)
+  const { productId, variant, bundle } = await readBody(event)
   if (!userId) return { error: 'User ID required' }
 
   const cartKey = `cart:${userId}`

@@ -190,7 +190,6 @@ async function updateCart() {
     }
 
     const product = {
-        userId: 1,
         productId: item.value.id,
         quantity: qty.value,
         originalPrice: itemBundle.value?.price,

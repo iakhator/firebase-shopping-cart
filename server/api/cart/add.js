@@ -1,9 +1,7 @@
-// import { adminAuth } from '~/server/utils/firebaseAdmin'
-import { getUserOrGuestId } from '~/utils'
+import { getUserOrGuestId } from '~/server/utils/authUtils'
 
 export default defineEventHandler(async (event) => {
   const {
-    userId,
     productId,
     quantity,
     originalPrice,
@@ -14,68 +12,64 @@ export default defineEventHandler(async (event) => {
     imageUrl,
   } = await readBody(event)
 
-  // const authToken = getCookie(event, 'auth_token')
+  const userId = await getUserOrGuestId(event)
 
-  const decodedToken = getUserOrGuestId(event)
+  if (!userId) return { error: 'User ID required' }
 
-  console.log(decodedToken, 'token')
+  const cartKey = `cart:${userId}`
 
-  // if (!userId) return { error: 'User ID required' }
+  try {
+    const cartItems = await redis.lrange(cartKey, 0, -1)
 
-  // const cartKey = `cart:${userId}`
+    let updated = false
+    let newCart = cartItems.map((item) => {
+      const parsedItem = JSON.parse(item)
 
-  // try {
-  //   const cartItems = await redis.lrange(cartKey, 0, -1)
+      if (
+        parsedItem.productId === productId &&
+        parsedItem.variant === variant &&
+        parsedItem.bundle === bundle
+      ) {
+        parsedItem.quantity += quantity
+        parsedItem.price += price
+        updated = true
+        return JSON.stringify(parsedItem)
+      }
 
-  //   let updated = false
-  //   let newCart = cartItems.map((item) => {
-  //     const parsedItem = JSON.parse(item)
+      return item
+    })
 
-  //     if (
-  //       parsedItem.productId === productId &&
-  //       parsedItem.variant === variant &&
-  //       parsedItem.bundle === bundle
-  //     ) {
-  //       parsedItem.quantity += quantity
-  //       parsedItem.price += price
-  //       updated = true
-  //       return JSON.stringify(parsedItem)
-  //     }
+    let newCartItem
+    if (!updated) {
+      newCartItem = {
+        productId,
+        name,
+        price,
+        originalPrice,
+        variant,
+        quantity,
+        bundle,
+        imageUrl,
+      }
+      newCart.push(JSON.stringify(newCartItem))
+    } else {
+      newCartItem = JSON.parse(
+        newCart.find((item) => {
+          const parsedItem = JSON.parse(item)
+          return (
+            parsedItem.productId === productId &&
+            parsedItem.variant === variant &&
+            parsedItem.bundle === bundle
+          )
+        }),
+      )
+    }
 
-  //     return item
-  //   })
+    await redis.del(cartKey)
+    await redis.rpush(cartKey, ...newCart)
 
-  //   let newCartItem
-  //   if (!updated) {
-  //     newCartItem = {
-  //       productId,
-  //       name,
-  //       price,
-  //       originalPrice,
-  //       variant,
-  //       quantity,
-  //       bundle,
-  //       imageUrl,
-  //     }
-  //     newCart.push(JSON.stringify(newCartItem))
-  //   } else {
-  //     newCartItem = JSON.parse(
-  //       newCart.find((item) => {
-  //         const parsedItem = JSON.parse(item)
-  //         return (
-  //           parsedItem.productId === productId &&
-  //           parsedItem.variant === variant &&
-  //           parsedItem.bundle === bundle
-  //         )
-  //       }),
-  //     )
-  //   }
-
-  //   await redis.del(cartKey)
-  //   await redis.rpush(cartKey, ...newCart)
-
-  //   return { cartItem: newCartItem, message: 'Product added to cart' }
-  // } catch (error) {
-  //   return { error: error.message }
-  // }
+    return { cartItem: newCartItem, message: 'Product added to cart' }
+  } catch (error) {
+    return { error: error.message }
+  }
 })

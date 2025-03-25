@@ -5,9 +5,7 @@
         :rules="rules"
         class="account__register register"
     >
-        <div class="icon-container">
-            <el-icon :size="50" class="form-icon"><User /></el-icon>
-        </div>
+        <div class="icon-container">Create an Account</div>
         <Input v-model="ruleForm.email" prop="email" placeholder="Email" />
         <Input
             v-model="ruleForm.firstname"

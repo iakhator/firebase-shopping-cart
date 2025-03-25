@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useCartStore } from '~/stores/cartStore'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -10,6 +11,7 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async signIn({ email, password }) {
       this.errorMessage = ''
+      console.log(email, password)
       try {
         const { $auth, $signInWithEmailAndPassword } = useNuxtApp()
         const userCredential = await $signInWithEmailAndPassword(
@@ -20,7 +22,7 @@ export const useAuthStore = defineStore('auth', {
 
         const idToken = await userCredential.user.getIdToken()
         const refreshToken = userCredential.user.refreshToken
-        const response = await $fetch('/api/auth/session', {
+        await $fetch('/api/auth/session', {
           method: 'POST',
           body: { idToken, refreshToken },
         })
@@ -86,7 +88,8 @@ export const useAuthStore = defineStore('auth', {
 
     async logout() {
       try {
-        const { $auth } = useNuxtApp()
+        const cartStore = useCartStore()
+        // const { $auth } = useNuxtApp()
 
         // await $auth.signOut()
         const response = await $fetch('/api/auth/logout', { method: 'POST' })
@@ -94,6 +97,7 @@ export const useAuthStore = defineStore('auth', {
         if (response.success) {
           this.isAuthenticated = false
           this.user = null
+          cartStore.fetchCart()
         }
       } catch (error) {
         console.error(error)
@@ -102,6 +106,7 @@ export const useAuthStore = defineStore('auth', {
 
     async fetchUser() {
       try {
+        const cartStore = useCartStore()
         const response = await $fetch('/api/user', {
           credentials: 'include',
           onResponseError: (context) => {
@@ -118,6 +123,7 @@ export const useAuthStore = defineStore('auth', {
         })
         this.isAuthenticated = response.authenticated
         this.user = response.user || null
+        cartStore.fetchCart()
       } catch (error) {
         this.isAuthenticated = false
         this.user = null

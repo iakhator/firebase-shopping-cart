@@ -8,11 +8,9 @@ export const useCartStore = defineStore('cart', {
   },
 
   actions: {
-    async fetchCart(userId) {
+    async fetchCart() {
       try {
-        const { cart } = await $fetch(`/api/cart/get`, {
-          params: { userId, guestId: this.guestId },
-        })
+        const { cart } = await $fetch(`/api/cart/get`)
 
         this.cart = cart
 
@@ -59,7 +57,7 @@ export const useCartStore = defineStore('cart', {
       }
     },
 
-    async incrementCartItem({ userId, productId, bundle, variant }) {
+    async incrementCartItem({ productId, bundle, variant }) {
       const itemIndex = this.cart.findIndex(
         (item) =>
           item.productId === productId &&
@@ -71,7 +69,6 @@ export const useCartStore = defineStore('cart', {
         const { data } = await useFetch('/api/cart/increment', {
           method: 'POST',
           body: {
-            userId,
             productId,
             bundle,
             variant,
@@ -83,7 +80,7 @@ export const useCartStore = defineStore('cart', {
         this.updateTotals()
       }
     },
-    async decrementCartItem({ userId, productId, bundle, variant }) {
+    async decrementCartItem({ productId, bundle, variant }) {
       const itemIndex = this.cart.findIndex(
         (item) =>
           item.productId === productId &&
@@ -95,7 +92,6 @@ export const useCartStore = defineStore('cart', {
         const { data } = await useFetch('/api/cart/decrement', {
           method: 'POST',
           body: {
-            userId,
             productId,
             bundle,
             variant,
@@ -111,7 +107,7 @@ export const useCartStore = defineStore('cart', {
         this.updateTotals()
       }
     },
-    async removeCartItem({ userId, productId, bundle, variant }) {
+    async removeCartItem({ productId, bundle, variant }) {
       const itemIndex = this.cart.findIndex(
         (item) =>
           item.productId === productId &&
@@ -123,7 +119,6 @@ export const useCartStore = defineStore('cart', {
         const { data } = await useFetch('/api/cart/delete', {
           method: 'POST',
           body: {
-            userId,
             productId,
             bundle,
             variant,
