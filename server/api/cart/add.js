@@ -1,5 +1,3 @@
-import { getUserOrGuestId } from '~/server/utils/authUtils'
-
 export default defineEventHandler(async (event) => {
   const {
     productId,

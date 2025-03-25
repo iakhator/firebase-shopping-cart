@@ -87,7 +87,6 @@ async function login(formEl) {
         if (!isValid) return
 
         const response = await authStore.signIn(ruleForm.value)
-        console.log(response)
 
         if (!errorMessage.value) {
             formEl.resetFields()

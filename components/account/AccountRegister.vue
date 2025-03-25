@@ -115,7 +115,6 @@ async function register(formEl) {
             }
 
             const response = await authStore.signUp(data)
-            console.log(response, 'response')
             if (response) {
                 formEl.resetFields()
                 emit('close-dialog')

@@ -11,7 +11,6 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async signIn({ email, password }) {
       this.errorMessage = ''
-      console.log(email, password)
       try {
         const { $auth, $signInWithEmailAndPassword } = useNuxtApp()
         const userCredential = await $signInWithEmailAndPassword(

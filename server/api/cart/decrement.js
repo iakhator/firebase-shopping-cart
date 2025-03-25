@@ -34,11 +34,8 @@
 // })
 //
 
-// import { adminAuth } from '~/server/utils/firebaseAdmin'
-import { getUserOrGuestId } from '~/server/utils/authUtils'
-
 export default defineEventHandler(async (event) => {
-  const userId = await getUserOrGuestId(event, adminAuth)
+  const userId = await getUserOrGuestId(event)
   const { productId, variant, bundle } = await readBody(event)
   if (!userId) return { error: 'User ID required' }
 

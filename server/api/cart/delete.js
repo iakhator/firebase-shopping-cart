@@ -1,5 +1,4 @@
 import { adminAuth } from '~/server/utils/firebaseAdmin'
-import { getUserOrGuestId } from '~/server/utils/authUtils'
 
 export default defineEventHandler(async (event) => {
   const userId = await getUserOrGuestId(event, adminAuth)
