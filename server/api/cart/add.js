@@ -1,3 +1,6 @@
+// import { adminAuth } from '~/server/utils/firebaseAdmin'
+import { getUserOrGuestId } from '~/utils'
+
 export default defineEventHandler(async (event) => {
   const {
     userId,
@@ -11,62 +14,68 @@ export default defineEventHandler(async (event) => {
     imageUrl,
   } = await readBody(event)
 
-  if (!userId) return { error: 'User ID required' }
+  // const authToken = getCookie(event, 'auth_token')
 
-  const cartKey = `cart:${userId}`
+  const decodedToken = getUserOrGuestId(event)
 
-  try {
-    const cartItems = await redis.lrange(cartKey, 0, -1)
+  console.log(decodedToken, 'token')
 
-    let updated = false
-    let newCart = cartItems.map((item) => {
-      const parsedItem = JSON.parse(item)
+  // if (!userId) return { error: 'User ID required' }
 
-      if (
-        parsedItem.productId === productId &&
-        parsedItem.variant === variant &&
-        parsedItem.bundle === bundle
-      ) {
-        parsedItem.quantity += quantity
-        parsedItem.price += price
-        updated = true
-        return JSON.stringify(parsedItem)
-      }
+  // const cartKey = `cart:${userId}`
 
-      return item
-    })
+  // try {
+  //   const cartItems = await redis.lrange(cartKey, 0, -1)
 
-    let newCartItem
-    if (!updated) {
-      newCartItem = {
-        productId,
-        name,
-        price,
-        originalPrice,
-        variant,
-        quantity,
-        bundle,
-        imageUrl,
-      }
-      newCart.push(JSON.stringify(newCartItem))
-    } else {
-      newCartItem = JSON.parse(
-        newCart.find((item) => {
-          const parsedItem = JSON.parse(item)
-          return (
-            parsedItem.productId === productId &&
-            parsedItem.variant === variant &&
-            parsedItem.bundle === bundle
-          )
-        }),
-      )
-    }
+  //   let updated = false
+  //   let newCart = cartItems.map((item) => {
+  //     const parsedItem = JSON.parse(item)
 
-    await redis.del(cartKey)
-    await redis.rpush(cartKey, ...newCart)
+  //     if (
+  //       parsedItem.productId === productId &&
+  //       parsedItem.variant === variant &&
+  //       parsedItem.bundle === bundle
+  //     ) {
+  //       parsedItem.quantity += quantity
+  //       parsedItem.price += price
+  //       updated = true
+  //       return JSON.stringify(parsedItem)
+  //     }
 
-    return { cartItem: newCartItem, message: 'Product added to cart' }
-  } catch (error) {
-    return { error: error.message }
-  }
+  //     return item
+  //   })
+
+  //   let newCartItem
+  //   if (!updated) {
+  //     newCartItem = {
+  //       productId,
+  //       name,
+  //       price,
+  //       originalPrice,
+  //       variant,
+  //       quantity,
+  //       bundle,
+  //       imageUrl,
+  //     }
+  //     newCart.push(JSON.stringify(newCartItem))
+  //   } else {
+  //     newCartItem = JSON.parse(
+  //       newCart.find((item) => {
+  //         const parsedItem = JSON.parse(item)
+  //         return (
+  //           parsedItem.productId === productId &&
+  //           parsedItem.variant === variant &&
+  //           parsedItem.bundle === bundle
+  //         )
+  //       }),
+  //     )
+  //   }
+
+  //   await redis.del(cartKey)
+  //   await redis.rpush(cartKey, ...newCart)
+
+  //   return { cartItem: newCartItem, message: 'Product added to cart' }
+  // } catch (error) {
+  //   return { error: error.message }
+  // }
 })
