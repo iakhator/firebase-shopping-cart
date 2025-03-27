@@ -20,7 +20,7 @@
                         <p class="item-name">{{ item.name }}</p>
                         <p>Bundle: {{ item.bundle }}</p>
                         <p>Color: {{ item.variant?.color }}</p>
-                        <p class="price">${{ item.price }}</p>
+                        <p class="price">{{ toUSD(item.price) }}</p>
                     </div>
                     <div class="item-actions">
                         <UICounter
@@ -40,7 +40,7 @@
                 <h3>Order Summary</h3>
                 <div class="summary-row">
                     <span>Subtotal</span>
-                    <span>${{ Number(subtotal.toFixed(2)) }}</span>
+                    <span>{{ toUSD(subtotal) }}</span>
                 </div>
                 <div class="summary-row discount">
                     <span>Discount (-5%)</span>
@@ -52,7 +52,7 @@
                 <hr />
                 <div class="summary-row total">
                     <span>Total</span>
-                    <span>${{ Number(total.toFixed(2)) }}</span>
+                    <span>{{ toUSD(total) }}</span>
                 </div>
 
                 <div class="promo-code">
@@ -73,6 +73,7 @@
 
 <script setup>
 import { Delete } from '@element-plus/icons-vue'
+const { toUSD } = useCurrency()
 import ShoppingBagBlack from '~/components/icons/ShoppingBagBlack.vue'
 const cartStore = useCartStore()
 

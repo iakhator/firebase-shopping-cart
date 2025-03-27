@@ -314,10 +314,13 @@ input:focus,
                         />
                     </div>
                     <div class="product-details">
-                        <h3>{{ item.name }}</h3>
+                        <h3>
+                            {{ item.name }}
+                        </h3>
                         <p class="product-variant">
                             {{ capitalize(item.variant?.color) }} |
-                            {{ item.bundle }}
+                            {{ item.bundle }} |
+                            <span>qty: {{ item.quantity }}</span>
                         </p>
                         <div class="product-price">{{ toUSD(item.price) }}</div>
                     </div>

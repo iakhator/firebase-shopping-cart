@@ -44,11 +44,11 @@
                 </div>
 
                 <div class="flex items-baseline">
-                    <span class="text-3xl font-bold"
-                        >${{ price.toFixed(2) }}</span
-                    >
+                    <span class="text-3xl font-bold">{{
+                        toUSD(price?.toFixed(2))
+                    }}</span>
                     <span class="text-sm text-gray-500 ml-2 line-through"
-                        >${{ originalPrice.toFixed(2) }}</span
+                        >${{ toUSD(originalPrice.toFixed(2)) }}</span
                     >
                 </div>
 
@@ -236,6 +236,7 @@
 
 <script setup>
 import { ref } from 'vue'
+const { toUSD } = useCurrency()
 import { ElMessage } from 'element-plus'
 import { ShoppingCart, Star, Van } from '@element-plus/icons-vue'
 
