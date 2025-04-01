@@ -75,6 +75,7 @@
 import { Delete } from '@element-plus/icons-vue'
 const { toUSD } = useCurrency()
 import ShoppingBagBlack from '~/components/icons/ShoppingBagBlack.vue'
+const authStore = useAuthStore()
 const cartStore = useCartStore()
 
 const deliveryFee = 15

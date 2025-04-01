@@ -395,6 +395,7 @@ input:focus,
                         <el-form-item label="Email" prop="email">
                             <el-input
                                 v-model="ruleForm.email"
+                                :value="authStore.user?.email"
                                 placeholder="your@email.com"
                                 size="large"
                             >
@@ -414,6 +415,7 @@ input:focus,
                                     <el-input
                                         v-model="ruleForm.firstName"
                                         placeholder="First Name"
+                                        :value="firstName"
                                         size="large"
                                     />
                                 </el-form-item>
@@ -424,6 +426,7 @@ input:focus,
                                         v-model="ruleForm.lastName"
                                         placeholder="Last Name"
                                         size="large"
+                                        :value="lastName"
                                     />
                                 </el-form-item>
                             </el-col>
@@ -661,11 +664,13 @@ const orderNumber = ref(
 )
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
-const loggedInUser = computed(() => authStore.loggedInUser)
+// const loggedInUser = computed(() => authStore.loggedInUser)
 const cartItems = computed(() => cartStore.cart)
 const subtotal = computed(() => cartStore.totalPrice)
 const discount = computed(() => Math.round(subtotal.value * 0.05))
 const totalPrice = computed(() => subtotal.value + deliveryFee - discount.value)
+const firstName = computed(() => authStore.user?.firstName || '')
+const lastName = computed(() => authStore.user?.lastName || '')
 
 // Initialize Stripe elements when component is mounted
 onMounted(async () => {
@@ -677,6 +682,17 @@ onMounted(async () => {
             console.log('Stripe elements would be initialized here')
         }, 500)
     }
+
+    ruleForm.value = {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        email: authStore.user?.email || '',
+        address: '',
+        street: '',
+        city: '',
+        country: '',
+        postalCode: '',
+    }
 })
 
 function goToPayment(formEl) {
@@ -686,7 +702,22 @@ function goToPayment(formEl) {
 
     formEl.validate((valid) => {
         if (valid) {
-            currentStep.value = 2
+            const userData = {
+                address: {
+                    address: ruleForm.value.address,
+                    street: ruleForm.value.street,
+                    city: ruleForm.value.city,
+                    country: ruleForm.value.country,
+                    postalCode: ruleForm.value.postalCode,
+                },
+                email: ruleForm.value.email,
+                firstName: ruleForm.value.firstName,
+                lastName: ruleForm.value.lastName,
+            }
+            const updatedUser = authStore.updateUser(userData)
+            if (updatedUser) {
+                currentStep.value = 2
+            }
         }
     })
 }

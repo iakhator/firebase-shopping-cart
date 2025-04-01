@@ -128,5 +128,19 @@ export const useAuthStore = defineStore('auth', {
         this.user = null
       }
     },
+
+    async updateUser(data) {
+      try {
+        const response = await $fetch('/api/user', {
+          method: 'POST',
+          body: data,
+          credentials: 'include',
+        })
+
+        return response.success || false
+      } catch (error) {
+        console.error(error)
+      }
+    },
   },
 })

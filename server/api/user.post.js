@@ -1,4 +1,4 @@
-import { adminAuth } from '~/server/utils/firebaseAdmin'
+import { adminAuth, adminFirestore } from '~/server/utils/firebaseAdmin'
 
 export default defineEventHandler(async (event) => {
   const idToken = getCookie(event, 'auth_token')
@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 
   let decodedToken
   try {
-    decodedToken = await getAuth().verifyIdToken(idToken)
+    decodedToken = await adminAuth.verifyIdToken(idToken)
   } catch (err) {
     throw createError({ statusCode: 401, statusMessage: 'Invalid token' })
   }
@@ -21,8 +21,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const { createdDate, ...metadata } = body
 
-  const db = getFirestore()
-  const userRef = db.collection('users').doc(uid)
+  const userRef = adminFirestore.collection('users').doc(uid)
 
   const doc = await userRef.get()
 

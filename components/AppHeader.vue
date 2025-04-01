@@ -129,7 +129,13 @@
                 size="large"
                 @click="signOut"
                 label="SIGN OUT"
-            />
+            >
+                <template #icon-right>
+                    <span class="ml-2">
+                        <el-icon><SwitchButton /></el-icon
+                    ></span>
+                </template>
+            </UIButton>
         </el-drawer>
     </ClientOnly>
 </template>
@@ -141,7 +147,13 @@ import UserIcon from '~/components/icons/UserIcon.vue'
 import AuthModal from '~/components/account/AuthModal.vue'
 import PopOver from '~/components/ui/PopOver.vue'
 import UIButton from '~/components/ui/UIButton.vue'
-import { UserFilled, Setting, Grid, Avatar } from '@element-plus/icons-vue'
+import {
+    UserFilled,
+    Setting,
+    Grid,
+    Avatar,
+    SwitchButton,
+} from '@element-plus/icons-vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
