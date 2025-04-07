@@ -496,11 +496,34 @@ input:focus,
 
                     <!-- Stripe Card Element -->
                     <div class="stripe-element-container">
-                        <div
-                            id="card-element"
-                            ref="cardElement"
-                            class="stripe-element"
-                        ></div>
+                        <div class="card-field">
+                            <label for="card-number-element">Card Number</label>
+                            <div
+                                id="card-number-element"
+                                class="stripe-element"
+                            ></div>
+                        </div>
+
+                        <div class="card-row">
+                            <div class="card-field expiry">
+                                <label for="card-expiry-element"
+                                    >Expiry Date</label
+                                >
+                                <div
+                                    id="card-expiry-element"
+                                    class="stripe-element"
+                                ></div>
+                            </div>
+
+                            <div class="card-field cvc">
+                                <label for="card-cvc-element">CVC</label>
+                                <div
+                                    id="card-cvc-element"
+                                    class="stripe-element"
+                                ></div>
+                            </div>
+                        </div>
+
                         <div
                             id="card-errors"
                             class="stripe-errors"
@@ -590,6 +613,7 @@ import {
     Discount,
     CircleCheckFilled,
 } from '@element-plus/icons-vue'
+const { $stripe } = useNuxtApp()
 const authStore = useAuthStore()
 const cartStore = useCartStore()
 const { toUSD } = useCurrency()
@@ -651,7 +675,10 @@ const rules = reactive({
 
 // Stripe and payment state
 const stripe = ref(null)
-const cardElement = ref(null)
+// const cardElement = ref(null)
+const cardNumberElement = ref(null)
+const cardExpiryElement = ref(null)
+const cardCvcElement = ref(null)
 const elements = ref(null)
 const cardError = ref('')
 const loading = ref(false)
@@ -678,9 +705,10 @@ onMounted(async () => {
     // and initialize it with your publishable key
     if (process.client) {
         // Simulating Stripe initialization for demo purposes
-        setTimeout(() => {
-            console.log('Stripe elements would be initialized here')
-        }, 500)
+        // setTimeout(() => {
+        //     console.log('Stripe elements would be initialized here')
+        // }, 500)
+        // stripeCard()
     }
 
     ruleForm.value = {
@@ -695,31 +723,104 @@ onMounted(async () => {
     }
 })
 
+watch(
+    () => currentStep.value,
+    (newStep) => {
+        if (newStep === 2 && process.client) {
+            nextTick(() => {
+                try {
+                    // Define base styles for all elements
+                    const elementStyle = {
+                        base: {
+                            fontSize: '14px',
+                            color: '#32325d',
+                            fontFamily: 'inherit',
+                            '::placeholder': {
+                                color: '#acafb7',
+                            },
+                            padding: '0 15px',
+                        },
+                        invalid: {
+                            color: '#fa755a',
+                            iconColor: '#fa755a',
+                        },
+                    }
+
+                    // Create fresh elements
+                    const elements = $stripe.elements()
+
+                    // Create and mount card number element
+                    cardNumberElement.value = elements.create('cardNumber', {
+                        style: elementStyle,
+                        placeholder: 'Card number',
+                    })
+                    cardNumberElement.value.mount('#card-number-element')
+
+                    // Create and mount card expiry element
+                    cardExpiryElement.value = elements.create('cardExpiry', {
+                        style: elementStyle,
+                    })
+                    cardExpiryElement.value.mount('#card-expiry-element')
+
+                    // Create and mount card CVC element
+                    cardCvcElement.value = elements.create('cardCvc', {
+                        style: elementStyle,
+                    })
+                    cardCvcElement.value.mount('#card-cvc-element')
+
+                    // Listen for errors on the card number element
+                    cardNumberElement.value.on('change', (event) => {
+                        if (event.error) {
+                            cardError.value = event.error.message
+                        } else {
+                            cardError.value = ''
+                        }
+                    })
+                } catch (err) {
+                    console.error('Error mounting Stripe elements:', err)
+                }
+            })
+        }
+    },
+    { immediate: true },
+)
+
+// function stripeCard() {
+//     if (process.client) {
+//         // Initialize Stripe elements, but don't mount yet
+//         // We'll handle mounting in the watcher when needed
+//         const elements = $stripe.elements()
+//         cardElement.value = elements.create('card')
+//     }
+// }
+
 function goToPayment(formEl) {
     console.log(formEl, 'formEl')
 
-    if (!formEl) return
+    // if (!formEl) return
 
-    formEl.validate((valid) => {
-        if (valid) {
-            const userData = {
-                address: {
-                    address: ruleForm.value.address,
-                    street: ruleForm.value.street,
-                    city: ruleForm.value.city,
-                    country: ruleForm.value.country,
-                    postalCode: ruleForm.value.postalCode,
-                },
-                email: ruleForm.value.email,
-                firstName: ruleForm.value.firstName,
-                lastName: ruleForm.value.lastName,
-            }
-            const updatedUser = authStore.updateUser(userData)
-            if (updatedUser) {
-                currentStep.value = 2
-            }
-        }
-    })
+    // formEl.validate((valid) => {
+    //     if (valid) {
+    //         const userData = {
+    //             address: {
+    //                 address: ruleForm.value.address,
+    //                 street: ruleForm.value.street,
+    //                 city: ruleForm.value.city,
+    //                 country: ruleForm.value.country,
+    //                 postalCode: ruleForm.value.postalCode,
+    //             },
+    //             email: ruleForm.value.email,
+    //             firstName: ruleForm.value.firstName,
+    //             lastName: ruleForm.value.lastName,
+    //         }
+    //         const updatedUser = authStore.updateUser(userData)
+    //         if (updatedUser) {
+    //             currentStep.value = 2
+    //         }
+    //     }
+    // })
+
+    currentStep.value = 2
 }
 
 // Process payment method
@@ -890,8 +991,6 @@ const goToOrders = () => {
 }
 
 .stripe-element-container {
-    border: 1px solid #dcdfe6;
-    padding: 1rem;
     border-radius: 4px;
     background-color: #fff;
     margin-bottom: 1rem;
@@ -948,6 +1047,61 @@ const goToOrders = () => {
     background-color: #f0f9eb;
     border-radius: 4px;
     color: #67c23a;
+}
+
+/* Card */
+.card-field {
+    margin-bottom: 1rem;
+}
+
+.card-field label {
+    display: block;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    color: #606266;
+    font-weight: 500;
+}
+
+.card-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.card-field.expiry {
+    flex: 1;
+}
+
+.card-field.cvc {
+    width: 40%;
+}
+
+.stripe-element {
+    background-color: white;
+    padding: 10px 12px;
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    min-height: 20px;
+}
+
+.stripe-element--focus {
+    border-color: #409eff;
+    box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+}
+
+.stripe-element--invalid {
+    border-color: #f56c6c;
+}
+
+/* Responsive adjustment */
+@media (max-width: 480px) {
+    .card-row {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .card-field.cvc {
+        width: 100%;
+    }
 }
 
 @media (max-width: 768px) {

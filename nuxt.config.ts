@@ -20,13 +20,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: process.env.npm_package_name || '',
-      // script: [
-      //   {
-      //     hid: 'stripe',
-      //     src: 'https://js.stripe.com/v3/',
-      //     defer: true,
-      //   },
-      // ],
+      script: [{ src: 'https://js.stripe.com/v3', async: true, defer: true }],
       meta: [
         {
           charset: 'utf-8',
@@ -84,66 +78,6 @@ export default defineNuxtConfig({
       STRIPE_CLIENT_KEY: process.env.STRIPE_CLIENT_KEY,
     },
   },
-
-  // security: {
-  //   nonce: true, // Enables nonce-based CSP for inline scripts in SSR mode
-  //   ssg: {
-  //     meta: true, // Enables CSP as a meta tag in SSG mode
-  //     hashScripts: true, // Enables CSP hash support for scripts in SSG mode
-  //   },
-  //   headers: {
-  //     contentSecurityPolicy: {
-  //       'script-src': [
-  //         "'self'",
-  //         'https://js.stripe.com',
-  //         'https://m.stripe.network',
-  //         "'strict-dynamic'", // Allows dynamically loaded scripts
-  //         "'nonce-{{nonce}}'", // Enables nonce support for inline scripts
-  //       ],
-  //       'frame-src': [
-  //         "'self'",
-  //         'https://js.stripe.com',
-  //         'https://hooks.stripe.com',
-  //       ],
-  //       'connect-src': [
-  //         "'self'",
-  //         'https://api.stripe.com',
-  //         'https://m.stripe.network',
-  //       ],
-  //       'img-src': [
-  //         "'self'",
-  //         'data:',
-  //         'https://firebasestorage.googleapis.com',
-  //       ],
-  //       'style-src': ["'self'", "'unsafe-inline'", 'https:'],
-  //       'object-src': ["'none'"],
-  //       'script-src-attr': ["'none'"],
-  //       'upgrade-insecure-requests': true,
-  //     },
-  //   },
-  // },
-  //
-
-  // security: {
-  //   headers: {
-  //     contentSecurityPolicy: {
-  //       'script-src': [
-  //         "'self'",
-  //         'https://js.stripe.com',
-  //         'https://m.stripe.network',
-  //         "'nonce-{{nonce}}'",
-  //       ],
-  //       'img-src': [
-  //         "'self'",
-  //         'data:',
-  //         'https://firebasestorage.googleapis.com',
-  //       ],
-  //       'frame-src': ["'self'", 'https://js.stripe.com'],
-  //       'connect-src': ["'self'", 'https://api.stripe.com'],
-  //     },
-  //   },
-  // },
-
   security: {
     nonce: true, // Enables nonce for scripts
     headers: {

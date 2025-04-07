@@ -89,10 +89,10 @@ async function login(formEl) {
         const response = await authStore.signIn(ruleForm.value)
 
         if (!errorMessage.value) {
-            formEl.resetFields()
             emit('close-dialog')
             navigateTo('/')
         }
+        formEl.resetFields()
     } finally {
         loading.value = false
     }
