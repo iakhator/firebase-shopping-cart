@@ -300,302 +300,329 @@ input:focus,
 </style> -->
 
 <template>
-    <div class="checkout-container">
-        <!-- Product Section (Left) -->
-        <div class="product-section">
-            <div class="product-content">
-                <h2 class="product-title">Order Summary</h2>
+    <ClientOnly>
+        <div class="checkout-container">
+            <!-- Product Section (Left) -->
+            <div class="product-section">
+                <div class="product-content">
+                    <h2 class="product-title">Order Summary</h2>
 
-                <div class="product-card" v-for="item in cartItems">
-                    <div class="product-image">
-                        <img
-                            :src="item.variant?.imageUrl"
-                            alt="OnePlus 12 Dual 5G"
-                        />
+                    <div class="product-card" v-for="item in cartItems">
+                        <div class="product-image">
+                            <img
+                                :src="item.variant?.imageUrl"
+                                alt="OnePlus 12 Dual 5G"
+                            />
+                        </div>
+                        <div class="product-details">
+                            <h3>
+                                {{ item.name }}
+                            </h3>
+                            <p class="product-variant">
+                                {{ capitalize(item.variant?.color) }} |
+                                {{ item.bundle }} |
+                                <span>qty: {{ item.quantity }}</span>
+                            </p>
+                            <div class="product-price">
+                                {{ toUSD(item.price) }}
+                            </div>
+                        </div>
                     </div>
-                    <div class="product-details">
-                        <h3>
-                            {{ item.name }}
-                        </h3>
-                        <p class="product-variant">
-                            {{ capitalize(item.variant?.color) }} |
-                            {{ item.bundle }} |
-                            <span>qty: {{ item.quantity }}</span>
-                        </p>
-                        <div class="product-price">{{ toUSD(item.price) }}</div>
-                    </div>
-                </div>
 
-                <div class="price-breakdown">
-                    <div class="price-row">
-                        <span>Subtotal</span>
-                        <span>{{ toUSD(subtotal) }}</span>
+                    <div class="price-breakdown">
+                        <div class="price-row">
+                            <span>Subtotal</span>
+                            <span>{{ toUSD(subtotal) }}</span>
+                        </div>
+                        <div class="price-row discount">
+                            <span>
+                                <el-tag
+                                    size="small"
+                                    effect="dark"
+                                    type="success"
+                                >
+                                    <el-icon><Discount /></el-icon> 15% OFF
+                                </el-tag>
+                            </span>
+                            <span> - {{ toUSD(discount) }}</span>
+                        </div>
+                        <div class="price-row">
+                            <span>Shipping</span>
+                            <span>{{ toUSD(deliveryFee) }}</span>
+                        </div>
+                        <div class="price-row total">
+                            <span>Total</span>
+                            <span>{{ toUSD(totalPrice) }}</span>
+                        </div>
                     </div>
-                    <div class="price-row discount">
-                        <span>
-                            <el-tag size="small" effect="dark" type="success">
-                                <el-icon><Discount /></el-icon> 15% OFF
-                            </el-tag>
-                        </span>
-                        <span> - {{ toUSD(discount) }}</span>
-                    </div>
-                    <div class="price-row">
-                        <span>Shipping</span>
-                        <span>{{ toUSD(deliveryFee) }}</span>
-                    </div>
-                    <div class="price-row total">
-                        <span>Total</span>
-                        <span>{{ toUSD(totalPrice) }}</span>
-                    </div>
-                </div>
 
-                <div class="shipping-info">
-                    <el-icon><Van /></el-icon>
-                    <span>Estimated delivery: 3-5 business days</span>
-                </div>
+                    <div class="shipping-info">
+                        <el-icon><Van /></el-icon>
+                        <span>Estimated delivery: 3-5 business days</span>
+                    </div>
 
-                <div class="secure-badge">
-                    <el-icon><Lock /></el-icon>
-                    <span>Secure Checkout</span>
+                    <div class="secure-badge">
+                        <el-icon><Lock /></el-icon>
+                        <span>Secure Checkout</span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Payment Section (Right) -->
-        <div class="payment-section">
-            <h2 class="payment-title">Payment Details</h2>
+            <!-- Payment Section (Right) -->
+            <div class="payment-section">
+                <h2 class="payment-title">Payment Details</h2>
 
-            <el-steps :active="currentStep" finish-status="success" simple>
-                <el-step title="Information">
-                    <template #icon>
-                        <el-icon><User /></el-icon>
-                    </template>
-                </el-step>
-                <el-step title="Payment">
-                    <template #icon>
-                        <el-icon><CreditCard /></el-icon>
-                    </template>
-                </el-step>
-                <el-step title="Confirmation">
-                    <template #icon>
-                        <el-icon><Check /></el-icon>
-                    </template>
-                </el-step>
-            </el-steps>
+                <el-steps :active="currentStep" finish-status="success" simple>
+                    <el-step title="Information">
+                        <template #icon>
+                            <el-icon><User /></el-icon>
+                        </template>
+                    </el-step>
+                    <el-step title="Payment">
+                        <template #icon>
+                            <el-icon><CreditCard /></el-icon>
+                        </template>
+                    </el-step>
+                    <el-step title="Confirmation">
+                        <template #icon>
+                            <el-icon><Check /></el-icon>
+                        </template>
+                    </el-step>
+                </el-steps>
 
-            <div class="payment-form">
-                <div v-if="currentStep === 1">
-                    <h3 class="section-title">Contact Information</h3>
-                    <el-form
-                        :model="ruleForm"
-                        :rules="rules"
-                        ref="ruleFormRef"
-                        label-position="top"
-                    >
-                        <el-form-item label="Email" prop="email">
-                            <el-input
-                                v-model="ruleForm.email"
-                                :value="authStore.user?.email"
-                                placeholder="your@email.com"
-                                size="large"
-                            >
-                                <template #prefix>
-                                    <el-icon><Message /></el-icon>
-                                </template>
-                            </el-input>
-                        </el-form-item>
-
-                        <h3 class="section-title">Shipping Address</h3>
-                        <el-row :gutter="12">
-                            <el-col :span="12">
-                                <el-form-item
-                                    label="First Name"
-                                    prop="firstName"
-                                >
-                                    <el-input
-                                        v-model="ruleForm.firstName"
-                                        placeholder="First Name"
-                                        :value="firstName"
-                                        size="large"
-                                    />
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="12">
-                                <el-form-item label="Last Name" prop="lastName">
-                                    <el-input
-                                        v-model="ruleForm.lastName"
-                                        placeholder="Last Name"
-                                        size="large"
-                                        :value="lastName"
-                                    />
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-
-                        <el-form-item label="Address" prop="address">
-                            <el-input
-                                v-model="ruleForm.address"
-                                placeholder="Street Address"
-                                size="large"
-                            >
-                                <template #prefix>
-                                    <el-icon><Location /></el-icon>
-                                </template>
-                            </el-input>
-                        </el-form-item>
-
-                        <el-row :gutter="12">
-                            <el-col :span="12">
-                                <el-form-item label="City" prop="city">
-                                    <el-input
-                                        v-model="ruleForm.city"
-                                        placeholder="City"
-                                        size="large"
-                                    />
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="12">
-                                <el-form-item label="Postal Code">
-                                    <el-input
-                                        v-model="ruleForm.postalCode"
-                                        placeholder="Postal Code"
-                                        size="large"
-                                    />
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-
-                        <el-form-item label="Country">
-                            <el-select
-                                v-model="ruleForm.country"
-                                placeholder="Select Country"
-                                style="width: 100%"
-                                size="large"
-                            >
-                                <el-option label="United States" value="us" />
-                                <el-option label="Canada" value="ca" />
-                                <el-option label="Nigeria" value="na" />
-                                <el-option label="United Kingdom" value="uk" />
-                            </el-select>
-                        </el-form-item>
-                    </el-form>
-
-                    <el-button
-                        type="primary"
-                        @click="goToPayment(ruleFormRef)"
-                        class="continue-btn"
-                        size="large"
-                    >
-                        Continue to Payment
-                        <el-icon class="el-icon--right"><ArrowRight /></el-icon>
-                    </el-button>
-                </div>
-
-                <div v-if="currentStep === 2" class="stripe-container">
-                    <h3 class="section-title">Card Information</h3>
-
-                    <!-- Stripe Card Element -->
-                    <div class="stripe-element-container">
-                        <div class="card-field">
-                            <label for="card-number-element">Card Number</label>
-                            <div
-                                id="card-number-element"
-                                class="stripe-element"
-                            ></div>
-                        </div>
-
-                        <div class="card-row">
-                            <div class="card-field expiry">
-                                <label for="card-expiry-element"
-                                    >Expiry Date</label
-                                >
-                                <div
-                                    id="card-expiry-element"
-                                    class="stripe-element"
-                                ></div>
-                            </div>
-
-                            <div class="card-field cvc">
-                                <label for="card-cvc-element">CVC</label>
-                                <div
-                                    id="card-cvc-element"
-                                    class="stripe-element"
-                                ></div>
-                            </div>
-                        </div>
-
-                        <div
-                            id="card-errors"
-                            class="stripe-errors"
-                            v-if="cardError"
+                <div class="payment-form">
+                    <div v-if="currentStep === 1">
+                        <h3 class="section-title">Contact Information</h3>
+                        <el-form
+                            :model="ruleForm"
+                            :rules="rules"
+                            ref="ruleFormRef"
+                            label-position="top"
                         >
-                            {{ cardError }}
-                        </div>
-                    </div>
+                            <el-form-item label="Email" prop="email">
+                                <el-input
+                                    v-model="ruleForm.email"
+                                    :value="authStore.user?.email"
+                                    placeholder="your@email.com"
+                                    size="large"
+                                >
+                                    <template #prefix>
+                                        <el-icon><Message /></el-icon>
+                                    </template>
+                                </el-input>
+                            </el-form-item>
 
-                    <div class="card-icons">
-                        <img
-                            src="/images/visa.svg"
-                            alt="Visa"
-                            class="card-icon"
-                        />
-                        <img
-                            src="/images/mastercard.svg"
-                            alt="Mastercard"
-                            class="card-icon"
-                        />
-                        <img
-                            src="/images/amex.svg"
-                            alt="American Express"
-                            class="card-icon"
-                        />
-                    </div>
+                            <h3 class="section-title">Shipping Address</h3>
+                            <el-row :gutter="12">
+                                <el-col :span="12">
+                                    <el-form-item
+                                        label="First Name"
+                                        prop="firstName"
+                                    >
+                                        <el-input
+                                            v-model="ruleForm.firstName"
+                                            placeholder="First Name"
+                                            :value="firstName"
+                                            size="large"
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item
+                                        label="Last Name"
+                                        prop="lastName"
+                                    >
+                                        <el-input
+                                            v-model="ruleForm.lastName"
+                                            placeholder="Last Name"
+                                            size="large"
+                                            :value="lastName"
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
 
-                    <el-checkbox v-model="saveCard"
-                        >Save card for future purchases</el-checkbox
-                    >
+                            <el-form-item label="Address" prop="address">
+                                <el-input
+                                    v-model="ruleForm.address"
+                                    placeholder="Street Address"
+                                    size="large"
+                                >
+                                    <template #prefix>
+                                        <el-icon><Location /></el-icon>
+                                    </template>
+                                </el-input>
+                            </el-form-item>
 
-                    <div class="actions">
-                        <el-button @click="currentStep = 1" size="large">
-                            <el-icon class="el-icon--left"
-                                ><ArrowLeft
-                            /></el-icon>
-                            Back
-                        </el-button>
+                            <el-row :gutter="12">
+                                <el-col :span="12">
+                                    <el-form-item label="City" prop="city">
+                                        <el-input
+                                            v-model="ruleForm.city"
+                                            placeholder="City"
+                                            size="large"
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="Postal Code">
+                                        <el-input
+                                            v-model="ruleForm.postalCode"
+                                            placeholder="Postal Code"
+                                            size="large"
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+
+                            <el-form-item label="Country">
+                                <el-select
+                                    v-model="ruleForm.country"
+                                    placeholder="Select Country"
+                                    style="width: 100%"
+                                    size="large"
+                                >
+                                    <el-option
+                                        label="United States"
+                                        value="us"
+                                    />
+                                    <el-option label="Canada" value="ca" />
+                                    <el-option label="Nigeria" value="na" />
+                                    <el-option
+                                        label="United Kingdom"
+                                        value="uk"
+                                    />
+                                </el-select>
+                            </el-form-item>
+                        </el-form>
+
                         <el-button
                             type="primary"
-                            @click="processPayment"
-                            :loading="loading"
+                            @click="goToPayment(ruleFormRef)"
+                            class="continue-btn"
                             size="large"
                         >
-                            Pay {{ toUSD(totalPrice) }}
+                            Continue to Payment
                             <el-icon class="el-icon--right"
-                                ><CreditCard
+                                ><ArrowRight
                             /></el-icon>
                         </el-button>
                     </div>
-                </div>
 
-                <div v-if="currentStep === 3" class="confirmation">
-                    <div class="success-icon">
-                        <el-icon><CircleCheckFilled /></el-icon>
+                    <div v-if="currentStep === 2" class="stripe-container">
+                        <h3 class="section-title">Card Information</h3>
+
+                        <!-- Stripe Card Element -->
+                        <div class="stripe-element-container">
+                            <div class="card-field">
+                                <label for="card-number-element"
+                                    >Card Number</label
+                                >
+                                <div
+                                    id="card-number-element"
+                                    class="stripe-element"
+                                ></div>
+                            </div>
+
+                            <div class="card-row">
+                                <div class="card-field expiry">
+                                    <label for="card-expiry-element"
+                                        >Expiry Date</label
+                                    >
+                                    <div
+                                        id="card-expiry-element"
+                                        class="stripe-element"
+                                    ></div>
+                                </div>
+
+                                <div class="card-field cvc">
+                                    <label for="card-cvc-element">CVC</label>
+                                    <div
+                                        id="card-cvc-element"
+                                        class="stripe-element"
+                                    ></div>
+                                </div>
+                            </div>
+
+                            <div
+                                id="card-errors"
+                                class="stripe-errors"
+                                v-if="cardError"
+                            >
+                                {{ cardError }}
+                            </div>
+                        </div>
+
+                        <div class="card-icons">
+                            <img
+                                src="/images/visa.svg"
+                                alt="Visa"
+                                class="card-icon"
+                            />
+                            <img
+                                src="/images/mastercard.svg"
+                                alt="Mastercard"
+                                class="card-icon"
+                            />
+                            <img
+                                src="/images/amex.svg"
+                                alt="American Express"
+                                class="card-icon"
+                            />
+                        </div>
+
+                        <el-checkbox v-model="saveCard"
+                            >Save card for future purchases</el-checkbox
+                        >
+
+                        <div class="actions">
+                            <el-button @click="currentStep = 1" size="large">
+                                <el-icon class="el-icon--left"
+                                    ><ArrowLeft
+                                /></el-icon>
+                                Back
+                            </el-button>
+                            <el-button
+                                type="primary"
+                                @click="processPayment"
+                                :loading="loading"
+                                size="large"
+                            >
+                                Pay {{ toUSD(totalPrice) }}
+                                <el-icon class="el-icon--right"
+                                    ><CreditCard
+                                /></el-icon>
+                            </el-button>
+                        </div>
                     </div>
-                    <h3>Payment Successful!</h3>
-                    <p>
-                        Your order has been placed and will be processed soon.
-                    </p>
-                    <p class="order-number">Order #: ORD-{{ orderNumber }}</p>
-                    <p>
-                        A confirmation email has been sent to
-                        {{ ruleForm.email }}
-                    </p>
-                    <el-button type="primary" size="large" @click="goToOrders"
-                        >View Order Details</el-button
-                    >
+
+                    <div v-if="currentStep === 3" class="confirmation">
+                        <div class="success-icon">
+                            <el-icon><CircleCheckFilled /></el-icon>
+                        </div>
+                        <h3>Payment Successful!</h3>
+                        <p>
+                            Your order has been placed and will be processed
+                            soon.
+                        </p>
+                        <p class="order-number">
+                            Order #: ORD-{{ orderNumber }}
+                        </p>
+                        <p>
+                            A confirmation email has been sent to
+                            {{ ruleForm.email }}
+                        </p>
+                        <el-button
+                            type="primary"
+                            size="large"
+                            @click="goToOrders"
+                            >View Order Details</el-button
+                        >
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </ClientOnly>
 </template>
 
 <script setup>
@@ -797,28 +824,28 @@ watch(
 function goToPayment(formEl) {
     console.log(formEl, 'formEl')
 
-    // if (!formEl) return
+    if (!formEl) return
 
-    // formEl.validate((valid) => {
-    //     if (valid) {
-    //         const userData = {
-    //             address: {
-    //                 address: ruleForm.value.address,
-    //                 street: ruleForm.value.street,
-    //                 city: ruleForm.value.city,
-    //                 country: ruleForm.value.country,
-    //                 postalCode: ruleForm.value.postalCode,
-    //             },
-    //             email: ruleForm.value.email,
-    //             firstName: ruleForm.value.firstName,
-    //             lastName: ruleForm.value.lastName,
-    //         }
-    //         const updatedUser = authStore.updateUser(userData)
-    //         if (updatedUser) {
-    //             currentStep.value = 2
-    //         }
-    //     }
-    // })
+    formEl.validate((valid) => {
+        if (valid) {
+            const userData = {
+                shippingAddress: {
+                    address: ruleForm.value.address,
+                    street: ruleForm.value.street,
+                    city: ruleForm.value.city,
+                    country: ruleForm.value.country,
+                    postalCode: ruleForm.value.postalCode,
+                },
+                email: ruleForm.value.email,
+                firstName: ruleForm.value.firstName,
+                lastName: ruleForm.value.lastName,
+            }
+            const updatedUser = authStore.updateUser(userData)
+            if (updatedUser) {
+                currentStep.value = 2
+            }
+        }
+    })
 
     currentStep.value = 2
 }
