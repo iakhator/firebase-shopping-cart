@@ -2,8 +2,8 @@ import { adminAuth } from '~/server/utils/firebaseAdmin'
 import { redis } from '~/server/utils/redisClient'
 
 export default defineEventHandler(async (event) => {
-  // const authToken = getCookie(event, 'token')
   const { idToken, refreshToken } = await readBody(event)
+
   if (!idToken) return { authenticated: false }
 
   try {
@@ -17,9 +17,12 @@ export default defineEventHandler(async (event) => {
       maxAge: 3600,
       path: '/',
     })
+
     setCookie(event, 'refresh_token', refreshToken, {
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+      path: '/',
     })
 
     // Sync cart on login/register

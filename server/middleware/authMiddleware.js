@@ -1,29 +1,42 @@
-// import { setResponseStatus } from 'nuxt/app'
-// import { auth } from '../api/config/firebaseConfig.js'
+import { adminAuth } from '~/server/utils/firebaseAdmin'
 
 export default defineEventHandler(async (event) => {
-  // try {
-  //   const req = event.node.req
-  //   let idToken
-  //   if (
-  //     req.headers.authorization &&
-  //     req.headers.authorization.startsWith('Bearer ')
-  //   ) {
-  //     idToken = req.headers.authorization.split('Bearer ')[1]
-  //   } else {
-  //     setResponseStatus(event, 403)
-  //     return { error: 'Unauthorized' }
-  //   }
-  //   const decodedToken = await auth.verifyIdToken(idToken)
-  //   // Attach the UID to the request object for further use
-  //   req.uid = decodedToken.uid
-  //   return { message: 'Token is valid', uid: decodedToken.uid }
-  // } catch (err) {
-  //   if (err.code === 'auth/id-token-expired') {
-  //     setResponseStatus(event, 403)
-  //     return { error: 'Token has expired.' }
-  //   }
-  //   setResponseStatus(event, 403)
-  //   return { error: err.code || 'Authentication failed.' }
-  // }
+  let idToken = getCookie(event, 'idToken')
+  const refreshToken = getCookie(event, 'refreshToken')
+
+  if (!idToken && refreshToken) {
+    try {
+      const response = await $fetch(
+        'https://securetoken.googleapis.com/v1/token?key=' +
+          process.env.FIREBASE_API_KEY,
+        {
+          method: 'POST',
+          body: new URLSearchParams({
+            grant_type: 'refresh_token',
+            refresh_token: refreshToken,
+          }),
+        },
+      )
+
+      idToken = response.id_token
+
+      setCookie(event, 'idToken', idToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 3600,
+        path: '/',
+      })
+    } catch (err) {
+      return
+    }
+  }
+
+  if (!idToken) return
+
+  try {
+    const decoded = await adminAuth.verifyIdToken(idToken)
+    event.context.user = decoded
+  } catch (err) {
+    console.error('Invalid token', err)
+  }
 })

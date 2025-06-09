@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
           refresh_token: refreshToken,
         }),
       },
-    ).then((res) => res.json())
+    )
 
     // Get new tokens
     const newIdToken = refreshed.id_token
@@ -26,11 +26,11 @@ export default defineEventHandler(async (event) => {
     // Store the new tokens securely
     setCookie(event, 'auth_token', newIdToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
       path: '/',
       maxAge: 3600,
     })
+
     // setCookie(event, 'refreshToken', newRefreshToken, {
     //   httpOnly: true,
     //   secure: true,
