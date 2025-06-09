@@ -1,8 +1,8 @@
 import { adminAuth } from '~/server/utils/firebaseAdmin'
 
 export default defineEventHandler(async (event) => {
-  let idToken = getCookie(event, 'idToken')
-  const refreshToken = getCookie(event, 'refreshToken')
+  let idToken = getCookie(event, 'auth_token')
+  const refreshToken = getCookie(event, 'refresh_token')
 
   if (!idToken && refreshToken) {
     try {

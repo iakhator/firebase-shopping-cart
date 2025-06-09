@@ -1,38 +1,34 @@
 import { adminAuth, adminFirestore } from '~/server/utils/firebaseAdmin'
 
 export default defineEventHandler(async (event) => {
+  const user = await event.context.user
+
   const authToken = getCookie(event, 'auth_token')
 
-  if (!authToken) return { authenticated: false }
+  if (!user) return { authenticated: false }
 
   try {
     const decodedToken = await adminAuth.verifyIdToken(authToken, true)
+    console.log(decodedToken.uid, 'decodedToken.uid', user.uid, 'user.uid')
 
     // Fetch user from firestore in 'users' collection
-    const userDoc = await adminFirestore
-      .collection('users')
-      .doc(decodedToken.uid)
-      .get()
+    const userDoc = await adminFirestore.collection('users').doc(user.uid).get()
 
     // Check if the document exists before accessing data
     if (!userDoc.exists) {
-      console.error(`User document not found for uid: ${decodedToken.uid}`)
+      console.error(`User document not found for uid: ${user.uid}`)
       return {
-        authenticated: true,
-        user: decodedToken,
+        authenticated: false,
         userProfileComplete: false,
       }
     }
 
-    const user = userDoc.data()
+    const userData = userDoc.data()
 
-    // Use optional chaining to safely access properties
-    decodedToken.firstName = user?.firstName || null
-    decodedToken.lastName = user?.lastName || null
-    decodedToken.address = user?.address || null
-    decodedToken.userProfileComplete = true
+    userData.userProfileComplete = true
+    userData.uid = user.uid
 
-    return { authenticated: true, user: decodedToken }
+    return { authenticated: true, user: userData }
   } catch (error) {
     console.error('Authentication error:', error)
 
