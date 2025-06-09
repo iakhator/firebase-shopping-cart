@@ -50,6 +50,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 
+const route = useRoute()
 const brands = ['Apple', 'Samsung', 'Google', 'OnePlus', 'Xiaomi']
 const priceRanges = [
     { label: '$0 - $300', min: 0, max: 300 },
@@ -72,6 +73,29 @@ function emitFilters() {
         storage: selectedStorage.value,
     })
 }
+
+watch(
+    () => route.query,
+    () => {
+        selectedBrands.value = route.query.brands
+            ? route.query.brands.split(',')
+            : []
+        selectedPriceRanges.value = route.query.priceRanges
+            ? route.query.priceRanges.split(',').map((range) => {
+                  const [min, max] = range.split('-')
+                  return {
+                      label: `$${min}${max ? ` - $${max}` : '+'}`,
+                      min: min ? parseInt(min) : 0,
+                      max: max ? parseInt(max) : Infinity,
+                  }
+              })
+            : []
+        selectedStorage.value = route.query.storage
+            ? route.query.storage.split(',')
+            : []
+    },
+    { immediate: true },
+)
 
 // Watch all selections for changes
 watch(

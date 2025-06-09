@@ -1,77 +1,87 @@
 <template>
-    <el-row class="product__grid">
-        <div class="product__grid-right">
-            <ul class="product__grid-w">
-                <li
-                    v-for="item in products"
-                    :key="item.id"
-                    class="product__grid-w__list"
-                >
-                    <a class="_p" :href="`/${item.categoryId}/${item.id}`">
-                        <span class="product__grid-w__list-img">
-                            <img :src="item?.imageUrl" alt="" loading="lazy" />
-                        </span>
-                        <div class="product__grid-w__list-content">
-                            <span
-                                class="product__grid-w__list-title multi-line-ellipsis"
-                                >{{ item.name }}
+    <AppAside @filter-change="handleFilterChange" />
+    <div class="main-content">
+        <el-row class="product__grid">
+            <div class="product__grid-right">
+                <ul class="product__grid-w">
+                    <li
+                        v-for="item in products"
+                        :key="item.id"
+                        class="product__grid-w__list"
+                    >
+                        <a class="_p" :href="`/${item.categoryId}/${item.id}`">
+                            <span class="product__grid-w__list-img">
+                                <img
+                                    :src="item?.imageUrl"
+                                    alt=""
+                                    loading="lazy"
+                                />
                             </span>
-                            <p>
-                                {{ item?.bundles[0]?.ram }} /
-                                {{ item?.bundles[0]?.storage }}
-                            </p>
+                            <div class="product__grid-w__list-content">
+                                <span
+                                    class="product__grid-w__list-title multi-line-ellipsis"
+                                    >{{ item.name }}
+                                </span>
+                                <p>
+                                    {{ item?.bundles[0]?.ram }} /
+                                    {{ item?.bundles[0]?.storage }}
+                                </p>
 
-                            <div class="product__grid-w__list-price_fav">
-                                <span class="product__grid-w__list-price">{{
-                                    toUSD(item?.bundles[0]?.price || item.price)
-                                }}</span>
-                                <el-button
-                                    text
-                                    circle
-                                    @click.prevent="addToWishlist"
-                                    @mouseenter="isFavHovered = item.id"
-                                    @mouseleave="isFavHovered = ''"
-                                    class="product__grid-w__list-favourite"
-                                    ><heart-icon
-                                        :fill="
-                                            isFavHovered === item.id
-                                                ? '#000'
-                                                : 'none'
-                                        "
-                                /></el-button>
+                                <div class="product__grid-w__list-price_fav">
+                                    <span class="product__grid-w__list-price">{{
+                                        toUSD(
+                                            item?.bundles[0]?.price ||
+                                                item.price,
+                                        )
+                                    }}</span>
+                                    <el-button
+                                        text
+                                        circle
+                                        @click.prevent="addToWishlist"
+                                        @mouseenter="isFavHovered = item.id"
+                                        @mouseleave="isFavHovered = ''"
+                                        class="product__grid-w__list-favourite"
+                                        ><heart-icon
+                                            :fill="
+                                                isFavHovered === item.id
+                                                    ? '#000'
+                                                    : 'none'
+                                            "
+                                    /></el-button>
+                                </div>
+                                <div class="product__grid-btn">
+                                    <UIButton
+                                        size="large"
+                                        class="black flex-3"
+                                        @click.prevent="handleHello"
+                                        label="Add to cart"
+                                    >
+                                        <template #icon>
+                                            <el-icon class="mr-2"
+                                                ><ShoppingCart
+                                            /></el-icon>
+                                        </template>
+                                    </UIButton>
+                                    <UIButton
+                                        size="large"
+                                        @click="handleHello"
+                                        variant="secondary"
+                                        label="Buy Now"
+                                    >
+                                        <template #icon>
+                                            <el-icon class="mr-2"
+                                                ><Wallet
+                                            /></el-icon>
+                                        </template>
+                                    </UIButton>
+                                </div>
                             </div>
-                            <div class="product__grid-btn">
-                                <UIButton
-                                    size="large"
-                                    class="black flex-3"
-                                    @click.prevent="handleHello"
-                                    label="Add to cart"
-                                >
-                                    <template #icon>
-                                        <el-icon class="mr-2"
-                                            ><ShoppingCart
-                                        /></el-icon>
-                                    </template>
-                                </UIButton>
-                                <UIButton
-                                    size="large"
-                                    @click="handleHello"
-                                    variant="secondary"
-                                    label="Buy Now"
-                                >
-                                    <template #icon>
-                                        <el-icon class="mr-2"
-                                            ><Wallet
-                                        /></el-icon>
-                                    </template>
-                                </UIButton>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </el-row>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </el-row>
+    </div>
 </template>
 
 <script setup>
@@ -82,6 +92,7 @@ import HeartIcon from '~/components/icons/HeartIcon.vue'
 const isFavHovered = ref('')
 const { toUSD } = useCurrency()
 const { $toast } = useNuxtApp()
+const router = useRouter()
 
 defineProps({
     products: {
@@ -98,10 +109,51 @@ function handleHello() {
     // console.log('hello one', $noty)
     $toast.success('Hello')
 }
+
+function handleFilterChange(filter) {
+    const query = formatFiltersToQuery(filter)
+    router.push({ path: '/', query })
+}
+
+function formatFiltersToQuery(filters) {
+    const query = {}
+
+    if (filters.brands?.length) {
+        query.brands = filters.brands.join(',')
+    }
+
+    if (filters.priceRanges?.length) {
+        query.priceRanges = filters.priceRanges
+            .map(
+                (price) =>
+                    price.label
+                        ?.replace(/[^0-9\-+]/g, '') // remove $, spaces
+                        ?.replace(/\+/g, '+'), // replace '+' for URL-friendliness
+            )
+            .join(',')
+    }
+
+    if (filters.storage?.length) {
+        query.storage = filters.storage.join(',')
+    }
+
+    return query
+}
 </script>
 
 <style lang="scss" scoped>
 //  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+.main-content {
+    flex-basis: 80%;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.sidebar {
+    flex-basis: 20%;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
 .product__grid {
     a {
         &:hover {

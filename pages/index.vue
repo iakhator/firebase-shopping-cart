@@ -1,5 +1,6 @@
 <template>
-    <product-list :products="products" />
+    <product-list v-if="products.length" :products="products" />
+    <div v-else>No products found</div>
 </template>
 
 <script setup>
@@ -16,14 +17,12 @@ const filters = computed(() => {
     }
 })
 
-await productStore.getAllProducts(filters.value)
-
 watch(
-    () => route.query,
-    () => {
-        console.log('Products updated')
-        productStore.getAllProducts(filters.value)
+    filters,
+    (newFilters) => {
+        productStore.getAllProducts(newFilters)
     },
+    { deep: true, immediate: true },
 )
 const products = computed(() => productStore.getProducts)
 </script>

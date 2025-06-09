@@ -2,16 +2,51 @@ import { adminFirestore as db } from '~/server/utils/firebaseAdmin'
 
 export default defineEventHandler(async (event) => {
   try {
-    const products = []
-    const allProducts = await db
-      .collection('products')
-      .orderBy('name')
-      .limit(10)
-      .get()
+    // const products = []
+    const query = getQuery(event)
 
-    allProducts?.forEach((product) => {
-      products.push({ ...product.data(), id: product.id })
-    })
+    const brands =
+      query.brands?.split(',').map((brand) => brand.toLowerCase()) || []
+    const priceRanges = query.priceRanges?.split(',') || []
+    const storage = query.storage?.split(',') || []
+
+    let productsRef = db.collection('products')
+    let queryRef = productsRef
+
+    if (brands.length) {
+      queryRef = queryRef.where('categoryId', 'in', brands)
+    }
+
+    if (storage.length) {
+      queryRef = queryRef.where('storage', 'in', storage)
+    }
+
+    if (priceRanges.length === 1) {
+      const range = parsePriceRange(priceRanges[0])
+      queryRef = queryRef
+        .where('price', '>=', range.min)
+        .where('price', '<=', range.max)
+    }
+
+    // queryRef = queryRef.orderBy('name').limit(10)
+    const snapshot = await queryRef.orderBy('name').get()
+
+    let products = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }))
+
+    // console.log(products, 'products')
+
+    // const allProducts = await db
+    //   .collection('products')
+    //   .orderBy('name')
+    //   .limit(10)
+    //   .get()
+
+    // allProducts?.forEach((product) => {
+    //   products.push({ ...product.data(), id: product.id })
+    // })
 
     return { products }
   } catch (error) {
@@ -22,6 +57,15 @@ export default defineEventHandler(async (event) => {
     return { message: 'Failed to fetch products' }
   }
 })
+
+function parsePriceRange(label) {
+  const parts = label.replace('$', '').split('-')
+  const min = parseFloat(parts[0])
+  const max = parts[1]?.includes('+')
+    ? Infinity
+    : parseFloat(parts[1]) || Infinity
+  return { min, max }
+}
 
 // pagination
 // export default defineEventHandler(async (event) => {

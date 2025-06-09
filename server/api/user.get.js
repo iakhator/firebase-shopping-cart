@@ -3,13 +3,13 @@ import { adminAuth, adminFirestore } from '~/server/utils/firebaseAdmin'
 export default defineEventHandler(async (event) => {
   const user = await event.context.user
 
-  const authToken = getCookie(event, 'auth_token')
+  // const authToken = getCookie(event, 'auth_token')
 
   if (!user) return { authenticated: false }
 
   try {
-    const decodedToken = await adminAuth.verifyIdToken(authToken, true)
-    console.log(decodedToken.uid, 'decodedToken.uid', user.uid, 'user.uid')
+    // const decodedToken = await adminAuth.verifyIdToken(authToken, true)
+    // console.log(decodedToken.uid, 'decodedToken.uid', user.uid, 'user.uid')
 
     // Fetch user from firestore in 'users' collection
     const userDoc = await adminFirestore.collection('users').doc(user.uid).get()

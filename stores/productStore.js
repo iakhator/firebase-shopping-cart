@@ -6,10 +6,20 @@ export const useProductStore = defineStore('product', {
   }),
 
   actions: {
-    async getAllProducts() {
+    async getAllProducts(filters) {
       const { $toast } = useNuxtApp()
+
+      const query = new URLSearchParams()
+      if (filters.brands.length) query.set('brands', filters.brands.join(','))
+      if (filters.priceRanges.length)
+        query.set('priceRanges', filters.priceRanges.join(','))
+      if (filters.storage.length)
+        query.set('storage', filters.storage.join(','))
+
       try {
-        const { data, error } = await useFetch('/api/products')
+        const { data, error } = await useFetch(
+          `/api/products?${query.toString()}`,
+        )
 
         if (error && error?.value) {
           $toast.error(error.value)
