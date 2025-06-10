@@ -75,14 +75,12 @@ function emitFilters() {
 }
 
 onMounted(() => {
-    console.log(route.query, 'query')
     selectedBrands.value = route.query.brands
         ? route.query.brands.split(',')
         : []
     selectedPriceRanges.value = route.query.priceRanges
         ? route.query.priceRanges.split(',').map((range) => {
               const [min, max] = range.split('-')
-              console.log(min, 'min max')
               return {
                   label: `$${min}${max ? ` - $${max}` : ''}`,
                   min: min ? parseInt(min) : 0,

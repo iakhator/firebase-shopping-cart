@@ -1,74 +1,84 @@
 <template>
-    <h3>YOUR BAG</h3>
-    <div class="cart">
-        <div v-if="!cartItems.length" class="cart__empty">
-            <span><shopping-bag-black class="no__cart" /></span>
-            <p>Your bag is empty</p>
-            <nuxt-link to="/" class="btn btn-primary black"
-                >Start Shopping</nuxt-link
-            >
-        </div>
-        <div v-else class="cart-container">
-            <div class="cart-items">
-                <div v-for="item in cartItems" :key="item.id" class="cart-item">
-                    <img
-                        :src="item.variant?.imageUrl"
-                        :alt="item.name"
-                        class="item-image"
-                    />
-                    <div class="item-details">
-                        <p class="item-name">{{ item.name }}</p>
-                        <p>Bundle: {{ item.bundle }}</p>
-                        <p>Color: {{ item.variant?.color }}</p>
-                        <p class="price">{{ toUSD(item.price) }}</p>
-                    </div>
-                    <div class="item-actions">
-                        <UICounter
-                            v-model="item.quantity"
-                            :readonly="true"
-                            @increment="() => increaseQuantity(item)"
-                            @decrement="() => decreaseQuantity(item)"
+    <section class="cart-wrapper">
+        <h3>YOUR BAG</h3>
+        <div class="cart">
+            <div v-if="!cartItems.length" class="cart__empty">
+                <span><shopping-bag-black class="no__cart" /></span>
+                <p>Your bag is empty</p>
+                <nuxt-link to="/" class="btn btn-primary black"
+                    >Start Shopping</nuxt-link
+                >
+            </div>
+            <div v-else class="cart-container">
+                <div class="cart-items">
+                    <div
+                        v-for="item in cartItems"
+                        :key="item.id"
+                        class="cart-item"
+                    >
+                        <img
+                            :src="item.variant?.imageUrl"
+                            :alt="item.name"
+                            class="item-image"
                         />
-                        <button class="delete-btn" @click="removeItem(item)">
-                            <el-icon><Delete /></el-icon>
-                        </button>
+                        <div class="item-details">
+                            <p class="item-name">{{ item.name }}</p>
+                            <p>Bundle: {{ item.bundle }}</p>
+                            <p>Color: {{ item.variant?.color }}</p>
+                            <p class="price">{{ toUSD(item.price) }}</p>
+                        </div>
+                        <div class="item-actions">
+                            <UICounter
+                                v-model="item.quantity"
+                                :readonly="true"
+                                @increment="() => increaseQuantity(item)"
+                                @decrement="() => decreaseQuantity(item)"
+                            />
+                            <button
+                                class="delete-btn"
+                                @click="removeItem(item)"
+                            >
+                                <el-icon><Delete /></el-icon>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="order-summary">
-                <h3>Order Summary</h3>
-                <div class="summary-row">
-                    <span>Subtotal</span>
-                    <span>{{ toUSD(subtotal) }}</span>
-                </div>
-                <div class="summary-row discount">
-                    <span>Discount (-5%)</span>
-                    <span class="discount-amount">-${{ discount }}</span>
-                </div>
-                <div class="summary-row">
-                    <span>Delivery Fee</span> <span>${{ deliveryFee }}</span>
-                </div>
-                <hr />
-                <div class="summary-row total">
-                    <span>Total</span>
-                    <span>{{ toUSD(total) }}</span>
-                </div>
+                <div class="order-summary">
+                    <h3>Order Summary</h3>
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span>{{ toUSD(subtotal) }}</span>
+                    </div>
+                    <div class="summary-row discount">
+                        <span>Discount (-5%)</span>
+                        <span class="discount-amount">-${{ discount }}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Delivery Fee</span>
+                        <span>${{ deliveryFee }}</span>
+                    </div>
+                    <hr />
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span>{{ toUSD(total) }}</span>
+                    </div>
 
-                <div class="promo-code">
-                    <input type="text" placeholder="Add promo code" />
-                    <button>Apply</button>
-                </div>
+                    <div class="promo-code">
+                        <input type="text" placeholder="Add promo code" />
+                        <button>Apply</button>
+                    </div>
 
-                <UIButton
-                    size="large"
-                    class="black checkout-btn"
-                    @click="navigateTo('/cart/checkout')"
-                    label="Go to Checkout →"
-                />
+                    <UIButton
+                        size="large"
+                        class="black checkout-btn"
+                        @click="navigateTo('/cart/checkout')"
+                        label="Go to Checkout →"
+                    />
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 </template>
 
 <script setup>
@@ -112,6 +122,11 @@ function removeItem(item) {
 </script>
 
 <style lang="scss" scoped>
+.cart-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
 .cart-container {
     display: flex;
     gap: 20px;
