@@ -1,6 +1,7 @@
 <template>
     <AppAside @filter-change="handleFilterChange" />
-    <div class="main-content">
+    <div v-if="!products.length">No products found</div>
+    <div v-else class="main-content">
         <el-row class="product__grid">
             <div class="product__grid-right">
                 <ul class="product__grid-w">
@@ -124,11 +125,10 @@ function formatFiltersToQuery(filters) {
 
     if (filters.priceRanges?.length) {
         query.priceRanges = filters.priceRanges
-            .map(
-                (price) =>
-                    price.label
-                        ?.replace(/[^0-9\-+]/g, '') // remove $, spaces
-                        ?.replace(/\+/g, '+'), // replace '+' for URL-friendliness
+            .map((price) =>
+                price.label
+                    ?.replace(/[^0-9\-+]/g, '')
+                    ?.replace(/\+/g, encodeURIComponent('+')),
             )
             .join(',')
     }

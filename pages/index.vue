@@ -1,6 +1,5 @@
 <template>
-    <product-list v-if="products.length" :products="products" />
-    <div v-else>No products found</div>
+    <product-list :products="products" />
 </template>
 
 <script setup>

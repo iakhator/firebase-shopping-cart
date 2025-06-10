@@ -2,7 +2,6 @@ import { adminFirestore as db } from '~/server/utils/firebaseAdmin'
 
 export default defineEventHandler(async (event) => {
   try {
-    // const products = []
     const query = getQuery(event)
 
     const brands =
@@ -18,7 +17,7 @@ export default defineEventHandler(async (event) => {
     }
 
     if (storage.length) {
-      queryRef = queryRef.where('storage', 'in', storage)
+      queryRef = queryRef.where('storage', 'array-contains-any', storage)
     }
 
     if (priceRanges.length === 1) {
@@ -29,24 +28,12 @@ export default defineEventHandler(async (event) => {
     }
 
     // queryRef = queryRef.orderBy('name').limit(10)
-    const snapshot = await queryRef.orderBy('name').get()
+    const snapshot = await queryRef.get()
 
     let products = snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }))
-
-    // console.log(products, 'products')
-
-    // const allProducts = await db
-    //   .collection('products')
-    //   .orderBy('name')
-    //   .limit(10)
-    //   .get()
-
-    // allProducts?.forEach((product) => {
-    //   products.push({ ...product.data(), id: product.id })
-    // })
 
     return { products }
   } catch (error) {

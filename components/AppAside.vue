@@ -74,28 +74,26 @@ function emitFilters() {
     })
 }
 
-watch(
-    () => route.query,
-    () => {
-        selectedBrands.value = route.query.brands
-            ? route.query.brands.split(',')
-            : []
-        selectedPriceRanges.value = route.query.priceRanges
-            ? route.query.priceRanges.split(',').map((range) => {
-                  const [min, max] = range.split('-')
-                  return {
-                      label: `$${min}${max ? ` - $${max}` : '+'}`,
-                      min: min ? parseInt(min) : 0,
-                      max: max ? parseInt(max) : Infinity,
-                  }
-              })
-            : []
-        selectedStorage.value = route.query.storage
-            ? route.query.storage.split(',')
-            : []
-    },
-    { immediate: true },
-)
+onMounted(() => {
+    console.log(route.query, 'query')
+    selectedBrands.value = route.query.brands
+        ? route.query.brands.split(',')
+        : []
+    selectedPriceRanges.value = route.query.priceRanges
+        ? route.query.priceRanges.split(',').map((range) => {
+              const [min, max] = range.split('-')
+              console.log(min, 'min max')
+              return {
+                  label: `$${min}${max ? ` - $${max}` : ''}`,
+                  min: min ? parseInt(min) : 0,
+                  max: max ? parseInt(max) : Infinity,
+              }
+          })
+        : []
+    selectedStorage.value = route.query.storage
+        ? route.query.storage.split(',')
+        : []
+})
 
 // Watch all selections for changes
 watch(
