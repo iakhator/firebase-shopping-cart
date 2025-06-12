@@ -57,6 +57,8 @@ export default defineEventHandler(async (event) => {
 
     return { success: true, token: newIdToken }
   } catch (error) {
+    deleteCookie(event, 'auth_token')
+    deleteCookie(event, 'refresh_token')
     return { success: false, message: 'Token refresh failed', error }
   }
 })

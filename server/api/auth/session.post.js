@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
     setCookie(event, 'refresh_token', refreshToken, {
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
-      maxAge: 60 * 60 * 24 * 30, // 30 days
+      maxAge: 60 * 60 * 24 * 7, // 7 days
       path: '/',
     })
 
@@ -36,6 +36,12 @@ export default defineEventHandler(async (event) => {
       setResponseStatus(event, 403)
       return { error: 'Token has expired.', authenticated: false }
     }
-    return { authenticated: false }
+
+    if (error.code === 'auth/invalid-refresh-token') {
+      setResponseStatus(event, 403) // Forbidden
+      return { error: 'Invalid refresh token.', authenticated: false }
+    }
+    setResponseStatus(event, 500)
+    return { error: 'Failed to refresh token.', authenticated: false }
   }
 })
