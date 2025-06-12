@@ -126,9 +126,7 @@ function formatFiltersToQuery(filters) {
     if (filters.priceRanges?.length) {
         query.priceRanges = filters.priceRanges
             .map((price) =>
-                price.label
-                    ?.replace(/[^0-9\-+]/g, '')
-                    ?.replace(/\+/g, encodeURIComponent('+')),
+                price.label?.replace(/[^0-9\-+]/g, '')?.replace(/\+/g, '+'),
             )
             .join(',')
     }

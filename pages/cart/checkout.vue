@@ -872,6 +872,7 @@ const goToOrders = () => {
 .checkout-container {
     display: flex;
     min-height: 60vh;
+    width: 100%;
     background-color: #f8f9fa;
     border-radius: 10px;
 }
