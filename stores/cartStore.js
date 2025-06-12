@@ -131,11 +131,12 @@ export const useCartStore = defineStore('cart', {
       }
     },
     updateTotals() {
-      this.totalQuantity = this.cart.reduce(
+      this.totalQuantity = this.cart?.reduce(
         (sum, item) => sum + item.quantity,
         0,
       )
-      this.totalPrice = this.cart.reduce((sum, item) => sum + item.price, 0)
+      this.totalPrice =
+        this.cart?.reduce((sum, item) => sum + item.price, 0) || 0
     },
   },
 })

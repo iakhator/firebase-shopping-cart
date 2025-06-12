@@ -1,5 +1,5 @@
 import { adminAuth } from '~/server/utils/firebaseAdmin'
-import { redis } from '~/server/utils/redisClient'
+import redis from '~/server/utils/redisClient'
 
 export default defineEventHandler(async (event) => {
   const { idToken, refreshToken } = await readBody(event)

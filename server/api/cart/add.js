@@ -1,3 +1,5 @@
+import redis from '~/server/utils/redisClient'
+
 export default defineEventHandler(async (event) => {
   const {
     productId,

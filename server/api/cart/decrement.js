@@ -33,6 +33,9 @@
 //   return { message: 'Quantity decreased or item removed' }
 // })
 //
+//
+
+import redis from '~/server/utils/redisClient'
 
 export default defineEventHandler(async (event) => {
   const userId = await getUserOrGuestId(event)
