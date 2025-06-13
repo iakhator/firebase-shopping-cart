@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install --omit=dev
 
-COPY . .
+COPY . ./
 EXPOSE 3000
 
 # Default command to start the application
@@ -26,4 +26,7 @@ ENV NODE_ENV=production
 # Build the application
 RUN npm run build
 
-CMD ["npm", "run", "start"]
+COPY --from=build /app/.output/ ./
+
+# CMD ["npm", "run", "start"]
+CMD ["node", "/app/server/index.mjs"]
