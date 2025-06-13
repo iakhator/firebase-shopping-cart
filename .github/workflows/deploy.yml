@@ -48,4 +48,4 @@ jobs:
         run: |
           echo "Deploying to Render..."
           echo "Hook Length: $(echo "$deploy_url" | wc -c)"
-          curl "https://api.render.com/deploy/srv-d15vlkp5pdvs73e38pvg?key=i_ERf7hZEFQ"
+          curl "https://api.render.com/deploy/srv-d161gommcj7s73dtlohg?key=QQQbgrmEAhM"
