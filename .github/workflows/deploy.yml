@@ -47,5 +47,5 @@ jobs:
           deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
         run: |
           echo "Deploying to Render..."
-          echo "Hook Length: $(echo "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" | wc -c)"
+          echo "Hook Length: $(echo "$deploy_url" | wc -c)"
           curl -X POST "$deploy_url"
