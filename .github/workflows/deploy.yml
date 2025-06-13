@@ -44,4 +44,6 @@ jobs:
 
       - name: Trigger Render Deploy Hook
         run: |
-          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+          echo "Deploying to Render..."
+          echo "Hook Length: $(echo "${{ secrets.RENDER_DEPLOY_HOOK }}" | wc -c)"
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
