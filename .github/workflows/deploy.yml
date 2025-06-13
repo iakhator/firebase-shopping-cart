@@ -2,8 +2,7 @@ name: Deploy to Render
 
 on:
   push:
-    branches:
-      - master # or main, depending on your default branch
+    branches: [master]
 
 jobs:
   deploy:
@@ -43,7 +42,10 @@ jobs:
             REDIS_URL=${{ secrets.REDIS_URL }}
 
       - name: Trigger Render Deploy Hook
+        if: github.ref == 'refs/heads/master'
+        env:
+          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
         run: |
           echo "Deploying to Render..."
-          echo "Hook Length: $(echo "${{ secrets.RENDER_DEPLOY_HOOK }}" | wc -c)"
-          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+          echo "Hook Length: $(echo "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" | wc -c)"
+          curl -X POST "$deploy_url"
