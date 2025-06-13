@@ -24,6 +24,6 @@ FROM base AS production
 ENV NODE_ENV=production
 
 # Build the application
-RUN npm run build
+# RUN npm run build
 
 CMD ["npm", "run", "start"]
