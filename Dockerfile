@@ -11,7 +11,7 @@ COPY . .
 EXPOSE 3000
 
 # Default command to start the application
-CMD ["npm", "run", "start"]
+# CMD ["npm", "run", "start"]
 
 # Development stage
 FROM base AS development
