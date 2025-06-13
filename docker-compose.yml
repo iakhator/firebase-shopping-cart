@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: development # Use 'production' for production builds
+      target: ${DOCKER_TARGET:-development} # Use 'production' for production builds
     ports:
       - '3000:3000'
     volumes:

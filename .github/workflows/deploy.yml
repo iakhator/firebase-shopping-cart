@@ -1,0 +1,48 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches:
+      - master # or your default branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # - name: Log in to DockerHub (optional)
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKER_USERNAME }}
+      #     password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false # Set to true if pushing to DockerHub
+          tags: shopping-cart-app:latest
+          build-args: |
+            NODE_ENV=production
+            API_KEY=${{ secrets.FIREBASE_API_KEY }}
+            PROJECT_ID=${{ secrets.PROJECT_ID }}
+            CLIENT_EMAIL=${{ secrets.CLIENT_EMAIL }}
+            CLIENT_ID=${{ secrets.FIREBASE_CLIENT_ID }}
+            PRIVATE_KEY=${{ secrets.PRIVATE_KEY }}
+            DATABASE_URL=${{ secrets.FIREBASE_DATABASE_URL }}
+            STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }}
+            STRIPE_SECRET=${{ secrets.STRIPE_SECRET }}
+            STRIPE_CLIENT_KEY=${{ secrets.STRIPE_CLIENT_KEY }}
+            REDIS_URL=${{ secrets.REDIS_URL }}
+          file: Dockerfile
+          target: production
+
+      - name: Trigger Render Deploy Hook
+        run: |
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
