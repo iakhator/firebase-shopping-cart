@@ -40,7 +40,7 @@ RUN corepack enable
 COPY package.json package-lock.json ./
 
 # Install dependencies
-RUN pnpm i
+RUN npm i
 
 # Copy the entire project
 COPY . ./
