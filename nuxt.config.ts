@@ -67,15 +67,15 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      FIREBASE_DATABASE_URL: process.env.DATABASE_URL,
-      FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
-      AUTH_DOMAIN: process.env.AUTH_DOMAIN,
-      PROJECT_ID: process.env.PROJECT_ID,
-      STORAGE_BUCKET: process.env.STORAGE_BUCKET,
-      MESSAGING_SENDER_ID: process.env.MESSAGING_SENDER_ID,
-      APP_ID: process.env.APP_ID,
-      MEASUREMENT_ID: process.env.MEASUREMENT_ID,
-      STRIPE_CLIENT_KEY: process.env.STRIPE_CLIENT_KEY,
+      FIREBASE_DATABASE_URL: process.env.DATABASE_URL || '',
+      FIREBASE_API_KEY: process.env.FIREBASE_API_KEY || '',
+      AUTH_DOMAIN: process.env.AUTH_DOMAIN || '',
+      PROJECT_ID: process.env.PROJECT_ID || '',
+      STORAGE_BUCKET: process.env.STORAGE_BUCKET || '',
+      MESSAGING_SENDER_ID: process.env.MESSAGING_SENDER_ID || '',
+      APP_ID: process.env.APP_ID || '',
+      MEASUREMENT_ID: process.env.MEASUREMENT_ID || '',
+      STRIPE_CLIENT_KEY: process.env.STRIPE_CLIENT_KEY || '',
     },
   },
   security: {
