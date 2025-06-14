@@ -12,8 +12,6 @@ export default defineNuxtPlugin(() => {
   console.log('🔥 Firebase Client Initialized')
   const config = useRuntimeConfig()
 
-  console.log(config.public, 'public keyyyeyeyeyeyeyey')
-
   const firebaseConfig = {
     apiKey: config.public.FIREBASE_API_KEY,
     authDomain: config.public.AUTH_DOMAIN,
