@@ -68,7 +68,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       FIREBASE_DATABASE_URL: process.env.DATABASE_URL,
-      API_KEY: process.env.API_KEY,
+      FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
       AUTH_DOMAIN: process.env.AUTH_DOMAIN,
       PROJECT_ID: process.env.PROJECT_ID,
       STORAGE_BUCKET: process.env.STORAGE_BUCKET,
