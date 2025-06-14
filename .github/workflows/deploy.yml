@@ -23,7 +23,9 @@ jobs:
           tags: shopping-cart-app:latest
           build-args: |
             NODE_ENV=production
-            API_KEY=${{ secrets.FIREBASE_API_KEY }}
+            FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }}
+            AUTH_DOMAIN=${{ secrets.AUTH_DOMAIN }}
+            APP_ID=${{ secrets.APP_ID }}
             PROJECT_ID=${{ secrets.PROJECT_ID }}
             CLIENT_EMAIL=${{ secrets.CLIENT_EMAIL }}
             CLIENT_ID=${{ secrets.FIREBASE_CLIENT_ID }}
