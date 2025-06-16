@@ -383,11 +383,6 @@ input:focus,
                             <el-icon><CreditCard /></el-icon>
                         </template>
                     </el-step>
-                    <el-step title="Confirmation">
-                        <template #icon>
-                            <el-icon><Check /></el-icon>
-                        </template>
-                    </el-step>
                 </el-steps>
 
                 <div class="payment-form">
@@ -595,30 +590,6 @@ input:focus,
                             </el-button>
                         </div>
                     </div>
-
-                    <div v-if="currentStep === 3" class="confirmation">
-                        <div class="success-icon">
-                            <el-icon><CircleCheckFilled /></el-icon>
-                        </div>
-                        <h3>Payment Successful!</h3>
-                        <p>
-                            Your order has been placed and will be processed
-                            soon.
-                        </p>
-                        <p class="order-number">
-                            Order #: ORD-{{ orderNumber }}
-                        </p>
-                        <p>
-                            A confirmation email has been sent to
-                            {{ ruleForm.email }}
-                        </p>
-                        <el-button
-                            type="primary"
-                            size="large"
-                            @click="goToOrders"
-                            >View Order Details</el-button
-                        >
-                    </div>
                 </div>
             </div>
         </div>
@@ -711,11 +682,6 @@ const cardError = ref('')
 const loading = ref(false)
 const saveCard = ref(false)
 const currentStep = ref(1)
-const orderNumber = ref(
-    Math.floor(Math.random() * 1000000)
-        .toString()
-        .padStart(6, '0'),
-)
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 // const loggedInUser = computed(() => authStore.loggedInUser)
@@ -738,15 +704,18 @@ onMounted(async () => {
         // stripeCard()
     }
 
+    const user = authStore.user
+
+    console.log(user.shippingAddress, 'user')
     ruleForm.value = {
         firstName: firstName.value,
         lastName: lastName.value,
-        email: authStore.user?.email || '',
-        address: '',
-        street: '',
-        city: '',
-        country: '',
-        postalCode: '',
+        email: user?.email || '',
+        address: user?.shippingAddress.address || '',
+        street: user?.shippingAddress.street || '',
+        city: user?.shippingAddress.city || '',
+        country: user?.shippingAddress.country || '',
+        postalCode: user?.shippingAddress.postalCode || '',
     }
 })
 
@@ -859,12 +828,6 @@ const processPayment = async () => {
         loading.value = false
         currentStep.value = 3
     }, 2000)
-}
-
-// Navigate to orders page
-const goToOrders = () => {
-    // In a real app, this would navigate to the orders page
-    console.log('Navigate to orders page')
 }
 </script>
 
@@ -1055,11 +1018,6 @@ const goToOrders = () => {
 .continue-btn {
     width: 100%;
     margin-top: 1.5rem;
-}
-
-.confirmation {
-    text-align: center;
-    padding: 2rem 0;
 }
 
 .success-icon {

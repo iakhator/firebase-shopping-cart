@@ -25,9 +25,11 @@ export default defineEventHandler(async (event) => {
     let newCart = cartItems.map((item) => {
       const parsedItem = JSON.parse(item)
 
+      console.log(parsedItem, 'parsedItem')
+
       if (
         parsedItem.productId === productId &&
-        parsedItem.variant === variant &&
+        parsedItem.variant.color === variant.color &&
         parsedItem.bundle === bundle
       ) {
         parsedItem.quantity += quantity

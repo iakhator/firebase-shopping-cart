@@ -1,6 +1,4 @@
 import { defineNuxtConfig } from 'nuxt/config'
-import { fileURLToPath } from 'url'
-import { resolve } from 'path'
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-01-01',
