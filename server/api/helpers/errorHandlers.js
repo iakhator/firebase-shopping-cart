@@ -1,5 +1,5 @@
 export const notFound = (res, data) => {
-  return res.status(200).json({
+  return res.status(404).json({
     data,
   })
 }

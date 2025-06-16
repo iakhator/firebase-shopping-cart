@@ -615,6 +615,7 @@ const { $stripe } = useNuxtApp()
 const authStore = useAuthStore()
 const cartStore = useCartStore()
 const { toUSD } = useCurrency()
+const router = useRouter()
 
 const deliveryFee = 15
 
@@ -673,11 +674,10 @@ const rules = reactive({
 
 // Stripe and payment state
 const stripe = ref(null)
-// const cardElement = ref(null)
+const cardElement = ref(null)
 const cardNumberElement = ref(null)
 const cardExpiryElement = ref(null)
 const cardCvcElement = ref(null)
-const elements = ref(null)
 const cardError = ref('')
 const loading = ref(false)
 const saveCard = ref(false)
@@ -706,7 +706,6 @@ onMounted(async () => {
 
     const user = authStore.user
 
-    console.log(user.shippingAddress, 'user')
     ruleForm.value = {
         firstName: firstName.value,
         lastName: lastName.value,
@@ -743,23 +742,29 @@ watch(
                     }
 
                     // Create fresh elements
-                    const elements = $stripe.elements()
+                    cardElement.value = $stripe.elements()
 
                     // Create and mount card number element
-                    cardNumberElement.value = elements.create('cardNumber', {
-                        style: elementStyle,
-                        placeholder: 'Card number',
-                    })
+                    cardNumberElement.value = cardElement.value.create(
+                        'cardNumber',
+                        {
+                            style: elementStyle,
+                            placeholder: 'Card number',
+                        },
+                    )
                     cardNumberElement.value.mount('#card-number-element')
 
                     // Create and mount card expiry element
-                    cardExpiryElement.value = elements.create('cardExpiry', {
-                        style: elementStyle,
-                    })
+                    cardExpiryElement.value = cardElement.value.create(
+                        'cardExpiry',
+                        {
+                            style: elementStyle,
+                        },
+                    )
                     cardExpiryElement.value.mount('#card-expiry-element')
 
                     // Create and mount card CVC element
-                    cardCvcElement.value = elements.create('cardCvc', {
+                    cardCvcElement.value = cardElement.value.create('cardCvc', {
                         style: elementStyle,
                     })
                     cardCvcElement.value.mount('#card-cvc-element')
@@ -780,6 +785,18 @@ watch(
     },
     { immediate: true },
 )
+
+onUnmounted(() => {
+    if (cardNumberElement.value) {
+        cardNumberElement.value.unmount()
+    }
+    if (cardExpiryElement.value) {
+        cardExpiryElement.value.unmount()
+    }
+    if (cardCvcElement.value) {
+        cardCvcElement.value.unmount()
+    }
+})
 
 // function stripeCard() {
 //     if (process.client) {
@@ -823,12 +840,52 @@ function goToPayment(formEl) {
 const processPayment = async () => {
     loading.value = true
 
-    // Simulate payment processing
-    setTimeout(() => {
+    const items = cartItems.value.map((cart) => ({
+        id: cart.productId,
+        quantity: cart.quantity,
+        name: cart.name,
+    }))
+
+    const payload = {
+        savePaymentMethod: saveCard.value,
+        amount: totalPrice.value,
+        items,
+    }
+
+    try {
+        const paymentIntentResponse = await $fetch(
+            '/api/payment/process-payment',
+            {
+                method: 'POST',
+                body: payload,
+            },
+        )
+
+        const clientSecret = paymentIntentResponse.clientSecret
+
+        if (!clientSecret) {
+            throw new Error(
+                'Failed to retrieve client secret from payment intent',
+            )
+        }
+        const result = await $stripe.confirmCardPayment(clientSecret, {
+            payment_method: {
+                card: cardNumberElement.value,
+            },
+        })
+        console.log(result.paymentIntent, 'data')
+        // if (result.paymentIntent.status === 'succeeded') {
+        //     router.push('/payment/success?')
+        // }
+    } catch (error) {
+        console.log(error)
         loading.value = false
-        currentStep.value = 3
-    }, 2000)
+    } finally {
+        loading.value = false
+    }
 }
+
+// 4242 4242 4242 4242
 </script>
 
 <style scoped lang="scss">

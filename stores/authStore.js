@@ -107,6 +107,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         const cartStore = useCartStore()
         const response = await $fetch('/api/user', {
+          method: 'GET',
           credentials: 'include',
           onResponseError: (context) => {
             if (

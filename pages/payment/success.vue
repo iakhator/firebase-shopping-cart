@@ -1,9 +1,11 @@
 <script setup>
-const orderNumber = ref(
-    Math.floor(Math.random() * 1000000)
-        .toString()
-        .padStart(6, '0'),
-)
+import { CircleCheckFilled } from '@element-plus/icons-vue'
+
+// const orderNumber = ref(
+//     Math.floor(Math.random() * 1000000)
+//         .toString()
+//         .padStart(6, '0'),
+// )
 
 // Navigate to orders page
 const goToOrders = () => {
@@ -19,10 +21,10 @@ const goToOrders = () => {
             </div>
             <h3>Payment Successful!</h3>
             <p>Your order has been placed and will be processed soon.</p>
-            <p class="order-number">Order #: ORD-{{ orderNumber }}</p>
+            <!-- <p class="order-number">Order #: ORD-{{ orderNumber }}</p> -->
             <p>
                 A confirmation email has been sent to
-                {{ ruleForm.email }}
+                <!-- {{ ruleForm.email }} -->
             </p>
             <el-button type="primary" size="large" @click="goToOrders"
                 >View Order Details</el-button
@@ -36,13 +38,7 @@ const goToOrders = () => {
     </el-row>
 </template>
 
-<style lang="scss">
-.el-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
+<style lang="scss" scoped>
 .success__grid {
     display: flex;
     align-items: center;

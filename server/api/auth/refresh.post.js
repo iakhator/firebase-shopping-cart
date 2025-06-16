@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     // Exchange refresh token for a new ID token
-    const response = await fetch(
+    const response = await $fetch(
       `https://securetoken.googleapis.com/v1/token?key=${process.env.API_KEY}`,
       {
         method: 'POST',

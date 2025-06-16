@@ -14,7 +14,7 @@
                 <el-col :md="12" class="item__contents">
                     <div class="item__contents-head">
                         <h3 class="capitalize item__contents-name">
-                            {{ item.name }}
+                            {{ item?.name }}
                         </h3>
                     </div>
                     <div class="item__contents-quantity-price">
@@ -24,7 +24,7 @@
                     </div>
                     <div class="item__contents-description">
                         <p class="item__contents-description">
-                            {{ item.description }}
+                            {{ item?.description }}
                         </p>
                     </div>
                     <div class="variant">
@@ -46,7 +46,7 @@
                                         v-for="item in item.bundles"
                                         @click="handleBundleChange(item)"
                                         :key="item.id"
-                                        :label="`${item.ram}/${item.storage}`"
+                                        :label="`${item?.ram}/${item?.storage}`"
                                         variant="transparent"
                                         size="large"
                                     />
@@ -193,7 +193,7 @@ async function updateCart() {
         productId: item.value.id,
         quantity: qty.value,
         originalPrice: itemBundle.value?.price,
-        name: item.value.name,
+        name: item.value?.name,
         price: itemPrice.value || item.value.price,
         variant: selectedVariant.value,
         bundle: `${itemBundle.value.ram}/${itemBundle.value.storage}`,
