@@ -17,7 +17,12 @@ export default defineNuxtConfig({
    */
   app: {
     head: {
-      title: process.env.npm_package_name || '',
+      title: 'RingCart',
+      link: [
+        { rel: 'icon', type: 'image/png', href: '/favicon-32x32.png' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+        { rel: 'manifest', href: '/site.webmanifest' },
+      ],
       script: [{ src: 'https://js.stripe.com/v3', async: true, defer: true }],
       meta: [
         {

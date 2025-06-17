@@ -1,8 +1,9 @@
 <template>
     <AppAside @filter-change="handleFilterChange" />
-    <div v-if="!products.length">No products found</div>
+    <Spinner v-if="isLoading" />
     <div v-else class="main-content">
-        <el-row class="product__grid">
+        <div v-if="!products.length">No products found</div>
+        <el-row v-else class="product__grid">
             <div class="product__grid-right">
                 <ul class="product__grid-w">
                     <li
@@ -89,6 +90,7 @@
 import UIButton from '~/components/ui/UIButton'
 import { ShoppingCart, Star, Wallet } from '@element-plus/icons-vue'
 import HeartIcon from '~/components/icons/HeartIcon.vue'
+import Spinner from '~/components/icons/Spinner.vue'
 
 const isFavHovered = ref('')
 const { toUSD } = useCurrency()
@@ -99,6 +101,10 @@ defineProps({
     products: {
         type: Array,
         default: () => [],
+    },
+    isLoading: {
+        type: Boolean,
+        default: false,
     },
 })
 

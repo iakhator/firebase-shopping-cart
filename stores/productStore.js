@@ -1,61 +1,60 @@
-export const useProductStore = defineStore('product', {
-  state: () => ({
-    products: [],
-    product: null,
-    errorMessage: null,
-  }),
+export const useProductStore = defineStore('product', () => {
+  const products = ref([])
+  const product = ref(null)
+  const errorMessage = ref(null)
 
-  actions: {
-    async getAllProducts(filters) {
-      const { $toast } = useNuxtApp()
+  const { isLoading, error, fetchData } = useFetchWithLoading()
+  const { $toast } = useNuxtApp()
 
-      const query = new URLSearchParams()
-      if (filters.brands.length) query.set('brands', filters.brands.join(','))
-      if (filters.priceRanges.length)
-        query.set('priceRanges', filters.priceRanges.join(','))
-      if (filters.storage.length)
-        query.set('storage', filters.storage.join(','))
+  const getAllProducts = async (filters) => {
+    const query = new URLSearchParams()
+    if (filters?.brands?.length) query.set('brands', filters.brands.join(','))
+    if (filters?.priceRanges?.length)
+      query.set('priceRanges', filters.priceRanges.join(','))
+    if (filters?.storage?.length)
+      query.set('storage', filters.storage.join(','))
 
-      try {
-        const { data, error } = await useFetch(
-          `/api/products?${query.toString()}`,
-        )
+    try {
+      const data = await fetchData(`/api/products?${query.toString()}`)
 
-        if (error && error?.value) {
-          $toast.error(error.value)
+      products.value = data.products || []
+    } catch (err) {
+      errorMessage.value = err.message
+      if ($toast) $toast.error(err.message)
+    }
+  }
 
-          return
-        }
+  const getProduct = async (productId) => {
+    try {
+      const { data, error } = await useFetch(`/api/products/${productId}`)
 
-        this.products = data.value.products
-      } catch (err) {
-        this.errorMessage = err.message
-        $toast.error(err.message) // Notify the user
+      if (error.value) {
+        if ($toast)
+          $toast.error(error.value.message || 'Failed to load product')
+        return
       }
-    },
 
-    async getProduct(productId) {
-      const { $toast } = useNuxtApp()
-      try {
-        const { data, error } = await useFetch(`/api/products/${productId}`)
+      product.value = data.value.product
+    } catch (err) {
+      errorMessage.value = err.message
+      if ($toast) $toast.error(err.message)
+    }
+  }
 
-        if (error && error?.value) {
-          if ($toast) $toast.error(error?.value)
+  const getProducts = computed(() => products.value || [])
 
-          return
-        }
+  return {
+    // state
+    isLoading,
+    products,
+    product,
+    errorMessage,
 
-        this.product = data.value.product
-      } catch (err) {
-        this.errorMessage = err?.message || 'An error occurred'
-        if ($toast) $toast.error(err?.message) // Notify the user
-      }
-    },
-  },
+    // actions
+    getAllProducts,
+    getProduct,
 
-  getters: {
-    getProducts: (state) => {
-      return state?.products || []
-    },
-  },
+    // getters
+    getProducts,
+  }
 })

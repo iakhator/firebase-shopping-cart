@@ -23,6 +23,7 @@ import AppFooter from '~/components/AppFooter'
 }
 
 .container-wrapper {
+    position: relative;
     width: 1600px;
     /* max-width: 1600px; */
     margin: 80px auto 30px auto;
