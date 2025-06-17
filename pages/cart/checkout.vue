@@ -209,30 +209,33 @@
                         <!-- Stripe Card Element -->
                         <div class="stripe-element-container">
                             <div class="card-field">
-                                <label for="card-number-element"
+                                <label id="card-number-label"
                                     >Card Number</label
                                 >
                                 <div
                                     id="card-number-element"
                                     class="stripe-element"
+                                    aria-labelledby="card-number-label"
                                 ></div>
                             </div>
 
                             <div class="card-row">
                                 <div class="card-field expiry">
-                                    <label for="card-expiry-element"
+                                    <label id="card-expiry-label"
                                         >Expiry Date</label
                                     >
                                     <div
                                         id="card-expiry-element"
                                         class="stripe-element"
+                                        aria-labelledby="card-expiry-label"
                                     ></div>
                                 </div>
 
                                 <div class="card-field cvc">
-                                    <label for="card-cvc-element">CVC</label>
+                                    <label id="card-cvc-label">CVC</label>
                                     <div
                                         id="card-cvc-element"
+                                        aria-labelledby="card-cvc-label"
                                         class="stripe-element"
                                     ></div>
                                 </div>
@@ -432,7 +435,6 @@ watch(
                             '::placeholder': {
                                 color: '#acafb7',
                             },
-                            padding: '0 15px',
                         },
                         invalid: {
                             color: '#fa755a',

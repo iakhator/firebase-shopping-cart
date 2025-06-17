@@ -19,11 +19,10 @@ export default defineNuxtConfig({
     head: {
       title: 'RingCart',
       link: [
-        { rel: 'icon', type: 'image/png', href: '/favicon-32x32.png' },
+        { rel: 'icon', type: 'image/png', href: '/favicon-96x96.png' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
         { rel: 'manifest', href: '/site.webmanifest' },
       ],
-      script: [{ src: 'https://js.stripe.com/v3', async: true, defer: true }],
       meta: [
         {
           charset: 'utf-8',
@@ -36,13 +35,6 @@ export default defineNuxtConfig({
           hid: 'description',
           name: 'description',
           content: process.env.npm_package_description || '',
-        },
-      ],
-      link: [
-        {
-          rel: 'icon',
-          type: 'image/x-icon',
-          href: '/favicon.ico',
         },
       ],
     },
