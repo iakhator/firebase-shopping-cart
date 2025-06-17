@@ -83,6 +83,7 @@ export default defineNuxtConfig({
   security: {
     nonce: true, // Enables nonce for scripts
     headers: {
+      crossOriginEmbedderPolicy: false,
       contentSecurityPolicy: {
         'default-src': ["'self'"],
         'script-src': [

@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
 
       idToken = response.id_token
 
-      setCookie(event, 'idToken', idToken, {
+      setCookie(event, 'auth_token', idToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         maxAge: 3600,
