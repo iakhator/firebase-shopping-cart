@@ -1,4 +1,5 @@
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig()
   const refreshToken = getCookie(event, 'refresh_token')
 
   if (!refreshToken) {
@@ -8,7 +9,7 @@ export default defineEventHandler(async (event) => {
   try {
     // Exchange refresh token for a new ID token
     const response = await $fetch(
-      `https://securetoken.googleapis.com/v1/token?key=${process.env.API_KEY}`,
+      `https://securetoken.googleapis.com/v1/token?key=${config.public.FIREBASE_API_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -19,10 +20,10 @@ export default defineEventHandler(async (event) => {
       },
     )
 
-    const refreshed = await response.json()
+    const refreshed = await response
 
     // Check for errors in the response
-    if (!response.ok) {
+    if (!response.user_id) {
       const errorMessage = refreshed.error?.message || 'Unknown error'
       if (errorMessage === 'INVALID_GRANT') {
         return {
@@ -37,7 +38,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Get new tokens
-    const newIdToken = refreshed.id_token
+    const newIdToken = refreshed.access_token
     const newRefreshToken = refreshed.refresh_token // May or may not change
 
     // Store the new tokens securely
@@ -57,6 +58,7 @@ export default defineEventHandler(async (event) => {
 
     return { success: true, token: newIdToken }
   } catch (error) {
+    console.log(error, 'error')
     deleteCookie(event, 'auth_token')
     deleteCookie(event, 'refresh_token')
     return { success: false, message: 'Token refresh failed', error }

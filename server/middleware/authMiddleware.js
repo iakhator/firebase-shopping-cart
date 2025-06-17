@@ -1,6 +1,7 @@
 import { adminAuth } from '~/server/utils/firebaseAdmin'
 
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig()
   let idToken = getCookie(event, 'auth_token')
   const refreshToken = getCookie(event, 'refresh_token')
 
@@ -8,7 +9,7 @@ export default defineEventHandler(async (event) => {
     try {
       const response = await $fetch(
         'https://securetoken.googleapis.com/v1/token?key=' +
-          process.env.FIREBASE_API_KEY,
+          config.public.FIREBASE_API_KEY,
         {
           method: 'POST',
           body: new URLSearchParams({

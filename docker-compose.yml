@@ -5,7 +5,7 @@ services:
     container_name: firebase-shopping-cart-app
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
       target: ${DOCKER_TARGET:-development} # Use 'production' for production builds
     ports:
       - '3000:3000'
