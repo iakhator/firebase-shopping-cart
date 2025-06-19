@@ -9,9 +9,10 @@ export default defineNuxtPlugin(() => {
 
       if (response.success) {
         console.log('Token refreshed successfully:', response.token)
-      } else {
-        console.error('Failed to refresh token:', response.message)
       }
+      // else {
+      //   console.error('Failed to refresh token:', response.message)
+      // }
     } catch (error) {
       console.error('Error refreshing token:', error)
     }
@@ -29,7 +30,7 @@ export default defineNuxtPlugin(() => {
         console.log('Refreshing auth token...')
         refreshAuthToken()
       },
-      50 * 60 * 1000,
+      30 * 60 * 1000,
     ) // 50 minutes in milliseconds
   }
 

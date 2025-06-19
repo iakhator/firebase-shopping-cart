@@ -1,7 +1,7 @@
 export async function syncCartOnLogin(event, userId, redis) {
   const guestId = getCookie(event, 'guest_id')
 
-  if (guestId) {
+  if (guestId && userId) {
     const guestCartKey = `cart:${guestId}`
     const userCartKey = `cart:${userId}`
 
