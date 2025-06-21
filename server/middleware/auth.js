@@ -1,5 +1,4 @@
 import { adminAuth } from '~/server/utils/firebaseAdmin'
-import { sendEmail } from '~/server/utils/sendEmail'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
@@ -37,11 +36,6 @@ export default defineEventHandler(async (event) => {
   // throw createError({ statusCode: 401, message: 'Not authenticated' })
   try {
     event.context.user = await adminAuth.verifyIdToken(idToken)
-    await sendEmail({
-      to: 'test@example.com',
-      subject: 'Order confirmed',
-      html: `<p>Thanks for your order!</p>`,
-    })
   } catch {
     throw createError({ statusCode: 401, message: 'Invalid token' })
   }
