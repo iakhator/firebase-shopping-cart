@@ -1,42 +1,41 @@
-
 .el-input-number__decrease:hover:not(.is-disabled)
-  ~ .el-input
-  .el-input__inner:not(.is-disabled),
+    ~ .el-input
+    .el-input__inner:not(.is-disabled),
 .el-input-number__increase:hover:not(.is-disabled)
-  ~ .el-input
-  .el-input__inner:not(.is-disabled) {
-  border-color: none;
+    ~ .el-input
+    .el-input__inner:not(.is-disabled) {
+    border-color: none;
 }
 
 .el-input-number__decrease,
 .el-input-number__increase {
-  background: $off-black;
-  color: #ffffff;
-  // border-radius: 50%;
-  // top: 10px;
+    background: $off-black;
+    color: #ffffff;
+    // border-radius: 50%;
+    // top: 10px;
 }
 
 .el-input-number__decrease:hover,
 .el-input-number__increase:hover {
-  color: #ffffff;
+    color: #ffffff;
 }
 
 .el-input__inner {
-  background-color: $off-white;
-  color: $off-black;
-  border: none;
+    background-color: $off-white;
+    color: $off-black;
+    border: none;
 }
 
 .account__form-input .el-input__inner {
-  margin-top: 0 !important;
-  border: none !important;
+    margin-top: 0 !important;
+    border: none !important;
 }
 
 .el-input-number .el-input__inner {
-  padding-right: 0px;
-  padding-left: 0px;
+    padding-right: 0px;
+    padding-left: 0px;
 }
 
 .el-input__wrapper {
-  background-color: transparent !important;
+    background-color: transparent !important;
 }

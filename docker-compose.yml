@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-      target: ${DOCKER_TARGET:-development} # Use 'production' for production builds
+      target: ${DOCKER_TARGET:-development}
     ports:
       - '3000:3000'
     volumes:
@@ -16,6 +16,7 @@ services:
       - .env
     depends_on:
       - redis
+      - maildev
 
   redis:
     container_name: firebase-shopping-cart-redis
@@ -24,6 +25,13 @@ services:
       - '6379:6379'
     volumes:
       - redis-data:/data
+
+  maildev:
+    container_name: firebase-shopping-cart-maildev
+    image: maildev/maildev
+    ports:
+      - '1080:1080'
+      - '1025:1025'
 
 volumes:
   redis-data:

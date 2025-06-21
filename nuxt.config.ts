@@ -2,6 +2,11 @@ import { defineNuxtConfig } from 'nuxt/config'
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-01-01',
+  nitro: {
+    externals: {
+      inline: ['nodemailer'],
+    },
+  },
   vite: {
     logLevel: 'info',
     css: {
@@ -19,6 +24,10 @@ export default defineNuxtConfig({
     head: {
       title: 'RingCart',
       link: [
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Sofia+Sans:wght@300;400;500;600;700&display=swap',
+        },
         { rel: 'icon', type: 'image/png', href: '/favicon-96x96.png' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
         { rel: 'manifest', href: '/site.webmanifest' },
@@ -32,7 +41,6 @@ export default defineNuxtConfig({
           content: 'width=device-width, initial-scale=1',
         },
         {
-          hid: 'description',
           name: 'description',
           content: process.env.npm_package_description || '',
         },
@@ -47,7 +55,23 @@ export default defineNuxtConfig({
   /*
    ** Nuxt.js modules
    */
-  modules: ['@pinia/nuxt', '@element-plus/nuxt', 'nuxt-security'],
+  modules: [
+    '@pinia/nuxt',
+    '@element-plus/nuxt',
+    // 'nuxt-security',
+    // 'nuxt-nodemailer',
+  ],
+  // nodemailer: {
+  //   from: '"John Doe" <john@doe.com>',
+  //   host: 'maildev',
+  //   port: 1025,
+  //   secure: true,
+  //   auth: null,
+  //   // auth: {
+  //   //   user: 'john@doe.com',
+  //   //   pass: '',
+  //   // },
+  // },
 
   /*
    ** Build configuration
@@ -72,48 +96,48 @@ export default defineNuxtConfig({
       STRIPE_CLIENT_KEY: '',
     },
   },
-  security: {
-    nonce: true, // Enables nonce for scripts
-    headers: {
-      crossOriginEmbedderPolicy: false,
-      contentSecurityPolicy: {
-        'default-src': ["'self'"],
-        'script-src': [
-          "'self'",
-          "'strict-dynamic'",
-          "'nonce-{{nonce}}'", // Ensure scripts use the nonce
-          'https://js.stripe.com',
-          'https://m.stripe.network',
-          'https://q.stripe.com',
-          "'unsafe-eval'", // Allow eval() (last resort)
-        ],
-        'frame-src': ["'self'", 'https://js.stripe.com'],
-        'connect-src': [
-          "'self'",
-          'https://api.stripe.com',
-          'https://m.stripe.network',
-          'https://identitytoolkit.googleapis.com', // ✅ Allows Firebase Authentication
-          'https://securetoken.googleapis.com', // ✅ Needed for Firebase tokens
-          'https://firestore.googleapis.com', // ✅ If you're using Firestore
-          'https://storage.googleapis.com', // ✅ If Firebase Storage is used
-          'https://www.googleapis.com',
-        ],
-        'img-src': [
-          "'self'",
-          'data:',
-          'https://*.stripe.com',
-          'https://firebasestorage.googleapis.com',
-        ],
-        'style-src': [
-          "'self'",
-          "'unsafe-inline'",
-          'https://fonts.googleapis.com',
-        ],
-        'font-src': ["'self'", 'https://fonts.gstatic.com', 'data:'],
-        'object-src': ["'none'"],
-        'upgrade-insecure-requests': true,
-      },
-    },
-    sri: true,
-  },
+  // security: {
+  //   nonce: true, // Enables nonce for scripts
+  //   headers: {
+  //     crossOriginEmbedderPolicy: false,
+  //     contentSecurityPolicy: {
+  //       'default-src': ["'self'"],
+  //       'script-src': [
+  //         "'self'",
+  //         "'strict-dynamic'",
+  //         "'nonce-{{nonce}}'", // Ensure scripts use the nonce
+  //         'https://js.stripe.com',
+  //         'https://m.stripe.network',
+  //         'https://q.stripe.com',
+  //         "'unsafe-eval'", // Allow eval() (last resort)
+  //       ],
+  //       'frame-src': ["'self'", 'https://js.stripe.com'],
+  //       'connect-src': [
+  //         "'self'",
+  //         'https://api.stripe.com',
+  //         'https://m.stripe.network',
+  //         'https://identitytoolkit.googleapis.com', // ✅ Allows Firebase Authentication
+  //         'https://securetoken.googleapis.com', // ✅ Needed for Firebase tokens
+  //         'https://firestore.googleapis.com', // ✅ If you're using Firestore
+  //         'https://storage.googleapis.com', // ✅ If Firebase Storage is used
+  //         'https://www.googleapis.com',
+  //       ],
+  //       'img-src': [
+  //         "'self'",
+  //         'data:',
+  //         'https://*.stripe.com',
+  //         'https://firebasestorage.googleapis.com',
+  //       ],
+  //       'style-src': [
+  //         "'self'",
+  //         "'unsafe-inline'",
+  //         'https://fonts.googleapis.com',
+  //       ],
+  //       'font-src': ["'self'", 'https://fonts.gstatic.com', 'data:'],
+  //       'object-src': ["'none'"],
+  //       'upgrade-insecure-requests': true,
+  //     },
+  //   },
+  //   sri: true,
+  // },
 })

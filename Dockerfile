@@ -30,3 +30,5 @@ COPY --from=build /app/.output/ ./
 EXPOSE 3000
 
 CMD ["node", "/app/server/index.mjs"]
+
+# RUN apk add --no-cache bash ca-certificates openssl msmtp

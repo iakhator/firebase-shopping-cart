@@ -1,17 +1,16 @@
 /* Tabs */
-
 .el-tabs__item.is-active {
-  color: $black !important; 
-  font-weight: bold;
+    color: $black !important;
+    font-weight: bold;
 }
 
 .el-tabs__active-bar {
-  background-color: $black !important;
-  height: 10px;
+    background-color: $black !important;
+    height: 10px;
 }
 
 .el-tabs__item:hover {
-  color: $black !important;  // Change text color on hover
-  transition: all 0.3s ease;
-  font-weight: bold;
+    color: $black !important; // Change text color on hover
+    transition: all 0.3s ease;
+    font-weight: bold;
 }
