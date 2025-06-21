@@ -12,7 +12,7 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@import "~/assets/scss/variables.scss";`, // Auto-import variables
+          additionalData: `@import "~/assets/scss/variables.scss";`,
         },
       },
     },
@@ -55,23 +55,7 @@ export default defineNuxtConfig({
   /*
    ** Nuxt.js modules
    */
-  modules: [
-    '@pinia/nuxt',
-    '@element-plus/nuxt',
-    // 'nuxt-security',
-    // 'nuxt-nodemailer',
-  ],
-  // nodemailer: {
-  //   from: '"John Doe" <john@doe.com>',
-  //   host: 'maildev',
-  //   port: 1025,
-  //   secure: true,
-  //   auth: null,
-  //   // auth: {
-  //   //   user: 'john@doe.com',
-  //   //   pass: '',
-  //   // },
-  // },
+  modules: ['@pinia/nuxt', '@element-plus/nuxt'],
 
   /*
    ** Build configuration
@@ -96,48 +80,4 @@ export default defineNuxtConfig({
       STRIPE_CLIENT_KEY: '',
     },
   },
-  // security: {
-  //   nonce: true, // Enables nonce for scripts
-  //   headers: {
-  //     crossOriginEmbedderPolicy: false,
-  //     contentSecurityPolicy: {
-  //       'default-src': ["'self'"],
-  //       'script-src': [
-  //         "'self'",
-  //         "'strict-dynamic'",
-  //         "'nonce-{{nonce}}'", // Ensure scripts use the nonce
-  //         'https://js.stripe.com',
-  //         'https://m.stripe.network',
-  //         'https://q.stripe.com',
-  //         "'unsafe-eval'", // Allow eval() (last resort)
-  //       ],
-  //       'frame-src': ["'self'", 'https://js.stripe.com'],
-  //       'connect-src': [
-  //         "'self'",
-  //         'https://api.stripe.com',
-  //         'https://m.stripe.network',
-  //         'https://identitytoolkit.googleapis.com', // ✅ Allows Firebase Authentication
-  //         'https://securetoken.googleapis.com', // ✅ Needed for Firebase tokens
-  //         'https://firestore.googleapis.com', // ✅ If you're using Firestore
-  //         'https://storage.googleapis.com', // ✅ If Firebase Storage is used
-  //         'https://www.googleapis.com',
-  //       ],
-  //       'img-src': [
-  //         "'self'",
-  //         'data:',
-  //         'https://*.stripe.com',
-  //         'https://firebasestorage.googleapis.com',
-  //       ],
-  //       'style-src': [
-  //         "'self'",
-  //         "'unsafe-inline'",
-  //         'https://fonts.googleapis.com',
-  //       ],
-  //       'font-src': ["'self'", 'https://fonts.gstatic.com', 'data:'],
-  //       'object-src': ["'none'"],
-  //       'upgrade-insecure-requests': true,
-  //     },
-  //   },
-  //   sri: true,
-  // },
 })
