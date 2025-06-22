@@ -1,4 +1,6 @@
 // PopOver
+@use './variables' as *;
+
 .el-popover {
     background-color: $off-white !important;
     color: $black;

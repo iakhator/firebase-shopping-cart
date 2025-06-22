@@ -233,7 +233,7 @@ async function signOut() {
 
 .el-menu-item.is-active {
     border: none;
-    color: $--text-white;
+    color: $text-white;
 }
 
 .flex-grow {

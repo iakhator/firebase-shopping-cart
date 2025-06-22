@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
         .doc(userId)
         .collection('userOrders')
         .add({
-          amount: paymentIntent.amount,
+          amount: paymentIntent.amount / 100,
           currency: paymentIntent.currency,
           status: paymentIntent.status,
           items: JSON.parse(items),

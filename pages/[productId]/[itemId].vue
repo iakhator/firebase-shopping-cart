@@ -251,7 +251,7 @@ img {
 
     &-description {
         margin-top: 1.5rem;
-        color: $--text-gray-600;
+        color: $text-gray-600;
     }
 
     &-specifications {

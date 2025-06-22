@@ -1,3 +1,5 @@
+@use './variables' as *;
+
 .el-dialog__close:hover {
     color: $primary-color !important;
 }

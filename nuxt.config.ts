@@ -6,13 +6,17 @@ export default defineNuxtConfig({
     externals: {
       inline: ['nodemailer'],
     },
+    routeRules: {
+      '/.well-known/**': { prerender: false, swr: false },
+    },
   },
+
   vite: {
     logLevel: 'info',
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@import "~/assets/scss/variables.scss";`,
+          additionalData: '@use "~/assets/scss/variables.scss" as *;',
         },
       },
     },
@@ -50,12 +54,12 @@ export default defineNuxtConfig({
   /*
    ** Global CSS
    */
-  css: ['element-plus/dist/index.css', '~/assets/scss/main.scss'],
+  css: ['element-plus/dist/index.css', '@/assets/scss/main.scss'],
 
   /*
    ** Nuxt.js modules
    */
-  modules: ['@pinia/nuxt', '@element-plus/nuxt'],
+  modules: ['@pinia/nuxt', '@element-plus/nuxt', '@nuxt/test-utils/module'],
 
   /*
    ** Build configuration

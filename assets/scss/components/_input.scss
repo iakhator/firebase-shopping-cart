@@ -1,3 +1,5 @@
+@use '../variables' as *;
+
 .el-input-number__decrease:hover:not(.is-disabled)
     ~ .el-input
     .el-input__inner:not(.is-disabled),
