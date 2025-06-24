@@ -179,20 +179,6 @@
                                 <el-checkbox v-model="saveCard"
                                     >Save card for future purchases</el-checkbox
                                 >
-
-                                <div class="actions">
-                                    <el-button
-                                        type="primary"
-                                        @click="processPayment"
-                                        :loading="loading"
-                                        size="large"
-                                    >
-                                        Pay {{ toUSD(totalPrice) }}
-                                        <el-icon class="el-icon--right"
-                                            ><CreditCard
-                                        /></el-icon>
-                                    </el-button>
-                                </div>
                             </div>
                         </el-form>
                     </div>
@@ -256,6 +242,22 @@
                             <span>Estimated delivery: 3-5 business days</span>
                         </div>
 
+                        <div class="actions">
+                            <UIButton
+                                variant="secondary"
+                                @click="processPayment"
+                                :loading="loading"
+                                size="large"
+                                :label="`Place Order ${toUSD(totalPrice)}`"
+                            >
+                                <template #icon>
+                                    <el-icon class="el-icon--left"
+                                        ><CreditCard
+                                    /></el-icon>
+                                </template>
+                                Place Order {{ toUSD(totalPrice) }}
+                            </UIButton>
+                        </div>
                         <div class="secure-badge">
                             <el-icon><Lock /></el-icon>
                             <span>Secure Checkout</span>
@@ -396,12 +398,11 @@ onMounted(() => {
                 // Define base styles for all elements
                 const elementStyle = {
                     base: {
-                        fontSize: '14px',
-                        color: '#000000',
-                        backgroundColor: 'inherit',
-                        fontFamily: 'Sofia Sans',
+                        // fontSize: '10px',
+                        color: '#1b1a1a',
+                        fontFamily: 'inherit',
                         '::placeholder': {
-                            color: '#999999',
+                            color: '#acafb7',
                         },
                     },
                     invalid: {
@@ -414,9 +415,10 @@ onMounted(() => {
                 cardElement.value = $stripe.elements()
 
                 // Helper to create, mount and bind focus/blur handlers
-                const setupElement = (type, refVar, elementId) => {
+                const setupElement = (type, elementId, placeholder) => {
                     const el = cardElement.value.create(type, {
                         style: elementStyle,
+                        placeholder,
                     })
                     el.mount(`#${elementId}`)
                     el.on('focus', () =>
@@ -439,25 +441,38 @@ onMounted(() => {
                 // Create and bind all elements
                 cardNumberElement.value = setupElement(
                     'cardNumber',
-                    cardNumberElement,
                     'card-number-element',
+                    '1234 5678 9012 3456',
                 )
 
                 cardExpiryElement.value = setupElement(
                     'cardExpiry',
-                    cardExpiryElement,
                     'card-expiry-element',
+                    'MM/YY',
                 )
 
                 cardCvcElement.value = setupElement(
                     'cardCvc',
-                    cardCvcElement,
                     'card-cvc-element',
+                    '123',
                 )
             } catch (err) {
                 console.error('Error mounting Stripe elements:', err)
             }
         })
+    }
+
+    const user = authStore.user
+
+    ruleForm.value = {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        email: user?.email || '',
+        address: user?.shippingAddress.address || '',
+        street: user?.shippingAddress.street || '',
+        city: user?.shippingAddress.city || '',
+        country: user?.shippingAddress.country || '',
+        postalCode: user?.shippingAddress.postalCode || '',
     }
 })
 
@@ -558,7 +573,7 @@ const processPayment = async () => {
     flex-direction: column;
     /* align-items: center; */
     justify-content: center;
-    padding: 2rem;
+    padding: 0 2rem;
     gap: 1rem;
     width: 100%;
 
@@ -730,6 +745,7 @@ h2.product-order-summary {
 
 .secure-badge {
     margin-top: 1.5rem;
+    justify-content: center;
 }
 
 .stripe-element-container {
