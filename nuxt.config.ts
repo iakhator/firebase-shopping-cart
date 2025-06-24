@@ -59,7 +59,7 @@ export default defineNuxtConfig({
   /*
    ** Nuxt.js modules
    */
-  modules: ['@pinia/nuxt', '@element-plus/nuxt', '@nuxt/test-utils/module'],
+  modules: ['@pinia/nuxt', '@element-plus/nuxt'],
 
   /*
    ** Build configuration

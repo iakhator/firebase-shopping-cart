@@ -1,91 +1,11 @@
 <template>
     <ClientOnly>
-        <div class="checkout-container">
-            <!-- Product Section (Left) -->
-            <div class="product-section">
-                <div class="product-content">
-                    <h2 class="product-title">Order Summary</h2>
-
-                    <div class="product-card" v-for="item in cartItems">
-                        <div class="product-image">
-                            <img
-                                :src="item.variant?.imageUrl"
-                                alt="OnePlus 12 Dual 5G"
-                            />
-                        </div>
-                        <div class="product-details">
-                            <h3>
-                                {{ item.name }}
-                            </h3>
-                            <p class="product-variant">
-                                {{ capitalize(item.variant?.color) }} |
-                                {{ item.bundle }} |
-                                <span>qty: {{ item.quantity }}</span>
-                            </p>
-                            <div class="product-price">
-                                {{ toUSD(item.price) }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="price-breakdown">
-                        <div class="price-row">
-                            <span>Subtotal</span>
-                            <span>{{ toUSD(subtotal) }}</span>
-                        </div>
-                        <div class="price-row discount">
-                            <span>
-                                <el-tag
-                                    size="small"
-                                    effect="dark"
-                                    type="success"
-                                >
-                                    <el-icon><Discount /></el-icon> 15% OFF
-                                </el-tag>
-                            </span>
-                            <span> - {{ toUSD(discount) }}</span>
-                        </div>
-                        <div class="price-row">
-                            <span>Shipping</span>
-                            <span>{{ toUSD(deliveryFee) }}</span>
-                        </div>
-                        <div class="price-row total">
-                            <span>Total</span>
-                            <span>{{ toUSD(totalPrice) }}</span>
-                        </div>
-                    </div>
-
-                    <div class="shipping-info">
-                        <el-icon><Van /></el-icon>
-                        <span>Estimated delivery: 3-5 business days</span>
-                    </div>
-
-                    <div class="secure-badge">
-                        <el-icon><Lock /></el-icon>
-                        <span>Secure Checkout</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Payment Section (Right) -->
-            <div class="payment-section">
-                <h2 class="payment-title">Payment Details</h2>
-
-                <el-steps :active="currentStep" finish-status="success" simple>
-                    <el-step title="Information">
-                        <template #icon>
-                            <el-icon><User /></el-icon>
-                        </template>
-                    </el-step>
-                    <el-step title="Payment">
-                        <template #icon>
-                            <el-icon><CreditCard /></el-icon>
-                        </template>
-                    </el-step>
-                </el-steps>
-
-                <div class="payment-form">
-                    <div v-if="currentStep === 1">
+        <div class="checkout">
+            <h2>Checkout</h2>
+            <div class="checkout-container">
+                <!-- Payment Section (Left) -->
+                <div class="payment-section">
+                    <div class="payment-form">
                         <h3 class="section-title">Contact Information</h3>
                         <el-form
                             :model="ruleForm"
@@ -93,25 +13,12 @@
                             ref="ruleFormRef"
                             label-position="top"
                         >
-                            <el-form-item label="Email" prop="email">
-                                <el-input
-                                    v-model="ruleForm.email"
-                                    :value="authStore.user?.email"
-                                    placeholder="your@email.com"
-                                    size="large"
-                                >
-                                    <template #prefix>
-                                        <el-icon><Message /></el-icon>
-                                    </template>
-                                </el-input>
-                            </el-form-item>
-
-                            <h3 class="section-title">Shipping Address</h3>
                             <el-row :gutter="12">
                                 <el-col :span="12">
                                     <el-form-item
                                         label="First Name"
                                         prop="firstName"
+                                        class="custom-select"
                                     >
                                         <el-input
                                             v-model="ruleForm.firstName"
@@ -135,6 +42,20 @@
                                     </el-form-item>
                                 </el-col>
                             </el-row>
+                            <el-form-item label="Email" prop="email">
+                                <el-input
+                                    v-model="ruleForm.email"
+                                    :value="authStore.user?.email"
+                                    placeholder="your@email.com"
+                                    size="large"
+                                >
+                                    <template #prefix>
+                                        <el-icon><Message /></el-icon>
+                                    </template>
+                                </el-input>
+                            </el-form-item>
+
+                            <h3 class="section-title">Shipping Address</h3>
 
                             <el-form-item label="Address" prop="address">
                                 <el-input
@@ -169,7 +90,7 @@
                                 </el-col>
                             </el-row>
 
-                            <el-form-item label="Country">
+                            <el-form-item label="Country" class="custom-select">
                                 <el-select
                                     v-model="ruleForm.country"
                                     placeholder="Select Country"
@@ -188,108 +109,156 @@
                                     />
                                 </el-select>
                             </el-form-item>
-                        </el-form>
 
-                        <el-button
-                            type="primary"
-                            @click="goToPayment(ruleFormRef)"
-                            class="continue-btn"
-                            size="large"
-                        >
-                            Continue to Payment
-                            <el-icon class="el-icon--right"
-                                ><ArrowRight
-                            /></el-icon>
-                        </el-button>
-                    </div>
+                            <div class="stripe-container">
+                                <h3 class="section-title">Card Information</h3>
+                                <!-- Stripe Card Element -->
+                                <div class="stripe-element-container">
+                                    <div class="card-field">
+                                        <label id="card-number-label"
+                                            >Card Number</label
+                                        >
+                                        <div
+                                            id="card-number-element"
+                                            class="stripe-element"
+                                            aria-labelledby="card-number-label"
+                                        ></div>
+                                    </div>
 
-                    <div v-if="currentStep === 2" class="stripe-container">
-                        <h3 class="section-title">Card Information</h3>
+                                    <div class="card-row">
+                                        <div class="card-field expiry">
+                                            <label id="card-expiry-label"
+                                                >Expiry Date</label
+                                            >
+                                            <div
+                                                id="card-expiry-element"
+                                                class="stripe-element"
+                                                aria-labelledby="card-expiry-label"
+                                            ></div>
+                                        </div>
 
-                        <!-- Stripe Card Element -->
-                        <div class="stripe-element-container">
-                            <div class="card-field">
-                                <label id="card-number-label"
-                                    >Card Number</label
-                                >
-                                <div
-                                    id="card-number-element"
-                                    class="stripe-element"
-                                    aria-labelledby="card-number-label"
-                                ></div>
-                            </div>
+                                        <div class="card-field cvc">
+                                            <label id="card-cvc-label"
+                                                >CVC</label
+                                            >
+                                            <div
+                                                id="card-cvc-element"
+                                                aria-labelledby="card-cvc-label"
+                                                class="stripe-element"
+                                            ></div>
+                                        </div>
+                                    </div>
 
-                            <div class="card-row">
-                                <div class="card-field expiry">
-                                    <label id="card-expiry-label"
-                                        >Expiry Date</label
+                                    <div
+                                        id="card-errors"
+                                        class="stripe-errors"
+                                        v-if="cardError"
                                     >
-                                    <div
-                                        id="card-expiry-element"
-                                        class="stripe-element"
-                                        aria-labelledby="card-expiry-label"
-                                    ></div>
+                                        {{ cardError }}
+                                    </div>
                                 </div>
 
-                                <div class="card-field cvc">
-                                    <label id="card-cvc-label">CVC</label>
-                                    <div
-                                        id="card-cvc-element"
-                                        aria-labelledby="card-cvc-label"
-                                        class="stripe-element"
-                                    ></div>
+                                <div class="card-icons">
+                                    <img
+                                        src="/images/visa.svg"
+                                        alt="Visa"
+                                        class="card-icon"
+                                    />
+                                    <img
+                                        src="/images/mastercard.svg"
+                                        alt="Mastercard"
+                                        class="card-icon"
+                                    />
+                                    <img
+                                        src="/images/amex.svg"
+                                        alt="American Express"
+                                        class="card-icon"
+                                    />
+                                </div>
+
+                                <el-checkbox v-model="saveCard"
+                                    >Save card for future purchases</el-checkbox
+                                >
+
+                                <div class="actions">
+                                    <el-button
+                                        type="primary"
+                                        @click="processPayment"
+                                        :loading="loading"
+                                        size="large"
+                                    >
+                                        Pay {{ toUSD(totalPrice) }}
+                                        <el-icon class="el-icon--right"
+                                            ><CreditCard
+                                        /></el-icon>
+                                    </el-button>
                                 </div>
                             </div>
+                        </el-form>
+                    </div>
+                </div>
+                <!-- Product Section (Right) -->
+                <div class="product-section">
+                    <div class="product-content">
+                        <h2 class="product-order-summary">Order Summary</h2>
 
-                            <div
-                                id="card-errors"
-                                class="stripe-errors"
-                                v-if="cardError"
-                            >
-                                {{ cardError }}
+                        <div class="product-card" v-for="item in cartItems">
+                            <div class="product-image">
+                                <img
+                                    :src="item.variant?.imageUrl"
+                                    alt="OnePlus 12 Dual 5G"
+                                />
+                            </div>
+                            <div class="product-details">
+                                <h3>
+                                    {{ item.name }}
+                                </h3>
+                                <p class="product-variant">
+                                    {{ capitalize(item.variant?.color) }} |
+                                    {{ item.bundle }} |
+                                    <span>qty: {{ item.quantity }}</span>
+                                </p>
+                                <div class="product-price">
+                                    {{ toUSD(item.price) }}
+                                </div>
                             </div>
                         </div>
 
-                        <div class="card-icons">
-                            <img
-                                src="/images/visa.svg"
-                                alt="Visa"
-                                class="card-icon"
-                            />
-                            <img
-                                src="/images/mastercard.svg"
-                                alt="Mastercard"
-                                class="card-icon"
-                            />
-                            <img
-                                src="/images/amex.svg"
-                                alt="American Express"
-                                class="card-icon"
-                            />
+                        <div class="price-breakdown">
+                            <div class="price-row">
+                                <span>Subtotal</span>
+                                <span>{{ toUSD(subtotal) }}</span>
+                            </div>
+                            <div class="price-row discount">
+                                <span>
+                                    <el-tag
+                                        size="small"
+                                        effect="dark"
+                                        type="success"
+                                    >
+                                        <el-icon><Discount /></el-icon> 15% OFF
+                                    </el-tag>
+                                </span>
+                                <span> - {{ toUSD(discount) }}</span>
+                            </div>
+                            <div class="price-row">
+                                <span>Shipping</span>
+                                <span>{{ toUSD(deliveryFee) }}</span>
+                            </div>
+                            <div class="price-row total">
+                                <span>Total</span>
+                                <span>{{ toUSD(totalPrice) }}</span>
+                            </div>
                         </div>
 
-                        <el-checkbox v-model="saveCard"
-                            >Save card for future purchases</el-checkbox
-                        >
+                        <div class="shipping-info">
+                            <el-icon><Van /></el-icon>
+                            <span>Estimated delivery: 3-5 business days</span>
+                        </div>
 
-                        <div class="actions">
-                            <el-button @click="currentStep = 1" size="large">
-                                <el-icon class="el-icon--left"
-                                    ><ArrowLeft
-                                /></el-icon>
-                                Back
-                            </el-button>
-                            <el-button
-                                type="primary"
-                                @click="processPayment"
-                                :loading="loading"
-                                size="large"
-                            >
-                                Pay {{ toUSD(totalPrice) }}
-                                <el-icon class="el-icon--right"
-                                    ><CreditCard
-                                /></el-icon>
-                            </el-button>
+                        <div class="secure-badge">
+                            <el-icon><Lock /></el-icon>
+                            <span>Secure Checkout</span>
                         </div>
                     </div>
                 </div>
@@ -420,72 +389,77 @@ onMounted(async () => {
     }
 })
 
-watch(
-    () => currentStep.value,
-    (newStep) => {
-        if (newStep === 2 && process.client) {
-            nextTick(() => {
-                try {
-                    // Define base styles for all elements
-                    const elementStyle = {
-                        base: {
-                            fontSize: '14px',
-                            color: '#32325d',
-                            fontFamily: 'inherit',
-                            '::placeholder': {
-                                color: '#acafb7',
-                            },
+onMounted(() => {
+    if (import.meta.client) {
+        nextTick(() => {
+            try {
+                // Define base styles for all elements
+                const elementStyle = {
+                    base: {
+                        fontSize: '14px',
+                        color: '#000000',
+                        backgroundColor: 'inherit',
+                        fontFamily: 'Sofia Sans',
+                        '::placeholder': {
+                            color: '#999999',
                         },
-                        invalid: {
-                            color: '#fa755a',
-                            iconColor: '#fa755a',
-                        },
-                    }
+                    },
+                    invalid: {
+                        color: '#fa755a',
+                        iconColor: '#fa755a',
+                    },
+                }
 
-                    // Create fresh elements
-                    cardElement.value = $stripe.elements()
+                // Create Stripe elements instance
+                cardElement.value = $stripe.elements()
 
-                    // Create and mount card number element
-                    cardNumberElement.value = cardElement.value.create(
-                        'cardNumber',
-                        {
-                            style: elementStyle,
-                            placeholder: 'Card number',
-                        },
-                    )
-                    cardNumberElement.value.mount('#card-number-element')
-
-                    // Create and mount card expiry element
-                    cardExpiryElement.value = cardElement.value.create(
-                        'cardExpiry',
-                        {
-                            style: elementStyle,
-                        },
-                    )
-                    cardExpiryElement.value.mount('#card-expiry-element')
-
-                    // Create and mount card CVC element
-                    cardCvcElement.value = cardElement.value.create('cardCvc', {
+                // Helper to create, mount and bind focus/blur handlers
+                const setupElement = (type, refVar, elementId) => {
+                    const el = cardElement.value.create(type, {
                         style: elementStyle,
                     })
-                    cardCvcElement.value.mount('#card-cvc-element')
+                    el.mount(`#${elementId}`)
+                    el.on('focus', () =>
+                        document
+                            .getElementById(elementId)
+                            ?.classList.add('focused'),
+                    )
+                    el.on('blur', () =>
+                        document
+                            .getElementById(elementId)
+                            ?.classList.remove('focused'),
+                    )
 
-                    // Listen for errors on the card number element
-                    cardNumberElement.value.on('change', (event) => {
-                        if (event.error) {
-                            cardError.value = event.error.message
-                        } else {
-                            cardError.value = ''
-                        }
+                    el.on('change', (event) => {
+                        cardError.value = event.error?.message || ''
                     })
-                } catch (err) {
-                    console.error('Error mounting Stripe elements:', err)
+                    return el
                 }
-            })
-        }
-    },
-    { immediate: true },
-)
+
+                // Create and bind all elements
+                cardNumberElement.value = setupElement(
+                    'cardNumber',
+                    cardNumberElement,
+                    'card-number-element',
+                )
+
+                cardExpiryElement.value = setupElement(
+                    'cardExpiry',
+                    cardExpiryElement,
+                    'card-expiry-element',
+                )
+
+                cardCvcElement.value = setupElement(
+                    'cardCvc',
+                    cardCvcElement,
+                    'card-cvc-element',
+                )
+            } catch (err) {
+                console.error('Error mounting Stripe elements:', err)
+            }
+        })
+    }
+})
 
 onUnmounted(() => {
     if (cardNumberElement.value) {
@@ -579,11 +553,38 @@ const processPayment = async () => {
 </script>
 
 <style scoped lang="scss">
+.checkout {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: center;
+    padding: 2rem;
+    gap: 1rem;
+    width: 100%;
+
+    h3 {
+        font-size: 1.2rem;
+        color: $text-primary;
+        font-weight: 600;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+        color: $text-primary;
+        font-weight: bold;
+    }
+}
+
+h2.product-order-summary {
+    color: $off-white;
+}
+
 .checkout-container {
     display: flex;
-    min-height: 60vh;
+    /* min-height: 60vh; */
     width: 100%;
-    background-color: #f8f9fa;
+    gap: 1rem;
+    /* background-color: #f8f9fa; */
     border-radius: 10px;
 }
 
@@ -594,8 +595,8 @@ const processPayment = async () => {
     padding: 2rem;
     display: flex;
     flex-direction: column;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
+    border-radius: 10px;
+    height: fit-content;
 }
 
 .product-content {
@@ -605,18 +606,20 @@ const processPayment = async () => {
 }
 
 .payment-section {
-    flex: 1.2;
-    background-color: white;
+    flex: 2;
+    border: 1px solid black;
+    /* background-color: white; */
     padding: 2rem;
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.05);
+    /* box-shadow: -5px 0 15px rgba(0, 0, 0, 0.05); */
     display: flex;
     flex-direction: column;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-radius: 10px;
+    /* border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px; */
 }
 
 .payment-form {
-    max-width: 500px;
+    /* max-width: 500px; */
     margin: 0 auto;
     width: 100%;
 }
@@ -626,6 +629,7 @@ const processPayment = async () => {
     font-size: $text-lg;
     margin-bottom: 2rem;
     font-weight: 600;
+    color: red;
 }
 
 .payment-title {
@@ -730,14 +734,9 @@ const processPayment = async () => {
 
 .stripe-element-container {
     border-radius: 4px;
-    background-color: #fff;
+    /* background-color: #fff; */
     margin-bottom: 1rem;
     min-height: 40px;
-}
-
-.stripe-element {
-    width: 100%;
-    min-height: 20px;
 }
 
 .stripe-errors {
@@ -792,7 +791,7 @@ const processPayment = async () => {
     font-size: 0.9rem;
     margin-bottom: 0.5rem;
     color: #606266;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .card-row {
@@ -809,16 +808,21 @@ const processPayment = async () => {
 }
 
 .stripe-element {
-    background-color: white;
     padding: 10px 12px;
     border-radius: 4px;
-    border: 1px solid #dcdfe6;
+    border: 1px solid #c0c4cc;
     min-height: 20px;
+    height: 40px;
+    /* background-color: #ffffff; */
 }
 
-.stripe-element--focus {
+/* .stripe-element:focus {
     border-color: #409eff;
     box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+} */
+
+.stripe-element.focused {
+    border-color: $off-black;
 }
 
 .stripe-element--invalid {
@@ -851,5 +855,74 @@ const processPayment = async () => {
     .payment-form {
         max-width: 100%;
     }
+}
+
+/* select */
+.custom-select :deep(.el-select) {
+    width: 100%;
+}
+
+.custom-select :deep(.el-select .el-select__wrapper) {
+    background-color: transparent;
+    transition: all 0.3s ease;
+    min-height: 40px;
+}
+
+/* .custom-select :deep(.el-select .el-input__inner) {
+    background-color: transparent;
+    color: #303133;
+    font-size: 14px;
+    font-weight: 500;
+} */
+
+/* Placeholder styling */
+/* .custom-select :deep(.el-select .el-input__inner::placeholder) {
+    color: #a8abb2;
+    font-weight: normal;
+} */
+
+/* Focus state */
+/* .custom-select :deep(.el-select .el-select__wrapper.is-focus) {
+    border-color: #409eff;
+    box-shadow: 0 0 0 3px rgba(64, 158, 255, 0.1);
+} */
+
+/* Arrow icon */
+/* .custom-select :deep(.el-select .el-input__suffix-inner .el-icon) {
+    color: #c0c4cc;
+    font-size: 14px;
+} */
+
+/* Dropdown styling */
+.custom-select :deep(.el-select-dropdown) {
+    background-color: transparent;
+    border: 1px solid #e4e7ed;
+    border-radius: 6px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    margin-top: 4px;
+}
+
+/* Option styling */
+.custom-select :deep(.el-select-dropdown__item) {
+    background-color: transparent;
+    color: #606266;
+    padding: 12px 16px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.custom-select :deep(.el-select-dropdown__item:hover) {
+    background-color: #f0f9ff;
+    color: #409eff;
+}
+
+.custom-select :deep(.el-select-dropdown__item.selected) {
+    background-color: #409eff;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.custom-select :deep(.el-select-dropdown__item.selected:hover) {
+    background-color: #337ecc;
 }
 </style>

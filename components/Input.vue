@@ -62,7 +62,7 @@ const handleBlur = () => emit('blur')
 }
 
 .el-input {
-    height: 40px;
+    height: 50px;
 }
 
 :deep(.el-input__wrapper.is-focus) {
