@@ -1,12 +1,17 @@
 <template>
     <section class="cart-wrapper">
-        <h3>YOUR BAG</h3>
+        <h3 class="font-briscolade">Your Cart</h3>
         <div class="cart">
             <div v-if="!cartItems.length" class="cart__empty">
-                <span><shopping-bag-black class="no__cart" /></span>
-                <p>Your bag is empty</p>
-                <nuxt-link to="/" class="btn btn-primary black"
-                    >Start Shopping</nuxt-link
+                <span class="mb-6"
+                    ><shopping-bag-black class="no__cart"
+                /></span>
+                <h2 class="mb-2">Your cart is empty</h2>
+                <p class="text-muted-foreground mb-6">
+                    Looks like you haven't added any products to your cart yet.
+                </p>
+                <nuxt-link to="/" class="btn btn-primary outline"
+                    >Continue Shopping</nuxt-link
                 >
             </div>
             <div v-else class="cart-container">
@@ -45,7 +50,7 @@
                 </div>
 
                 <div class="order-summary">
-                    <h3>Order Summary</h3>
+                    <h3 class="font-briscolade">Order Summary</h3>
                     <div class="summary-row">
                         <span>Subtotal</span>
                         <span>{{ toUSD(subtotal) }}</span>
@@ -126,6 +131,12 @@ function removeItem(item) {
     width: 100%;
     display: flex;
     flex-direction: column;
+
+    h3 {
+        font-size: 1.2rem;
+        color: $text-primary;
+        font-weight: 600;
+    }
 }
 .cart-container {
     display: flex;

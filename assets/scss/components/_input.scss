@@ -1,4 +1,15 @@
 @use '../variables' as *;
+/* checkbox */
+
+.el-checkbox__inner {
+    border: 1px solid $off-black !important;
+    border-radius: 5px;
+    /* background: inherit !important; */
+}
+
+.el-checkbox__inner::after {
+    background: $off-black;
+}
 
 .el-input-number__decrease:hover:not(.is-disabled)
     ~ .el-input

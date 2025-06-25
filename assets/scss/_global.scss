@@ -1,6 +1,12 @@
 // PopOver
 @use './variables' as *;
 
+/* font */
+
+.font-briscolade {
+    font-family: $font-stack-brand;
+}
+
 .el-popover {
     background-color: $off-white !important;
     color: $black;
@@ -15,6 +21,24 @@ p {
 
 .capitalize {
     text-transform: uppercase;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: $font-weight-semibold;
+    margin-bottom: 0.5rem;
+}
+
+h2 {
+    font-size: 1.2rem;
+    font-weight: $font-weight-semibold;
+    margin-bottom: 0.5rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+    font-weight: $font-weight-semibold;
+    margin-bottom: 0.5rem;
 }
 
 /* Element Plus customizations */
@@ -80,6 +104,10 @@ p {
 
 .mb-12 {
     margin-bottom: 3rem;
+}
+
+.mb-6 {
+    margin-bottom: 1.5rem;
 }
 
 .mb-4 {

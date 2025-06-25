@@ -1,7 +1,7 @@
 <template>
     <div class="sidebar">
         <div class="filter-section">
-            <h3>Brand</h3>
+            <h3 class="font-briscolade">Brand</h3>
             <div class="filter-options">
                 <label v-for="brand in brands" :key="brand">
                     <input
@@ -16,7 +16,7 @@
         </div>
 
         <div class="filter-section">
-            <h3>Price Range</h3>
+            <h3 class="font-briscolade">Price Range</h3>
             <div class="filter-options">
                 <label v-for="range in priceRanges" :key="range.label">
                     <input
@@ -31,7 +31,7 @@
         </div>
 
         <div class="filter-section">
-            <h3>Storage</h3>
+            <h3 class="font-briscolade">Storage</h3>
             <div class="filter-options">
                 <label v-for="storage in storageOptions" :key="storage">
                     <input

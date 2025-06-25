@@ -1,6 +1,7 @@
 @use '../variables' as *;
 
-.el-button {
+.el-button,
+a.btn {
     background: $off-white;
     color: $off-black;
     border: 1px solid $off-black;
@@ -17,6 +18,37 @@
     pointer-events: all;
     transition: opacity 4s ease-in;
     // height: 40px;
+
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+}
+
+a.btn {
+    color: inherit;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+
+    &:hover,
+    &:focus {
+        border-color: $off-black;
+        background-color: $off-white;
+        color: $off-black;
+    }
+
+    &:active {
+        border-color: $off-black;
+        background-color: $off-white;
+        color: $off-black;
+    }
+}
+
+.outline {
+    border: 1px solid $off-black;
+    background-color: transparent;
+    color: $off-black;
 }
 
 .el-button {

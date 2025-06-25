@@ -1,12 +1,14 @@
 <template>
     <ClientOnly>
         <div class="checkout">
-            <h2>Checkout</h2>
+            <h2 class="font-briscolade">Checkout</h2>
             <div class="checkout-container">
                 <!-- Payment Section (Left) -->
                 <div class="payment-section">
                     <div class="payment-form">
-                        <h3 class="section-title">Contact Information</h3>
+                        <h3 class="section-title font-briscolade">
+                            Contact Information
+                        </h3>
                         <el-form
                             :model="ruleForm"
                             :rules="rules"
@@ -55,7 +57,9 @@
                                 </el-input>
                             </el-form-item>
 
-                            <h3 class="section-title">Shipping Address</h3>
+                            <h3 class="section-title font-briscolade">
+                                Shipping Address
+                            </h3>
 
                             <el-form-item label="Address" prop="address">
                                 <el-input
@@ -111,7 +115,9 @@
                             </el-form-item>
 
                             <div class="stripe-container">
-                                <h3 class="section-title">Card Information</h3>
+                                <h3 class="section-title font-briscolade">
+                                    Card Information
+                                </h3>
                                 <!-- Stripe Card Element -->
                                 <div class="stripe-element-container">
                                     <div class="card-field">
@@ -186,7 +192,9 @@
                 <!-- Product Section (Right) -->
                 <div class="product-section">
                     <div class="product-content">
-                        <h2 class="product-order-summary">Order Summary</h2>
+                        <h2 class="product-order-summary font-briscolade">
+                            Order Summary
+                        </h2>
 
                         <div class="product-card" v-for="item in cartItems">
                             <div class="product-image">
@@ -196,16 +204,16 @@
                                 />
                             </div>
                             <div class="product-details">
-                                <h3>
+                                <h3 class="font-medium">
                                     {{ item.name }}
                                 </h3>
-                                <p class="product-variant">
-                                    {{ capitalize(item.variant?.color) }} |
-                                    {{ item.bundle }} |
-                                    <span>qty: {{ item.quantity }}</span>
+                                <p class="product-variant text-sm">
+                                    {{ capitalize(item.variant?.color) }},
+                                    {{ item.bundle }}
                                 </p>
-                                <div class="product-price">
-                                    {{ toUSD(item.price) }}
+                                <div class="product-price text-sm">
+                                    {{ toUSD(item.price) }} x
+                                    {{ item.quantity }}
                                 </div>
                             </div>
                         </div>
@@ -248,7 +256,7 @@
                                 @click="processPayment"
                                 :loading="loading"
                                 size="large"
-                                :label="`Place Order ${toUSD(totalPrice)}`"
+                                label="Place Order"
                             >
                                 <template #icon>
                                     <el-icon class="el-icon--left"
@@ -592,6 +600,7 @@ const processPayment = async () => {
 
 h2.product-order-summary {
     color: $off-white;
+    margin-bottom: 30px;
 }
 
 .checkout-container {
@@ -660,15 +669,16 @@ h2.product-order-summary {
 
 .product-card {
     display: flex;
-    background-color: rgba(255, 255, 255, 0.1);
+    /* background-color: rgba(255, 255, 255, 0.1); */
     border-radius: 12px;
-    padding: 1rem;
+    /* padding: 1rem; */
     margin-bottom: 1.5rem;
+    color: $text-white;
 }
 
 .product-image {
-    width: 80px;
-    height: 80px;
+    width: 65px;
+    height: 65px;
     border-radius: 8px;
     overflow: hidden;
     background-color: #2a2a2a;
@@ -690,18 +700,14 @@ h2.product-order-summary {
 
 .product-details h3 {
     font-size: $text-base;
-    margin: 0 0 0.3rem 0;
+    margin: 0 0 0.2rem 0;
+    color: $text-white;
 }
 
 .product-variant {
     color: #aaa;
     font-size: 0.9rem;
-    margin: 0 0 0.5rem 0;
-}
-
-.product-price {
-    font-weight: 600;
-    font-size: 1.2rem;
+    margin: 0 0 0.2rem 0;
 }
 
 .price-breakdown {
@@ -882,63 +888,5 @@ h2.product-order-summary {
     background-color: transparent;
     transition: all 0.3s ease;
     min-height: 40px;
-}
-
-/* .custom-select :deep(.el-select .el-input__inner) {
-    background-color: transparent;
-    color: #303133;
-    font-size: 14px;
-    font-weight: 500;
-} */
-
-/* Placeholder styling */
-/* .custom-select :deep(.el-select .el-input__inner::placeholder) {
-    color: #a8abb2;
-    font-weight: normal;
-} */
-
-/* Focus state */
-/* .custom-select :deep(.el-select .el-select__wrapper.is-focus) {
-    border-color: #409eff;
-    box-shadow: 0 0 0 3px rgba(64, 158, 255, 0.1);
-} */
-
-/* Arrow icon */
-/* .custom-select :deep(.el-select .el-input__suffix-inner .el-icon) {
-    color: #c0c4cc;
-    font-size: 14px;
-} */
-
-/* Dropdown styling */
-.custom-select :deep(.el-select-dropdown) {
-    background-color: transparent;
-    border: 1px solid #e4e7ed;
-    border-radius: 6px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-    margin-top: 4px;
-}
-
-/* Option styling */
-.custom-select :deep(.el-select-dropdown__item) {
-    background-color: transparent;
-    color: #606266;
-    padding: 12px 16px;
-    font-size: 14px;
-    transition: all 0.2s ease;
-}
-
-.custom-select :deep(.el-select-dropdown__item:hover) {
-    background-color: #f0f9ff;
-    color: #409eff;
-}
-
-.custom-select :deep(.el-select-dropdown__item.selected) {
-    background-color: #409eff;
-    color: #ffffff;
-    font-weight: 600;
-}
-
-.custom-select :deep(.el-select-dropdown__item.selected:hover) {
-    background-color: #337ecc;
 }
 </style>
