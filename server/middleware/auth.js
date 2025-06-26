@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
 
   //     idToken = response.id_token
 
-  //     setCookie(event, 'idToken', idToken, {
+  //     setCookie(event, 'auth_token', idToken, {
   //       httpOnly: true,
   //       secure: process.env.NODE_ENV === 'production',
   //       maxAge: 3600,
@@ -36,6 +36,12 @@ export default defineEventHandler(async (event) => {
   // throw createError({ statusCode: 401, message: 'Not authenticated' })
   try {
     event.context.user = await adminAuth.verifyIdToken(idToken)
+    setCookie(event, 'auth_token', idToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 3600,
+      path: '/',
+    })
   } catch {
     throw createError({ statusCode: 401, message: 'Invalid token' })
   }

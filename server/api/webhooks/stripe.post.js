@@ -1,5 +1,5 @@
 import Stripe from 'stripe'
-import { adminFirestore as db } from '~/server/utils/firebaseAdmin'
+import { adminAuth, adminFirestore as db } from '~/server/utils/firebaseAdmin'
 import { sendEmail } from '~/server/utils/sendEmail'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET)
@@ -8,6 +8,7 @@ const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET
 export default defineEventHandler(async (event) => {
   const sig = event.node.req.headers['stripe-signature']
   const body = await readRawBody(event)
+  // const userKey = await getUserOrGuestId(event, adminAuth)
 
   let stripeEvent
 
@@ -28,39 +29,47 @@ export default defineEventHandler(async (event) => {
       return { statusCode: 400, error: 'Invalid metadata' }
     }
 
-    const { userId, items } = paymentIntent.metadata
+    const { userId, items, orderId } = paymentIntent.metadata
+    const total = paymentIntent.amount / 100
+    const itemsArray = JSON.parse(items)
 
-    if (userId === 'guest') {
-      // Save guest order to Firestore
-      await db.collection('guestOrders').add({
-        amount: paymentIntent.amount / 100,
+    console.log(orderId, 'orderId')
+
+    // Save logged-in user order to Firestore
+    await db
+      .collection('orders')
+      .doc(orderId)
+      .set({
+        orderId,
+        items: itemsArray,
+        amount: total,
+        userId: userId || 'guest',
         currency: paymentIntent.currency,
         status: paymentIntent.status,
-        items: JSON.parse(items), // Parse items from JSON string
-        created: new Date(),
+        createdAt: new Date().toISOString(),
         stripePaymentIntentId: paymentIntent.id,
       })
-    } else {
-      // Save logged-in user order to Firestore
-      await db
-        .collection('orders')
-        .doc(userId)
-        .collection('userOrders')
-        .add({
-          amount: paymentIntent.amount / 100,
-          currency: paymentIntent.currency,
-          status: paymentIntent.status,
-          items: JSON.parse(items),
-          created: new Date(),
-          stripePaymentIntentId: paymentIntent.id,
-        })
-    }
 
     await sendEmail({
-      to: 'iakhator@gmail.com',
-      subject: 'Order confirmed',
+      to: 'test@maildev.com',
+      subject: `Order confirmed for Order #${orderId}`,
       text: 'Thanks for your order',
-      html: `<p>Thanks for your order!</p>`,
+      html: `
+        <div style="font-family: sans-serif; max-width:600px;margin:auto">
+          <h2>Order Confirmed</h2>
+          <p>Thank you for your purchase!</p>
+          <p><strong>Order #${orderId}</strong></p>
+          <ul>
+            ${itemsArray
+              .map((item) => `<li>${item.name} × ${item.quantity}</li>`)
+              .join('')}
+          </ul>
+          <p><strong>Total: $${total}</strong></p>
+          <p style="color:#888;">– RingCart Team</p>
+        </div>
+      `,
     })
+
+    const result = await removeCartItem(userId)
   }
 })

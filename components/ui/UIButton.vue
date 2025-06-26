@@ -26,6 +26,7 @@ const buttonClass = computed(() => ({
     secondary: props.variant === 'secondary',
     'is-plain': props.variant === 'plain',
     'is-transparent': props.variant === 'transparent',
+    'is-mild': props.variant === 'mild',
 }))
 </script>
 

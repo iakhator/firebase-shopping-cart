@@ -138,5 +138,9 @@ export const useCartStore = defineStore('cart', {
       this.totalPrice =
         this.cart?.reduce((sum, item) => sum + item.price, 0) || 0
     },
+    async clearCart() {
+      this.cart = []
+      this.updateTotals()
+    },
   },
 })

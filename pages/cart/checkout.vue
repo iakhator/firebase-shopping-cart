@@ -252,7 +252,7 @@
 
                         <div class="actions">
                             <UIButton
-                                variant="secondary"
+                                variant="mild"
                                 @click="processPayment"
                                 :loading="loading"
                                 size="large"
@@ -531,9 +531,12 @@ const processPayment = async () => {
         id: cart.productId,
         quantity: cart.quantity,
         name: cart.name,
+        price: cart.price,
+        imageUrl: cart.imageUrl,
     }))
 
     const payload = {
+        userId: authStore.user.uid,
         savePaymentMethod: saveCard.value,
         amount: totalPrice.value,
         items,
@@ -560,10 +563,11 @@ const processPayment = async () => {
                 card: cardNumberElement.value,
             },
         })
-        console.log(result.paymentIntent, 'data')
-        // if (result.paymentIntent.status === 'succeeded') {
-        //     router.push('/payment/success?')
-        // }
+        console.log(result?.paymentIntent, 'data')
+        if (result.paymentIntent.status === 'succeeded') {
+            await cartStore.clearCart()
+            router.push(`/orders/success?ref=${paymentIntentResponse.orderId}`)
+        }
     } catch (error) {
         console.log(error)
         loading.value = false

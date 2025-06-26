@@ -1,3 +1,5 @@
+import redis from '~/server/utils/redisClient'
+
 export async function syncCartOnLogin(event, userId, redis) {
   const guestId = getCookie(event, 'guest_id')
 
@@ -20,5 +22,17 @@ export async function syncCartOnLogin(event, userId, redis) {
     // Remove guest cart
     await redis.del(guestCartKey)
     deleteCookie(event, 'guest_id')
+  }
+}
+
+export async function removeCartItem(userId) {
+  const cartKey = `cart:${userId}`
+
+  try {
+    const result = await redis.del(cartKey)
+    if (result === 1)
+      return { status: 'success', message: 'Cart removed successfully' }
+  } catch (error) {
+    return { status: 'error', message: error.message }
   }
 }

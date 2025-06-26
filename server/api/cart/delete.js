@@ -1,8 +1,7 @@
-import { adminAuth } from '~/server/utils/firebaseAdmin'
 import redis from '~/server/utils/redisClient'
 
 export default defineEventHandler(async (event) => {
-  const userId = await getUserOrGuestId(event, adminAuth)
+  const userId = await getUserOrGuestId(event)
   const { productId, variant, bundle } = await readBody(event)
   if (!userId) return { error: 'User ID required' }
 
