@@ -5,44 +5,40 @@ export default defineEventHandler(async (event) => {
   let idToken = getCookie(event, 'auth_token')
   const refreshToken = getCookie(event, 'refresh_token')
 
-  // if (!idToken && refreshToken) {
-  //   try {
-  //     const response = await $fetch(
-  //       'https://securetoken.googleapis.com/v1/token?key=' +
-  //         config.public.FIREBASE_API_KEY,
-  //       {
-  //         method: 'POST',
-  //         body: new URLSearchParams({
-  //           grant_type: 'refresh_token',
-  //           refresh_token: refreshToken,
-  //         }),
-  //       },
-  //     )
+  if (!idToken && refreshToken) {
+    try {
+      const response = await $fetch(
+        'https://securetoken.googleapis.com/v1/token?key=' +
+          config.public.FIREBASE_API_KEY,
+        {
+          method: 'POST',
+          body: new URLSearchParams({
+            grant_type: 'refresh_token',
+            refresh_token: refreshToken,
+          }),
+        },
+      )
 
-  //     idToken = response.id_token
+      idToken = response.id_token
 
-  //     setCookie(event, 'auth_token', idToken, {
-  //       httpOnly: true,
-  //       secure: process.env.NODE_ENV === 'production',
-  //       maxAge: 3600,
-  //       path: '/',
-  //     })
-  //   } catch (err) {
-  //     return
-  //   }
-  // }
+      setCookie(event, 'auth_token', idToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 3600,
+        path: '/',
+      })
 
-  if (!idToken) return
-  // throw createError({ statusCode: 401, message: 'Not authenticated' })
-  try {
-    event.context.user = await adminAuth.verifyIdToken(idToken)
-    setCookie(event, 'auth_token', idToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 3600,
-      path: '/',
-    })
-  } catch {
-    throw createError({ statusCode: 401, message: 'Invalid token' })
+      event.context.user = await adminAuth.verifyIdToken(idToken)
+    } catch (err) {
+      throw createError({ statusCode: 401, message: 'Invalid token' })
+    }
   }
+
+  // if (!idToken) return
+  // // throw createError({ statusCode: 401, message: 'Not authenticated' })
+  // try {
+  //   event.context.user = await adminAuth.verifyIdToken(idToken)
+  // } catch {
+  //   throw createError({ statusCode: 401, message: 'Invalid token' })
+  // }
 })
