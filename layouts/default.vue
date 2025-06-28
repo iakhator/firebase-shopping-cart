@@ -23,12 +23,18 @@ import AppFooter from '~/components/AppFooter'
 }
 
 .container-wrapper {
-    position: relative;
-    width: 1600px;
-    /* max-width: 1600px; */
-    margin: 80px auto 30px auto;
-    padding: 20px;
-    display: flex;
-    gap: 20px;
+    padding: 40px 0;
+}
+
+@media (min-width: 768px) {
+    .container-wrapper {
+        position: relative;
+        width: 1600px;
+        /* max-width: 1600px; */
+        margin: 80px auto 30px auto;
+        padding: 20px;
+        display: flex;
+        gap: 20px;
+    }
 }
 </style>

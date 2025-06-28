@@ -1,4 +1,5 @@
 import Stripe from 'stripe'
+import { readRawBody } from 'h3'
 import { adminAuth, adminFirestore as db } from '~/server/utils/firebaseAdmin'
 import { sendEmail } from '~/server/utils/sendEmail'
 
@@ -22,8 +23,6 @@ export default defineEventHandler(async (event) => {
   if (stripeEvent.type === 'payment_intent.succeeded') {
     const paymentIntent = stripeEvent.data.object
 
-    console.log(event.context.user, 'user')
-
     if (!paymentIntent.metadata || !paymentIntent.metadata.items) {
       console.error('Missing metadata in payment intent:', paymentIntent)
       return { statusCode: 400, error: 'Invalid metadata' }
@@ -32,8 +31,6 @@ export default defineEventHandler(async (event) => {
     const { userId, items, orderId } = paymentIntent.metadata
     const total = paymentIntent.amount / 100
     const itemsArray = JSON.parse(items)
-
-    console.log(orderId, 'orderId')
 
     // Save logged-in user order to Firestore
     await db
@@ -49,13 +46,12 @@ export default defineEventHandler(async (event) => {
         createdAt: new Date().toISOString(),
         stripePaymentIntentId: paymentIntent.id,
       })
-
     await sendEmail({
-      to: 'test@maildev.com',
+      to: 'iakhator@gmail.com',
       subject: `Order confirmed for Order #${orderId}`,
       text: 'Thanks for your order',
       html: `
-        <div style="font-family: sans-serif; max-width:600px;margin:auto">
+        <div style="font-family: sans-serif;>
           <h2>Order Confirmed</h2>
           <p>Thank you for your purchase!</p>
           <p><strong>Order #${orderId}</strong></p>
@@ -70,6 +66,8 @@ export default defineEventHandler(async (event) => {
       `,
     })
 
-    const result = await removeCartItem(userId)
+    await removeCartItem(userId)
+
+    return { received: true }
   }
 })

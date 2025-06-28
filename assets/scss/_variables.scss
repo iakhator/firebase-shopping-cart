@@ -64,11 +64,8 @@ $text-3xl: 2rem; // 32px
 $text-4xl: 2.5rem; // 40px
 $text-5xl: 3rem; // 48px
 
-/* border */
-$border-gray-900: #c0c4cc;
-
 /* background */
-$bg-gray-900: #c0c4cc;
+/* $bg-gray-900: #c0c4cc;
 $bg-gray-800: #999999;
 $bg-gray-700: #666666;
 $bg-gray-600: #333333;
@@ -77,4 +74,249 @@ $bg-gray-400: #f9f9f9;
 $bg-gray-300: #f2f2f2;
 $bg-gray-200: #f8f5f2;
 $bg-gray-100: #e6e6e6;
-$bg-gray-50: #ffffff;
+$bg-gray-50: #ffffff; */
+
+// ===============================================================================================================
+//  Colors
+// ===============================================================================================================
+
+// =====================
+// Neutral Colors (Gray)
+// =====================
+// Border
+$border-gray-50: #f9fafb;
+$border-gray-100: #f3f4f6;
+$border-gray-200: #e5e7eb;
+$border-gray-300: #d1d5db;
+$border-gray-400: #9ca3af;
+$border-gray-500: #6b7280;
+$border-gray-600: #4b5563;
+$border-gray-700: #374151;
+$border-gray-800: #1f2937;
+$border-gray-900: #111827;
+$border-gray-950: #030712;
+
+// Background
+$bg-gray-50: #f9fafb;
+$bg-gray-100: #f3f4f6;
+$bg-gray-200: #e5e7eb;
+$bg-gray-300: #d1d5db;
+$bg-gray-400: #9ca3af;
+$bg-gray-500: #6b7280;
+$bg-gray-600: #4b5563;
+$bg-gray-700: #374151;
+$bg-gray-800: #1f2937;
+$bg-gray-900: #111827;
+$bg-gray-950: #030712;
+
+// Text
+$text-gray-50: #f9fafb;
+$text-gray-100: #f3f4f6;
+$text-gray-200: #e5e7eb;
+$text-gray-300: #d1d5db;
+$text-gray-400: #9ca3af;
+$text-gray-500: #6b7280;
+$text-gray-600: #4b5563;
+$text-gray-700: #374151;
+$text-gray-800: #1f2937;
+$text-gray-900: #111827;
+$text-gray-950: #030712;
+
+// =====================
+// Primary Colors (Blue)
+// =====================
+// Border
+$border-blue-50: #eff6ff;
+$border-blue-100: #dbeafe;
+$border-blue-200: #bfdbfe;
+$border-blue-300: #93c5fd;
+$border-blue-400: #60a5fa;
+$border-blue-500: #3b82f6;
+$border-blue-600: #2563eb;
+$border-blue-700: #1d4ed8;
+$border-blue-800: #1e40af;
+$border-blue-900: #1e3a8a;
+$border-blue-950: #172554;
+
+// Background
+$bg-blue-50: #eff6ff;
+$bg-blue-100: #dbeafe;
+$bg-blue-200: #bfdbfe;
+$bg-blue-300: #93c5fd;
+$bg-blue-400: #60a5fa;
+$bg-blue-500: #3b82f6;
+$bg-blue-600: #2563eb;
+$bg-blue-700: #1d4ed8;
+$bg-blue-800: #1e40af;
+$bg-blue-900: #1e3a8a;
+$bg-blue-950: #172554;
+
+// Text
+$text-blue-50: #eff6ff;
+$text-blue-100: #dbeafe;
+$text-blue-200: #bfdbfe;
+$text-blue-300: #93c5fd;
+$text-blue-400: #60a5fa;
+$text-blue-500: #3b82f6;
+$text-blue-600: #2563eb;
+$text-blue-700: #1d4ed8;
+$text-blue-800: #1e40af;
+$text-blue-900: #1e3a8a;
+$text-blue-950: #172554;
+
+// =====================
+// Success Colors (Green)
+// =====================
+// Border
+$border-green-50: #f0fdf4;
+$border-green-100: #dcfce7;
+$border-green-200: #bbf7d0;
+$border-green-300: #86efac;
+$border-green-400: #4ade80;
+$border-green-500: #22c55e;
+$border-green-600: #16a34a;
+$border-green-700: #15803d;
+$border-green-800: #166534;
+$border-green-900: #14532d;
+$border-green-950: #052e16;
+
+// Background
+$bg-green-100: #dcfce7;
+$bg-green-200: #bbf7d0;
+$bg-green-300: #86efac;
+$bg-green-400: #4ade80;
+$bg-green-500: #22c55e;
+$bg-green-600: #16a34a;
+$bg-green-700: #15803d;
+$bg-green-800: #166534;
+$bg-green-900: #14532d;
+
+// Text
+$text-green-50: #f0fdf4;
+$text-green-100: #dcfce7;
+$text-green-200: #bbf7d0;
+$text-green-300: #86efac;
+$text-green-400: #4ade80;
+$text-green-500: #22c55e;
+$text-green-600: #16a34a;
+$text-green-700: #15803d;
+$text-green-800: #166534;
+$text-green-900: #14532d;
+$text-green-950: #052e16;
+
+// =====================
+// Warning Colors (Yellow)
+// =====================
+// Border
+$border-yellow-50: #fefce8;
+$border-yellow-100: #fef9c3;
+$border-yellow-200: #fef08a;
+$border-yellow-300: #fde047;
+$border-yellow-400: #facc15;
+$border-yellow-500: #eab308;
+$border-yellow-600: #ca8a04;
+$border-yellow-700: #a16207;
+$border-yellow-800: #854d0e;
+$border-yellow-900: #713f12;
+$border-yellow-950: #422006;
+
+// Background
+$bg-yellow-50: #fefce8;
+$bg-yellow-100: #fef9c3;
+$bg-yellow-200: #fef08a;
+$bg-yellow-300: #fde047;
+$bg-yellow-400: #facc15;
+$bg-yellow-500: #eab308;
+$bg-yellow-600: #ca8a04;
+$bg-yellow-700: #a16207;
+$bg-yellow-800: #854d0e;
+$bg-yellow-900: #713f12;
+$bg-yellow-950: #422006;
+
+// Text
+$text-yellow-50: #fefce8;
+$text-yellow-100: #fef9c3;
+$text-yellow-200: #fef08a;
+$text-yellow-300: #fde047;
+$text-yellow-400: #facc15;
+$text-yellow-500: #eab308;
+$text-yellow-600: #ca8a04;
+$text-yellow-700: #a16207;
+$text-yellow-800: #854d0e;
+$text-yellow-900: #713f12;
+$text-yellow-950: #422006;
+
+// =====================
+// Danger Colors (Red)
+// =====================
+// Border
+$border-red-50: #fef2f2;
+$border-red-100: #fee2e2;
+$border-red-200: #fecaca;
+$border-red-300: #fca5a5;
+$border-red-400: #f87171;
+$border-red-500: #ef4444;
+$border-red-600: #dc2626;
+$border-red-700: #b91c1c;
+$border-red-800: #991b1b;
+$border-red-900: #7f1d1d;
+$border-red-950: #450a0a;
+
+// Background
+$bg-red-50: #fef2f2;
+$bg-red-100: #fee2e2;
+$bg-red-200: #fecaca;
+$bg-red-300: #fca5a5;
+$bg-red-400: #f87171;
+$bg-red-500: #ef4444;
+$bg-red-600: #dc2626;
+$bg-red-700: #b91c1c;
+$bg-red-800: #991b1b;
+$bg-red-900: #7f1d1d;
+$bg-red-950: #450a0a;
+
+// Text
+$text-red-50: #fef2f2;
+$text-red-100: #fee2e2;
+$text-red-200: #fecaca;
+$text-red-300: #fca5a5;
+$text-red-400: #f87171;
+$text-red-500: #ef4444;
+$text-red-600: #dc2626;
+$text-red-700: #b91c1c;
+$text-red-800: #991b1b;
+$text-red-900: #7f1d1d;
+$text-red-950: #450a0a;
+
+// =====================
+// Semantic Variables
+// =====================
+// Primary (Blue)
+$primary-border: $border-blue-500;
+$primary-bg: $bg-blue-500;
+$primary-text: $text-blue-50;
+$primary-hover: $bg-blue-600;
+
+// Success (Green)
+$success-border: $border-green-500;
+$success-bg: $bg-green-500;
+$success-text: $text-green-50;
+$success-hover: $bg-green-600;
+
+// Warning (Yellow)
+$warning-border: $border-yellow-500;
+$warning-bg: $bg-yellow-500;
+$warning-text: $text-yellow-900; // Dark text for better contrast
+$warning-hover: $bg-yellow-600;
+
+// Danger (Red)
+$danger-border: $border-red-500;
+$danger-bg: $bg-red-500;
+$danger-text: $text-red-50;
+$danger-hover: $bg-red-600;
+
+// Neutral (Gray)
+$neutral-border: $border-gray-300;
+$neutral-bg: $bg-gray-100;
+$neutral-text: $text-gray-800;
+$neutral-hover: $bg-gray-200;

@@ -1,6 +1,14 @@
 import { adminAuth } from '~/server/utils/firebaseAdmin'
+import { getCookie, setCookie } from 'h3'
 
 export default defineEventHandler(async (event) => {
+  const url = event.node.req.url
+
+  // 1. Bypass Stripe webhook route
+  if (url.startsWith('/api/webhooks/stripe')) {
+    return
+  }
+
   const config = useRuntimeConfig()
   let idToken = getCookie(event, 'auth_token')
   const refreshToken = getCookie(event, 'refresh_token')
@@ -8,8 +16,7 @@ export default defineEventHandler(async (event) => {
   if (!idToken && refreshToken) {
     try {
       const response = await $fetch(
-        'https://securetoken.googleapis.com/v1/token?key=' +
-          config.public.FIREBASE_API_KEY,
+        `https://securetoken.googleapis.com/v1/token?key=${config.public.FIREBASE_API_KEY}`,
         {
           method: 'POST',
           body: new URLSearchParams({
@@ -27,18 +34,19 @@ export default defineEventHandler(async (event) => {
         maxAge: 3600,
         path: '/',
       })
-
-      event.context.user = await adminAuth.verifyIdToken(idToken)
     } catch (err) {
-      throw createError({ statusCode: 401, message: 'Invalid token' })
+      throw createError({ statusCode: 401, message: 'Invalid refresh token' })
     }
   }
 
-  // if (!idToken) return
-  // // throw createError({ statusCode: 401, message: 'Not authenticated' })
-  // try {
-  //   event.context.user = await adminAuth.verifyIdToken(idToken)
-  // } catch {
-  //   throw createError({ statusCode: 401, message: 'Invalid token' })
-  // }
+  if (idToken) {
+    try {
+      const decodedToken = await adminAuth.verifyIdToken(idToken)
+      event.context.user = decodedToken
+    } catch {
+      throw createError({ statusCode: 401, message: 'Invalid token' })
+    }
+  } else {
+    throw createError({ statusCode: 401, message: 'Not authenticated' })
+  }
 })

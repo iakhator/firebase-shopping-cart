@@ -411,6 +411,8 @@ const IconInstagram = defineComponent({
     gap: 2rem;
 }
 
+/* Responsive adjustments */
+
 @media (min-width: 768px) {
     .md\:flex-row {
         flex-direction: row;

@@ -68,9 +68,6 @@ h3 {
 }
 
 /* Custom styles to enhance Element Plus */
-.container {
-    max-width: 1600px;
-}
 
 .grid {
     display: grid;
@@ -81,6 +78,10 @@ h3 {
 }
 
 @media (min-width: 768px) {
+    .container {
+        max-width: 1600px;
+    }
+
     .md\:grid-cols-2 {
         grid-template-columns: 1fr 1fr;
     }

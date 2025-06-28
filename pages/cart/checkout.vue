@@ -563,7 +563,6 @@ const processPayment = async () => {
                 card: cardNumberElement.value,
             },
         })
-        console.log(result?.paymentIntent, 'data')
         if (result.paymentIntent.status === 'succeeded') {
             await cartStore.clearCart()
             router.push(`/orders/success?ref=${paymentIntentResponse.orderId}`)

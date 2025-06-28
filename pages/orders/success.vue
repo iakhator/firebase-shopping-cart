@@ -37,12 +37,12 @@ const goToOrders = () => {
                 <h4>Items:</h4>
                 <ul>
                     <li v-for="item in order.items" :key="item.id">
-                        {{ item.name }} × {{ item.quantity }} — ₦{{
+                        {{ item.name }} × {{ item.quantity }} — ${{
                             item.price
                         }}
                     </li>
                 </ul>
-                <p><strong>Total:</strong> ₦{{ order.amount }}</p>
+                <p><strong>Total:</strong> ${{ order.amount }}</p>
             </div>
             <p>
                 A confirmation email has been sent to
