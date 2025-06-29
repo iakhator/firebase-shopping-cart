@@ -1,10 +1,10 @@
 export const useProductStore = defineStore('product', () => {
+  const { isLoading, error, fetchData } = useFetchWithLoading()
+  const { $toast } = useNuxtApp()
+
   const products = ref([])
   const product = ref(null)
   const errorMessage = ref(null)
-
-  const { isLoading, error, fetchData } = useFetchWithLoading()
-  const { $toast } = useNuxtApp()
 
   const getAllProducts = async (filters) => {
     const query = new URLSearchParams()

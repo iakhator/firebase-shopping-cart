@@ -1,0 +1,15 @@
+Order Confirmation
+==================
+
+Thank you for your purchase!
+
+Order #: {{orderId}}
+
+Items:
+{{#each items}}
+- {{name}} × {{quantity}} (${{priceTotal}})
+{{/each}}
+
+Total: ${{total}}
+
+-- RingCart Team

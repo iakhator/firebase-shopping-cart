@@ -3,7 +3,6 @@ import { adminAuth, adminFirestore as db } from '~/server/utils/firebaseAdmin'
 export default defineEventHandler(async (event) => {
   const orderId = getRouterParam(event, 'orderId')
 
-  console.log(orderId, 'orderId order get')
   const authToken = getCookie(event, 'auth_token')
   const user = await adminAuth.verifyIdToken(authToken)
 

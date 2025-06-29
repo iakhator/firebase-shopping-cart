@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   app:
-    container_name: grid-cart-app
+    container_name: ring-cart-app
     build:
       context: .
       dockerfile: Dockerfile.dev
@@ -19,7 +19,7 @@ services:
       - maildev
 
   redis:
-    container_name: grid-cart-redis
+    container_name: ring-cart-redis
     image: redis:alpine
     ports:
       - '6379:6379'
@@ -27,7 +27,7 @@ services:
       - redis-data:/data
 
   maildev:
-    container_name: grid-cart-maildev
+    container_name: ring-cart-maildev
     image: maildev/maildev
     ports:
       - '1080:1080'

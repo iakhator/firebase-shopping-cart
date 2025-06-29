@@ -532,7 +532,9 @@ const processPayment = async () => {
         quantity: cart.quantity,
         name: cart.name,
         price: cart.price,
-        imageUrl: cart.imageUrl,
+        originalPrice: cart.originalPrice,
+        variant: cart.variant?.color || '',
+        bundle: cart.variant?.bundle || '',
     }))
 
     const payload = {
@@ -563,10 +565,10 @@ const processPayment = async () => {
                 card: cardNumberElement.value,
             },
         })
-        if (result.paymentIntent.status === 'succeeded') {
-            await cartStore.clearCart()
-            router.push(`/orders/success?ref=${paymentIntentResponse.orderId}`)
-        }
+        // if (result.paymentIntent.status === 'succeeded') {
+        //     await cartStore.clearCart()
+        //     router.push(`/orders/success?ref=${paymentIntentResponse.orderId}`)
+        // }
     } catch (error) {
         console.log(error)
         loading.value = false

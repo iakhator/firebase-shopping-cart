@@ -145,7 +145,7 @@
                                     ><Message
                                 /></el-icon>
                                 <span class="text-gray-600"
-                                    >support@mobileshop.com</span
+                                    >support@ringcart.app</span
                                 >
                             </li>
                         </ul>
