@@ -162,7 +162,7 @@ const cartStore = useCartStore()
 const dialogVisible = ref(false)
 // const activeIndex2 = ref('1')
 // const profileDrawer = ref(false)
-const categories = ref([])
+// const categories = ref([])
 
 const activeIndex = ref('1')
 const profileOpen = ref(false)
@@ -183,10 +183,10 @@ const toggleDrawer = () => {
     profileOpen.value = !profileOpen.value
 }
 
-onMounted(async () => {
-    const { categories: cat } = await $fetch('/api/categories')
-    categories.value = cat
-})
+// onMounted(async () => {
+//     const { categories: cat } = await $fetch('/api/categories')
+//     categories.value = cat
+// })
 
 const quantity = computed(() => cartStore.totalQuantity)
 const isAuthenticated = computed(() => authStore.isAuthenticated)

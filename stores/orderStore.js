@@ -10,7 +10,6 @@ export const useOrderStore = defineStore('order', () => {
     try {
       const data = await fetchData(`/api/orders/${orderId}`)
       order.value = data.order || {}
-      return data.order
     } catch (error) {
       console.error('Error fetching cart:', error)
     }

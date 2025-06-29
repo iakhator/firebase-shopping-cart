@@ -2,6 +2,7 @@
 import UIButton from '@/components/ui/UIButton.vue'
 import { useOrderStore } from '@/stores/orderStore'
 import { CreditCard, ArrowRight, Van } from '@element-plus/icons-vue'
+import Spinner from '~/components/icons/Spinner.vue'
 
 const route = useRoute()
 // const order = ref([])
@@ -12,22 +13,13 @@ const orderStore = useOrderStore()
 const order = computed(() => orderStore.order)
 const isLoading = computed(() => orderStore.isLoading)
 
-// onMounted(async () => {
-//     const orderId = route.query.ref
-//     console.log(orderId, 'routse')
-//     if (orderId) {
-//         await fetchOrderById(orderId)
-//         // order.value = res.order
-//     }
+onMounted(async () => {
+    console.log(orderId, 'routse')
+    if (orderId) {
+        await orderStore.fetchOrderById(orderId)
+    }
+})
 
-//     console.log(orderStore, 'orderStore')
-// })
-
-// await useAsyncData(`order-${orderId}`, () => {
-//     if (orderId) {
-//         return fetchOrderById(orderId)
-//     }
-// })
 // Navigate to orders page
 const goToOrders = () => {
     // In a real app, this would navigate to the orders page
@@ -39,11 +31,8 @@ const goToOrders = () => {
 <template>
     <ClientOnly>
         <div class="order-confirmation">
-            <pre>
-            <p>{{isLoading}}</p>
-            {{ order }}
-        </pre>
-            <el-container v-if="!isLoading">
+            <Spinner v-if="isLoading" />
+            <el-container v-else>
                 <el-main class="confirmation-container">
                     <el-card shadow="never" class="confirmation-card">
                         <!-- Header with Check Icon -->
