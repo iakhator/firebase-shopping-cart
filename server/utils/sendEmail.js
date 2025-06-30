@@ -23,4 +23,11 @@ export async function sendEmail({ to, subject, text, html }) {
       pass: process.env.SMTP_PASS,
     },
   })
+  return transporter.sendMail({
+    from: 'Shop <no-reply@ringcart.app>',
+    to,
+    subject,
+    text,
+    html,
+  })
 }
