@@ -23,6 +23,7 @@
     "@pinia/nuxt": "^0.5.4",
     "@sidebase/nuxt-session": "^0.2.8",
     "@stripe/stripe-js": "^7.3.1",
+    "dayjs": "^1.11.13",
     "firebase": "^11.6.0",
     "firebase-admin": "^13.2.0",
     "handlebars": "^4.7.8",

@@ -1,15 +1,50 @@
-Order Confirmation
-==================
+Order Confirmed – RingCart
+==========================
 
-Thank you for your purchase!
+Hi {{customerName}},
 
-Order #: {{orderId}}
+Thank you for your purchase. Your order has been successfully placed and is now being prepared for shipment.
+
+Order Summary
+-------------
+
+Order Number: {{orderId}}
+Order Date: {{orderDate}}
+Payment Method: Credit Card
+
+Shipping Address:
+{{shippingAddress.address}}, {{shippingAddress.city}}, {{shippingAddress.country}}, {{shippingAddress.postalCode}}
 
 Items:
 {{#each items}}
-- {{name}} × {{quantity}} (${{priceTotal}})
+- {{name}} ({{variant.color}}, {{bundle}}) × {{quantity}} - ${{price}}
 {{/each}}
 
+Subtotal: ${{total}}
+Shipping: Free
 Total: ${{total}}
 
--- RingCart Team
+Shipping & Delivery
+-------------------
+
+Processing Time: 1–2 business days
+Shipping Method: Standard Delivery (Free)
+Estimated Delivery: {{estimatedDeliveryStart}} – {{estimatedDeliveryEnd}}
+
+You’ll receive a tracking number via email once your order ships.
+
+Need Help?
+----------
+
+Email: support@ringcart.com
+Phone: 1-800-RINGCART (1-800-746-6348)
+Hours: Monday – Friday, 9 AM – 6 PM EST
+
+Connect With Us:
+Facebook | Twitter | Instagram | YouTube
+
+—
+
+© 2025 RingCart. All rights reserved.
+123 Tech Street, San Francisco, CA 94103
+Unsubscribe | Privacy Policy | Terms of Service

@@ -10,9 +10,11 @@ export default defineEventHandler(async (event) => {
   const {
     amount,
     items,
+    userId,
+    customerName,
+    shippingAddress,
     currency = 'usd',
     savePaymentMethod = false,
-    userId,
   } = body
 
   // Check if the user is logged in
@@ -60,6 +62,8 @@ export default defineEventHandler(async (event) => {
     setup_future_usage: savePaymentMethod && userId ? 'off_session' : undefined,
     metadata: {
       userId: userId || 'guest',
+      customerName: customerName || '',
+      shippingAddress: JSON.stringify(shippingAddress) || {},
       orderId,
       items: JSON.stringify(items),
     },

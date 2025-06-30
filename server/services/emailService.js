@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { renderTemplate } from '../utils/renderTemplate'
 import { sendEmail } from '../utils/sendEmail'
 
@@ -6,12 +7,13 @@ export async function sendOrderConfirmation({
   orderId,
   items,
   total,
-  businessName = 'RingCart',
+  shippingAddress,
 }) {
   const data = {
     orderId,
+    orderDate: dayjs(new Date().toISOString()).format('DD/MM/YYYY'),
+    shippingAddress,
     total: total.toFixed(2),
-    businessName,
     items: items.map((item) => ({
       ...item,
       priceTotal: (item.price * item.quantity).toFixed(2),

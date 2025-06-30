@@ -534,11 +534,13 @@ const processPayment = async () => {
         price: cart.price,
         originalPrice: cart.originalPrice,
         variant: cart.variant?.color || '',
-        bundle: cart.variant?.bundle || '',
+        bundle: cart.bundle || '',
     }))
 
     const payload = {
+        customerName: authStore.user.displayName,
         userId: authStore.user.uid,
+        shippingAddress: authStore.user.shippingAddress,
         savePaymentMethod: saveCard.value,
         amount: totalPrice.value,
         items,

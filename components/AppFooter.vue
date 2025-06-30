@@ -403,10 +403,6 @@ const IconInstagram = defineComponent({
     border-color: #e5e5e5;
 }
 
-.bg-gray-50 {
-    background-color: $white;
-}
-
 .gap-8 {
     gap: 2rem;
 }
