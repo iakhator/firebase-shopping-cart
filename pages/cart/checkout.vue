@@ -567,10 +567,10 @@ const processPayment = async () => {
                 card: cardNumberElement.value,
             },
         })
-        // if (result.paymentIntent.status === 'succeeded') {
-        //     await cartStore.clearCart()
-        //     router.push(`/orders/success?ref=${paymentIntentResponse.orderId}`)
-        // }
+        if (result.paymentIntent.status === 'succeeded') {
+            await cartStore.clearCart()
+            router.push(`/orders/success?ref=${paymentIntentResponse.orderId}`)
+        }
     } catch (error) {
         console.log(error)
         loading.value = false

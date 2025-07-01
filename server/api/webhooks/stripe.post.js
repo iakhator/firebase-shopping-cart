@@ -59,7 +59,7 @@ export default defineEventHandler(async (event) => {
       total,
     })
 
-    // await removeCartItem(userId)
+    await removeCartItem(userId)
 
     return { received: true }
   }
