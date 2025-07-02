@@ -220,12 +220,28 @@ h3 {
     align-items: flex-start;
 }
 
+.items-end {
+    align-items: flex-end;
+}
+
 .items-baseline {
     align-items: baseline;
 }
 
 .justify-center {
     justify-content: center;
+}
+
+.justify-start {
+    justify-content: flex-start;
+}
+
+.justify-end {
+    justify-content: flex-end;
+}
+
+.justify-around {
+    justify-content: space-around;
 }
 
 .justify-between {

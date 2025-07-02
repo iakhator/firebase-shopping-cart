@@ -12,10 +12,8 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Verify the user
     const user = await adminAuth.verifyIdToken(authToken)
 
-    // Get all orders for the authenticated user
     const ordersSnapshot = await db
       .collection('orders')
       .where('userId', '==', user.uid)
@@ -30,8 +28,6 @@ export default defineEventHandler(async (event) => {
         ...doc.data(),
       })
     })
-
-    console.log(orders, 'orders')
 
     return { orders }
   } catch (error) {
