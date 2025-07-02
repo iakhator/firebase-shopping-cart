@@ -64,7 +64,7 @@
                                             /></el-icon>
                                         </template>
                                     </UIButton>
-                                    <UIButton
+                                    <!-- <UIButton
                                         size="large"
                                         @click="handleHello"
                                         variant="secondary"
@@ -75,7 +75,7 @@
                                                 ><Wallet
                                             /></el-icon>
                                         </template>
-                                    </UIButton>
+                                    </UIButton> -->
                                 </div>
                             </div>
                         </a>

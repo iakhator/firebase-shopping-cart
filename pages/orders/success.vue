@@ -5,7 +5,8 @@ import { CreditCard, ArrowRight, Van } from '@element-plus/icons-vue'
 import Spinner from '~/components/icons/Spinner.vue'
 
 const route = useRoute()
-// const order = ref([])
+const router = useRouter()
+
 const orderId = route.query.ref
 // const { order, isLoading, fetchOrderById } = useOrderStore()
 const orderStore = useOrderStore()
@@ -14,17 +15,34 @@ const order = computed(() => orderStore.order)
 const isLoading = computed(() => orderStore.isLoading)
 
 onMounted(async () => {
-    console.log(orderId, 'routse')
-    if (orderId) {
+    console.log('Order ID from route:', orderId)
+
+    if (!orderId) {
+        error.value = 'No order ID provided'
+        router.push('/payment/error?error=Missing order information')
+        return
+    }
+
+    try {
         await orderStore.fetchOrderById(orderId)
+
+        // Check if order was actually found
+        if (!order.value) {
+            error.value = 'Order not found'
+            router.push('/payment/error?error=Order not found')
+        }
+    } catch (err) {
+        console.error('Error fetching order:', err)
+        error.value = 'Failed to load order details'
     }
 })
 
-// Navigate to orders page
-const goToOrders = () => {
-    // In a real app, this would navigate to the orders page
-    console.log('Navigate to orders page')
-    // navigateTo(`/orders/${order.orderId}`)
+const viewOrderDetails = () => {
+    router.push(`/orders/${orderId}`)
+}
+
+const continueShopping = () => {
+    router.push('/')
 }
 </script>
 
@@ -208,6 +226,7 @@ const goToOrders = () => {
                                 label="Continue Shopping"
                                 size="large"
                                 style="width: auto"
+                                @click="continueShopping"
                             >
                                 <template #icon-right
                                     ><el-icon class="ml-2"
@@ -219,7 +238,7 @@ const goToOrders = () => {
                                 size="large"
                                 variant="secondary"
                                 style="width: auto"
-                                @click="goToOrders"
+                                @click="viewOrderDetails"
                             />
                         </div>
 

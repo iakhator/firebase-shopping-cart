@@ -567,9 +567,14 @@ const processPayment = async () => {
                 card: cardNumberElement.value,
             },
         })
-        if (result.paymentIntent.status === 'succeeded') {
+        if (
+            result.paymentIntent.status === 'succeeded' &&
+            paymentIntentResponse.orderId
+        ) {
             await cartStore.clearCart()
-            router.push(`/orders/success?ref=${paymentIntentResponse.orderId}`)
+            await navigateTo(
+                `/orders/success?ref=${paymentIntentResponse.orderId}`,
+            )
         }
     } catch (error) {
         console.log(error)

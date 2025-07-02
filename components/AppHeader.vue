@@ -111,12 +111,17 @@
                     <p>{{ capitalize(loggedInUser) }}</p>
                 </div>
                 <div class="el-menu-link">
-                    <NuxtLink class="link" to="/profile" @click="toggleDrawer">
+                    <NuxtLink
+                        class="link"
+                        :to="`/user/${uid}`"
+                        @click="toggleDrawer"
+                    >
                         <el-icon><Avatar /></el-icon
                         ><span>Profile</span></NuxtLink
                     >
-                    <NuxtLink class="link" to="/order" @click="toggleDrawer"
-                        ><el-icon><Grid /></el-icon><span>Order</span></NuxtLink
+                    <NuxtLink class="link" to="/orders" @click="toggleDrawer"
+                        ><el-icon><Grid /></el-icon
+                        ><span>View Orders</span></NuxtLink
                     >
                     <NuxtLink class="link" to="/about" @click="toggleDrawer"
                         ><el-icon><Setting /></el-icon>
@@ -193,6 +198,7 @@ const isAuthenticated = computed(() => authStore.isAuthenticated)
 const loggedInUser = computed(
     () => authStore.user?.name || authStore.user?.displayName || '',
 )
+const uid = computed(() => authStore.user?.uid)
 
 function handleClose() {
     dialogVisible.value = false

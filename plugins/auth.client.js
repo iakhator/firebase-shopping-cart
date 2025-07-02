@@ -1,8 +1,6 @@
 export default defineNuxtPlugin(() => {
   let refreshTimer = null
 
-  console.log('plugin', 'auth plugin')
-
   async function refreshAuthToken() {
     try {
       const response = await $fetch('/api/auth/refresh', {
@@ -10,7 +8,7 @@ export default defineNuxtPlugin(() => {
       })
 
       if (response.success) {
-        console.info('[Auth] Token refreshed', response.token)
+        console.info('[Auth] Token refreshed')
       }
       // else {
       //   console.error('Failed to refresh token:', response.message)
