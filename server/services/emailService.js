@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { renderTemplate } from '../utils/renderTemplate'
-import { sendEmail } from '../utils/sendEmail'
+import { sendEmail } from '../utils/sendEmail.cjs'
 
 export async function sendOrderConfirmation({
   to,

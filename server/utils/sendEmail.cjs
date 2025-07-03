@@ -5,17 +5,6 @@ const nodemailer = require('nodemailer')
 const isProd = import.meta.dev === false
 
 export async function sendEmail({ to, subject, text, html }) {
-  // const transporter = nodemailer.createTransport({
-  //   host: 'maildev',
-  //   port: 1025,
-  //   secure: false,
-  // })
-  // return transporter.sendMail({
-  //   from: 'Shop <no-reply@example.com>',
-  //   to,
-  //   subject,
-  //   html,
-  // })
   const transporter = isProd
     ? nodemailer.createTransport({
         host: 'smtp.mailgun.org',

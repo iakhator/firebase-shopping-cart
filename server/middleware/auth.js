@@ -39,6 +39,8 @@ export default defineEventHandler(async (event) => {
     }
   }
 
+  if (!idToken) return
+
   if (idToken) {
     try {
       const decodedToken = await adminAuth.verifyIdToken(idToken)

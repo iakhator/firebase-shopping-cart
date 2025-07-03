@@ -9,6 +9,11 @@ export default defineNuxtConfig({
     routeRules: {
       '/.well-known/**': { prerender: false, swr: false },
     },
+    esbuild: {
+      options: {
+        format: 'esm',
+      },
+    },
   },
 
   vite: {
