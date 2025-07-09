@@ -29,4 +29,4 @@ COPY --from=build /app/node_modules ./node_modules
 
 EXPOSE 3000
 
-CMD ["dumb-init", "node", "server/index.mjs"]
+CMD ["node", "server/index.mjs"]
