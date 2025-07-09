@@ -4,6 +4,7 @@ import { sendEmail } from '../utils/sendEmail'
 
 export async function sendOrderConfirmation({
   to,
+  customerName,
   orderId,
   items,
   total,
@@ -11,6 +12,7 @@ export async function sendOrderConfirmation({
 }) {
   const data = {
     orderId,
+    customerName,
     orderDate: dayjs(new Date().toISOString()).format('DD/MM/YYYY'),
     shippingAddress,
     total: total.toFixed(2),

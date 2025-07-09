@@ -1,5 +1,5 @@
 import { defineNuxtConfig } from 'nuxt/config'
-import { esbuildCommonjs, viteCommonjs } from '@originjs/vite-plugin-commonjs'
+// import { esbuildCommonjs, viteCommonjs } from '@originjs/vite-plugin-commonjs'
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-01-01',
@@ -19,12 +19,12 @@ export default defineNuxtConfig({
 
   vite: {
     logLevel: 'info',
-    plugins: [viteCommonjs()],
-    optimizeDeps: {
-      esbuildOptions: {
-        plugins: [esbuildCommonjs(['nodemailer'])],
-      },
-    },
+    // plugins: [viteCommonjs()],
+    // optimizeDeps: {
+    //   esbuildOptions: {
+    //     plugins: [esbuildCommonjs(['nodemailer'])],
+    //   },
+    // },
     css: {
       preprocessorOptions: {
         scss: {

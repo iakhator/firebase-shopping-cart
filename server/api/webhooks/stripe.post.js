@@ -53,6 +53,7 @@ export default defineEventHandler(async (event) => {
 
       await sendOrderConfirmation({
         to: 'iakhator@gmail.com',
+        customerName,
         orderId,
         shippingAddress: shippingAddressObj,
         items: itemsArray,
