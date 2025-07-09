@@ -21,7 +21,6 @@ RUN npm run build
 # ----------------------------------
 FROM node:22-alpine AS prod
 
-
 WORKDIR /app
 
 COPY --from=build /app/.output ./
@@ -30,4 +29,4 @@ COPY --from=build /app/node_modules ./node_modules
 
 EXPOSE 3000
 
-CMD ["node", "server/index.mjs"]
+CMD ["dumb-init", "node", "server/index.mjs"]
