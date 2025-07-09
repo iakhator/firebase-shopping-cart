@@ -1,35 +1,33 @@
-
+# ----------------------------------
+# 🛠 Build Stage
+# ----------------------------------
 FROM node:22-alpine AS build
-WORKDIR /app
 
-RUN corepack enable
+# Set working directory
+WORKDIR /app
 
 COPY package.json package-lock.json ./
+RUN npm install
 
-# Install dependencies
-RUN npm i
+# Copy the rest of the project
+COPY . .
 
-# Copy the entire project
-COPY . ./
-
-# Build the project
+# Build the Nuxt app
 RUN npm run build
 
-# Build Stage 2
 
-FROM node:22-alpine
+# ----------------------------------
+# 🚀 Production Stage
+# ----------------------------------
+FROM node:22-alpine AS prod
+
+
 WORKDIR /app
 
-# Only `.output` folder is needed from the build stage
-COPY --from=build /app/.output/ ./
-
-# Change the port and host
-# ENV PORT=80
-# ENV HOST=0.0.0.0
+COPY --from=build /app/.output ./
+COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/node_modules ./node_modules
 
 EXPOSE 3000
 
-CMD ["node", "/app/server/index.mjs"]
-
-# RUN apk add --no-cache bash ca-certificates openssl msmtp
-# RUN npm install --omit=dev
+CMD ["node", "server/index.mjs"]
