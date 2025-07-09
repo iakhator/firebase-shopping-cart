@@ -1,0 +1,1 @@
+import{_ as t}from"./DlAUqK2U.js";import{c as a,K as s,a as o,o as r}from"./CJ91jfVQ.js";const n={},c={class:"auth-container"},_={class:"auth-container__separator"};function d(e,f){return r(),a("div",c,[s(e.$slots,"default",{},void 0,!0),o("span",_,[s(e.$slots,"separator",{},void 0,!0)])])}const u=t(n,[["render",d],["__scopeId","data-v-7fc1f148"]]);export{u as A};
