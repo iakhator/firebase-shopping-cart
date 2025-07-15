@@ -1,6 +1,6 @@
-# 🛒 Firebase Shopping Cart
+# 🛒 RingCart
 
-A modern, full-featured e-commerce application built with Nuxt.js 3, Firebase, and Stripe. This application provides a complete shopping experience with user authentication, product browsing, cart management, and secure payment processing.
+A modern,e-commerce application built with Nuxt.js 3, Firebase, and Stripe. This application provides a complete shopping experience with user authentication, product browsing, cart management, and secure payment processing.
 
 ## 🚀 Features
 
@@ -22,18 +22,18 @@ A modern, full-featured e-commerce application built with Nuxt.js 3, Firebase, a
 
 ## 🛠 Tech Stack
 
-### Frontend
+### Client
 - **[Nuxt.js 3](https://nuxt.com/)** - Vue.js SSR framework
-- **[Vue.js 3](https://vuejs.org/)** - Progressive JavaScript framework
 - **[Element Plus](https://element-plus.org/)** - Vue 3 component library
 - **[Pinia](https://pinia.vuejs.org/)** - State management
 - **[SCSS](https://sass-lang.com/)** - CSS preprocessor
 
-### Backend
+### Server
 - **[Firebase](https://firebase.google.com/)** - Authentication & Firestore database
 - **[Redis](https://redis.io/)** - Cart storage and session management
 - **[Stripe](https://stripe.com/)** - Payment processing
 - **[Nodemailer](https://nodemailer.com/)** - Email notifications
+- **[Mailgun](https://www.mailgun.com/)** - Email Client
 
 ### DevOps
 - **[Docker](https://www.docker.com/)** - Containerization
@@ -51,7 +51,7 @@ A modern, full-featured e-commerce application built with Nuxt.js 3, Firebase, a
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/firebase-shopping-cart.git
+git clone https://github.com/iakhator/firebase-shopping-cart.git
 cd firebase-shopping-cart
 ```
 
