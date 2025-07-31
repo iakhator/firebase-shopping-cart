@@ -31,3 +31,19 @@ export async function sendOrderConfirmation({
     text,
   })
 }
+
+export async function sendEmailVerificationLink({ email, verificationLink }) {
+  const data = {
+    email,
+    verificationLink,
+  }
+
+  const { html, text } = await renderTemplate('email-verification', data)
+
+  await sendEmail({
+    to: email,
+    subject: 'Verify your email address',
+    html,
+    text,
+  })
+}

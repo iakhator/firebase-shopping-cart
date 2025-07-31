@@ -1,5 +1,6 @@
 import { adminAuth } from '~/server/utils/firebaseAdmin'
 import redis from '~/server/utils/redisClient'
+import { sendEmailVerificationLink } from '~/server/services/emailService'
 
 export default defineEventHandler(async (event) => {
   const { idToken, refreshToken } = await readBody(event)
@@ -8,6 +9,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     const decodedToken = await adminAuth.verifyIdToken(idToken, true)
+    const userId = decodedToken.uid
 
     // Set cookies for session management
     setCookie(event, 'auth_token', idToken, {
@@ -18,18 +20,30 @@ export default defineEventHandler(async (event) => {
       path: '/',
     })
 
-    setCookie(event, 'refresh_token', refreshToken, {
-      secure: process.env.NODE_ENV === 'production',
+    setCookie(event, 'user_id', userId, {
       httpOnly: true,
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'Strict',
+      maxAge: 60 * 60 * 24, // 1 days
       path: '/',
     })
 
+    redis.set(`refreshToken:${userId}`, refreshToken, 'EX', 60 * 60 * 24 * 7)
+
+    const verificationLink = await adminAuth.generateEmailVerificationLink(
+      decodedToken.email
+    )
+    await sendEmailVerificationLink({
+      email: decodedToken.email,
+      verificationLink,
+    })
+
     // Sync cart on login/register
-    await syncCartOnLogin(event, decodedToken.uid, redis)
+    await syncCartOnLogin(event, userId, redis)
 
     return { authenticated: true, user: decodedToken }
   } catch (error) {
+    console.log(error, 'error')
     deleteCookie(event, 'auth_token')
 
     if (error.code === 'auth/id-token-expired') {

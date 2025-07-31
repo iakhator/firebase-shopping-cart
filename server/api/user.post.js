@@ -26,13 +26,11 @@ export default defineEventHandler(async (event) => {
   const doc = await userRef.get()
 
   if (doc.exists) {
-    // Update user data
     await userRef.update({
       ...metadata,
       lastUpdated: new Date(),
     })
   } else {
-    // Create new user document
     await userRef.set({
       uid: user.uid,
       email: user.email ?? '',

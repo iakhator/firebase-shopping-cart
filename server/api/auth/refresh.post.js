@@ -1,6 +1,14 @@
+import redis from '~/server/utils/redisClient'
+
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
-  const refreshToken = getCookie(event, 'refresh_token')
+
+  const userId = getCookie(event, 'user_id')
+  if (!userId) {
+    return { success: false, message: 'No user id found' }
+  }
+
+  const refreshToken = await redis.get(`refreshToken:${userId}`)
 
   if (!refreshToken) {
     return { success: false, message: 'No refresh token found' }

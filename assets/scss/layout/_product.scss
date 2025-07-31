@@ -133,6 +133,7 @@
             line-height: 1.4em;
             margin-bottom: 8px;
             display: -webkit-box;
+            line-clamp: 2;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
@@ -140,13 +141,11 @@
 
             @media (max-width: 480px) {
                 font-size: 13px;
-                min-height: 2.6em;
             }
 
             @media (max-width: 360px) {
                 font-size: 12px;
                 -webkit-line-clamp: 3;
-                min-height: 3.6em;
             }
         }
 

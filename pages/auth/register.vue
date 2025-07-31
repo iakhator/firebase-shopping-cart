@@ -251,16 +251,16 @@ const formRules = reactive({
       trigger: 'blur',
     },
     {
-      min: 8,
+      min: 4,
       message: 'Password must be at least 8 characters long',
       trigger: 'blur',
     },
-    {
-      pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      message:
-        'Password must contain at least one uppercase letter, one lowercase letter, and one number',
-      trigger: 'blur',
-    },
+    // {
+    //   pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+    //   message:
+    //     'Password must contain at least one uppercase letter, one lowercase letter, and one number',
+    //   trigger: 'blur',
+    // },
   ],
   confirmPassword: [
     {
@@ -291,6 +291,7 @@ const formRules = reactive({
 
 // Methods
 const handleSubmit = async () => {
+  errorMessage.value = ''
   if (!registerFormRef.value) return
 
   try {

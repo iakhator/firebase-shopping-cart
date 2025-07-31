@@ -16,7 +16,7 @@ export const useAuthStore = defineStore('auth', {
         const userCredential = await $signInWithEmailAndPassword(
           $auth,
           email,
-          password,
+          password
         )
 
         const idToken = await userCredential.user.getIdToken()
@@ -48,7 +48,7 @@ export const useAuthStore = defineStore('auth', {
         const userCred = await $createUserWithEmailAndPassword(
           $auth,
           email,
-          password,
+          password
         )
         const idToken = await userCred.user.getIdToken()
         const refreshToken = userCred.user.refreshToken
@@ -58,19 +58,22 @@ export const useAuthStore = defineStore('auth', {
           body: { idToken, refreshToken },
         })
 
-        await $fetch('/api/user', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${idToken}`, // Secure with token
-          },
-          body: {
-            uid: userCred.user.uid,
-            email: userCred.user.email,
-            firstName: firstName,
-            lastName: lastName,
-            createdDate: new Date().toISOString(),
-          },
-        })
+        if (response.authenticated) {
+          await $fetch('/api/user', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${idToken}`,
+            },
+            body: {
+              uid: userCred.user.uid,
+              email: userCred.user.email,
+              firstName: firstName,
+              lastName: lastName,
+              name: `${firstName} ${lastName}`,
+              createdDate: new Date().toISOString(),
+            },
+          })
+        }
 
         await this.fetchUser()
 
@@ -88,10 +91,12 @@ export const useAuthStore = defineStore('auth', {
     async logout() {
       try {
         const cartStore = useCartStore()
-        // const { $auth } = useNuxtApp()
+        const { $auth } = useNuxtApp()
 
-        // await $auth.signOut()
-        const response = await $fetch('/api/auth/logout', { method: 'POST' })
+        await $auth.signOut()
+        const response = await $fetch('/api/auth/logout', {
+          method: 'POST',
+        })
 
         if (response.success) {
           this.isAuthenticated = false

@@ -1,0 +1,13 @@
+Hi {{customerName}},
+
+Welcome to RingCart!
+
+Thank you for signing up. To get started, please verify your email address by clicking the link below:
+
+{{verificationLink}}
+
+If you did not create a RingCart account, you can safely ignore this email.
+
+Need help? Contact support@ringcart.com
+
+© {{year}} RingCart. All rights reserved.
