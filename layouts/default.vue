@@ -23,18 +23,35 @@ import AppFooter from '~/components/AppFooter'
 }
 
 .container-wrapper {
-    padding: 40px 0;
+    padding: 20px;
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 @media (min-width: 768px) {
     .container-wrapper {
-        position: relative;
-        width: 1600px;
-        /* max-width: 1600px; */
-        margin: 80px auto 30px auto;
-        padding: 20px;
+        padding: 40px 20px;
+        margin: 60px auto 30px auto;
         display: flex;
         gap: 20px;
+        align-items: flex-start;
+        overflow-x: auto;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container-wrapper {
+        max-width: 1800px;
+        padding: 40px 40px;
+    }
+}
+
+@media (max-width: 767px) {
+    .container-wrapper {
+        padding: 16px;
+        margin-top: 20px;
     }
 }
 </style>

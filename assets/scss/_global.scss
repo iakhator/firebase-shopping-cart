@@ -65,6 +65,90 @@ h3 {
     .sm\:flex-row {
         flex-direction: row;
     }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    h2 {
+        font-size: 1.1rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+    }
+
+    .text-3xl {
+        font-size: 1.5rem;
+        line-height: 2rem;
+    }
+
+    .text-xl {
+        font-size: 1.125rem;
+        line-height: 1.5rem;
+    }
+
+    .gap-8 {
+        gap: 1.5rem;
+    }
+
+    .gap-6 {
+        gap: 1rem;
+    }
+
+    .gap-4 {
+        gap: 0.75rem;
+    }
+
+    .py-12 {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+
+    .py-8 {
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
+    }
+
+    .p-8 {
+        padding: 1.5rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1rem;
+    }
+
+    h3 {
+        font-size: 1.125rem;
+    }
+
+    .text-3xl {
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+    }
+
+    .gap-8 {
+        gap: 1rem;
+    }
+
+    .gap-6 {
+        gap: 0.75rem;
+    }
+
+    .py-12 {
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
+    }
+
+    .p-8 {
+        padding: 1rem !important;
+    }
 }
 
 /* Custom styles to enhance Element Plus */
@@ -485,4 +569,78 @@ h3 {
 }
 .el-loading-spinner {
     top: 5% !important;
+}
+
+/* Mobile utility classes */
+.mobile-only {
+    display: none;
+    @media (max-width: 768px) {
+        display: block;
+    }
+}
+
+.desktop-only {
+    display: block;
+    @media (max-width: 768px) {
+        display: none;
+    }
+}
+
+.mobile-flex {
+    display: none;
+    @media (max-width: 768px) {
+        display: flex;
+    }
+}
+
+.desktop-flex {
+    display: flex;
+    @media (max-width: 768px) {
+        display: none;
+    }
+}
+
+/* Responsive text utilities */
+.text-responsive {
+    @media (max-width: 768px) {
+        font-size: 0.875rem;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 0.8125rem;
+    }
+}
+
+/* Multi-line ellipsis utility */
+.multi-line-ellipsis {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @media (max-width: 360px) {
+        -webkit-line-clamp: 3;
+    }
+}
+
+/* Responsive grid utilities */
+.grid-responsive {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+
+    @media (max-width: 768px) {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 0.75rem;
+    }
+
+    @media (max-width: 480px) {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 0.5rem;
+    }
+
+    @media (max-width: 360px) {
+        grid-template-columns: 1fr 1fr;
+    }
 }
