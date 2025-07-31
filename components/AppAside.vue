@@ -1,7 +1,10 @@
 <template>
     <div class="sidebar">
         <div class="filter-section">
-            <h3 class="font-briscolade">Brand</h3>
+            <h3 class="font-briscolade">
+                <el-icon class="section-icon"><CollectionTag /></el-icon>
+                Brand
+            </h3>
             <div class="filter-options">
                 <label
                     v-for="brand in brands"
@@ -22,7 +25,10 @@
         </div>
 
         <div class="filter-section">
-            <h3 class="font-briscolade">Price Range</h3>
+            <h3 class="font-briscolade">
+                <el-icon class="section-icon"><Wallet /></el-icon>
+                Price Range
+            </h3>
             <div class="filter-options">
                 <label
                     v-for="range in priceRanges"
@@ -43,7 +49,10 @@
         </div>
 
         <div class="filter-section">
-            <h3 class="font-briscolade">Storage</h3>
+            <h3 class="font-briscolade">
+                <el-icon class="section-icon"><FolderOpened /></el-icon>
+                Storage
+            </h3>
             <div class="filter-options">
                 <label
                     v-for="storage in storageOptions"
@@ -65,6 +74,7 @@
 
         <div class="filter-actions">
             <button @click="clearAllFilters" class="clear-filters-btn">
+                <el-icon class="clear-icon"><Delete /></el-icon>
                 Clear All Filters
             </button>
         </div>
@@ -73,6 +83,12 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+import {
+    CollectionTag,
+    Wallet,
+    FolderOpened,
+    Delete,
+} from '@element-plus/icons-vue'
 
 const route = useRoute()
 const brands = ['Apple', 'Samsung', 'Google', 'OnePlus', 'Xiaomi']
@@ -165,10 +181,23 @@ watch(
     font-size: 18px;
     color: #333;
     font-weight: 600;
+    display: flex;
+    align-items: center;
 
     @media (max-width: 768px) {
         font-size: 16px;
         margin-bottom: 12px;
+    }
+
+    .section-icon {
+        margin-right: 8px;
+        color: #666;
+        font-size: 16px;
+        transition: color 0.2s ease;
+    }
+
+    &:hover .section-icon {
+        color: #333;
     }
 }
 
@@ -274,6 +303,9 @@ watch(
     cursor: pointer;
     font-size: 14px;
     transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     @media (max-width: 768px) {
         padding: 12px 16px;
@@ -284,10 +316,21 @@ watch(
         background: #f5f5f5;
         border-color: #ccc;
         color: #333;
+
+        .clear-icon {
+            transform: rotate(-360deg);
+        }
     }
 
     &:active {
         background: #eee;
+        transform: scale(0.98);
+    }
+
+    .clear-icon {
+        margin-right: 8px;
+        font-size: 14px;
+        transition: transform 0.3s ease;
     }
 }
 </style>

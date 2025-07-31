@@ -35,23 +35,16 @@ import AppFooter from '~/components/AppFooter'
         padding: 40px 20px;
         margin: 60px auto 30px auto;
         display: flex;
-        gap: 20px;
+        /* gap: 20px; */
         align-items: flex-start;
         overflow-x: auto;
-    }
-}
-
-@media (min-width: 1200px) {
-    .container-wrapper {
-        max-width: 1800px;
-        padding: 40px 40px;
     }
 }
 
 @media (max-width: 767px) {
     .container-wrapper {
         padding: 16px;
-        margin-top: 20px;
+        margin-top: 60px;
     }
 }
 </style>

@@ -1,13 +1,17 @@
 <template>
     <ClientOnly>
         <section class="cart-wrapper">
-            <h3 class="font-briscolade">Your Cart</h3>
+            <h3 class="font-briscolade cart-title">
+                <el-icon class="cart-title-icon"><ShoppingBag /></el-icon>
+                Your Cart
+            </h3>
             <Spinner v-if="isLoading" />
             <div v-else class="cart">
                 <div v-if="!cartItems.length && !isLoading" class="cart__empty">
                     <span class="mb-6"
-                        ><shopping-bag-black class="no__cart"
-                    /></span>
+                        ><el-icon :size="70" class="cart-title-icon"
+                            ><ShoppingBag /></el-icon
+                    ></span>
                     <h2 class="mb-2">Your cart is empty</h2>
                     <p class="text-muted-foreground mb-6">
                         Looks like you haven't added any products to your cart
@@ -83,8 +87,12 @@
                             size="large"
                             class="black checkout-btn"
                             @click="navigateTo('/cart/checkout')"
-                            label="Go to Checkout →"
-                        />
+                            label="Go to Checkout"
+                        >
+                            <template #icon>
+                                <el-icon class="mr-2"><CreditCard /></el-icon>
+                            </template>
+                        </UIButton>
                     </div>
                 </div>
             </div>
@@ -93,7 +101,7 @@
 </template>
 
 <script setup>
-import { Delete } from '@element-plus/icons-vue'
+import { Delete, ShoppingBag, CreditCard } from '@element-plus/icons-vue'
 import Spinner from '~/components/icons/Spinner.vue'
 const { toUSD } = useCurrency()
 import ShoppingBagBlack from '~/components/icons/ShoppingBagBlack.vue'
@@ -144,10 +152,18 @@ onMounted(async () => {
     display: flex;
     flex-direction: column;
 
-    h3 {
+    .cart-title {
         font-size: 1.2rem;
         color: $text-primary;
         font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .cart-title-icon {
+            font-size: 1.4rem;
+            color: #666;
+        }
     }
 }
 .cart-container {

@@ -57,12 +57,16 @@ a.btn {
     border: 1px solid #cdc9c6;
     transition: background 0.1s ease-in;
 
-    &:hover,
+    &.favourite:hover svg {
+        color: $black !important;
+    }
+
+    /* &:hover,
     &:focus {
         background: #1b1a1a !important;
         border-color: #1b1a1a !important;
         color: #ecf5ff !important;
-    }
+    } */
 
     &.is-plain {
         &.is-active,

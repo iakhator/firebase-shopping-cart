@@ -3,8 +3,13 @@
         <!-- Mobile Filter Toggle -->
         <div class="mobile-filter-toggle">
             <el-button @click="toggleMobileFilters" class="filter-btn">
-                <el-icon><Filter /></el-icon>
+                <el-icon class="filter-toggle-icon"><Filter /></el-icon>
                 Filters
+                <el-icon
+                    class="filter-arrow-icon"
+                    :class="{ rotated: showMobileFilters }"
+                    ><ArrowRight
+                /></el-icon>
             </el-button>
         </div>
 
@@ -15,16 +20,18 @@
         >
             <div class="sidebar-overlay" @click="closeMobileFilters"></div>
             <div class="sidebar-content">
-                <div class="mobile-filter-header">
+                <div class="flex justify-between items-center">
                     <h3>Filters</h3>
-                    <el-button
-                        @click="closeMobileFilters"
-                        text
-                        circle
-                        class="close-btn"
-                    >
-                        <el-icon><Close /></el-icon>
-                    </el-button>
+                    <div class="mobile-filter-header">
+                        <el-button
+                            @click="closeMobileFilters"
+                            text
+                            circle
+                            class="close-btn"
+                        >
+                            <el-icon><Close /></el-icon>
+                        </el-button>
+                    </div>
                 </div>
                 <AppAside @filter-change="handleFilterChange" />
             </div>
@@ -60,10 +67,10 @@
                                         class="product__grid-w__list-title multi-line-ellipsis"
                                         >{{ item.name }}
                                     </span>
-                                    <p>
+                                    <span>
                                         {{ item?.bundles[0]?.ram }} /
                                         {{ item?.bundles[0]?.storage }}
-                                    </p>
+                                    </span>
 
                                     <div
                                         class="product__grid-w__list-price_fav"
@@ -83,13 +90,10 @@
                                             @click.prevent="addToWishlist"
                                             @mouseenter="isFavHovered = item.id"
                                             @mouseleave="isFavHovered = ''"
-                                            class="product__grid-w__list-favourite"
-                                            ><heart-icon
-                                                :fill="
-                                                    isFavHovered === item.id
-                                                        ? '#000'
-                                                        : 'none'
-                                                "
+                                            class="favourite"
+                                            ><IconHeart
+                                                :size="24"
+                                                backgroundColor="#000"
                                         /></el-button>
                                     </div>
                                     <div class="product__grid-btn">
@@ -101,7 +105,7 @@
                                         >
                                             <template #icon>
                                                 <el-icon class="mr-2"
-                                                    ><ShoppingCart
+                                                    ><ShoppingBag
                                                 /></el-icon>
                                             </template>
                                         </UIButton>
@@ -130,14 +134,7 @@
 
 <script setup>
 import UIButton from '~/components/ui/UIButton'
-import {
-    ShoppingCart,
-    Star,
-    Wallet,
-    Filter,
-    Close,
-} from '@element-plus/icons-vue'
-import HeartIcon from '~/components/icons/HeartIcon.vue'
+import { ShoppingBag, Filter, Close, ArrowRight } from '@element-plus/icons-vue'
 import Spinner from '~/components/icons/Spinner.vue'
 
 const isFavHovered = ref('')
@@ -246,16 +243,39 @@ onUnmounted(() => {
         border: 1px solid #ddd;
         background: white;
         color: #333;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
 
         &:hover {
             background: #f5f5f5;
+            border-color: #999;
+        }
+
+        .filter-toggle-icon {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        .filter-arrow-icon {
+            transition: transform 0.3s ease;
+            font-size: 14px;
+
+            &.rotated {
+                transform: rotate(90deg);
+            }
         }
     }
 }
 
 .sidebar-container {
-    flex-basis: 280px;
+    flex-basis: 210px;
     flex-shrink: 0;
+
+    @media (min-width: 993px) and (max-width: 1200px) {
+        flex-basis: 230px;
+    }
 
     @media (max-width: 992px) {
         position: fixed;
@@ -273,7 +293,7 @@ onUnmounted(() => {
     }
 }
 
-.sidebar-overlay {
+/* .sidebar-overlay {
     display: none;
 
     @media (max-width: 992px) {
@@ -285,7 +305,7 @@ onUnmounted(() => {
         height: 100%;
         background: rgba(0, 0, 0, 0.5);
     }
-}
+} */
 
 .sidebar-content {
     @media (max-width: 992px) {
@@ -329,6 +349,10 @@ onUnmounted(() => {
     flex: 1;
     min-width: 0;
     max-width: calc(100vw - 250px);
+
+    @media (max-width: 992px) {
+        max-width: 100%;
+    }
 
     @media (max-width: 768px) {
         max-width: 100%;
@@ -376,7 +400,7 @@ onUnmounted(() => {
 
         @media (max-width: 992px) {
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            justify-content: center;
+            /* justify-content: center; */
             gap: 10px;
         }
 
@@ -430,9 +454,15 @@ onUnmounted(() => {
 
 .el-button.product__grid-w__list-favourite {
     background: $off-white;
+    transition: all 0.2s ease;
 
     &:hover {
         background: $off-white !important;
+        transform: scale(1.1);
+    }
+
+    svg {
+        transition: all 0.2s ease;
     }
 }
 
