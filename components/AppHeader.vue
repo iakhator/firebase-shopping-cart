@@ -28,7 +28,7 @@
                             @click="
                                 isAuthenticated
                                     ? toggleDrawer()
-                                    : (dialogVisible = true)
+                                    : navigateTo('/auth/login')
                             "
                             class="el-menu-navlist"
                         >
@@ -90,18 +90,6 @@
         </el-menu>
     </el-header>
 
-    <ClientOnly>
-        <Teleport to="body">
-            <el-dialog
-                v-model="dialogVisible"
-                width="400"
-                :before-close="handleClose"
-            >
-                <AuthModal @close-dialog="handleClose" />
-            </el-dialog>
-        </Teleport>
-    </ClientOnly>
-
     <!-- Profile Drawer -->
     <ClientOnly>
         <el-drawer v-model="profileOpen" direction="rtl" id="mobile-menu">
@@ -149,7 +137,7 @@
 import { Menu, Close } from '@element-plus/icons-vue'
 import ShoppingBag from '~/components/icons/ShoppingBag.vue'
 import UserIcon from '~/components/icons/UserIcon.vue'
-import AuthModal from '~/components/account/AuthModal.vue'
+
 import PopOver from '~/components/ui/PopOver.vue'
 import UIButton from '~/components/ui/UIButton.vue'
 import {
@@ -164,7 +152,6 @@ const router = useRouter()
 const authStore = useAuthStore()
 const cartStore = useCartStore()
 
-const dialogVisible = ref(false)
 // const activeIndex2 = ref('1')
 // const profileDrawer = ref(false)
 // const categories = ref([])
@@ -199,10 +186,6 @@ const loggedInUser = computed(
     () => authStore.user?.name || authStore.user?.displayName || '',
 )
 const uid = computed(() => authStore.user?.uid)
-
-function handleClose() {
-    dialogVisible.value = false
-}
 
 async function signOut() {
     await authStore.logout()

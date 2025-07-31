@@ -5,7 +5,7 @@ A modern,e-commerce application built with Nuxt.js 3, Firebase, and Stripe. This
 ## 🚀 Features
 
 ### Core Functionality
-- **User Authentication**: Secure login/registration with Firebase Auth
+- **User Authentication**: Standalone login/registration pages with Firebase Auth
 - **Product Catalog**: Browse products with advanced filtering (brand, price, storage)
 - **Shopping Cart**: Add, remove, and modify cart items with real-time updates
 - **Order Management**: Complete order processing and history tracking
@@ -14,9 +14,10 @@ A modern,e-commerce application built with Nuxt.js 3, Firebase, and Stripe. This
 
 ### Technical Features
 - **Server-Side Rendering**: Fast initial page loads with Nuxt.js 3
-<!-- - **Real-time Updates**: Live cart synchronization across sessions
-- **Guest Cart**: Cart persistence for non-authenticated users -->
+- **Real-time Updates**: Live cart synchronization across sessions
+- **Guest Cart**: Cart persistence for non-authenticated users
 - **Responsive Design**: Mobile-first approach with Element Plus UI
+- **Standalone Auth Pages**: Modern authentication UI with social login options
 - **Docker Support**: Containerized deployment ready
 - **Redis Caching**: High-performance cart storage
 
