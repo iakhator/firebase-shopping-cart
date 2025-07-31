@@ -43,73 +43,140 @@
             <div v-else-if="!products.length" class="no-products">
                 No products found
             </div>
-            <div v-else class="product__grid">
-                <div class="product__grid-right">
-                    <ul class="product__grid-w">
-                        <li
-                            v-for="item in products"
-                            :key="item.id"
-                            class="product__grid-w__list"
+            <div v-else>
+                <div class="product-list-header">
+                    <div class="product-count">
+                        Showing {{ products.length }} product<span
+                            v-if="products.length !== 1"
+                            >s</span
                         >
-                            <a
-                                class="_p"
-                                :href="`/${item.categoryId}/${item.id}`"
+                    </div>
+                    <div class="product-sort">
+                        <el-dropdown
+                            placement="bottom-end"
+                            @command="handleSortCommand"
+                            trigger="click"
+                        >
+                            <UIButton
+                                label="Sort"
+                                variant="transparent"
+                                size="large"
                             >
-                                <span class="product__grid-w__list-img">
-                                    <img
-                                        :src="item?.imageUrl"
-                                        alt=""
-                                        loading="lazy"
-                                    />
-                                </span>
-                                <div class="product__grid-w__list-content">
-                                    <span
-                                        class="product__grid-w__list-title multi-line-ellipsis"
-                                        >{{ item.name }}
-                                    </span>
-                                    <span>
-                                        {{ item?.bundles[0]?.ram }} /
-                                        {{ item?.bundles[0]?.storage }}
-                                    </span>
+                                <template #icon>
+                                    <IconSlidersHorizontal :size="16" />
+                                </template>
+                                <span class="sort-label">Sort</span>
+                            </UIButton>
 
-                                    <div
-                                        class="product__grid-w__list-price_fav"
-                                    >
+                            <template #dropdown>
+                                <el-dropdown-menu>
+                                    <el-dropdown-item command="price-asc">
+                                        Price: Low to High
+                                        <el-icon
+                                            v-if="selectedSort === 'price-asc'"
+                                            style="margin-left: 8px"
+                                            ><Check
+                                        /></el-icon>
+                                    </el-dropdown-item>
+                                    <el-dropdown-item command="price-desc">
+                                        Price: High to Low
+                                        <el-icon
+                                            v-if="selectedSort === 'price-desc'"
+                                            style="margin-left: 8px"
+                                            ><Check
+                                        /></el-icon>
+                                    </el-dropdown-item>
+                                    <el-dropdown-item command="name-asc">
+                                        Name: A-Z
+                                        <el-icon
+                                            v-if="selectedSort === 'name-asc'"
+                                            style="margin-left: 8px"
+                                            ><Check
+                                        /></el-icon>
+                                    </el-dropdown-item>
+                                    <el-dropdown-item command="name-desc">
+                                        Name: Z-A
+                                        <el-icon
+                                            v-if="selectedSort === 'name-desc'"
+                                            style="margin-left: 8px"
+                                            ><Check
+                                        /></el-icon>
+                                    </el-dropdown-item>
+                                </el-dropdown-menu>
+                            </template>
+                        </el-dropdown>
+                    </div>
+                </div>
+                <div class="product__grid">
+                    <div class="product__grid-right">
+                        <ul class="product__grid-w">
+                            <li
+                                v-for="item in sortedProducts"
+                                :key="item.id"
+                                class="product__grid-w__list"
+                            >
+                                <a
+                                    class="_p"
+                                    :href="`/${item.categoryId}/${item.id}`"
+                                >
+                                    <span class="product__grid-w__list-img">
+                                        <img
+                                            :src="item?.imageUrl"
+                                            alt=""
+                                            loading="lazy"
+                                        />
+                                    </span>
+                                    <div class="product__grid-w__list-content">
                                         <span
-                                            class="product__grid-w__list-price"
-                                            >{{
-                                                toUSD(
-                                                    item?.bundles[0]?.price ||
-                                                        item.price,
-                                                )
-                                            }}</span
+                                            class="product__grid-w__list-title multi-line-ellipsis"
+                                            >{{ item.name }}
+                                        </span>
+                                        <span>
+                                            {{ item?.bundles[0]?.ram }} /
+                                            {{ item?.bundles[0]?.storage }}
+                                        </span>
+
+                                        <div
+                                            class="product__grid-w__list-price_fav"
                                         >
-                                        <el-button
-                                            text
-                                            circle
-                                            @click.prevent="addToWishlist"
-                                            @mouseenter="isFavHovered = item.id"
-                                            @mouseleave="isFavHovered = ''"
-                                            class="favourite"
-                                            ><IconHeart
-                                                :size="24"
-                                                backgroundColor="#000"
-                                        /></el-button>
-                                    </div>
-                                    <div class="product__grid-btn">
-                                        <UIButton
-                                            size="large"
-                                            class="black flex-3"
-                                            @click.prevent="handleHello"
-                                            label="Add to cart"
-                                        >
-                                            <template #icon>
-                                                <el-icon class="mr-2"
-                                                    ><ShoppingBag
-                                                /></el-icon>
-                                            </template>
-                                        </UIButton>
-                                        <!-- <UIButton
+                                            <span
+                                                class="product__grid-w__list-price"
+                                                >{{
+                                                    toUSD(
+                                                        item?.bundles[0]
+                                                            ?.price ||
+                                                            item.price,
+                                                    )
+                                                }}</span
+                                            >
+                                            <el-button
+                                                text
+                                                circle
+                                                @click.prevent="addToWishlist"
+                                                @mouseenter="
+                                                    isFavHovered = item.id
+                                                "
+                                                @mouseleave="isFavHovered = ''"
+                                                class="favourite"
+                                                ><IconHeart
+                                                    :size="24"
+                                                    backgroundColor="#000"
+                                            /></el-button>
+                                        </div>
+                                        <div class="product__grid-btn">
+                                            <UIButton
+                                                size="large"
+                                                class="black flex-3"
+                                                @click.prevent="handleHello"
+                                                label="Add to cart"
+                                            >
+                                                <template #icon>
+                                                    <el-icon class="mr-2"
+                                                        ><ShoppingBag
+                                                    /></el-icon>
+                                                </template>
+                                            </UIButton>
+                                            <!-- <UIButton
                                         size="large"
                                         @click="handleHello"
                                         variant="secondary"
@@ -121,11 +188,12 @@
                                             /></el-icon>
                                         </template>
                                     </UIButton> -->
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -134,7 +202,14 @@
 
 <script setup>
 import UIButton from '~/components/ui/UIButton'
-import { ShoppingBag, Filter, Close, ArrowRight } from '@element-plus/icons-vue'
+import {
+    ShoppingBag,
+    Filter,
+    Close,
+    ArrowRight,
+    Sort,
+    Check,
+} from '@element-plus/icons-vue'
 import Spinner from '~/components/icons/Spinner.vue'
 
 const isFavHovered = ref('')
@@ -143,7 +218,41 @@ const { toUSD } = useCurrency()
 const { $toast } = useNuxtApp()
 const router = useRouter()
 
-defineProps({
+const selectedSort = ref('price-asc')
+
+const sortedProducts = computed(() => {
+    if (!Array.isArray(props.products)) return []
+    let sorted = [...props.products]
+    switch (selectedSort.value) {
+        case 'price-asc':
+            sorted.sort((a, b) => {
+                const priceA = a?.bundles?.[0]?.price ?? a.price ?? 0
+                const priceB = b?.bundles?.[0]?.price ?? b.price ?? 0
+                return priceA - priceB
+            })
+            break
+        case 'price-desc':
+            sorted.sort((a, b) => {
+                const priceA = a?.bundles?.[0]?.price ?? a.price ?? 0
+                const priceB = b?.bundles?.[0]?.price ?? b.price ?? 0
+                return priceB - priceA
+            })
+            break
+        case 'name-asc':
+            sorted.sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+            break
+        case 'name-desc':
+            sorted.sort((a, b) => (b.name || '').localeCompare(a.name || ''))
+            break
+    }
+    return sorted
+})
+
+function handleSortCommand(command) {
+    selectedSort.value = command
+}
+
+const props = defineProps({
     products: {
         type: Array,
         default: () => [],
@@ -357,6 +466,87 @@ onUnmounted(() => {
     @media (max-width: 768px) {
         max-width: 100%;
     }
+}
+
+.product-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.product-count {
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+}
+
+.product-sort {
+    min-width: 120px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.sort-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #ddd !important;
+    background: #fff !important;
+    font-weight: 600;
+    font-size: 18px;
+    padding: 8px 18px;
+    border-radius: 12px;
+    box-shadow: none;
+    transition: border-color 0.2s;
+}
+
+.sort-btn:hover,
+.sort-btn:focus {
+    border-color: #999 !important;
+    background: #f5f5f5 !important;
+}
+
+.sort-icon {
+    font-size: 22px;
+    margin-right: 2px;
+}
+
+.sort-label {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.sort-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #ddd !important;
+    background: #fff !important;
+    font-weight: 600;
+    font-size: 18px;
+    padding: 8px 18px;
+    border-radius: 12px;
+    box-shadow: none;
+    transition: border-color 0.2s;
+}
+
+.sort-btn:hover,
+.sort-btn:focus {
+    border-color: #999 !important;
+    background: #f5f5f5 !important;
+}
+
+.sort-icon {
+    font-size: 22px;
+    margin-right: 2px;
+}
+
+.sort-label {
+    font-size: 18px;
+    font-weight: 600;
 }
 
 .no-products {
