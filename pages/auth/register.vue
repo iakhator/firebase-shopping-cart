@@ -307,8 +307,8 @@ const handleSubmit = async () => {
       lastName: registerForm.value.lastName,
     })
 
-    if (!errorMessage.value) {
-      $toast.success('Account created successfully! Welcome!')
+    if (!errorMessage.value && response.success) {
+      $toast.success(response.message)
       registerForm.value = {}
       // await navigateTo('/auth/login')
     }

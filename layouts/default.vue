@@ -1,7 +1,7 @@
 <template>
     <div class="app-layout">
         <el-container>
-            <Header />
+            <!-- <Header /> -->
             <AppHeader />
             <div class="container-wrapper">
                 <slot />

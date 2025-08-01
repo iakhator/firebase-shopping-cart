@@ -58,7 +58,7 @@ export const useAuthStore = defineStore('auth', {
         //   body: { idToken, refreshToken },
         // })
 
-        const response = await $fetch('/api/register', {
+        const response = await $fetch('/api/auth/register', {
           method: 'POST',
           body: {
             email,
@@ -73,7 +73,7 @@ export const useAuthStore = defineStore('auth', {
 
         // await this.fetchUser()
 
-        return response.success
+        return response
       } catch (error) {
         if (error.code === 'auth/email-already-in-use') {
           this.errorMessage = 'Email already in use'

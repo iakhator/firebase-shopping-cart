@@ -21,6 +21,20 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    // Update user's email verification status in Firestore if needed
+    const userRef = adminFirestore.collection('users').doc(userId)
+    const userDoc = await userRef.get()
+
+    if (userDoc.exists) {
+      const userData = userDoc.data()
+      if (!userData.emailVerified) {
+        await userRef.update({
+          emailVerified: true,
+          lastUpdated: new Date().toISOString(),
+        })
+      }
+    }
+
     // Set cookies for session management
     setCookie(event, 'auth_token', idToken, {
       httpOnly: true,
@@ -38,19 +52,8 @@ export default defineEventHandler(async (event) => {
       path: '/',
     })
 
+    // TODO:set remember me
     redis.set(`refreshToken:${userId}`, refreshToken, 'EX', 60 * 60 * 24 * 7)
-
-    // const actionSettings = {
-    //   url: 'http://localhost:3000/verification-success',
-    // }
-    // const verificationLink = await adminAuth.generateEmailVerificationLink(
-    //   decodedToken.email,
-    //   actionSettings,
-    // )
-    // await sendEmailVerificationLink({
-    //   email: decodedToken.email,
-    //   verificationLink,
-    // })
 
     // Sync cart on login/register
     await syncCartOnLogin(event, userId, redis)
