@@ -1,6 +1,7 @@
 <template>
     <div class="app-layout">
         <el-container>
+            <Header />
             <AppHeader />
             <div class="container-wrapper">
                 <slot />
@@ -12,6 +13,7 @@
 
 <script setup>
 import AppHeader from '~/components/AppHeader'
+import Header from '~/components/ui/Header'
 import AppFooter from '~/components/AppFooter'
 </script>
 

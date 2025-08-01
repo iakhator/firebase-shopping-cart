@@ -13,29 +13,39 @@
             </el-button>
         </div>
 
-        <!-- Filter Sidebar -->
-        <div
-            class="sidebar-container"
-            :class="{ 'mobile-open': showMobileFilters }"
-        >
-            <div class="sidebar-overlay" @click="closeMobileFilters"></div>
+        <!-- Filter Sidebar (Desktop) -->
+        <div class="sidebar-container" v-if="!isMobile">
             <div class="sidebar-content">
                 <div class="flex justify-between items-center">
                     <h3>Filters</h3>
-                    <div class="mobile-filter-header">
-                        <el-button
-                            @click="closeMobileFilters"
-                            text
-                            circle
-                            class="close-btn"
-                        >
-                            <el-icon><Close /></el-icon>
-                        </el-button>
-                    </div>
                 </div>
                 <AppAside @filter-change="handleFilterChange" />
             </div>
         </div>
+
+        <!-- Filter Drawer (Mobile) -->
+        <el-drawer
+            v-model="showMobileFilters"
+            direction="ltr"
+            size="80vw"
+            :with-header="false"
+            custom-class="mobile-filter-drawer"
+        >
+            <div
+                class="drawer-header"
+                style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                "
+            >
+                <h3 style="margin: 0">Filters</h3>
+                <el-button @click="closeMobileFilters" circle class="close-btn">
+                    <el-icon><Close /></el-icon>
+                </el-button>
+            </div>
+            <AppAside @filter-change="handleFilterChange" />
+        </el-drawer>
 
         <!-- Main Content -->
         <div class="main-content">
@@ -176,18 +186,6 @@
                                                     /></el-icon>
                                                 </template>
                                             </UIButton>
-                                            <!-- <UIButton
-                                        size="large"
-                                        @click="handleHello"
-                                        variant="secondary"
-                                        label="Buy Now"
-                                    >
-                                        <template #icon>
-                                            <el-icon class="mr-2"
-                                                ><Wallet
-                                            /></el-icon>
-                                        </template>
-                                    </UIButton> -->
                                         </div>
                                     </div>
                                 </a>
@@ -207,7 +205,6 @@ import {
     Filter,
     Close,
     ArrowRight,
-    Sort,
     Check,
 } from '@element-plus/icons-vue'
 import Spinner from '~/components/icons/Spinner.vue'
@@ -217,6 +214,19 @@ const showMobileFilters = ref(false)
 const { toUSD } = useCurrency()
 const { $toast } = useNuxtApp()
 const router = useRouter()
+
+// Detect mobile
+const isMobile = ref(false)
+if (import.meta.client) {
+    const checkMobile = () => {
+        isMobile.value = window.innerWidth <= 992
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    onUnmounted(() => {
+        window.removeEventListener('resize', checkMobile)
+    })
+}
 
 const selectedSort = ref('price-asc')
 
@@ -290,7 +300,7 @@ function handleFilterChange(filter) {
     const query = formatFiltersToQuery(filter)
     router.push({ path: '/', query })
     // Close mobile filters after applying filters
-    if (process.client && window.innerWidth <= 768) {
+    if (import.meta.client && window.innerWidth <= 768) {
         closeMobileFilters()
     }
 }
@@ -319,7 +329,7 @@ function formatFiltersToQuery(filters) {
 
 // Clean up on unmount
 onUnmounted(() => {
-    if (process.client) {
+    if (import.meta.client) {
         document.body.style.overflow = ''
     }
 })
@@ -387,19 +397,14 @@ onUnmounted(() => {
     }
 
     @media (max-width: 992px) {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 1000;
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-
-        &.mobile-open {
-            transform: translateX(0);
-        }
+        display: none;
     }
+}
+
+/* Mobile filter drawer overrides */
+.mobile-filter-drawer {
+    padding: 0;
+    background: #fff;
 }
 
 /* .sidebar-overlay {
@@ -418,40 +423,12 @@ onUnmounted(() => {
 
 .sidebar-content {
     @media (max-width: 992px) {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 320px;
-        max-width: 85vw;
-        height: 100%;
-        background: white;
-        padding: 20px;
-        overflow-y: auto;
-        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        display: none;
     }
 }
 
 .mobile-filter-header {
     display: none;
-
-    @media (max-width: 992px) {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid #eee;
-
-        h3 {
-            margin: 0;
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .close-btn {
-            padding: 8px;
-        }
-    }
 }
 
 .main-content {

@@ -45,9 +45,19 @@ export default defineEventHandler(async (event) => {
     const user = await adminAuth.createUser(body)
     setResponseStatus(event, 201)
 
-    console.log(user, 'user')
-
     if (!user.uid) return
+
+    const userRef = adminFirestore.collection('users').doc(user.uid)
+    await userRef.set({
+      uid: user.uid,
+      email: user.email,
+      firstName: body.firstName || '',
+      lastName: body.lastName || '',
+      displayName: body.displayName,
+      emailVerified: false,
+      createdDate: body.createdDate,
+      lastUpdated: new Date().toISOString(),
+    })
 
     const actionSettings = {
       url: `${useRuntimeConfig().public.BASE_URL}/auth/login`,
@@ -59,10 +69,28 @@ export default defineEventHandler(async (event) => {
     await sendEmailVerificationLink({
       email: user.email,
       verificationLink,
+      firstName: body.firstName,
     })
-    return { success: true, error: false }
+    return {
+      success: true,
+      message:
+        'Account created successfully. Please check your email to verify your account before signing in.',
+    }
   } catch (error) {
-    setResponseStatus(event, 201)
-    return { error: 'Failed to create User.', success: false }
+    setResponseStatus(event, 400)
+    let errorMessage = 'Failed to create user.'
+
+    if (error.code === 'auth/email-already-exists') {
+      errorMessage = 'An account with this email already exists.'
+    } else if (error.code === 'auth/invalid-email') {
+      errorMessage = 'Invalid email address.'
+    } else if (error.code === 'auth/weak-password') {
+      errorMessage = 'Password is too weak.'
+    }
+
+    return {
+      success: false,
+      message: errorMessage,
+    }
   }
 })

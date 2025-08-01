@@ -1,6 +1,5 @@
 import { adminAuth } from '~/server/utils/firebaseAdmin'
 import redis from '~/server/utils/redisClient'
-import { sendEmailVerificationLink } from '~/server/services/emailService'
 
 export default defineEventHandler(async (event) => {
   const { idToken, refreshToken } = await readBody(event)
@@ -10,6 +9,17 @@ export default defineEventHandler(async (event) => {
   try {
     const decodedToken = await adminAuth.verifyIdToken(idToken, true)
     const userId = decodedToken.uid
+
+    const userRecord = await adminAuth.getUser(userId)
+
+    // Check if email is verified
+    if (!userRecord.emailVerified) {
+      throw createError({
+        statusCode: 403,
+        statusMessage:
+          'Please verify your email address before signing in. Check your inbox for the verification link.',
+      })
+    }
 
     // Set cookies for session management
     setCookie(event, 'auth_token', idToken, {
@@ -30,20 +40,23 @@ export default defineEventHandler(async (event) => {
 
     redis.set(`refreshToken:${userId}`, refreshToken, 'EX', 60 * 60 * 24 * 7)
 
-    const verificationLink = await adminAuth.generateEmailVerificationLink(
-      decodedToken.email
-    )
-    await sendEmailVerificationLink({
-      email: decodedToken.email,
-      verificationLink,
-    })
+    // const actionSettings = {
+    //   url: 'http://localhost:3000/verification-success',
+    // }
+    // const verificationLink = await adminAuth.generateEmailVerificationLink(
+    //   decodedToken.email,
+    //   actionSettings,
+    // )
+    // await sendEmailVerificationLink({
+    //   email: decodedToken.email,
+    //   verificationLink,
+    // })
 
     // Sync cart on login/register
     await syncCartOnLogin(event, userId, redis)
 
     return { authenticated: true, user: decodedToken }
   } catch (error) {
-    console.log(error, 'error')
     deleteCookie(event, 'auth_token')
 
     if (error.code === 'auth/id-token-expired') {

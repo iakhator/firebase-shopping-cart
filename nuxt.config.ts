@@ -89,6 +89,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
+      BASE_URL: '',
       FIREBASE_DATABASE_URL: '',
       FIREBASE_API_KEY: '',
       FIREBASE_AUTH_DOMAIN: '',

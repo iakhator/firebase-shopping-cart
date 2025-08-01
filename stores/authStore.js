@@ -44,38 +44,34 @@ export const useAuthStore = defineStore('auth', {
 
     async signUp({ email, password, firstName, lastName }) {
       try {
-        const { $auth, $createUserWithEmailAndPassword } = useNuxtApp()
-        const userCred = await $createUserWithEmailAndPassword(
-          $auth,
-          email,
-          password
-        )
-        const idToken = await userCred.user.getIdToken()
-        const refreshToken = userCred.user.refreshToken
+        // const { $auth, $createUserWithEmailAndPassword } = useNuxtApp()
+        // const userCred = await $createUserWithEmailAndPassword(
+        //   $auth,
+        //   email,
+        //   password
+        // )
+        // const idToken = await userCred.user.getIdToken()
+        // const refreshToken = userCred.user.refreshToken
 
-        const response = await $fetch('/api/auth/session', {
+        // const response = await $fetch('/api/auth/session', {
+        //   method: 'POST',
+        //   body: { idToken, refreshToken },
+        // })
+
+        const response = await $fetch('/api/register', {
           method: 'POST',
-          body: { idToken, refreshToken },
+          body: {
+            email,
+            password,
+            emailVerified: false,
+            firstName: firstName,
+            lastName: lastName,
+            displayName: `${firstName} ${lastName}`,
+            createdDate: new Date().toISOString(),
+          },
         })
 
-        if (response.authenticated) {
-          await $fetch('/api/user', {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${idToken}`,
-            },
-            body: {
-              uid: userCred.user.uid,
-              email: userCred.user.email,
-              firstName: firstName,
-              lastName: lastName,
-              name: `${firstName} ${lastName}`,
-              createdDate: new Date().toISOString(),
-            },
-          })
-        }
-
-        await this.fetchUser()
+        // await this.fetchUser()
 
         return response.success
       } catch (error) {

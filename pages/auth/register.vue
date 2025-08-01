@@ -309,7 +309,8 @@ const handleSubmit = async () => {
 
     if (!errorMessage.value) {
       $toast.success('Account created successfully! Welcome!')
-      await navigateTo('/')
+      registerForm.value = {}
+      // await navigateTo('/auth/login')
     }
   } catch (error) {
     console.error('Registration error:', error)
