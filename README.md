@@ -1,10 +1,18 @@
 # 🛒 RingCart
 
 A modern,e-commerce application built with Nuxt.js 3, Firebase, and Stripe. This application provides a complete shopping experience with user authentication, product browsing, cart management, and secure payment processing.
+![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
+![Nuxt.js](https://img.shields.io/badge/Nuxt.js-3-blue.svg)
+![Firebase](https://img.shields.io/badge/Firebase-Enabled-orange.svg)
+![Redis](https://img.shields.io/badge/Redis-Enabled-red.svg)
+![Stripe](https://img.shields.io/badge/Stripe-Enabled-purple.svg)
+![Docker](https://img.shields.io/badge/Docker-Enabled-blue.svg)
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ## 🚀 Features
 
 ### Core Functionality
+
 - **User Authentication**: Standalone login/registration pages with Firebase Auth
 - **Product Catalog**: Browse products with advanced filtering (brand, price, storage)
 - **Shopping Cart**: Add, remove, and modify cart items with real-time updates
@@ -13,6 +21,7 @@ A modern,e-commerce application built with Nuxt.js 3, Firebase, and Stripe. This
 - **Email Notifications**: Automated order confirmations and updates
 
 ### Technical Features
+
 - **Server-Side Rendering**: Fast initial page loads with Nuxt.js 3
 - **Real-time Updates**: Live cart synchronization across sessions
 - **Guest Cart**: Cart persistence for non-authenticated users
@@ -24,12 +33,14 @@ A modern,e-commerce application built with Nuxt.js 3, Firebase, and Stripe. This
 ## 🛠 Tech Stack
 
 ### Client
+
 - **[Nuxt.js 3](https://nuxt.com/)** - Vue.js SSR framework
 - **[Element Plus](https://element-plus.org/)** - Vue 3 component library
 - **[Pinia](https://pinia.vuejs.org/)** - State management
 - **[SCSS](https://sass-lang.com/)** - CSS preprocessor
 
 ### Server
+
 - **[Firebase](https://firebase.google.com/)** - Authentication & Firestore database
 - **[Redis](https://redis.io/)** - Cart storage and session management
 - **[Stripe](https://stripe.com/)** - Payment processing
@@ -37,12 +48,14 @@ A modern,e-commerce application built with Nuxt.js 3, Firebase, and Stripe. This
 - **[Mailgun](https://www.mailgun.com/)** - Email Client
 
 ### DevOps
+
 - **[Docker](https://www.docker.com/)** - Containerization
 - **[Vitest](https://vitest.dev/)** - Unit testing framework
 
 ## 📦 Installation
 
 ### Prerequisites
+
 - Node.js 18+ and npm/yarn
 - Redis server
 - Firebase project
@@ -50,25 +63,29 @@ A modern,e-commerce application built with Nuxt.js 3, Firebase, and Stripe. This
 
 ### Quick Start
 
-1. **Clone the repository**
+1.**Clone the repository**
+
 ```bash
 git clone https://github.com/iakhator/firebase-shopping-cart.git
 cd firebase-shopping-cart
 ```
 
-2. **Install dependencies**
+2.**Install dependencies**
+
 ```bash
 npm install
 ```
 
-3. **Set up environment variables**
+3.**Set up environment variables**
+
 ```bash
 cp .env.example .env
 ```
 
-4. **Configure your environment variables** (see Configuration section)
+4.**Configure your environment variables** (see Configuration section)
 
-5. **Start development server**
+5.**Start development server**
+
 ```bash
 npm run dev
 ```

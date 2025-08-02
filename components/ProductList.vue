@@ -51,7 +51,18 @@
     <div class="main-content">
       <Spinner v-if="isLoading" />
       <div v-else-if="!products.length" class="no-products">
-        No products found
+        <div class="no-products-container">
+          <div class="no-products-icon">
+            <IconBox size="70" color="#000" />
+          </div>
+
+          <div class="no-products-content">
+            <h2 class="no-products-title">No products found</h2>
+            <p class="no-products-subtitle">
+              Try adjusting your filters to see more results.
+            </p>
+          </div>
+        </div>
       </div>
       <div v-else>
         <div class="product-list-header">
@@ -376,6 +387,52 @@ onUnmounted(() => {
   }
 }
 
+// no product
+.no-products {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 40px 20px;
+}
+
+.no-products-container {
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.no-products-icon {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.no-products-content {
+  .no-products-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: $black;
+    margin: 0 0 12px 0;
+    line-height: 1.2;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+  }
+
+  .no-products-subtitle {
+    font-size: 1rem;
+    color: #6b7280;
+    margin: 0 0 32px 0;
+    line-height: 1.5;
+
+    @media (max-width: 768px) {
+      font-size: 0.8rem;
+    }
+  }
+}
+
 .sidebar-container {
   flex-basis: 210px;
   flex-shrink: 0;
@@ -394,20 +451,6 @@ onUnmounted(() => {
   padding: 0;
   background: #fff;
 }
-
-/* .sidebar-overlay {
-    display: none;
-
-    @media (max-width: 992px) {
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-    }
-} */
 
 .sidebar-content {
   @media (max-width: 992px) {
