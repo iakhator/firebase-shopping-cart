@@ -38,10 +38,24 @@ export default defineEventHandler(async (event) => {
       reviews: db.constructor.FieldValue.arrayUnion(reviewData),
     })
 
+    // Efficiently update averageRating and totalReviews
+    const productSnap = await productRef.get()
+    const productData = productSnap.data()
+    const prevAvg = productData.averageRating || 0
+    const prevCount = productData.totalReviews || 0
+
+    const newAvg = (prevAvg * prevCount + userRating) / (prevCount + 1)
+    await productRef.update({
+      averageRating: newAvg,
+      totalReviews: prevCount + 1,
+    })
+
     return {
       success: true,
       message: 'Review added successfully',
       review: reviewData,
+      averageRating: newAvg,
+      totalReviews: prevCount + 1,
     }
   } catch (error) {
     console.error('Error adding review:', error)

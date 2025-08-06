@@ -108,8 +108,12 @@
         <el-col>
             <el-row>
                 <el-col>
-                    <el-tabs class="el-card-options">
-                        <el-tab-pane label="Product Details">
+                    <el-tabs
+                        v-model="tabActiveName"
+                        class="el-card-options"
+                        @tab-click="handleTabClick"
+                    >
+                        <el-tab-pane label="Product Details" name="details">
                             <div class="item__contents-specifications">
                                 <p
                                     v-for="(
@@ -124,7 +128,7 @@
                                 </p>
                             </div>
                         </el-tab-pane>
-                        <el-tab-pane label="Ratings/Review">
+                        <el-tab-pane label="Ratings/Review" name="ratings">
                             <div class="review-tab-container">
                                 <!-- Display overall rating and review count -->
                                 <div class="flex items-center mb-4">
@@ -253,6 +257,33 @@ const userRating = ref(0)
 const ratingErrorMessage = ref('')
 const userComment = ref('')
 const reviewSubmitted = ref(false)
+const reviewsLoaded = ref(false)
+
+const tabActiveName = ref('details')
+const { $toast } = useNuxtApp()
+
+async function loadReviews() {
+    if (reviewsLoaded.value) return
+    try {
+        const res = await $fetch('/api/products/review', {
+            params: { productId },
+        })
+        if (res.success) {
+            overallRating.value = res.averageRating
+            totalReviews.value = res.totalReviews
+            reviewsLoaded.value = true
+        }
+    } catch (err) {
+        $toast.error(result.error)
+        console.error('Failed to load reviews', err)
+    }
+}
+
+function handleTabClick(tab) {
+    if (tab.paneName === 'ratings') {
+        loadReviews()
+    }
+}
 
 function submitReview() {
     if (!userRating.value || !userComment.value.trim()) {
@@ -311,8 +342,6 @@ async function updateCart() {
 
     cartStore.addToCart(product)
 }
-
-function buyNow() {}
 </script>
 
 <style scoped lang="scss">

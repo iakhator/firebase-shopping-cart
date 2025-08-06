@@ -2,7 +2,6 @@ import { adminFirestore as db } from '~/server/utils/firebaseAdmin'
 
 export default defineEventHandler(async (event) => {
   try {
-    // Get productId from query params
     const { productId } = getQuery(event)
 
     if (!productId) {
@@ -21,12 +20,17 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    // Get reviews, averageRating, and totalReviews from product document
     const productData = productDoc.data()
     const reviews = productData.reviews || []
+    const averageRating = productData.averageRating || 0
+    const totalReviews = productData.totalReviews || 0
 
     return {
       success: true,
       reviews,
+      averageRating,
+      totalReviews,
     }
   } catch (error) {
     console.error('Error fetching reviews:', error)
