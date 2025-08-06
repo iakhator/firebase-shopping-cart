@@ -124,9 +124,84 @@
                                 </p>
                             </div>
                         </el-tab-pane>
-                        <el-tab-pane label="Ratings/Review"
-                            >Ratings/Review</el-tab-pane
-                        >
+                        <el-tab-pane label="Ratings/Review">
+                            <div class="review-tab-container">
+                                <!-- Display overall rating and review count -->
+                                <div class="flex items-center mb-4">
+                                    <el-rate
+                                        v-model="overallRating"
+                                        disabled
+                                        show-score
+                                        text-color="#000000"
+                                        score-template="{value} out of 5"
+                                        :max="5"
+                                    />
+                                    <span
+                                        class="review-count ml-2 text-gray-500"
+                                    >
+                                        ({{ totalReviews }} reviews)
+                                    </span>
+                                </div>
+                                <!-- Divider -->
+                                <div class="w-full border-t my-8"></div>
+                                <!-- Interactive rating and comment form -->
+                                <div class="w-full max-w-md">
+                                    <h3
+                                        class="text-lg font-bold mb-4 text-gray-800"
+                                    >
+                                        Rate this item & leave a comment
+                                    </h3>
+                                    <div class="mb-4 flex flex-col items-start">
+                                        <label
+                                            class="mb-2 font-medium text-gray-700"
+                                            >Your Rating:</label
+                                        >
+                                        <el-rate
+                                            v-model="userRating"
+                                            :max="5"
+                                            allow-half
+                                            show-score
+                                            score-template="{value} out of 5"
+                                            text-color="#000000"
+                                        />
+                                    </div>
+                                    <div class="mb-4 flex flex-col items-start">
+                                        <label
+                                            class="mb-2 font-medium text-gray-700"
+                                            >Your Comment:</label
+                                        >
+                                        <el-input
+                                            type="textarea"
+                                            v-model="userComment"
+                                            :rows="4"
+                                            placeholder="Share your experience with this product..."
+                                            maxlength="500"
+                                            show-word-limit
+                                            class="w-full"
+                                        />
+                                    </div>
+                                    <p
+                                        class="error el-tag--danger"
+                                        v-if="ratingErrorMessage"
+                                    >
+                                        {{ ratingErrorMessage }}
+                                    </p>
+                                    <UIButton
+                                        label="Submit Review"
+                                        size="large"
+                                        variant="primary"
+                                        class="w-full"
+                                        @click="submitReview"
+                                    />
+                                    <div
+                                        v-if="reviewSubmitted"
+                                        class="mt-4 text-green-600 font-medium"
+                                    >
+                                        Thank you for your review!
+                                    </div>
+                                </div>
+                            </div>
+                        </el-tab-pane>
                         <el-tab-pane label="FAQ">FAQ</el-tab-pane>
                     </el-tabs>
                 </el-col>
@@ -140,6 +215,7 @@ import UIButton from '~/components/ui/UIButton'
 import UICounter from '~/components/ui/UICounter'
 import UIColorBox from '~/components/ui/UIColorBox'
 import { ShoppingCart, Star, Van } from '@element-plus/icons-vue'
+import { ref, computed, onMounted } from 'vue'
 
 const cartStore = useCartStore()
 const productStore = useProductStore()
@@ -170,13 +246,46 @@ onMounted(() => {
     selectedVariant.value = item.value.variant ? item.value?.variant[0] : {}
 })
 
+// Ratings/Review tab state
+const overallRating = ref(4.5)
+const totalReviews = ref(24)
+const userRating = ref(0)
+const ratingErrorMessage = ref('')
+const userComment = ref('')
+const reviewSubmitted = ref(false)
+
+function submitReview() {
+    if (!userRating.value || !userComment.value.trim()) {
+        ratingErrorMessage.value =
+            'Please provide a rating and comment before submitting.'
+        setTimeout(() => {
+            errorMessage.value = ''
+        }, 3000)
+        return
+    }
+    reviewSubmitted.value = true
+    $fetch('/api/products/review', {
+        method: 'POST',
+        body: {
+            productId: productId,
+            userRating: userRating.value,
+            userComment: userComment.value,
+        },
+    })
+    setTimeout(() => {
+        userRating.value = 0
+        userComment.value = ''
+        reviewSubmitted.value = false
+    }, 3000)
+}
+
 function handleBundleChange(item) {
     itemBundle.value = item
 }
 
-function handleQtyChange(value) {
-    qty.value = value
-}
+// function handleQtyChange(value) {
+//     qty.value = value
+// }
 
 function addToWhishlist() {
     // wishlistStore.addToWishlist(item.value.id)
