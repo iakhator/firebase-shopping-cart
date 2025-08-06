@@ -148,6 +148,55 @@
                                 </div>
                                 <!-- Divider -->
                                 <div class="w-full border-t my-8"></div>
+
+                                <!-- Display reviews list -->
+                                <div
+                                    v-if="reviews.length"
+                                    class="reviews-list mb-8 w-full max-w-2xl"
+                                >
+                                    <h3
+                                        class="text-md font-bold mb-4 text-gray-800"
+                                    >
+                                        Recent Reviews
+                                    </h3>
+                                    <div
+                                        v-for="(review, idx) in reviews"
+                                        :key="idx"
+                                        class="review-card p-4 mb-4 rounded-lg border border-gray-200 bg-white shadow-sm"
+                                    >
+                                        <div class="flex items-center mb-2">
+                                            <span
+                                                class="review-user font-semibold text-primary mr-2"
+                                            >
+                                                {{
+                                                    review.userName ||
+                                                    'Anonymous'
+                                                }}
+                                            </span>
+                                            <el-rate
+                                                :model-value="review.userRating"
+                                                disabled
+                                                :max="5"
+                                                size="small"
+                                                class="review-stars"
+                                            />
+                                        </div>
+                                        <div
+                                            class="review-comment text-gray-700 mb-1 text-sm"
+                                        >
+                                            {{ review.userComment }}
+                                        </div>
+                                        <div
+                                            class="review-date text-xs text-gray-400 text-sm"
+                                        >
+                                            {{ formatDate(review.createdAt) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-else class="text-gray-500 mb-8">
+                                    No reviews yet. Be the first to review!
+                                </div>
+
                                 <!-- Interactive rating and comment form -->
                                 <div class="w-full max-w-md">
                                     <h3
@@ -261,6 +310,7 @@ const reviewsLoaded = ref(false)
 
 const tabActiveName = ref('details')
 const { $toast } = useNuxtApp()
+const reviews = ref([])
 
 async function loadReviews() {
     if (reviewsLoaded.value) return
@@ -271,12 +321,24 @@ async function loadReviews() {
         if (res.success) {
             overallRating.value = res.averageRating
             totalReviews.value = res.totalReviews
+            reviews.value = res.reviews || []
             reviewsLoaded.value = true
         }
     } catch (err) {
         $toast.error(result.error)
         console.error('Failed to load reviews', err)
     }
+}
+
+// Format date for review display
+function formatDate(dateStr) {
+    if (!dateStr) return ''
+    const date = new Date(dateStr)
+    return date.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    })
 }
 
 function handleTabClick(tab) {

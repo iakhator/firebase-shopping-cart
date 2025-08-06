@@ -19,6 +19,10 @@ useHead({
 </script>
 
 <style lang="scss" scoped>
+:deep(.el-card) {
+    background: $off-white;
+    border: 1px solid $bg-gray-300;
+}
 .auth-layout {
     min-height: 100vh;
     width: 100%;
@@ -73,6 +77,7 @@ useHead({
     cursor: pointer;
 
     .icon-circle {
+        position: relative;
         width: 64px;
         height: 64px;
         background-color: #000;
@@ -80,6 +85,18 @@ useHead({
         display: flex;
         align-items: center;
         justify-content: center;
+
+        img {
+            width: 40px;
+            height: 40px;
+            margin-left: -10px;
+        }
+
+        svg {
+            position: absolute;
+            top: 32px;
+            right: 8px;
+        }
     }
 }
 
@@ -146,7 +163,6 @@ useHead({
     }
 
     .divider-text {
-        background: white;
         color: #999;
         font-size: 12px;
         font-weight: 500;
