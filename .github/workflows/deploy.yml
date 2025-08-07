@@ -12,35 +12,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v3
-
-      # - name: Build Docker image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: .
-      #     push: false # Render will build from Git; no need to push
-      #     tags: shopping-cart-app:latest
-      #     build-args: |
-      #       NODE_ENV=production
-      #       FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }}
-      #       AUTH_DOMAIN=${{ secrets.AUTH_DOMAIN }}
-      #       APP_ID=${{ secrets.APP_ID }}
-      #       PROJECT_ID=${{ secrets.PROJECT_ID }}
-      #       CLIENT_EMAIL=${{ secrets.CLIENT_EMAIL }}
-      #       CLIENT_ID=${{ secrets.FIREBASE_CLIENT_ID }}
-      #       PRIVATE_KEY=${{ secrets.PRIVATE_KEY }}
-      #       DATABASE_URL=${{ secrets.FIREBASE_DATABASE_URL }}
-      #       STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }}
-      #       STRIPE_SECRET=${{ secrets.STRIPE_SECRET }}
-      #       STRIPE_CLIENT_KEY=${{ secrets.STRIPE_CLIENT_KEY }}
-      #       REDIS_URL=${{ secrets.REDIS_URL }}
-
       - name: Trigger Render Deploy Hook
         if: github.ref == 'refs/heads/master'
         env:
-          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK }}
         run: |
           echo "Deploying to Render..."
           echo "Hook Length: $(echo "$deploy_url" | wc -c)"
-          curl "https://api.render.com/deploy/srv-d161gommcj7s73dtlohg?key=QQQbgrmEAhM"
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}

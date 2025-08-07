@@ -135,11 +135,12 @@ async function submitPin() {
             },
         })
         if (res.success) {
-            ;((successMessage.value =
-                'Your email has been verified! You may now log in. You will be redirected to login'),
-                setTimeout(() => {
-                    router.push('/auth/login')
-                }, 2000))
+            $toast.success(
+                'Your email has been verified! You may now log in. You will be redirected to login',
+            )
+            setTimeout(() => {
+                router.push('/auth/login')
+            }, 3000)
         } else {
             errorMessage.value = res.message || 'Verification failed.'
         }
