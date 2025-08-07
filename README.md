@@ -9,7 +9,7 @@ A modern,e-commerce application built with Nuxt.js 3, Firebase, and Stripe. This
 ![Docker](https://img.shields.io/badge/Docker-Enabled-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-## 🚀 Features
+##  Features
 
 ### Core Functionality
 
@@ -30,7 +30,7 @@ A modern,e-commerce application built with Nuxt.js 3, Firebase, and Stripe. This
 - **Docker Support**: Containerized deployment ready
 - **Redis Caching**: High-performance cart storage
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Client
 
@@ -52,7 +52,7 @@ A modern,e-commerce application built with Nuxt.js 3, Firebase, and Stripe. This
 - **[Docker](https://www.docker.com/)** - Containerization
 - **[Vitest](https://vitest.dev/)** - Unit testing framework
 
-## 📦 Installation
+## Installation
 
 ### Prerequisites
 
@@ -134,10 +134,10 @@ npm run start
 
 ```bash
 # Build and run with Docker Compose
-docker-compose up --build
+docker compose up --build
 
 # Run in detached mode
-docker-compose up -d
+docker compose up -d
 ```
 
 ## Testing
@@ -169,7 +169,7 @@ npm run test:coverage
 - Update documentation as needed
 - Use semantic versioning
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
@@ -181,4 +181,4 @@ For support, please open an issue on GitHub or contact the maintainers.
 
 **Author**: Akhator Itua
 **Version**: 2.0.0
-**Last Updated**: 2024
+**Last Updated**: 2025

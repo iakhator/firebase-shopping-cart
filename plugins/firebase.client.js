@@ -5,6 +5,7 @@ import {
   inMemoryPersistence,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  signInWithCustomToken,
 } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 
@@ -40,6 +41,7 @@ export default defineNuxtPlugin(() => {
       firestore,
       signInWithEmailAndPassword,
       createUserWithEmailAndPassword,
+      signInWithCustomToken,
     },
   }
 })

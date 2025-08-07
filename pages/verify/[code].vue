@@ -44,7 +44,6 @@
                     :disabled="loading || pinDigits.join('').length !== 6"
                 />
             </form>
-            <div v-if="loading" class="verify-loading">Verifying...</div>
         </div>
     </div>
 </template>
@@ -65,7 +64,7 @@ const successMessage = ref('')
 const loading = ref(false)
 const userId = ref('')
 
-const { $toast } = useNuxtApp()
+const { $toast, $auth, $signInWithCustomToken } = useNuxtApp()
 
 onMounted(async () => {
     if (!code || typeof code !== 'string' || code.length < 16) {
@@ -79,9 +78,9 @@ onMounted(async () => {
         })
         if (!res.success && res.message) {
             $toast.info(res.message)
-            setTimeout(() => {
-                navigateTo('/auth/register')
-            }, 2000)
+            // setTimeout(() => {
+            //     navigateTo('/auth/register')
+            // }, 2000)
 
             return
         }
@@ -125,6 +124,7 @@ async function submitPin() {
     successMessage.value = ''
     loading.value = true
     const pin = pinDigits.value.join('')
+
     try {
         const res = await $fetch('/api/verify/pin', {
             method: 'POST',
@@ -134,17 +134,31 @@ async function submitPin() {
                 enteredPin: pin,
             },
         })
+
+        const customToken = res.customToken
         if (res.success) {
-            $toast.success(
-                'Your email has been verified! You may now log in. You will be redirected to login',
+            const userCredential = await $signInWithCustomToken(
+                $auth,
+                customToken,
             )
-            setTimeout(() => {
-                router.push('/auth/login')
-            }, 3000)
+            const idToken = await userCredential.user.getIdToken()
+            const refreshToken = userCredential.user.refreshToken
+
+            // Send tokens to your session API to set cookies
+            await $fetch('/api/auth/session', {
+                method: 'POST',
+                body: {
+                    idToken,
+                    refreshToken,
+                },
+            })
+
+            navigateTo('/')
         } else {
             errorMessage.value = res.message || 'Verification failed.'
         }
     } catch (err) {
+        console.log(err, 'err')
         errorMessage.value = 'Verification failed. Please try again.'
     }
     loading.value = false

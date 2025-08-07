@@ -32,7 +32,9 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    if (data.pin !== enteredPin) {
+    console.log(data.pin, typeof data.pin, enteredPin, typeof enteredPin)
+
+    if (data.pin !== enteredPin.toString()) {
       return {
         success: false,
         message: 'Incorrect PIN.',
@@ -46,12 +48,15 @@ export default defineEventHandler(async (event) => {
 
     await adminAuth.updateUser(data.userId, { emailVerified: true })
 
+    const customToken = await adminAuth.createCustomToken(data.userId)
+
     // Delete verification code document after successful verification
-    await codeDocRef.delete()
+    // await codeDocRef.delete()
 
     return {
       success: true,
       message: 'Email verified successfully!',
+      customToken,
     }
   } catch (error) {
     console.error('Error verifying PIN:', error)

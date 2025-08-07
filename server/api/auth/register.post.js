@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
     const verificationCode = crypto.randomUUID()
     // Generate 6-digit PIN
     const pin = Math.floor(100000 + Math.random() * 900000).toString()
-    const expiresAt = Date.now() + 20 * 60 * 1000
+    const expiresAt = Date.now() + 60 * 60 * 1000
 
     await adminFirestore
       .collection('verificationCodes')

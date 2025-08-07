@@ -16,7 +16,7 @@ export const useAuthStore = defineStore('auth', {
         const userCredential = await $signInWithEmailAndPassword(
           $auth,
           email,
-          password
+          password,
         )
 
         const idToken = await userCredential.user.getIdToken()
@@ -44,20 +44,6 @@ export const useAuthStore = defineStore('auth', {
 
     async signUp({ email, password, firstName, lastName }) {
       try {
-        // const { $auth, $createUserWithEmailAndPassword } = useNuxtApp()
-        // const userCred = await $createUserWithEmailAndPassword(
-        //   $auth,
-        //   email,
-        //   password
-        // )
-        // const idToken = await userCred.user.getIdToken()
-        // const refreshToken = userCred.user.refreshToken
-
-        // const response = await $fetch('/api/auth/session', {
-        //   method: 'POST',
-        //   body: { idToken, refreshToken },
-        // })
-
         const response = await $fetch('/api/auth/register', {
           method: 'POST',
           body: {
