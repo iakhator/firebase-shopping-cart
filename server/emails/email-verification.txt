@@ -2,9 +2,9 @@ Hi {{customerName}},
 
 Welcome to RingCart!
 
-Thank you for signing up. To get started, please verify your email address by clicking the link below:
+Thank you for signing up. To get started, use the code below to verify your email:
 
-{{verificationLink}}
+{{pin}}
 
 If you did not create a RingCart account, you can safely ignore this email.
 

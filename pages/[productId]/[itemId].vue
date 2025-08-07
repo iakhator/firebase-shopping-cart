@@ -133,7 +133,7 @@
                                 <!-- Display overall rating and review count -->
                                 <div class="flex items-center mb-4">
                                     <el-rate
-                                        v-model="overallRating"
+                                        v-model="item.averageRating"
                                         disabled
                                         show-score
                                         text-color="#000000"
@@ -143,7 +143,7 @@
                                     <span
                                         class="review-count ml-2 text-gray-500"
                                     >
-                                        ({{ totalReviews }} reviews)
+                                        ({{ item.totalReviews }} reviews)
                                     </span>
                                 </div>
                                 <!-- Divider -->

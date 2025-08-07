@@ -160,101 +160,23 @@
                                             {{ item?.bundles[0]?.storage }}
                                         </span>
                                         <div
+                                            v-if="
+                                                item.averageRating ||
+                                                item.totalReviews
+                                            "
                                             class="product__grid-w__list-rating"
                                         >
-                                            <span class="stars">
-                                                <span
-                                                    v-for="star in 5"
-                                                    :key="star"
-                                                >
-                                                    <!-- <IconStar :size="16" /> -->
-                                                    <svg
-                                                        v-if="
-                                                            item.rating
-                                                                ? star <=
-                                                                  Math.floor(
-                                                                      item.rating,
-                                                                  )
-                                                                : star <= 4
-                                                        "
-                                                        width="18"
-                                                        height="18"
-                                                        viewBox="0 0 24 24"
-                                                        fill="#FFD700"
-                                                        stroke="#FFD700"
-                                                        stroke-width="1"
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        style="
-                                                            margin-right: 2px;
-                                                        "
-                                                    >
-                                                        <polygon
-                                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                                                        />
-                                                    </svg>
-                                                    <svg
-                                                        v-else-if="
-                                                            item.rating
-                                                                ? star -
-                                                                      item.rating <
-                                                                      1 &&
-                                                                  star >
-                                                                      item.rating
-                                                                : false
-                                                        "
-                                                        width="18"
-                                                        height="18"
-                                                        viewBox="0 0 24 24"
-                                                        fill="url(#half)"
-                                                        stroke="#FFD700"
-                                                        stroke-width="1"
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        style="
-                                                            margin-right: 2px;
-                                                        "
-                                                    >
-                                                        <defs>
-                                                            <linearGradient
-                                                                id="half"
-                                                            >
-                                                                <stop
-                                                                    offset="50%"
-                                                                    stop-color="#FFD700"
-                                                                />
-                                                                <stop
-                                                                    offset="50%"
-                                                                    stop-color="#fff"
-                                                                />
-                                                            </linearGradient>
-                                                        </defs>
-                                                        <polygon
-                                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                                                        />
-                                                    </svg>
-                                                    <svg
-                                                        v-else
-                                                        width="18"
-                                                        height="18"
-                                                        viewBox="0 0 24 24"
-                                                        fill="#fff"
-                                                        stroke="#FFD700"
-                                                        stroke-width="1"
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        style="
-                                                            margin-right: 2px;
-                                                        "
-                                                    >
-                                                        <polygon
-                                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                                                        />
-                                                    </svg>
-                                                </span>
-                                            </span>
-                                            <span class="review-count">
-                                                {{ item.reviewCount || 128 }}
+                                            <el-rate
+                                                :model-value="
+                                                    item.averageRating
+                                                "
+                                                disabled
+                                                :max="5"
+                                                size="large"
+                                                class="review-stars"
+                                            />
+                                            <span class="review-count text-xs">
+                                                {{ item.totalReviews }}
                                                 reviews
                                             </span>
                                         </div>
@@ -593,6 +515,8 @@ onUnmounted(() => {
     font-family: 'Bricolage Grotesque', Arial, sans-serif;
     font-size: 1rem;
     gap: 8px;
+    position: absolute;
+    top: 0;
 }
 
 .product__grid-w__list-rating .stars {

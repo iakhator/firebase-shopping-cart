@@ -32,10 +32,11 @@ export async function sendOrderConfirmation({
   })
 }
 
-export async function sendEmailVerificationLink({ email, verificationLink }) {
+export async function sendEmailVerificationLink({ email, pin, firstName }) {
   const data = {
     email,
-    verificationLink,
+    pin,
+    firstName,
   }
 
   const { html, text } = await renderTemplate('email-verification', data)

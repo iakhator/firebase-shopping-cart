@@ -51,6 +51,7 @@
         border-radius: 8px;
         transition: all 0.3s ease;
         overflow: hidden;
+        position: relative;
 
         @media (max-width: 768px) {
             width: 100%;

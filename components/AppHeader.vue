@@ -202,7 +202,7 @@ async function signOut() {
 }
 
 .el-top-menu {
-    width: 1600px;
+    width: 1400px;
     display: flex;
     align-items: center;
     justify-content: space-between;

@@ -24,21 +24,22 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Add review to product document in Firestore
-    const productRef = db.collection('products').doc(productId)
+    // Add review to separate reviews collection
     const reviewData = {
+      productId,
       userRating,
       userComment,
       createdAt: new Date().toISOString(),
       // Optionally add user info if available
       // userId: user?.uid || null
+      // userName: user?.name || 'Anonymous'
     }
 
-    await productRef.update({
-      reviews: db.constructor.FieldValue.arrayUnion(reviewData),
-    })
+    // Add review document
+    await db.collection('reviews').add(reviewData)
 
-    // Efficiently update averageRating and totalReviews
+    // Update averageRating and totalReviews in product document
+    const productRef = db.collection('products').doc(productId)
     const productSnap = await productRef.get()
     const productData = productSnap.data()
     const prevAvg = productData.averageRating || 0

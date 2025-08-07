@@ -11,26 +11,21 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const productDoc = await db.collection('products').doc(productId).get()
+    const reviewsSnapshot = await db
+      .collection('reviews')
+      .where('productId', '==', productId)
+      .orderBy('createdAt', 'desc')
+      .get()
 
-    if (!productDoc.exists) {
-      throw createError({
-        statusCode: 404,
-        statusMessage: 'Product not found',
-      })
-    }
-
-    // Get reviews, averageRating, and totalReviews from product document
-    const productData = productDoc.data()
-    const reviews = productData.reviews || []
-    const averageRating = productData.averageRating || 0
-    const totalReviews = productData.totalReviews || 0
+    const reviews = []
+    reviewsSnapshot.forEach((doc) => {
+      const data = doc.data()
+      reviews.push({ id: doc.id, ...data })
+    })
 
     return {
       success: true,
       reviews,
-      averageRating,
-      totalReviews,
     }
   } catch (error) {
     console.error('Error fetching reviews:', error)

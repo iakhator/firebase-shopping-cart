@@ -322,9 +322,8 @@ const handleSubmit = async () => {
         })
 
         if (!errorMessage.value && response.success) {
-            $toast.success(response.message)
             registerForm.value = {}
-            // await navigateTo('/auth/login')
+            await navigateTo(`/verify/${response.code}`)
         }
     } catch (error) {
         console.error('Registration error:', error)
