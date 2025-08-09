@@ -51,7 +51,7 @@ export default defineEventHandler(async (event) => {
     const customToken = await adminAuth.createCustomToken(data.userId)
 
     // Delete verification code document after successful verification
-    // await codeDocRef.delete()
+    await codeDocRef.delete()
 
     return {
       success: true,

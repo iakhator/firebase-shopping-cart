@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
     const verificationCode = crypto.randomUUID()
     // Generate 6-digit PIN
     const pin = Math.floor(100000 + Math.random() * 900000).toString()
-    const expiresAt = Date.now() + 60 * 60 * 1000
+    const expiresAt = Date.now() + 20 * 60 * 1000
 
     await adminFirestore
       .collection('verificationCodes')
@@ -34,17 +34,6 @@ export default defineEventHandler(async (event) => {
         pin,
         expiresAt,
       })
-
-    // const actionSettings = {
-    //   url: `${useRuntimeConfig().public.BASE_URL}/auth/login`,
-    // }
-    // const verificationLink = await adminAuth.generateEmailVerificationLink(
-    //   user.email,
-    //   actionSettings
-    // )
-
-    // Create verification link
-    // const verificationLink = `${useRuntimeConfig().public.BASE_URL}/verify/${verificationCode}`
 
     await sendEmailVerificationLink({
       email: user.email,

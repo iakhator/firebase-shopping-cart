@@ -131,7 +131,12 @@
                         <el-tab-pane label="Ratings/Review" name="ratings">
                             <div class="review-tab-container">
                                 <!-- Display overall rating and review count -->
-                                <div class="flex items-center mb-4">
+                                <div
+                                    v-if="
+                                        item.averageRating || item.totalReviews
+                                    "
+                                    class="flex items-center mb-4"
+                                >
                                     <el-rate
                                         v-model="item.averageRating"
                                         disabled
@@ -154,9 +159,7 @@
                                     v-if="reviews.length"
                                     class="reviews-list mb-8 w-full max-w-2xl"
                                 >
-                                    <h3
-                                        class="text-md font-bold mb-4 text-gray-800"
-                                    >
+                                    <h3 class="font-bold mb-4 text-gray-800">
                                         Recent Reviews
                                     </h3>
                                     <div
@@ -193,18 +196,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div v-else class="text-gray-500 mb-8">
-                                    No reviews yet. Be the first to review!
-                                </div>
 
                                 <!-- Interactive rating and comment form -->
                                 <div class="w-full max-w-md">
-                                    <h3
+                                    <h4
                                         class="text-lg font-bold mb-4 text-gray-800"
                                     >
                                         Rate this item & leave a comment
-                                    </h3>
-                                    <div class="mb-4 flex flex-col items-start">
+                                    </h4>
+                                    <div
+                                        class="mb-4 flex flex-col items-start review-rating"
+                                    >
                                         <label
                                             class="mb-2 font-medium text-gray-700"
                                             >Your Rating:</label
@@ -218,7 +220,9 @@
                                             text-color="#000000"
                                         />
                                     </div>
-                                    <div class="mb-4 flex flex-col items-start">
+                                    <div
+                                        class="mb-4 flex flex-col items-start review-comment"
+                                    >
                                         <label
                                             class="mb-2 font-medium text-gray-700"
                                             >Your Comment:</label
@@ -412,6 +416,20 @@ $font-weight-bold: 600;
 $off-black: #1b1a1a;
 $gray: #dcdfe6;
 
+.review {
+    &-rating {
+        label {
+            font-size: $text-sm;
+        }
+    }
+
+    &-comment {
+        label: {
+            font-size: $text-sm;
+        }
+    }
+}
+
 @mixin pseudo-border($border-color) {
     content: '';
     width: 100%;
@@ -522,23 +540,7 @@ img {
     font-size: 0.89rem;
 }
 
-.item__contents-variant {
-}
-
 .item__contents-quantity {
-    /* font-size: 0.89rem;
-    flex: 0 0 30%; */
-
-    // &:after {
-    //   content: '';
-    //   width: 100%;
-    //   border-bottom: solid 1px $gray;
-    //   position: absolute;
-    //   left: 0;
-    //   top: 120%;
-    //   z-index: 99;
-    // }
-
     &-price {
         display: flex;
         // font-weight: 600;
@@ -557,13 +559,6 @@ img {
     justify-content: center;
     gap: 20px;
 }
-
-// .item__contents-quantity {
-//   flex: 0 0 30%;
-//   font-size: 0.89rem;
-//   border-bottom: solid 1px $gray;
-
-// }
 
 .error {
     color: #f56c6c;
