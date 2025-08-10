@@ -116,16 +116,15 @@ function fulfillOrder(orderId) {}
 <style scoped>
 .admin-layout {
     display: flex;
+    gap: 10px;
     min-height: 100vh;
-    background: #f7f8fa;
+    width: 100%;
 }
 .admin-content {
     flex: 1;
     padding: 2rem;
     background: #fff;
-    border-radius: 16px;
-    margin: 2rem;
-    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+    border-radius: 5px;
 }
 .forbidden {
     min-height: 100vh;
