@@ -76,26 +76,15 @@ useHead({
     margin-bottom: 24px;
     cursor: pointer;
 
-    .icon-circle {
+    .brand-name {
+        font-weight: bold;
+        font-size: 2rem;
+        font-family: $font-stack-brand;
         position: relative;
-        width: 64px;
-        height: 64px;
-        background-color: #000;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        img {
-            width: 40px;
-            height: 40px;
-            margin-left: -10px;
-        }
 
         svg {
             position: absolute;
-            top: 32px;
-            right: 8px;
+            top: 5px;
         }
     }
 }
@@ -105,7 +94,7 @@ useHead({
     margin-bottom: 32px;
 
     .auth-title {
-        font-size: 28px;
+        font-size: $text-xl;
         font-weight: 600;
         color: #1a1a1a;
         margin: 0 0 8px 0;

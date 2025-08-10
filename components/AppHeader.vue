@@ -14,9 +14,9 @@
             <div class="el-top-menu">
                 <el-menu-item index="0">
                     <nuxt-link to="/" class="logo-link" aria-label="Home">
-                        <span class="brand-name"
-                            ><img src="/images/ringcart.png" />
-                            <IconShoppingBag :size="18" color="white"
+                        <span class="brand-name">
+                            RingCart
+                            <IconShoppingBag :size="10" color="white"
                         /></span>
                     </nuxt-link>
                 </el-menu-item>
@@ -35,10 +35,15 @@
                             "
                             class="el-menu-navlist"
                         >
-                            <p class="display-name">
-                                {{ capitalize(loggedInUser) }}
-                            </p>
-                            <IconCircleUserRound color="white" />
+                            <template v-if="!isAuthenticated">
+                                <p class="display-name">Account</p>
+                            </template>
+                            <template v-else>
+                                <!-- <p class="display-name">
+                                    {{ capitalize(loggedInUser) }}
+                                </p> -->
+                                <IconCircleUserRound color="white" />
+                            </template>
                         </el-menu-item>
                         <el-menu-item
                             index="3"
@@ -236,15 +241,14 @@ async function signOut() {
     font-family: $font-stack-brand;
     position: relative;
 
-    img {
-        width: 45px;
-        height: 45px;
+    &:hover {
+        color: $off-white;
     }
 
     svg {
         position: absolute;
-        top: 25px;
-        right: -8px;
+        top: 15px;
+        right: -5;
     }
 }
 
@@ -266,6 +270,9 @@ async function signOut() {
 .display-name {
     margin-right: 5px;
     color: $white;
+    font-weight: $font-weight-medium;
+    font-size: $text-base;
+    font-family: $font-brand;
 }
 
 .profile-avatar {
@@ -311,7 +318,7 @@ async function signOut() {
     }
 
     .brand-name {
-        font-size: $text-base;
+        font-size: $text-md;
     }
 }
 

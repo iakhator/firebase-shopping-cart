@@ -2,10 +2,10 @@
     <el-card class="auth-card" shadow="hover">
         <!-- Logo/Icon -->
         <div class="auth-icon" role="button" @click="navigateTo('/')">
-            <div class="icon-circle">
-                <img src="/images/ringcart.png" />
-                <IconShoppingBag :size="18" color="white" />
-            </div>
+            <span class="brand-name">
+                RingCart
+                <IconShoppingBag :size="10" color="black"
+            /></span>
         </div>
 
         <!-- Header -->

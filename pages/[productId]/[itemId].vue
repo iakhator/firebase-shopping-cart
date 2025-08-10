@@ -264,6 +264,54 @@
                 </el-col>
             </el-row>
         </el-col>
+
+        <div v-if="similarProducts.length" class="similar-products-section">
+            <h3 class="section-title mt-4 mb-4 font-briscolade">
+                Similar Products
+            </h3>
+            <ul class="product__grid-w">
+                <li
+                    v-for="product in similarProducts"
+                    :key="product.id"
+                    class="product__grid-w__list"
+                >
+                    <!-- Use same markup as your product card -->
+                    <a
+                        :href="`/${product.categoryId}/${product.id}`"
+                        class="_p"
+                    >
+                        <span class="product__grid-w__list-img">
+                            <img
+                                :src="product.imageUrl"
+                                alt=""
+                                loading="lazy"
+                            />
+                        </span>
+                        <div class="product__grid-w__list-content">
+                            <span
+                                class="product__grid-w__list-title multi-line-ellipsis"
+                            >
+                                {{ product.name }}
+                            </span>
+                            <span>
+                                {{ product?.bundles[0]?.ram }} /
+                                {{ product?.bundles[0]?.storage }}
+                            </span>
+                            <div class="product__grid-w__list-price_fav">
+                                <span class="product__grid-w__list-price">
+                                    {{
+                                        toUSD(
+                                            product?.bundles[0]?.price ||
+                                                product.price,
+                                        )
+                                    }}
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </el-row>
 </template>
 
@@ -301,6 +349,8 @@ productStore.getProduct(productId)
 onMounted(() => {
     itemBundle.value = item.value?.bundles ? item.value?.bundles[0] : {}
     selectedVariant.value = item.value.variant ? item.value?.variant[0] : {}
+
+    loadSimilarProducts()
 })
 
 // Ratings/Review tab state
@@ -407,6 +457,18 @@ async function updateCart() {
     }
 
     cartStore.addToCart(product)
+}
+
+// Similar Item
+const similarProducts = ref([])
+async function loadSimilarProducts() {
+    const res = await $fetch('/api/products/similar', {
+        params: {
+            categoryId: item.value.categoryId,
+            excludeId: productId,
+        },
+    })
+    similarProducts.value = res.products || []
 }
 </script>
 
@@ -563,5 +625,15 @@ img {
 .error {
     color: #f56c6c;
     font-size: 0.75rem;
+}
+
+.similar-products-section {
+    border-top: 1px solid $gray;
+    width: 100%;
+    margin-top: 20px;
+
+    h3 {
+        font-size: 1.3rem;
+    }
 }
 </style>
