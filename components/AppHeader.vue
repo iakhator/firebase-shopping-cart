@@ -176,10 +176,11 @@ const toggleDrawer = () => {
     profileOpen.value = !profileOpen.value
 }
 
-// onMounted(async () => {
-//     const { categories: cat } = await $fetch('/api/categories')
-//     categories.value = cat
-// })
+onMounted(async () => {
+    await cartStore.fetchCart()
+    // const { categories: cat } = await $fetch('/api/categories')
+    // categories.value = cat
+})
 
 const quantity = computed(() => cartStore.totalQuantity)
 const isAuthenticatedUser = computed(() => authStore.isAuthenticatedUser)

@@ -11,6 +11,7 @@ export default defineEventHandler(async (event) => {
     amount,
     items,
     userId,
+    email,
     customerName,
     shippingAddress,
     currency = 'usd',
@@ -72,6 +73,7 @@ export default defineEventHandler(async (event) => {
     setup_future_usage: savePaymentMethod && userId ? 'off_session' : undefined,
     metadata: {
       userId: userId || 'guest',
+      email: email || '',
       customerName: customerName || '',
       shippingAddress: JSON.stringify(shippingAddress) || {},
       orderId,

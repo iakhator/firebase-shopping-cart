@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
         return { statusCode: 400, error: 'Invalid metadata' }
       }
 
-      const { userId, items, orderId, customerName, shippingAddress } =
+      const { userId, email, items, orderId, customerName, shippingAddress } =
         paymentIntent.metadata
       const total = paymentIntent.amount / 100
       const itemsArray = JSON.parse(items)
@@ -52,7 +52,7 @@ export default defineEventHandler(async (event) => {
         })
 
       await sendOrderConfirmation({
-        to: 'iakhator@gmail.com',
+        to: email,
         customerName,
         orderId,
         shippingAddress: shippingAddressObj,

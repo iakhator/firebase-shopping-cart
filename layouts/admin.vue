@@ -1,10 +1,12 @@
 <template>
-    <div class="admin-layout">
-        <AdminSidebar :active="activeTab" @change="onTabChange" />
-        <div class="admin-content">
-            <slot />
+    <NuxtLayout name="default">
+        <div class="admin-layout">
+            <AdminSidebar :active="activeTab" @change="onTabChange" />
+            <div class="admin-content">
+                <slot />
+            </div>
         </div>
-    </div>
+    </NuxtLayout>
 </template>
 
 <script setup>
@@ -39,15 +41,30 @@ watch(
 <style scoped>
 .admin-layout {
     display: flex;
-    min-height: 100vh;
-    background: #f7f8fa;
+    width: 100%;
+    gap: 10px;
+    padding: 20px;
 }
 .admin-content {
     flex: 1;
     padding: 2rem;
     background: #fff;
+    border-radius: 5px;
+}
+.forbidden {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f7f8fa;
+}
+.forbidden-card {
+    background: #fff;
     border-radius: 16px;
-    margin: 2rem;
     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+    padding: 2.5rem 2rem;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
 }
 </style>

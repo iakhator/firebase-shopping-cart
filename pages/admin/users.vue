@@ -2,17 +2,23 @@
 import { ref, onMounted } from 'vue'
 import AdminTable from '~/components/admin/AdminTable.vue'
 
+definePageMeta({
+    layout: 'admin',
+    middleware: 'admin',
+})
+
 const users = ref([])
 const page = ref(1)
-const pageSize = 20
+const pageSize = 10
 const loading = ref(false)
 
 async function loadUsers() {
     loading.value = true
-    const res = await $fetch('/api/admin/users', {
-        params: { page: page.value, pageSize },
-    })
-    users.value.push(...res.data)
+    // const res = await $fetch('/api/admin/users', {
+    //     params: { page: page.value, pageSize },
+    // })
+    // users.value.push(...res.data)
+    users.value.push({})
     loading.value = false
 }
 
@@ -39,10 +45,10 @@ function setupObserver() {
     )
 
     // Wait for DOM to render
-    setTimeout(() => {
-        const el = document.getElementById('infinite-scroll-trigger')
-        if (el) observer.observe(el)
-    }, 100)
+    // setTimeout(() => {
+    //     const el = document.getElementById('infinite-scroll-trigger')
+    //     if (el) observer.observe(el)
+    // }, 100)
 }
 </script>
 

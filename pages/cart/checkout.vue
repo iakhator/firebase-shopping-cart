@@ -540,6 +540,7 @@ const processPayment = async () => {
     const payload = {
         customerName: authStore.user.displayName,
         userId: authStore.user.uid,
+        email: authStore.user.email,
         shippingAddress: authStore.user.shippingAddress || {
             address: ruleForm.value?.address || '',
             street: ruleForm.value?.street || '',

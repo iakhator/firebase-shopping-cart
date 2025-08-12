@@ -32,32 +32,27 @@ export const useCartStore = defineStore('cart', () => {
 
   const addToCart = async (product) => {
     try {
-      const { data, error } = await useFetch('/api/cart/add', {
+      const response = await $fetch('/api/cart/add', {
         method: 'POST',
         body: { ...product },
       })
 
-      if (error.value) {
-        $toast.error(error.value)
-        return
-      }
-
       const existingIndex = cart.value.findIndex(
         (item) =>
-          item.productId === data.value.cartItem.productId &&
-          item.variant === data.value.cartItem.variant &&
-          item.bundle === data.value.cartItem.bundle,
+          item.productId === response.cartItem.productId &&
+          item.variant === response.cartItem.variant &&
+          item.bundle === response.cartItem.bundle,
       )
 
       if (existingIndex !== -1) {
-        cart.value[existingIndex].quantity = data.value?.cartItem.quantity
-        cart.value[existingIndex].price = data.value?.cartItem.price
+        cart.value[existingIndex].quantity = response?.cartItem.quantity
+        cart.value[existingIndex].price = response?.cartItem.price
       } else {
-        cart.value.push(data.value?.cartItem)
+        cart.value.push(response?.cartItem)
       }
 
       updateTotals()
-      $toast.success(data.value.message)
+      $toast.success(response.message)
     } catch (err) {
       $toast.error(err.message)
     }
@@ -72,13 +67,13 @@ export const useCartStore = defineStore('cart', () => {
     )
 
     if (itemIndex !== -1) {
-      const { data } = await useFetch('/api/cart/increment', {
+      const data = await $fetch('/api/cart/increment', {
         method: 'POST',
         body: { productId, bundle, variant },
       })
 
-      cart.value[itemIndex].quantity = data.value?.cartItem.quantity
-      cart.value[itemIndex].price = data.value?.cartItem.price
+      cart.value[itemIndex].quantity = data?.cartItem.quantity
+      cart.value[itemIndex].price = data?.cartItem.price
       updateTotals()
     }
   }
@@ -92,7 +87,7 @@ export const useCartStore = defineStore('cart', () => {
     )
 
     if (itemIndex !== -1) {
-      const { data } = await useFetch('/api/cart/decrement', {
+      const data = await $fetch('/api/cart/decrement', {
         method: 'POST',
         body: { productId, bundle, variant },
       })
@@ -100,8 +95,8 @@ export const useCartStore = defineStore('cart', () => {
       if (data.value?.cartItem.quantity <= 0) {
         cart.value.splice(itemIndex, 1)
       } else {
-        cart.value[itemIndex].quantity = data.value?.cartItem.quantity
-        cart.value[itemIndex].price = data.value?.cartItem.price
+        cart.value[itemIndex].quantity = data?.cartItem.quantity
+        cart.value[itemIndex].price = data?.cartItem.price
       }
       updateTotals()
     }
@@ -116,7 +111,7 @@ export const useCartStore = defineStore('cart', () => {
     )
 
     if (itemIndex !== -1) {
-      await useFetch('/api/cart/delete', {
+      await $fetch('/api/cart/delete', {
         method: 'POST',
         body: { productId, bundle, variant },
       })

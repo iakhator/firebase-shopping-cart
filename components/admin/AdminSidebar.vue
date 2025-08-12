@@ -6,14 +6,15 @@
                     v-for="tab in tabs"
                     :key="tab.name"
                     :class="{ active: active === tab.name }"
-                    @click="$emit('change', tab.name)"
                 >
                     <span class="icon">
                         <el-icon :size="22">
                             <component :is="tab.icon" />
                         </el-icon>
                     </span>
-                    <span class="label">{{ tab.label }}</span>
+                    <NuxtLink class="label" :to="`/admin/${tab.name}`">
+                        {{ tab.label }}</NuxtLink
+                    >
                 </li>
             </ul>
         </nav>
@@ -38,6 +39,7 @@ const tabs = [
 
 <style scoped lang="scss">
 .admin-sidebar {
+    height: 100vh;
     width: 220px;
     border-right: 1px solid $border-gray-200;
     min-height: 100vh;
@@ -62,11 +64,18 @@ const tabs = [
     transition:
         background 0.18s,
         color 0.18s;
+
+    a {
+        text-decoration: none;
+    }
 }
 .admin-sidebar nav ul li.active,
-.admin-sidebar nav ul li:hover {
+.admin-sidebar nav ul li:hover,
+.admin-sidebar nav ul li.active a,
+.admin-sidebar nav ul li:hover a {
     background: $off-black;
     color: $white;
+    decoration: none;
 }
 .admin-sidebar .icon {
     display: flex;

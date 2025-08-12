@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-01-01',
   nitro: {
     externals: {
-      inline: ['nodemailer', 'handlebars'],
+      inline: ['nodemailer', 'handlebars', '@faker-js/faker'],
     },
     routeRules: {
       '/.well-known/**': { prerender: false, swr: false },
