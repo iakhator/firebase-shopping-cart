@@ -8,7 +8,6 @@ const route = useRoute()
 const router = useRouter()
 
 const orderId = route.query.ref
-// const { order, isLoading, fetchOrderById } = useOrderStore()
 const orderStore = useOrderStore()
 
 const order = computed(() => orderStore.order)
@@ -23,17 +22,13 @@ onMounted(async () => {
         return
     }
 
-    try {
-        await orderStore.fetchOrderById(orderId)
+    await orderStore.fetchOrderById(orderId)
+})
 
-        // Check if order was actually found
-        if (!order.value) {
-            error.value = 'Order not found'
-            router.push('/payment/error?error=Order not found')
-        }
-    } catch (err) {
-        console.error('Error fetching order:', err)
-        error.value = 'Failed to load order details'
+watch(order, (newOrder) => {
+    if (newOrder) {
+        console.log(newOrder, 'new order')
+        // Perform actions when order changes
     }
 })
 

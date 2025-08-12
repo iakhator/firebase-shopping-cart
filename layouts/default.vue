@@ -12,9 +12,9 @@
 </template>
 
 <script setup>
-import AppHeader from '~/components/AppHeader'
-import Header from '~/components/ui/Header'
-import AppFooter from '~/components/AppFooter'
+// import AppHeader from '~/components/AppHeader'
+// import Header from '~/components/ui/Header'
+// import AppFooter from '~/components/AppFooter'
 </script>
 
 <style scoped>

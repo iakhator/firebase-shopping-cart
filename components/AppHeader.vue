@@ -29,13 +29,13 @@
                             index="5"
                             role="button"
                             @click="
-                                isAuthenticated
+                                isAuthenticatedUser
                                     ? toggleDrawer()
                                     : navigateTo('/auth/login')
                             "
                             class="el-menu-navlist"
                         >
-                            <template v-if="!isAuthenticated">
+                            <template v-if="!isAuthenticatedUser">
                                 <p class="display-name">Account</p>
                             </template>
                             <template v-else>
@@ -74,7 +74,7 @@
                         </el-badge>
                     </el-menu-item>
                     <el-menu-item
-                        v-if="!isAuthenticated"
+                        v-if="!isAuthenticatedUser"
                         index="5"
                         role="button"
                         @click="() => navigateTo('/auth/login')"
@@ -182,7 +182,7 @@ const toggleDrawer = () => {
 // })
 
 const quantity = computed(() => cartStore.totalQuantity)
-const isAuthenticated = computed(() => authStore.isAuthenticated)
+const isAuthenticatedUser = computed(() => authStore.isAuthenticatedUser)
 const loggedInUser = computed(
     () => authStore.user?.name || authStore.user?.displayName || '',
 )

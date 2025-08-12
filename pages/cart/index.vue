@@ -78,16 +78,30 @@
                             <span>{{ toUSD(total) }}</span>
                         </div>
 
-                        <div class="promo-code">
+                        <!-- TODO: Implement promo code functionality -->
+                        <!-- <div class="promo-code">
                             <input type="text" placeholder="Add promo code" />
                             <button>Apply</button>
-                        </div>
+                        </div> -->
 
                         <UIButton
+                            v-if="authStore.isAuthenticatedUser"
                             size="large"
                             class="black checkout-btn"
                             @click="navigateTo('/cart/checkout')"
                             label="Go to Checkout"
+                        >
+                            <template #icon>
+                                <el-icon class="mr-2"><CreditCard /></el-icon>
+                            </template>
+                        </UIButton>
+
+                        <UIButton
+                            v-else
+                            size="large"
+                            class="black checkout-btn"
+                            @click="navigateTo('/auth/login')"
+                            label="Login to Checkout"
                         >
                             <template #icon>
                                 <el-icon class="mr-2"><CreditCard /></el-icon>

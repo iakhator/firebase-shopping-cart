@@ -19,12 +19,6 @@ export default defineNuxtConfig({
 
   vite: {
     logLevel: 'info',
-    // plugins: [viteCommonjs()],
-    // optimizeDeps: {
-    //   esbuildOptions: {
-    //     plugins: [esbuildCommonjs(['nodemailer'])],
-    //   },
-    // },
     css: {
       preprocessorOptions: {
         scss: {

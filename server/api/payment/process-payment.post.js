@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
   } = body
 
   // Check if the user is logged in
-  // const authToken = getCookie(event, 'auth_token')
+  // const authToken = getCookie(event, 'auth_token')1
 
   let customerId = null
 
@@ -32,7 +32,10 @@ export default defineEventHandler(async (event) => {
       if (userDoc.exists && userDoc.data().stripeCustomerId) {
         customerId = userDoc.data().stripeCustomerId
       } else {
-        const customer = await stripe.customers.create({ email: user.email })
+        const customer = await stripe.customers.create({
+          name: userDoc.data().displayName,
+          email: userDoc.data().email,
+        })
         await db.collection('users').doc(userId).set(
           {
             stripeCustomerId: customer.id,
@@ -41,14 +44,21 @@ export default defineEventHandler(async (event) => {
         )
         customerId = customer.id
       }
+
+      await db.collection('users').doc(userId).set(
+        {
+          shippingAddress,
+        },
+        { merge: true },
+      )
     } catch (err) {
       console.error('Error verifying user:', err)
       throw createError({ statusCode: 401, message: 'Unauthenticated' })
     }
   } else {
-    // For guests, create a temporary Stripe customer
-    const guestCustomer = await stripe.customers.create()
-    customerId = guestCustomer.id
+    // TODO: For guests, create a temporary Stripe customer
+    // const guestCustomer = await stripe.customers.create()
+    // customerId = guestCustomer.id
   }
 
   // Convert amount to the smallest currency unit (e.g., cents for USD)

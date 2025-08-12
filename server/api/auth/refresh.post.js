@@ -4,6 +4,7 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
 
   const userId = getCookie(event, 'user_id')
+
   if (!userId) {
     return { success: false, message: 'No user id found' }
   }
@@ -66,9 +67,8 @@ export default defineEventHandler(async (event) => {
 
     return { success: true, token: newIdToken }
   } catch (error) {
-    console.log(error, 'error')
     deleteCookie(event, 'auth_token')
-    deleteCookie(event, 'refresh_token')
+    redis.delete(`refreshToken:${userId}`)
     return { success: false, message: 'Token refresh failed', error }
   }
 })

@@ -2,6 +2,7 @@
     <div v-if="isAdmin" class="admin-layout">
         <AdminSidebar :active="activeTab" @change="activeTab = $event" />
         <div class="admin-content">
+            <pre>{{ orders }}</pre>
             <div v-if="activeTab === 'users'">
                 <AdminTable
                     :columns="userColumns"
@@ -50,6 +51,10 @@ import AdminTable from '~/components/admin/AdminTable.vue'
 import ProductForm from '~/components/admin/ProductForm.vue'
 import UIButton from '~/components/ui/UIButton.vue'
 
+definePageMeta({
+    middleware: ['admin'],
+})
+
 const router = useRouter()
 const activeTab = ref('users')
 const isAdmin = ref(true)
@@ -87,21 +92,23 @@ function goHome() {
 
 // RBAC check: fetch current user and check role
 onMounted(async () => {
-    // try {
-    //     // Replace with your actual API/session logic
-    //     const res = await $fetch('/api/auth/me')
-    //     if (res && res.user && res.user.role === 'admin') {
-    //         isAdmin.value = true
-    //         // Fetch data for tables (stubbed here)
-    //         users.value = res.users || []
-    //         products.value = res.products || []
-    //         orders.value = res.orders || []
-    //     } else {
-    //         isAdmin.value = false
-    //     }
-    // } catch (err) {
-    //     isAdmin.value = false
-    // }
+    try {
+        // Replace with your actual API/session logic
+        const { data, error, pending } = await useFetch('/api/admin/users')
+        console.log(res, 'res')
+        // if (res && res.user && res.user.role === 'admin') {
+        //     isAdmin.value = true
+        //     // Fetch data for tables (stubbed here)
+        //     users.value = res.users || []
+        //     products.value = res.products || []
+        //     orders.value = res.orders || []
+        // } else {
+        //     isAdmin.value = false
+        orders.value = data
+        // isAdmin.value = true
+    } catch (err) {
+        // isAdmin.value = false
+    }
 })
 
 // Dummy handlers for scaffolding

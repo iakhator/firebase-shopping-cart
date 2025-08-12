@@ -1,17 +1,11 @@
 import { adminAuth, adminFirestore } from '~/server/utils/firebaseAdmin'
 
 export default defineEventHandler(async (event) => {
-  const user = await event.context.user
+  const user = event.context.user
 
-  // const authToken = getCookie(event, 'auth_token')
-
-  if (!user) return { authenticated: false }
+  if (!user) return { authenticated: false, user: null }
 
   try {
-    // const decodedToken = await adminAuth.verifyIdToken(authToken, true)
-    // console.log(decodedToken.uid, 'decodedToken.uid', user.uid, 'user.uid')
-
-    // Fetch user from firestore in 'users' collection
     const userDoc = await adminFirestore.collection('users').doc(user.uid).get()
 
     // Check if the document exists before accessing data
@@ -27,6 +21,7 @@ export default defineEventHandler(async (event) => {
 
     userData.userProfileComplete = true
     userData.uid = user.uid
+    userData.role = user.role
 
     return { authenticated: true, user: userData }
   } catch (error) {
@@ -37,7 +32,6 @@ export default defineEventHandler(async (event) => {
       return { error: 'Token has expired.', authenticated: false }
     }
 
-    // For other errors, you might want to set a specific status code
     setResponseStatus(event, 500)
     return {
       authenticated: false,

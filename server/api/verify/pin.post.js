@@ -32,8 +32,6 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    console.log(data.pin, typeof data.pin, enteredPin, typeof enteredPin)
-
     if (data.pin !== enteredPin.toString()) {
       return {
         success: false,

@@ -9,6 +9,13 @@ export default defineEventHandler(async (event) => {
 
     if (!user.uid) return
 
+    // Set custom user claims for admin role if requested in registration body
+    if (body.role && body.role === 'admin') {
+      await adminAuth.setCustomUserClaims(user.uid, { role: 'admin' })
+    } else {
+      await adminAuth.setCustomUserClaims(user.uid, { role: 'user' })
+    }
+
     const userRef = adminFirestore.collection('users').doc(user.uid)
     await userRef.set({
       uid: user.uid,

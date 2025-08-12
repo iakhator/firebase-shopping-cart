@@ -1,19 +1,19 @@
 export default defineNuxtRouteMiddleware(async (to) => {
   const authStore = useAuthStore()
-  if (!authStore.isAuthenticated) {
+  if (!authStore.authenticated) {
     await authStore.fetchUser()
   }
 
   const authRoutes = ['/auth/login', '/auth/register']
+  const protectedRoutes = ['/profile', '/orders']
 
-  if (authStore.isAuthenticated && authRoutes.includes(to.path)) {
-    return navigateTo('/')
+  if (authStore.authenticated && authRoutes.includes(to.path)) {
+    // await authStore.fetchUser()
+    return await navigateTo('/')
   }
 
-  const protectedRoutes = ['/profile', '/orders', '/cart/checkout']
-
   if (
-    !authStore.isAuthenticated &&
+    !authStore.authenticated &&
     protectedRoutes.some((route) => to.path.startsWith(route))
   ) {
     return navigateTo('/auth/login')

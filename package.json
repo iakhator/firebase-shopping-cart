@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@element-plus/nuxt": "^1.0.10",
+    "@faker-js/faker": "^9.9.0",
     "@nuxtjs/style-resources": "^1.2.2",
     "@pinia/nuxt": "^0.5.4",
     "@sidebase/nuxt-session": "^0.2.8",

@@ -39,8 +39,8 @@ const buttonClass = computed(() => ({
 }
 
 .primary:hover {
-    background: #ffffff;
-    color: #000;
+    background: $off-black;
+    color: $off-white;
     border: 1px solid #303133;
 }
 

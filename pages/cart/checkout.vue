@@ -391,11 +391,11 @@ onMounted(async () => {
         firstName: firstName.value,
         lastName: lastName.value,
         email: user?.email || '',
-        address: user?.shippingAddress.address || '',
-        street: user?.shippingAddress.street || '',
-        city: user?.shippingAddress.city || '',
-        country: user?.shippingAddress.country || '',
-        postalCode: user?.shippingAddress.postalCode || '',
+        address: user?.shippingAddress?.address || '',
+        street: user?.shippingAddress?.street || '',
+        city: user?.shippingAddress?.city || '',
+        country: user?.shippingAddress?.country || '',
+        postalCode: user?.shippingAddress?.postalCode || '',
     }
 })
 
@@ -476,11 +476,11 @@ onMounted(() => {
         firstName: firstName.value,
         lastName: lastName.value,
         email: user?.email || '',
-        address: user?.shippingAddress.address || '',
-        street: user?.shippingAddress.street || '',
-        city: user?.shippingAddress.city || '',
-        country: user?.shippingAddress.country || '',
-        postalCode: user?.shippingAddress.postalCode || '',
+        address: user?.shippingAddress?.address || '',
+        street: user?.shippingAddress?.street || '',
+        city: user?.shippingAddress?.city || '',
+        country: user?.shippingAddress?.country || '',
+        postalCode: user?.shippingAddress?.postalCode || '',
     }
 })
 
@@ -525,7 +525,7 @@ function goToPayment(formEl) {
 
 // Process payment method
 const processPayment = async () => {
-    loading.value = true
+    if (!ruleFormRef.value) return
 
     const items = cartItems.value.map((cart) => ({
         id: cart.productId,
@@ -540,13 +540,23 @@ const processPayment = async () => {
     const payload = {
         customerName: authStore.user.displayName,
         userId: authStore.user.uid,
-        shippingAddress: authStore.user.shippingAddress,
+        shippingAddress: authStore.user.shippingAddress || {
+            address: ruleForm.value?.address || '',
+            street: ruleForm.value?.street || '',
+            city: ruleForm.value?.city || '',
+            country: ruleForm.value?.country || '',
+            postalCode: ruleForm.value?.postalCode || '',
+        },
         savePaymentMethod: saveCard.value,
         amount: totalPrice.value,
         items,
     }
 
     try {
+        const valid = await ruleFormRef.value.validate()
+        if (!valid) return
+
+        loading.value = true
         const paymentIntentResponse = await $fetch(
             '/api/payment/process-payment',
             {
@@ -591,9 +601,7 @@ const processPayment = async () => {
 .checkout {
     display: flex;
     flex-direction: column;
-    /* align-items: center; */
     justify-content: center;
-    padding: 0 2rem;
     gap: 1rem;
     width: 100%;
 
@@ -617,10 +625,8 @@ h2.product-order-summary {
 
 .checkout-container {
     display: flex;
-    /* min-height: 60vh; */
     width: 100%;
     gap: 1rem;
-    /* background-color: #f8f9fa; */
     border-radius: 10px;
 }
 
