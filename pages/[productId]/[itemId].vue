@@ -3,7 +3,7 @@
         <el-col>
             <el-row>
                 <el-col :md="12">
-                    <div class="item-image">
+                    <div class="product__item-image">
                         <img
                             :src="itemImageUrl"
                             class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle"
@@ -502,7 +502,7 @@ $gray: #dcdfe6;
     z-index: 99;
 }
 
-.item-image {
+.product__item-image {
     display: flex;
     align-items: center;
     justify-content: center;

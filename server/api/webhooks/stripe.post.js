@@ -35,21 +35,16 @@ export default defineEventHandler(async (event) => {
       const itemsArray = JSON.parse(items)
       const shippingAddressObj = JSON.parse(shippingAddress)
 
-      await db
-        .collection('orders')
-        .doc(orderId)
-        .set({
-          customerName,
-          orderId,
-          items: itemsArray,
-          shippingAddress: shippingAddressObj,
-          amount: total,
-          userId: userId || 'guest',
-          currency: paymentIntent.currency,
-          status: paymentIntent.status,
-          createdAt: new Date().toISOString(),
-          stripePaymentIntentId: paymentIntent.id,
-        })
+      const status = paymentIntent.status === 'succeeded' ? 'processing' : ''
+      const paymentStatus =
+        paymentIntent.status === 'succeeded' ? 'paid' : 'failed'
+
+      await db.collection('orders').doc(orderId).update({
+        paymentStatus,
+        status,
+        stripePaymentIntentId: paymentIntent.id,
+        paidAt: new Date().toISOString(),
+      })
 
       await sendOrderConfirmation({
         to: email,

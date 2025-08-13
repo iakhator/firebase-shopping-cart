@@ -53,7 +53,7 @@
                 Browse our latest collection
             </h2>
             <Spinner v-if="isLoading" />
-            <div v-else-if="!products.length" class="no-products">
+            <div v-else-if="!products?.length" class="no-products">
                 <div class="no-products-container">
                     <div class="no-products-icon">
                         <IconBox size="70" color="#000" />
@@ -70,8 +70,8 @@
             <div v-else>
                 <div class="product-list-header">
                     <div class="product-count">
-                        Showing {{ products.length }} product<span
-                            v-if="products.length !== 1"
+                        Showing {{ products?.length }} product<span
+                            v-if="products && products.length !== 1"
                             >s</span
                         >
                     </div>

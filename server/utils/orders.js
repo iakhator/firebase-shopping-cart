@@ -1,7 +1,10 @@
-import { nanoid } from 'nanoid'
+import { customAlphabet } from 'nanoid'
+
+const nanoid4 = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', 4)
+const nanoid3 = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', 3)
 
 export function generateOrderId() {
-  const timestamp = Date.now().toString(36)
-  const random = nanoid(8)
-  return `ORD-${timestamp}-${random}`.toUpperCase()
+  const part1 = nanoid4()
+  const part2 = nanoid3()
+  return `ORD-${part1}-${part2}`
 }

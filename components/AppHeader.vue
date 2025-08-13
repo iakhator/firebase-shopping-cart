@@ -39,10 +39,89 @@
                                 <p class="display-name">Account</p>
                             </template>
                             <template v-else>
-                                <!-- <p class="display-name">
-                                    {{ capitalize(loggedInUser) }}
-                                </p> -->
-                                <IconCircleUserRound color="white" />
+                                <el-dropdown
+                                    trigger="click"
+                                    placement="bottom-end"
+                                >
+                                    <span
+                                        class="el-dropdown-link"
+                                        style="cursor: pointer"
+                                    >
+                                        <IconCircleUserRound color="white" />
+                                    </span>
+                                    <template #dropdown>
+                                        <div
+                                            class="profile-content"
+                                            style="
+                                                padding: 16px;
+                                                min-width: 220px;
+                                            "
+                                        >
+                                            <div
+                                                class="profile-avatar"
+                                                style="
+                                                    text-align: center;
+                                                    margin-bottom: 12px;
+                                                "
+                                            >
+                                                <el-avatar
+                                                    :icon="UserFilled"
+                                                    :size="70"
+                                                />
+                                                <p>
+                                                    {{
+                                                        capitalize(loggedInUser)
+                                                    }}
+                                                </p>
+                                            </div>
+                                            <div
+                                                class="el-menu-link"
+                                                style="margin-bottom: 12px"
+                                            >
+                                                <NuxtLink
+                                                    class="link"
+                                                    :to="`/user/${uid}`"
+                                                >
+                                                    <el-icon
+                                                        ><Avatar
+                                                    /></el-icon>
+                                                    <span>Profile</span>
+                                                </NuxtLink>
+                                                <NuxtLink
+                                                    class="link"
+                                                    to="/orders"
+                                                >
+                                                    <el-icon><Grid /></el-icon>
+                                                    <span>View Orders</span>
+                                                </NuxtLink>
+                                                <NuxtLink
+                                                    class="link"
+                                                    to="/about"
+                                                >
+                                                    <el-icon
+                                                        ><Setting
+                                                    /></el-icon>
+                                                    <span>Preference</span>
+                                                </NuxtLink>
+                                            </div>
+                                            <UIButton
+                                                variant="primary"
+                                                size="large"
+                                                @click="signOut"
+                                                label="SIGN OUT"
+                                                style="width: 100%"
+                                            >
+                                                <template #icon-right>
+                                                    <span class="ml-2">
+                                                        <el-icon
+                                                            ><SwitchButton
+                                                        /></el-icon>
+                                                    </span>
+                                                </template>
+                                            </UIButton>
+                                        </div>
+                                    </template>
+                                </el-dropdown>
                             </template>
                         </el-menu-item>
                         <el-menu-item
@@ -57,89 +136,8 @@
                     </ClientOnly>
                 </div>
             </div>
-
-            <!-- Mobile Menu Button -->
-
-            <ClientOnly>
-                <div class="mobile-menu-button">
-                    <
-                    <el-menu-item
-                        index="3"
-                        class="el-menu-navlist"
-                        @click="() => navigateTo('/cart')"
-                    >
-                        <el-badge :value="quantity" class="item">
-                            <!-- <shopping-bag /> -->
-                            <IconShoppingBag color="white" />
-                        </el-badge>
-                    </el-menu-item>
-                    <el-menu-item
-                        v-if="!isAuthenticatedUser"
-                        index="5"
-                        role="button"
-                        @click="() => navigateTo('/auth/login')"
-                        class="el-menu-navlist"
-                    >
-                        <IconCircleUserRound color="white" />
-                    </el-menu-item>
-                    <el-button
-                        v-else
-                        type="primary"
-                        circle
-                        @click="toggleDrawer"
-                        aria-label="Toggle mobile menu"
-                        aria-expanded="false"
-                        aria-controls="mobile-menu"
-                    >
-                        <el-icon v-if="profileOpen"><Close /></el-icon>
-                        <el-icon v-else><Menu /></el-icon>
-                    </el-button>
-                </div>
-            </ClientOnly>
         </el-menu>
     </el-header>
-
-    <!-- Profile Drawer -->
-    <ClientOnly>
-        <el-drawer v-model="profileOpen" direction="rtl" id="mobile-menu">
-            <div class="profile-content">
-                <div class="profile-avatar">
-                    <el-avatar :icon="UserFilled" :size="70" />
-                    <p>{{ capitalize(loggedInUser) }}</p>
-                </div>
-                <div class="el-menu-link">
-                    <NuxtLink
-                        class="link"
-                        :to="`/user/${uid}`"
-                        @click="toggleDrawer"
-                    >
-                        <el-icon><Avatar /></el-icon
-                        ><span>Profile</span></NuxtLink
-                    >
-                    <NuxtLink class="link" to="/orders" @click="toggleDrawer"
-                        ><el-icon><Grid /></el-icon
-                        ><span>View Orders</span></NuxtLink
-                    >
-                    <NuxtLink class="link" to="/about" @click="toggleDrawer"
-                        ><el-icon><Setting /></el-icon>
-                        <span>Preference</span></NuxtLink
-                    >
-                </div>
-            </div>
-            <UIButton
-                variant="primary"
-                size="large"
-                @click="signOut"
-                label="SIGN OUT"
-            >
-                <template #icon-right>
-                    <span class="ml-2">
-                        <el-icon><SwitchButton /></el-icon
-                    ></span>
-                </template>
-            </UIButton>
-        </el-drawer>
-    </ClientOnly>
 </template>
 
 <script setup>
@@ -258,10 +256,6 @@ async function signOut() {
     display: flex;
 }
 
-.mobile-menu-button {
-    display: none;
-}
-
 .item {
     display: flex;
     align-items: baseline;
@@ -277,41 +271,30 @@ async function signOut() {
 }
 
 .profile-avatar {
+    font-family: $font-brand;
+    font-size: $text-sm;
+    font-weight: $font-weight-medium;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: 10px;
     margin-bottom: 20px;
-    flex-direction: column;
 }
 
 .el-avatar {
     background-color: $black;
+    width: 28px;
+    height: 28px;
 
     &--icon {
-        font-size: 40px;
+        font-size: 20px;
     }
 }
 
 /* Mobile styles */
 @media (max-width: 768px) {
-    .desktop-menu {
-        display: none;
-    }
-
     .el-menu-demo {
         width: 100%;
-    }
-
-    .mobile-menu-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-left: auto;
-        margin-right: 16px;
-    }
-
-    .mobile-menu-items {
-        border-right: none;
     }
 
     .logo {

@@ -365,7 +365,6 @@ const saveCard = ref(false)
 const currentStep = ref(1)
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
-// const loggedInUser = computed(() => authStore.loggedInUser)
 const cartItems = computed(() => cartStore.cart)
 const subtotal = computed(() => cartStore.totalPrice)
 const discount = computed(() => Math.round(subtotal.value * 0.05))
@@ -374,33 +373,12 @@ const firstName = computed(() => authStore.user?.firstName || '')
 const lastName = computed(() => authStore.user?.lastName || '')
 
 // Initialize Stripe elements when component is mounted
-onMounted(async () => {
-    // In a real app, you would load Stripe.js from their CDN
-    // and initialize it with your publishable key
-    if (process.client) {
-        // Simulating Stripe initialization for demo purposes
-        // setTimeout(() => {
-        //     console.log('Stripe elements would be initialized here')
-        // }, 500)
-        // stripeCard()
-    }
-
-    const user = authStore.user
-
-    ruleForm.value = {
-        firstName: firstName.value,
-        lastName: lastName.value,
-        email: user?.email || '',
-        address: user?.shippingAddress?.address || '',
-        street: user?.shippingAddress?.street || '',
-        city: user?.shippingAddress?.city || '',
-        country: user?.shippingAddress?.country || '',
-        postalCode: user?.shippingAddress?.postalCode || '',
-    }
-})
+let stripeInitialized = false
 
 onMounted(() => {
-    if (import.meta.client) {
+    // Only initialize Stripe Elements once per component lifetime
+    if (import.meta.client && !stripeInitialized) {
+        stripeInitialized = true
         nextTick(() => {
             try {
                 // Define base styles for all elements
@@ -470,8 +448,8 @@ onMounted(() => {
         })
     }
 
+    // Initialize form values from user only once
     const user = authStore.user
-
     ruleForm.value = {
         firstName: firstName.value,
         lastName: lastName.value,
@@ -496,45 +474,14 @@ onUnmounted(() => {
     }
 })
 
-function goToPayment(formEl) {
-    if (!formEl) return
-
-    formEl.validate((valid) => {
-        if (valid) {
-            const userData = {
-                shippingAddress: {
-                    address: ruleForm.value.address,
-                    street: ruleForm.value.street,
-                    city: ruleForm.value.city,
-                    country: ruleForm.value.country,
-                    postalCode: ruleForm.value.postalCode,
-                },
-                email: ruleForm.value.email,
-                firstName: ruleForm.value.firstName,
-                lastName: ruleForm.value.lastName,
-            }
-            const updatedUser = authStore.updateUser(userData)
-            if (updatedUser) {
-                currentStep.value = 2
-            }
-        }
-    })
-
-    currentStep.value = 2
-}
-
 // Process payment method
 const processPayment = async () => {
     if (!ruleFormRef.value) return
 
     const items = cartItems.value.map((cart) => ({
+        ...cart,
         id: cart.productId,
-        quantity: cart.quantity,
-        name: cart.name,
-        price: cart.price,
-        originalPrice: cart.originalPrice,
         variant: cart.variant?.color || '',
-        bundle: cart.bundle || '',
     }))
 
     const payload = {

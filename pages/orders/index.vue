@@ -49,40 +49,6 @@ import Spinner from '~/components/icons/Spinner.vue'
 const orderStore = useOrderStore()
 const search = ref('')
 
-const orders = ref([
-    {
-        id: 'ORD-2024-001',
-        placed: 'January 15, 2024',
-        status: 'Delivered',
-        total: 1299.0,
-        items: [
-            {
-                name: 'iPhone 15 Pro Max',
-                details: 'Midnight Black, 256GB • Qty: 1',
-            },
-        ],
-        delivered: '1/17/2024',
-    },
-    {
-        id: 'ORD-2024-002',
-        placed: 'January 20, 2024',
-        status: 'Shipped',
-        total: 2698.0,
-        tracking: '1Z999AA1234567891',
-        eta: '1/25/2024',
-        items: [
-            {
-                name: 'Galaxy S24 Ultra',
-                details: 'Titanium Gray, 512GB • Qty: 1',
-            },
-            {
-                name: 'iPhone 15',
-                details: 'Blue, 128GB • Qty: 1',
-            },
-        ],
-    },
-])
-
 const filteredOrders = computed(() =>
     orderStore.orders.filter((order) =>
         order.id.toLowerCase().includes(search.value.toLowerCase()),
@@ -153,8 +119,8 @@ onMounted(async () => {
                                 ${{ order.amount }}
                             </div>
                             <div class="text-sm text-gray-500">
-                                {{ order.items.length }} item<span
-                                    v-if="order.items.length > 1"
+                                {{ order.items?.length }} item<span
+                                    v-if="order.items?.length > 1"
                                     >s</span
                                 >
                             </div>
@@ -190,7 +156,6 @@ onMounted(async () => {
                         </div>
 
                         <div class="flex justify-end space-x-2">
-                            <el-button>View Details</el-button>
                             <el-button v-if="order?.tracking" type="primary"
                                 >Track Package</el-button
                             >

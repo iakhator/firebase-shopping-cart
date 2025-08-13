@@ -81,6 +81,25 @@ export default defineEventHandler(async (event) => {
     },
   })
 
+  // Save order with paymentStatus 'pending'
+  if (paymentIntent.client_secret) {
+    await db
+      .collection('orders')
+      .doc(orderId)
+      .set({
+        orderId,
+        userId: userId || 'guest',
+        items,
+        amount: formattedAmount,
+        paymentStatus: 'pending',
+        createdAt: new Date().toISOString(),
+        customerName,
+        shippingAddress,
+        currency,
+        email: email || '',
+      })
+  }
+
   return {
     clientSecret: paymentIntent.client_secret,
     orderId,

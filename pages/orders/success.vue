@@ -32,8 +32,8 @@ watch(order, (newOrder) => {
     }
 })
 
-const viewOrderDetails = () => {
-    router.push(`/orders/${orderId}`)
+const viewOrderHistory = () => {
+    router.push(`/orders`)
 }
 
 const continueShopping = () => {
@@ -233,7 +233,7 @@ const continueShopping = () => {
                                 size="large"
                                 variant="secondary"
                                 style="width: auto"
-                                @click="viewOrderDetails"
+                                @click="viewOrderHistory"
                             />
                         </div>
 

@@ -13,11 +13,13 @@
         display: flex;
         flex-direction: column;
         gap: 15px;
+        padding: 15px 0;
 
         .link {
             display: flex;
             align-items: center;
             gap: 10px;
+            font-size: $text-sm;
         }
     }
 }
