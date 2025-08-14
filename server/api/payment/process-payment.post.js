@@ -84,23 +84,29 @@ export default defineEventHandler(async (event) => {
 
   // Save order with paymentStatus 'pending'
   if (paymentIntent.client_secret) {
+    const orderDate = new Date()
+    const estimatedDeliveryDate = new Date(
+      orderDate.getTime() + 21 * 24 * 60 * 60 * 1000,
+    ) // 3 weeks
+
     await db
       .collection('orders')
       .doc(orderId)
       .set({
-        orderId,
-        userId: userId || 'guest',
         items,
+        orderId,
+        currency,
+        shippingAddress,
+        userId: userId || 'guest',
         amount: formattedAmount,
         paymentStatus: 'pending',
-        createdAt: new Date().toISOString(),
+        createdAt: orderDate.toISOString(),
         customer: {
           name: customerName || '',
           email: email || '',
           phone: phone || '',
         },
-        shippingAddress,
-        currency,
+        estimatedDeliveryDate: estimatedDeliveryDate.toISOString(),
       })
   }
 

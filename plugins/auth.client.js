@@ -32,22 +32,13 @@ export default defineNuxtPlugin(() => {
     ) // 50 minutes in milliseconds
   }
 
-  // function stopRefreshTimer() {
-  //   if (refreshTimer) {
-  //     clearInterval(refreshTimer)
-  //     refreshTimer = null
-  //   }
-  // }
+  function stopRefreshTimer() {
+    if (refreshTimer) {
+      clearInterval(refreshTimer)
+      refreshTimer = null
+    }
+  }
 
   // Start the timer when the plugin is initialized
   startRefreshTimer()
-
-  // return {
-  //   provide: {
-  //     authRefresh: {
-  //       startRefreshTimer,
-  //       stopRefreshTimer,
-  //     },
-  //   },
-  // }
 })

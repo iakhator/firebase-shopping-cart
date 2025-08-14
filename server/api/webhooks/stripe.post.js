@@ -39,11 +39,38 @@ export default defineEventHandler(async (event) => {
       const paymentStatus =
         paymentIntent.status === 'succeeded' ? 'paid' : 'failed'
 
+      // Extract payment method details
+      let paymentMethod = 'Card'
+      if (
+        paymentIntent.charges &&
+        paymentIntent.charges.data &&
+        paymentIntent.charges.data.length > 0
+      ) {
+        const charge = paymentIntent.charges.data[0]
+        if (
+          charge.payment_method_details &&
+          charge.payment_method_details.card
+        ) {
+          const brand = charge.payment_method_details.card.brand
+          const last4 = charge.payment_method_details.card.last4
+          paymentMethod = `${brand.charAt(0).toUpperCase() + brand.slice(1)} ending in ${last4}`
+        }
+      }
+
+      // TODO: Implement payment method for Paypal
+      // else if (
+      //   paymentIntent.payment_method_types &&
+      //   paymentIntent.payment_method_types.includes('paypal')
+      // ) {
+      //   paymentMethod = 'Paypal'
+      // }
+
       await db.collection('orders').doc(orderId).update({
         paymentStatus,
         status,
         stripePaymentIntentId: paymentIntent.id,
         paidAt: new Date().toISOString(),
+        paymentMethod,
       })
 
       await sendOrderConfirmation({
