@@ -309,7 +309,6 @@ const { $stripe } = useNuxtApp()
 const authStore = useAuthStore()
 const cartStore = useCartStore()
 const { toUSD } = useCurrency()
-const router = useRouter()
 
 const deliveryFee = 15
 

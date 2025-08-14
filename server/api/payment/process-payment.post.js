@@ -85,7 +85,7 @@ export default defineEventHandler(async (event) => {
   // Save order with paymentStatus 'pending'
   if (paymentIntent.client_secret) {
     const orderDate = new Date()
-    const estimatedDeliveryDate = new Date(
+    const estimatedDelivery = new Date(
       orderDate.getTime() + 21 * 24 * 60 * 60 * 1000,
     ) // 3 weeks
 
@@ -106,7 +106,7 @@ export default defineEventHandler(async (event) => {
           email: email || '',
           phone: phone || '',
         },
-        estimatedDeliveryDate: estimatedDeliveryDate.toISOString(),
+        estimatedDelivery: estimatedDelivery.toISOString(),
       })
   }
 

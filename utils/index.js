@@ -17,6 +17,13 @@ export const shortUUID = () => {
   return `ORD-${timestamp}-${randomPart}`
 }
 
+export const countryMap = {
+  us: 'United States',
+  ca: 'Canada',
+  na: 'Nigeria',
+  uk: 'United Kingdom',
+}
+
 // export async function getUserOrGuestId(event, adminAuth) {
 //   let userId
 //   const authToken = getCookie(event, 'auth_token')

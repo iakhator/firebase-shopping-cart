@@ -142,7 +142,13 @@
                                         {{ order.shippingAddress.state }}
                                         {{ order.shippingAddress.postalCode }}
                                     </p>
-                                    <p>{{ order.shippingAddress.country }}</p>
+                                    <p>
+                                        {{
+                                            countryMap[
+                                                order.shippingAddress.country
+                                            ] || order.shippingAddress.country
+                                        }}
+                                    </p>
                                 </div>
                             </div>
 
@@ -240,6 +246,7 @@ import {
     Message,
 } from '@element-plus/icons-vue'
 import Spinner from '~/components/icons/Spinner.vue'
+// import { countryMap } from '~/utils'
 
 const orderStore = useOrderStore()
 
