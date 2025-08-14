@@ -44,18 +44,35 @@
                                     </el-form-item>
                                 </el-col>
                             </el-row>
-                            <el-form-item label="Email" prop="email">
-                                <el-input
-                                    v-model="ruleForm.email"
-                                    :value="authStore.user?.email"
-                                    placeholder="your@email.com"
-                                    size="large"
-                                >
-                                    <template #prefix>
-                                        <el-icon><Message /></el-icon>
-                                    </template>
-                                </el-input>
-                            </el-form-item>
+                            <el-row :gutter="12">
+                                <el-col :span="12">
+                                    <el-form-item label="Email" prop="email">
+                                        <el-input
+                                            v-model="ruleForm.email"
+                                            :value="authStore.user?.email"
+                                            placeholder="your@email.com"
+                                            size="large"
+                                        >
+                                            <template #prefix>
+                                                <el-icon><Message /></el-icon>
+                                            </template>
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="Phone" prop="phone">
+                                        <el-input
+                                            v-model.number="ruleForm.phone"
+                                            placeholder="1234567890"
+                                            size="large"
+                                        >
+                                            <template #prefix>
+                                                <el-icon><Phone /></el-icon>
+                                            </template>
+                                        </el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
 
                             <h3 class="section-title font-briscolade">
                                 Shipping Address
@@ -280,17 +297,13 @@
 <script setup>
 import UIButton from '@/components/ui/UIButton.vue'
 import {
-    User,
     CreditCard,
-    Check,
     Message,
     Location,
-    ArrowRight,
-    ArrowLeft,
     Van,
     Lock,
     Discount,
-    CircleCheckFilled,
+    Phone,
 } from '@element-plus/icons-vue'
 const { $stripe } = useNuxtApp()
 const authStore = useAuthStore()
@@ -303,6 +316,7 @@ const deliveryFee = 15
 // Form data
 const ruleForm = ref({
     email: '',
+    phone: '',
     firstName: '',
     lastName: '',
     address: '',
@@ -313,6 +327,16 @@ const ruleForm = ref({
 
 const ruleFormRef = ref(null)
 
+const checkPhone = (rule, value, callback) => {
+    if (!value) {
+        callback(new Error('Phone number is required'))
+    } else if (!Number.isInteger(value)) {
+        callback(new Error('Phone must be a number'))
+    } else {
+        callback()
+    }
+}
+
 const rules = reactive({
     email: [
         { required: true, message: 'Please enter your email', trigger: 'blur' },
@@ -321,6 +345,19 @@ const rules = reactive({
             message: 'Email is required',
             trigger: 'blur',
         },
+    ],
+    phone: [
+        { validator: checkPhone, trigger: 'blur' },
+        // {
+        //     required: true,
+        //     message: 'Phone number is required',
+        //     trigger: 'blur',
+        // },
+        // {
+        //     type: 'number',
+        //     message: 'Phone number is required',
+        //     trigger: 'blur',
+        // },
     ],
     firstName: [
         {
@@ -362,7 +399,6 @@ const cardCvcElement = ref(null)
 const cardError = ref('')
 const loading = ref(false)
 const saveCard = ref(false)
-const currentStep = ref(1)
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 const cartItems = computed(() => cartStore.cart)
@@ -454,8 +490,8 @@ onMounted(() => {
         firstName: firstName.value,
         lastName: lastName.value,
         email: user?.email || '',
+        phone: user?.phone || '',
         address: user?.shippingAddress?.address || '',
-        street: user?.shippingAddress?.street || '',
         city: user?.shippingAddress?.city || '',
         country: user?.shippingAddress?.country || '',
         postalCode: user?.shippingAddress?.postalCode || '',
@@ -488,9 +524,9 @@ const processPayment = async () => {
         customerName: authStore.user.displayName,
         userId: authStore.user.uid,
         email: authStore.user.email,
+        phone: authStore.user.phone || '',
         shippingAddress: authStore.user.shippingAddress || {
             address: ruleForm.value?.address || '',
-            street: ruleForm.value?.street || '',
             city: ruleForm.value?.city || '',
             country: ruleForm.value?.country || '',
             postalCode: ruleForm.value?.postalCode || '',

@@ -59,6 +59,10 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+
+    h4 {
+        font-size: $text-sm;
+    }
 }
 
 .order-card {
@@ -186,7 +190,7 @@
 }
 
 .section-title {
-    font-weight: 500;
+    font-weight: 600;
     color: #111827;
     font-size: 0.875rem;
     text-transform: uppercase;
@@ -254,17 +258,16 @@
     align-items: center;
     padding: 0.75rem 0;
     border-top: 1px solid #e5e7eb;
-}
 
-.order-total span:first-child {
-    font-weight: 500;
-    color: #111827;
-}
-
-.order-total span:last-child {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #111827;
+    span {
+        &:first-child {
+            font-weight: 600;
+        }
+        &:last-child {
+            font-size: $text-base;
+            font-weight: $font-weight-bold;
+        }
+    }
 }
 
 .info-section {
@@ -274,7 +277,7 @@
 }
 
 .info-section-title {
-    font-weight: 500;
+    font-weight: 600;
     color: #111827;
     margin: 0 0 0.75rem 0;
     display: flex;
@@ -283,11 +286,11 @@
     font-size: 0.875rem;
     text-transform: uppercase;
     letter-spacing: 0.025em;
-}
 
-.info-section-title svg {
-    width: 1rem;
-    height: 1rem;
+    svg {
+        width: 1rem;
+        height: 1rem;
+    }
 }
 
 .customer-info {

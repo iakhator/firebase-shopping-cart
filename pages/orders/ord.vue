@@ -17,11 +17,8 @@
                 </UIButton>
             </div>
         </div>
-
-        <div
-            v-if="filteredOrders && filteredOrders?.length === 0"
-            class="empty-state"
-        >
+        <Spinner v-if="orderStore.isLoading" />
+        <div v-else-if="!filteredOrders?.length" class="empty-state">
             <el-icon><Box /></el-icon>
             <h3>No orders found</h3>
             <p>Start shopping to fill your cart!</p>
@@ -50,24 +47,24 @@
                             </el-icon>
                         </el-button>
                         <div class="order-info">
-                            <h3>{{ order.orderNumber }}</h3>
+                            <h3>{{ order.id }}</h3>
                             <p>
                                 Ordered on
-                                {{ formatDate(order.date) }}
+                                {{ formatDate(order.createdAt) }}
                             </p>
                         </div>
                     </div>
                     <div
                         class="status-badge"
-                        :class="statusConfig[order.status].className"
+                        :class="statusConfig[order.status]?.className"
                     >
                         <el-icon>
                             <component
-                                :is="statusConfig[order.status].icon"
+                                :is="statusConfig[order.status]?.icon"
                                 class="status-icon"
                             />
                         </el-icon>
-                        {{ statusConfig[order.status].label }}
+                        {{ statusConfig[order.status]?.label }}
                     </div>
                 </div>
 
@@ -86,7 +83,7 @@
                                         class="order-item"
                                     >
                                         <img
-                                            :src="item.image || ''"
+                                            :src="item.imageUrl || ''"
                                             :alt="item.name"
                                             class="item-image"
                                         />
@@ -110,7 +107,7 @@
 
                             <div class="order-total">
                                 <span>Total</span>
-                                <span>${{ order.total.toFixed(2) }}</span>
+                                <span>${{ order.amount.toFixed(2) }}</span>
                             </div>
 
                             <div class="info-section">
@@ -120,15 +117,15 @@
                                 </h4>
                                 <div class="customer-info">
                                     <p class="customer-name">
-                                        {{ order.customer.name }}
+                                        {{ order.customer?.name }}
                                     </p>
                                     <div class="contact-info">
                                         <el-icon><Message /></el-icon>
-                                        {{ order.customer.email }}
+                                        {{ order.customer?.email || 'N/A' }}
                                     </div>
                                     <div class="contact-info">
                                         <el-icon><Phone /></el-icon>
-                                        {{ order.customer.phone }}
+                                        {{ order.customer?.phone || 'N/A' }}
                                     </div>
                                 </div>
                             </div>
@@ -143,7 +140,7 @@
                                     <p>
                                         {{ order.shippingAddress.city }},
                                         {{ order.shippingAddress.state }}
-                                        {{ order.shippingAddress.zipCode }}
+                                        {{ order.shippingAddress.postalCode }}
                                     </p>
                                     <p>{{ order.shippingAddress.country }}</p>
                                 </div>
@@ -155,10 +152,10 @@
                                         <el-icon><CreditCard /></el-icon>
                                         Payment Method
                                     </h4>
-                                    <p>{{ order.paymentMethod }}</p>
+                                    <p>{{ order?.paymentMethod || 'N/A' }}</p>
                                 </div>
                                 <div
-                                    v-if="order.estimatedDelivery"
+                                    v-if="order?.estimatedDelivery"
                                     class="info-section"
                                 >
                                     <h4 class="info-section-title">
@@ -173,13 +170,13 @@
                                 </div>
                             </div>
 
-                            <div v-if="order.orderNotes" class="order-notes">
+                            <div v-if="order?.orderNotes" class="order-notes">
                                 <h4>Order Notes</h4>
                                 <p>{{ order.orderNotes }}</p>
                             </div>
 
                             <div
-                                v-if="order.trackingNumber"
+                                v-if="order?.trackingNumber"
                                 class="tracking-info"
                             >
                                 <el-icon><Location /></el-icon>
@@ -191,7 +188,7 @@
 
                             <div class="action-buttons">
                                 <UIButton
-                                    v-if="order.status === 'delivered'"
+                                    v-if="order?.status === 'delivered'"
                                     label="Reorder"
                                     style="flex-basis: fit-content"
                                 >
@@ -203,7 +200,7 @@
 
                                 <UIButton
                                     v-if="
-                                        (order.status === 'shipped' ||
+                                        (order?.status === 'shipped' ||
                                             order.status === 'pending') &&
                                         order.trackingNumber
                                     "
@@ -242,10 +239,13 @@ import {
     Phone,
     Message,
 } from '@element-plus/icons-vue'
+import Spinner from '~/components/icons/Spinner.vue'
+
+const orderStore = useOrderStore()
 
 const statusConfig = {
-    pending: {
-        label: 'Pending',
+    processing: {
+        label: 'Processing',
         icon: Clock,
         className: 'status-pending',
     },
@@ -410,10 +410,27 @@ const mockOrders = [
 const selectedFilter = ref('all')
 const expandedOrderId = ref(null)
 
-const filteredOrders = computed(() => {
-    if (selectedFilter.value === 'all') return mockOrders
-    return mockOrders.filter((order) => order.status === selectedFilter.value)
+onMounted(async () => {
+    await orderStore.fetchOrders()
+
+    console.log(orderStore.orders, 'orderStore.orders')
 })
+
+const filteredOrders = computed(() => {
+    if (!Array.isArray(orderStore.orders)) return []
+    if (selectedFilter.value === 'all') return orderStore.orders
+    return orderStore.orders.filter(
+        (order) => order.status === selectedFilter.value,
+    )
+})
+
+// const filteredOrders = computed(() => {
+//     console.log(orderStore.orders, 'computed')
+//     if (selectedFilter.value === 'all') return mockOrders
+//     return orderStore.orders.filter(
+//         (order) => order.status === selectedFilter.value,
+//     )
+// })
 
 function toggleOrderExpansion(orderId) {
     expandedOrderId.value = expandedOrderId.value === orderId ? null : orderId
@@ -435,11 +452,11 @@ function formatDate(dateStr) {
     gap: 0.5rem;
 }
 
-.orders-container {
+/* .orders-container {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-}
+} */
 
 .order-card {
     border: 1px solid #e5e7eb;
@@ -481,12 +498,6 @@ function formatDate(dateStr) {
 .order-details {
     padding: 1.5rem;
     background: #fff;
-}
-
-.section-title {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
 }
 
 .order-items {
@@ -542,15 +553,6 @@ function formatDate(dateStr) {
 
 .info-section {
     margin-bottom: 1rem;
-}
-
-.info-section-title {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.3rem;
 }
 
 .customer-info {

@@ -12,6 +12,7 @@ export default defineEventHandler(async (event) => {
     items,
     userId,
     email,
+    phone,
     customerName,
     shippingAddress,
     currency = 'usd',
@@ -93,10 +94,13 @@ export default defineEventHandler(async (event) => {
         amount: formattedAmount,
         paymentStatus: 'pending',
         createdAt: new Date().toISOString(),
-        customerName,
+        customer: {
+          name: customerName || '',
+          email: email || '',
+          phone: phone || '',
+        },
         shippingAddress,
         currency,
-        email: email || '',
       })
   }
 

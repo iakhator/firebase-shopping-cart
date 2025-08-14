@@ -5,8 +5,8 @@ services:
     container_name: ring-cart-app
     build:
       context: .
-      dockerfile: Dockerfile.dev
-      target: ${DOCKER_TARGET:-development}
+      dockerfile: Dockerfile
+      target: dev
     ports:
       - '3000:3000'
     volumes:
@@ -15,7 +15,18 @@ services:
     env_file:
       - .env
     environment:
+      - NODE_ENV=development
       - NODE_OPTIONS=--max-old-space-size=4096
+    restart: unless-stopped
+    develop:
+      watch:
+        - action: sync
+          path: ./
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./package.json
     depends_on:
       - redis
       - maildev
@@ -36,4 +47,5 @@ services:
       - '1025:1025'
 
 volumes:
+  app_node_modules:
   redis-data:
