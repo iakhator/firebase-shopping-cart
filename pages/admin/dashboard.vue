@@ -1,75 +1,11 @@
-<template>
-    <div>
-        <div class="page-header">
-            <h1 class="page-title">Dashboard</h1>
-            <p class="page-subtitle">
-                Welcome back! Here's what's happening with your store.
-            </p>
-        </div>
-
-        <div class="stats-grid">
-            <div v-for="(stat, index) in stats" :key="index" class="stat-card">
-                <div class="stat-label">{{ stat.label }}</div>
-                <div class="stat-value">{{ stat.value }}</div>
-                <div class="stat-change">{{ stat.change }}</div>
-            </div>
-        </div>
-
-        <div class="data-table">
-            <div class="table-header">
-                <h2 class="table-title">Recent Orders</h2>
-                <button class="btn btn-primary" @click="goToOrders">
-                    View All Orders
-                </button>
-            </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Order ID</th>
-                        <th>Customer</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="order in recentOrders" :key="order.id">
-                        <td>{{ order.id }}</td>
-                        <td>{{ order.customer }}</td>
-                        <td>{{ order.amount }}</td>
-                        <td>
-                            <span
-                                :class="[
-                                    'status-badge',
-                                    `status-${order.status}`,
-                                ]"
-                            >
-                                {{ capitalize(order.status) }}
-                            </span>
-                        </td>
-                        <td>
-                            <div class="actions">
-                                <button
-                                    class="btn btn-outline"
-                                    @click="viewOrder(order.id)"
-                                >
-                                    View
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</template>
-
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { Edit } from '@element-plus/icons-vue'
 
 definePageMeta({
     layout: 'admin',
+    middleware: 'admin',
 })
 
 const router = useRouter()
@@ -122,13 +58,90 @@ function capitalize(str) {
 }
 </script>
 
+<template>
+    <div>
+        <div class="page-header">
+            <h1 class="page-title">Dashboard</h1>
+            <p class="page-subtitle">
+                Welcome back! Here's what's happening with your store.
+            </p>
+        </div>
+
+        <el-row :gutter="20" class="stats-grid">
+            <el-col
+                v-for="(stat, index) in stats"
+                :key="index"
+                :xs="24"
+                :sm="12"
+                :md="6"
+            >
+                <el-card class="stat-card">
+                    <div class="stat-label">{{ stat.label }}</div>
+                    <div class="stat-value">{{ stat.value }}</div>
+                    <div class="stat-change">{{ stat.change }}</div>
+                </el-card>
+            </el-col>
+        </el-row>
+
+        <div class="data-table">
+            <div class="table-header">
+                <h2 class="table-title">Recent Orders</h2>
+                <div>
+                    <el-button type="primary" @click="goToOrders"
+                        >View All Orders</el-button
+                    >
+                </div>
+            </div>
+            <el-table :data="recentOrders" style="width: 100%">
+                <el-table-column prop="id" label="Order ID" />
+                <el-table-column prop="customer" label="Customer" />
+                <el-table-column prop="amount" label="Amount" />
+                <el-table-column prop="status" label="Status">
+                    <template #default="{ row }">
+                        <el-tag
+                            :type="
+                                row.status === 'delivered'
+                                    ? 'success'
+                                    : row.status === 'shipped'
+                                      ? 'info'
+                                      : row.status === 'processing'
+                                        ? 'warning'
+                                        : row.status === 'pending'
+                                          ? 'danger'
+                                          : 'default'
+                            "
+                        >
+                            {{ capitalize(row.status) }}
+                        </el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="Actions" width="120">
+                    <template #default="{ row }">
+                        <el-button
+                            size="small"
+                            circle
+                            aria-label="View"
+                            @click="viewOrder(row.id)"
+                        >
+                            <el-icon><Edit /></el-icon>
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+    </div>
+</template>
+
 <style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+@import '@/assets/scss/_global.scss';
+
 .page-header {
     margin-bottom: 2rem;
     .page-title {
         font-size: 2rem;
         font-weight: $font-weight-bold;
-        color: $black;
+        color: $text-primary;
         margin-bottom: 0.3rem;
         font-family: $font-stack-brand;
     }
@@ -140,16 +153,13 @@ function capitalize(str) {
 }
 
 .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.5rem;
     margin-bottom: 2.5rem;
 }
 
 .stat-card {
     background: $white;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 8px rgba($black, 0.04);
     padding: 1.5rem 1.2rem;
     display: flex;
     flex-direction: column;
@@ -164,7 +174,7 @@ function capitalize(str) {
     .stat-value {
         font-size: 1.5rem;
         font-weight: $font-weight-bold;
-        color: $black;
+        color: $text-primary;
         margin-bottom: 0.3rem;
         font-family: $font-stack-brand;
     }
@@ -179,7 +189,7 @@ function capitalize(str) {
 .data-table {
     background: $white;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 8px rgba($black, 0.04);
     padding: 2rem 1.5rem;
     border: 1px solid $text-gray-100;
     .table-header {
@@ -190,97 +200,43 @@ function capitalize(str) {
         .table-title {
             font-size: 1.2rem;
             font-weight: $font-weight-bold;
-            color: $black;
+            color: $text-primary;
             font-family: $font-stack-brand;
         }
-        .btn-primary {
-            background: $base-color;
-            color: $black;
+        .el-button--primary {
+            background: $base-color !important;
+            color: $text-primary !important;
             border: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: 6px;
-            font-size: 1rem;
             font-weight: $font-weight-semibold;
-            cursor: pointer;
-            transition: background 0.2s;
-            &:hover {
-                background: darken($base-color, 8%);
-            }
         }
     }
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-        th,
-        td {
-            padding: 0.7rem 1rem;
-            text-align: left;
-            font-size: 1rem;
-            font-family: $font-stack-body;
-        }
-        th {
-            color: $text-gray-600;
-            font-weight: $font-weight-semibold;
-            border-bottom: 1px solid $text-gray-100;
-        }
-        td {
-            color: $black;
-            border-bottom: 1px solid $text-gray-100;
-            vertical-align: middle;
-        }
-        tr:last-child td {
-            border-bottom: none;
-        }
+}
+
+:deep(.el-table) {
+    background: $white;
+    border-radius: 12px;
+    font-family: $font-stack-body;
+    th {
+        color: $text-gray-600;
+        font-weight: $font-weight-semibold;
+        background: $off-white;
+        border-bottom: 1px solid $text-gray-100;
     }
-    .status-badge {
-        display: inline-block;
-        padding: 0.3rem 0.8rem;
-        border-radius: 12px;
-        font-size: 0.95rem;
-        font-weight: $font-weight-medium;
-        text-transform: capitalize;
-        &.status-delivered {
-            background: #dcfce7;
-            color: #22c55e;
-            border: 1px solid #22c55e;
-        }
-        &.status-shipped {
-            background: #e0f2fe;
-            color: #38bdf8;
-            border: 1px solid #38bdf8;
-        }
-        &.status-processing {
-            background: #fff7ed;
-            color: #f59e42;
-            border: 1px solid #f59e42;
-        }
-        &.status-pending {
-            background: #fee2e2;
-            color: #ef4444;
-            border: 1px solid #ef4444;
-        }
+    td {
+        color: $text-primary;
+        border-bottom: 1px solid $text-gray-100;
+        vertical-align: middle;
+        background: $white;
     }
-    .actions {
-        display: flex;
-        gap: 0.5rem;
-        .btn-outline {
-            background: none;
-            border: 1px solid $text-gray-100;
-            color: $black;
-            padding: 0.3rem 0.9rem;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: $font-weight-medium;
-            cursor: pointer;
-            transition:
-                background 0.2s,
-                border-color 0.2s;
-            &:hover {
-                background: $base-color;
-                border-color: $base-color;
-                color: $black;
-            }
-        }
+
+    .cell {
+        line-height: 34px;
     }
+}
+
+.el-tag {
+    font-weight: $font-weight-medium;
+    border-radius: 12px;
+    text-transform: capitalize;
 }
 </style>
