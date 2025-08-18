@@ -84,7 +84,7 @@
                                                         'admin'
                                                     "
                                                     class="link"
-                                                    to="/admin/user"
+                                                    to="/admin/dashboard"
                                                 >
                                                     <el-icon
                                                         ><UserFilled

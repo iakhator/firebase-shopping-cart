@@ -24,7 +24,7 @@ export default defineEventHandler(
     const usersSnapshot = await db.collection('users').get()
     const totalUsers = usersSnapshot.size
 
-    // Example: Calculate changes (mocked for now, you can implement real logic)
+    // TODO: Calculate changes (mocked for now, you can implement real logic)
     const stats = [
       {
         label: 'Total Revenue',
