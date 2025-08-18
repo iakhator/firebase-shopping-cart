@@ -91,9 +91,6 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
-@import '@/assets/scss/_global.scss';
-
 .admin-layout {
     display: flex;
     min-height: 100vh;
