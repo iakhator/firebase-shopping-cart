@@ -318,30 +318,6 @@ function handleSaveProduct() {
     }
 }
 
-.el-table {
-    background: $white;
-    border-radius: 12px;
-    font-family: $font-stack-body;
-    th {
-        color: $text-gray-600;
-        font-weight: $font-weight-semibold;
-        background: $off-white;
-        border-bottom: 1px solid $text-gray-100;
-    }
-    td {
-        color: $text-primary;
-        border-bottom: 1px solid $text-gray-100;
-        vertical-align: middle;
-        background: $white;
-    }
-}
-
-.el-tag {
-    font-weight: $font-weight-medium;
-    border-radius: 12px;
-    text-transform: capitalize;
-}
-
 .form-actions {
     display: flex;
     gap: 1rem;
