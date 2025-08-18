@@ -9,9 +9,9 @@ services:
       target: dev
     ports:
       - '3000:3000'
-    # volumes:
-    #   - .:/app
-    #   - /app/node_modules
+    volumes:
+      - .:/app
+      - /app/node_modules
     env_file:
       - .env
     environment:

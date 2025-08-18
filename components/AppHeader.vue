@@ -79,6 +79,19 @@
                                                 style="margin-bottom: 12px"
                                             >
                                                 <NuxtLink
+                                                    v-if="
+                                                        authStore.user?.role ===
+                                                        'admin'
+                                                    "
+                                                    class="link"
+                                                    to="/admin/user"
+                                                >
+                                                    <el-icon
+                                                        ><UserFilled
+                                                    /></el-icon>
+                                                    <span>Admin</span>
+                                                </NuxtLink>
+                                                <NuxtLink
                                                     class="link"
                                                     :to="`/user/${uid}`"
                                                 >
@@ -94,10 +107,8 @@
                                                     <el-icon><Grid /></el-icon>
                                                     <span>View Orders</span>
                                                 </NuxtLink>
-                                                <NuxtLink
-                                                    class="link"
-                                                    to="/about"
-                                                >
+
+                                                <NuxtLink class="link" to="/">
                                                     <el-icon
                                                         ><Setting
                                                     /></el-icon>

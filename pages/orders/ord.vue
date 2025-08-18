@@ -50,7 +50,11 @@
                             <h3>{{ order.id }}</h3>
                             <p>
                                 Ordered on
-                                {{ formatDate(order.createdAt) }}
+                                {{
+                                    $dayjs(order.createdAt).format(
+                                        'MMMM D, YYYY',
+                                    )
+                                }}
                             </p>
                         </div>
                     </div>
@@ -170,7 +174,9 @@
                                     </h4>
                                     <p>
                                         {{
-                                            formatDate(order.estimatedDelivery)
+                                            $dayjs(
+                                                order.estimatedDelivery,
+                                            ).format('MMMM D, YYYY')
                                         }}
                                     </p>
                                 </div>
@@ -249,6 +255,7 @@ import Spinner from '~/components/icons/Spinner.vue'
 // import { countryMap } from '~/utils'
 
 const orderStore = useOrderStore()
+const { $dayjs } = useNuxtApp()
 
 const statusConfig = {
     processing: {
@@ -281,146 +288,11 @@ const filterOptions = [
     { value: 'cancelled', label: 'Cancelled' },
 ]
 
-const mockOrders = [
-    {
-        id: '1',
-        orderNumber: 'ORD-2024-001',
-        date: '2024-01-15',
-        items: [
-            {
-                name: 'Wireless Headphones',
-                quantity: 1,
-                price: 199.99,
-                image: '/placeholder.svg?height=60&width=60',
-            },
-            {
-                name: 'Phone Case',
-                quantity: 2,
-                price: 24.99,
-                image: '/placeholder.svg?height=60&width=60',
-            },
-        ],
-        total: 249.97,
-        status: 'delivered',
-        trackingNumber: 'TRK123456789',
-        customer: {
-            name: 'John Smith',
-            email: 'john.smith@email.com',
-            phone: '+1 (555) 123-4567',
-        },
-        shippingAddress: {
-            street: '123 Main Street, Apt 4B',
-            city: 'New York',
-            state: 'NY',
-            zipCode: '10001',
-            country: 'United States',
-        },
-        paymentMethod: 'Visa ending in 4242',
-        estimatedDelivery: '2024-01-18',
-        orderNotes: 'Leave package at front door',
-    },
-    {
-        id: '2',
-        orderNumber: 'ORD-2024-002',
-        date: '2024-01-18',
-        items: [
-            {
-                name: 'Laptop Stand',
-                quantity: 1,
-                price: 89.99,
-                image: '/placeholder.svg?height=60&width=60',
-            },
-        ],
-        total: 89.99,
-        status: 'shipped',
-        trackingNumber: 'TRK987654321',
-        customer: {
-            name: 'Sarah Johnson',
-            email: 'sarah.j@email.com',
-            phone: '+1 (555) 987-6543',
-        },
-        shippingAddress: {
-            street: '456 Oak Avenue',
-            city: 'Los Angeles',
-            state: 'CA',
-            zipCode: '90210',
-            country: 'United States',
-        },
-        paymentMethod: 'Mastercard ending in 8888',
-        estimatedDelivery: '2024-01-22',
-    },
-    {
-        id: '3',
-        orderNumber: 'ORD-2024-003',
-        date: '2024-01-20',
-        items: [
-            {
-                name: 'Bluetooth Speaker',
-                quantity: 1,
-                price: 149.99,
-                image: '/placeholder.svg?height=60&width=60',
-            },
-            {
-                name: 'USB Cable',
-                quantity: 3,
-                price: 12.99,
-                image: '/placeholder.svg?height=60&width=60',
-            },
-        ],
-        total: 188.96,
-        status: 'pending',
-        customer: {
-            name: 'Mike Davis',
-            email: 'mike.davis@email.com',
-            phone: '+1 (555) 456-7890',
-        },
-        shippingAddress: {
-            street: '789 Pine Street',
-            city: 'Chicago',
-            state: 'IL',
-            zipCode: '60601',
-            country: 'United States',
-        },
-        paymentMethod: 'PayPal',
-        estimatedDelivery: '2024-01-25',
-    },
-    {
-        id: '4',
-        orderNumber: 'ORD-2024-004',
-        date: '2024-01-12',
-        items: [
-            {
-                name: 'Smart Watch',
-                quantity: 1,
-                price: 299.99,
-                image: '/placeholder.svg?height=60&width=60',
-            },
-        ],
-        total: 299.99,
-        status: 'cancelled',
-        customer: {
-            name: 'Emily Wilson',
-            email: 'emily.w@email.com',
-            phone: '+1 (555) 321-0987',
-        },
-        shippingAddress: {
-            street: '321 Elm Drive',
-            city: 'Miami',
-            state: 'FL',
-            zipCode: '33101',
-            country: 'United States',
-        },
-        paymentMethod: 'American Express ending in 1234',
-    },
-]
-
 const selectedFilter = ref('all')
 const expandedOrderId = ref(null)
 
 onMounted(async () => {
     await orderStore.fetchOrders()
-
-    console.log(orderStore.orders, 'orderStore.orders')
 })
 
 const filteredOrders = computed(() => {
@@ -442,64 +314,12 @@ const filteredOrders = computed(() => {
 function toggleOrderExpansion(orderId) {
     expandedOrderId.value = expandedOrderId.value === orderId ? null : orderId
 }
-
-function formatDate(dateStr) {
-    const date = new Date(dateStr)
-    return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    })
-}
 </script>
 
 <style scoped lang="scss">
 .filter-buttons {
     display: flex;
     gap: 0.5rem;
-}
-
-/* .orders-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-} */
-
-.order-card {
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-    overflow: hidden;
-    transition: box-shadow 0.2s;
-}
-
-.order-card:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
-}
-
-.order-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background: #f9fafb;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.order-header-left {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.expand-button {
-    margin-right: 0.5rem;
-}
-
-.expand-icon.rotated {
-    transform: rotate(90deg);
-    transition: transform 0.2s;
 }
 
 .order-details {
@@ -520,69 +340,6 @@ function formatDate(dateStr) {
     gap: 1rem;
     border-bottom: 1px solid #f3f4f6;
     padding-bottom: 0.5rem;
-}
-
-.item-image {
-    width: 60px;
-    height: 60px;
-    object-fit: contain;
-    border-radius: 6px;
-    background: #f3f4f6;
-}
-
-.item-info h5 {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 500;
-}
-
-.item-info p {
-    margin: 0;
-    font-size: 0.9rem;
-    color: #6b7280;
-}
-
-.item-price p {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 500;
-    color: #374151;
-}
-
-.order-total {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-}
-
-.info-section {
-    margin-bottom: 1rem;
-}
-
-.customer-info {
-    margin-left: 1.5rem;
-}
-
-.customer-name {
-    font-weight: 500;
-    margin-bottom: 0.2rem;
-}
-
-.contact-info {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.95rem;
-    color: #6b7280;
-}
-
-.address-info {
-    margin-left: 1.5rem;
-    font-size: 0.95rem;
-    color: #374151;
 }
 
 .info-grid {

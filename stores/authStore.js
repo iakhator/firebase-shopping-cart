@@ -37,11 +37,12 @@ export const useAuthStore = defineStore('auth', () => {
       }
 
       if (error.code === 'auth/invalid-credential') {
-        errorMessage.value = 'Invalid Login  credentials'
-        return
+        errorMessage.value = 'Invalid Login credentials'
+        return error.message
       }
 
       this.errorMessage = error.message
+      return error.message
     }
   }
 
@@ -52,9 +53,9 @@ export const useAuthStore = defineStore('auth', () => {
         body: {
           email,
           password,
+          lastName,
+          firstName,
           emailVerified: false,
-          firstName: firstName,
-          lastName: lastName,
           displayName: `${firstName} ${lastName}`,
           createdDate: new Date().toISOString(),
           role: 'admin',
@@ -131,6 +132,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   return {
     authenticated,
+    errorMessage,
     user,
     signIn,
     signUp,
