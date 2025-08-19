@@ -52,7 +52,11 @@
             <h2 class="collection-heading font-briscolade text-2xl">
                 Browse our latest collection
             </h2>
-            <Spinner v-if="isLoading" />
+            <LoadingSpinner
+                v-if="isLoading"
+                type="progress"
+                message="Loading products..."
+            />
             <div v-else-if="!products?.length" class="no-products">
                 <div class="no-products-container">
                     <div class="no-products-icon">
@@ -229,8 +233,8 @@
 
 <script setup>
 import UIButton from '~/components/ui/UIButton'
+import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
 import { Filter, Close, ArrowRight, Check } from '@element-plus/icons-vue'
-import Spinner from '~/components/icons/Spinner.vue'
 
 const isFavHovered = ref('')
 const showMobileFilters = ref(false)

@@ -5,7 +5,11 @@
                 <el-icon class="cart-title-icon"><ShoppingBag /></el-icon>
                 Your Cart
             </h3>
-            <Spinner v-if="isLoading" />
+            <LoadingSpinner
+                v-if="isLoading"
+                type="spinner"
+                message="Loading your cart..."
+            />
             <div v-else class="cart">
                 <div v-if="!cartItems.length && !isLoading" class="cart__empty">
                     <span class="mb-6"
@@ -116,7 +120,7 @@
 
 <script setup>
 import { Delete, ShoppingBag, CreditCard } from '@element-plus/icons-vue'
-import Spinner from '~/components/icons/Spinner.vue'
+import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
 const { toUSD } = useCurrency()
 import ShoppingBagBlack from '~/components/icons/ShoppingBagBlack.vue'
 const authStore = useAuthStore()

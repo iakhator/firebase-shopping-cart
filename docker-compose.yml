@@ -16,7 +16,7 @@ services:
       - .env
     environment:
       - NODE_ENV=development
-      # - NODE_OPTIONS=--max-old-space-size=4096
+      - NODE_OPTIONS=--max-old-space-size=4096
     restart: unless-stopped
     develop:
       watch:

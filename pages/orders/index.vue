@@ -34,7 +34,11 @@ onMounted(async () => {
 
 <template>
     <p>Order Page</p>
-    <Spinner v-if="isLoading && !orders.length" />
+    <LoadingSpinner
+        v-if="isLoading && !orders.length"
+        type="dots"
+        message="Loading your orders..."
+    />
     <div v-else>
         <pre>
         {{ orders }}
@@ -44,7 +48,7 @@ onMounted(async () => {
 </template> -->
 
 <script setup>
-import Spinner from '~/components/icons/Spinner.vue'
+import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
 
 const orderStore = useOrderStore()
 const search = ref('')
@@ -85,7 +89,11 @@ onMounted(async () => {
             </div>
         </div>
 
-        <Spinner v-if="orderStore.isLoading && !orderStore.orders.length" />
+        <LoadingSpinner
+            v-if="orderStore.isLoading && !orderStore.orders.length"
+            type="pulse"
+            message="Fetching orders..."
+        />
         <!-- <div v-else-if="orderStore.orders.length < 1" class="text-center mt-8">
             <p class="text-gray-500">No orders found</p>
         </div> -->
