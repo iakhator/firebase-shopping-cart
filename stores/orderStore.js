@@ -35,9 +35,11 @@ export const useOrderStore = defineStore('order', () => {
 
   const fetchOrders = async (options = {}) => {
     try {
-      const data = await fetchData('/api/orders', {
+      const data = await $fetch('/api/orders', {
         showToast: options.showToast !== false,
       })
+
+      console.log(data, 'data')
 
       orders.value = data.orders || []
       return data.orders
