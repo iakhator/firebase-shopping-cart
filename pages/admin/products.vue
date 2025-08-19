@@ -6,7 +6,7 @@
                 Manage your product catalog and inventory
             </p>
         </div>
-
+        <pre>{{ productsData }}</pre>
         <div class="data-table">
             <div class="table-header">
                 <h2 class="table-title">All Products</h2>
@@ -144,6 +144,12 @@ definePageMeta({
 const showModal = ref(false)
 const isEditing = ref(false)
 const categoryFilter = ref('')
+
+const {
+    data: productsData,
+    pending: productsLoading,
+    error: productsError,
+} = await useAsyncData('admin-products', () => $fetch('/api/admin/products'))
 
 const products = ref([
     {

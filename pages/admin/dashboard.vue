@@ -10,8 +10,6 @@ definePageMeta({
 
 const router = useRouter()
 
-import { useAsyncData } from '#imports'
-
 const {
     data: statsData,
     pending: statsLoading,

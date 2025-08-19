@@ -79,19 +79,6 @@
                                                 style="margin-bottom: 12px"
                                             >
                                                 <NuxtLink
-                                                    v-if="
-                                                        authStore.user?.role ===
-                                                        'admin'
-                                                    "
-                                                    class="link"
-                                                    to="/admin/dashboard"
-                                                >
-                                                    <el-icon
-                                                        ><UserFilled
-                                                    /></el-icon>
-                                                    <span>Admin</span>
-                                                </NuxtLink>
-                                                <NuxtLink
                                                     class="link"
                                                     :to="`/user/${uid}`"
                                                 >
