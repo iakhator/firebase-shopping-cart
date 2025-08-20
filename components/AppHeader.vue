@@ -95,7 +95,10 @@
                                                     <span>View Orders</span>
                                                 </NuxtLink>
 
-                                                <NuxtLink class="link" to="/">
+                                                <NuxtLink
+                                                    class="link"
+                                                    to="/profile/preference"
+                                                >
                                                     <el-icon
                                                         ><Setting
                                                     /></el-icon>

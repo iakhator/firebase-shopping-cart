@@ -332,6 +332,10 @@ h3 {
     justify-content: space-between;
 }
 
+.fit-content {
+    width: fit-content;
+}
+
 .space-y-6 > * + * {
     margin-top: 1.5rem;
 }
@@ -420,8 +424,48 @@ h3 {
     width: 2.5rem;
 }
 
+.w-12 {
+    width: 3rem;
+}
+
+.w-14 {
+    width: 3.5rem;
+}
+
+.w-16 {
+    width: 4rem;
+}
+
+.w-18 {
+    width: 4.5rem;
+}
+
+.w-20 {
+    width: 5rem;
+}
+
+.h-2 {
+    height: 0.5rem;
+}
+
+.h-4 {
+    height: 1rem;
+}
+
+.h-6 {
+    height: 1.5rem;
+}
+
+.h-8 {
+    height: 2rem;
+}
+
 .h-10 {
     height: 2.5rem;
+}
+
+.h-12 {
+    height: 3rem;
 }
 
 .max-w-md {
@@ -482,6 +526,34 @@ h3 {
     .sm\:flex-row {
         flex-direction: row;
     }
+}
+
+/* font */
+.text-xs {
+    font-size: $text-xs;
+    line-height: 1;
+}
+
+/* text */
+.text-white {
+    color: $white;
+}
+
+/* background */
+/* blue */
+.bg-blue-500 {
+    background-color: $bg-blue-500;
+}
+.bg-blue-600 {
+    background-color: $bg-blue-600;
+}
+
+/* red */
+.bg-red-500 {
+    background-color: $bg-red-500;
+}
+.bg-red-600 {
+    background-color: $bg-red-600;
 }
 
 /* Black and white theme customizations */
@@ -563,13 +635,13 @@ h3 {
 }
 
 /* Add a border to the white color option for visibility */
-.color-option-white {
+/* .color-option-white {
     border: 1px solid #d9d9d9;
-}
+} */
 
 //Spinner
 .el-loading-mask {
-    /* position: relative !important; */
+    position: relative !important;
     background: inherit !important;
 }
 .el-loading-spinner {
@@ -577,7 +649,7 @@ h3 {
 }
 
 /* Mobile utility classes */
-.mobile-only {
+/* .mobile-only {
     display: none;
     @media (max-width: 768px) {
         display: block;
@@ -603,10 +675,10 @@ h3 {
     @media (max-width: 768px) {
         display: none;
     }
-}
+} */
 
 /* Responsive text utilities */
-.text-responsive {
+/* .text-responsive {
     @media (max-width: 768px) {
         font-size: 0.875rem;
     }
@@ -614,10 +686,10 @@ h3 {
     @media (max-width: 480px) {
         font-size: 0.8125rem;
     }
-}
+} */
 
 /* Multi-line ellipsis utility */
-.multi-line-ellipsis {
+/* .multi-line-ellipsis {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -627,10 +699,10 @@ h3 {
     @media (max-width: 360px) {
         -webkit-line-clamp: 3;
     }
-}
+} */
 
 /* Responsive grid utilities */
-.grid-responsive {
+/* .grid-responsive {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1rem;
@@ -648,4 +720,4 @@ h3 {
     @media (max-width: 360px) {
         grid-template-columns: 1fr 1fr;
     }
-}
+} */

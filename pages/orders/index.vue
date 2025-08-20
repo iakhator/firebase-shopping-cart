@@ -262,7 +262,7 @@ import {
     Phone,
     Message,
 } from '@element-plus/icons-vue'
-import LoadingSpinner from '~/components/icons/Spinner.vue'
+import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
 
 // import { countryMap } from '~/utils'
 const { toUSD } = useCurrency()
