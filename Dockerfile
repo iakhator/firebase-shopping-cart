@@ -37,7 +37,7 @@
 
 
 # Base stage - common dependencies
-FROM node:22-alpine AS base
+FROM node:20-alpine AS base
 WORKDIR /app
 COPY package.json package-lock.json ./
 
@@ -59,13 +59,14 @@ CMD ["npm", "run", "dev"]
 # ----------------------------------
 #
 FROM base AS build
+COPY . ./
 ENV NODE_ENV=production
 RUN npm run build
 
 # ----------------------------------
 #  Production Stage
 # ----------------------------------
-FROM node:22-alpine AS prod
+FROM node:20-alpine AS prod
 WORKDIR /app
 ENV NODE_ENV=production
 
