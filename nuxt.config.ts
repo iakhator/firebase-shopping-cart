@@ -7,19 +7,19 @@ export default defineNuxtConfig({
     externals: {
       inline: ['nodemailer', 'handlebars', '@faker-js/faker'],
     },
-    // routeRules: {
-    //   '/.well-known/**': { prerender: false, swr: false },
-    //   // Homepage - prerender for better SEO and performance (disable for now due to Redis)
-    //   // '/': { prerender: false },
-    //   // Auth pages - SPA mode (no SSR needed)
-    //   '/auth/**': { ssr: false },
-    //   // Cart pages - SPA mode (user-specific content)
-    //   '/cart/**': { ssr: false },
-    //   // Profile pages - SPA mode (user-specific content)
-    //   '/profile/**': { ssr: false },
-    //   // Orders pages - SPA mode (user-specific content)
-    //   '/orders/**': { ssr: false },
-    // },
+    routeRules: {
+      //   '/.well-known/**': { prerender: false, swr: false },
+      //   // Homepage - prerender for better SEO and performance (disable for now due to Redis)
+      //   // '/': { prerender: false },
+      //   // Auth pages - SPA mode (no SSR needed)
+      '/auth/**': { ssr: false },
+      //   // Cart pages - SPA mode (user-specific content)
+      '/cart/**': { ssr: false },
+      //   // Profile pages - SPA mode (user-specific content)
+      '/profile/**': { ssr: false },
+      //   // Orders pages - SPA mode (user-specific content)
+      '/orders/**': { ssr: false },
+    },
     esbuild: {
       options: {
         format: 'esm',

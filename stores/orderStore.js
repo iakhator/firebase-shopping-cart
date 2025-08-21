@@ -11,7 +11,6 @@ export const useOrderStore = defineStore('orders', () => {
     error.value = null
     try {
       const response = await $fetch('/api/orders')
-      console.log(response, 'response')
       orders.value = response.orders || []
     } catch (err) {
       error.value = err

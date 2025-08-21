@@ -20,13 +20,11 @@ useHead({
 
 <style lang="scss" scoped>
 :deep(.el-card) {
-    background: $off-white;
     border: 1px solid $bg-gray-300;
 }
 .auth-layout {
     min-height: 100vh;
     width: 100%;
-    background: $off-white;
     display: flex;
     align-items: center;
     justify-content: center;
