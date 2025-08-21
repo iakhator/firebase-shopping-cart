@@ -62,13 +62,13 @@ CMD ["npm", "run", "dev"]
 # ----------------------------------
 #
 FROM base AS build
-# COPY apps/analytics ./
+COPY . .
 RUN npm run build
 
 # ----------------------------------
 #  Production Stage
 # ----------------------------------
-FROM node:22-alpine AS prod
+FROM base AS prod
 WORKDIR /app
 
 ENV NODE_ENV=production
