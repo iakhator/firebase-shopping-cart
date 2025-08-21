@@ -275,13 +275,15 @@ import {
 } from '@element-plus/icons-vue'
 import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
 import { useOrderStore } from '~/stores/orderStore.js'
-import { storeToRefs } from 'pinia'
 
 // import { countryMap } from '~/utils'
 const { toUSD } = useCurrency()
-const { orders, isLoading, error, fetchOrders } = storeToRefs(useOrderStore())
-// const orderStore = useOrderStore()
+const orderStore = useOrderStore()
 const { $dayjs } = useNuxtApp()
+
+const orders = computed(() => orderStore.orders)
+const isLoading = computed(() => orderStore.isLoading)
+const error = computed(() => orderStore.error)
 
 const statusConfig = {
     processing: {
@@ -318,7 +320,7 @@ const selectedFilter = ref('all')
 const expandedOrderId = ref(null)
 
 onMounted(async () => {
-    await fetchOrders()
+    await orderStore.fetchOrders()
 })
 
 const filteredOrders = computed(() => {
