@@ -58,7 +58,7 @@ function handleSaveShipping() {
                                 >Default</ElTag
                             >
                         </div>
-                        <ElButton type="text" size="small">
+                        <ElButton type="text" size="small" class="edit">
                             <IconEdit class="mr-2" size="15 " />
                             Edit
                         </ElButton>
@@ -88,7 +88,7 @@ function handleSaveShipping() {
             </template>
             <div class="space-y-4">
                 <ElFormItem label="Default Shipping Speed">
-                    <ElSelect v-model="shipping.preferences.speed">
+                    <ElSelect v-model="shipping.preferences.speed" size="large">
                         <ElOption
                             label="Standard (5-7 days)"
                             value="standard"
@@ -108,11 +108,25 @@ function handleSaveShipping() {
                 </div>
             </div>
         </ElCard>
-        <div class="flex justify-end">
-            <ElButton type="primary" @click="handleSaveShipping">
-                <IconSave class="mr-2" size="15" />
-                Save Shipping Info
-            </ElButton>
-        </div>
     </div>
 </template>
+
+<style scoped lang="scss">
+:deep(.el-select .el-select__wrapper) {
+    background: $white;
+}
+:deep(.el-button) {
+    text-transform: capitalize;
+    align-items: center;
+
+    &.edit {
+        width: fit-content;
+    }
+
+    & > span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+</style>

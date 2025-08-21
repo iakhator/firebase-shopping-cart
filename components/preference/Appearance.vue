@@ -67,37 +67,56 @@ function handleSaveAppearance() {
                 </div>
             </template>
             <div class="space-y-4">
-                <ElFormItem label="Language">
-                    <ElSelect v-model="appearance.language">
-                        <ElOption label="English" value="en" />
-                        <ElOption label="Español" value="es" />
-                        <ElOption label="Français" value="fr" />
-                        <ElOption label="Deutsch" value="de" />
-                    </ElSelect>
-                </ElFormItem>
-                <ElFormItem label="Currency">
-                    <ElSelect v-model="appearance.currency">
-                        <ElOption label="USD ($)" value="usd" />
-                        <ElOption label="EUR (€)" value="eur" />
-                        <ElOption label="GBP (£)" value="gbp" />
-                        <ElOption label="CAD ($)" value="cad" />
-                    </ElSelect>
-                </ElFormItem>
-                <ElFormItem label="Time Zone">
-                    <ElSelect v-model="appearance.timezone">
-                        <ElOption label="Pacific Standard Time" value="pst" />
-                        <ElOption label="Mountain Standard Time" value="mst" />
-                        <ElOption label="Central Standard Time" value="cst" />
-                        <ElOption label="Eastern Standard Time" value="est" />
-                    </ElSelect>
-                </ElFormItem>
+                <ElForm label-position="top">
+                    <ElFormItem label="Language">
+                        <ElSelect v-model="appearance.language" size="large">
+                            <ElOption label="English" value="en" />
+                            <ElOption label="Español" value="es" />
+                            <ElOption label="Français" value="fr" />
+                            <ElOption label="Deutsch" value="de" />
+                        </ElSelect>
+                    </ElFormItem>
+                    <ElFormItem label="Currency">
+                        <ElSelect v-model="appearance.currency" size="large">
+                            <ElOption label="USD ($)" value="usd" />
+                            <ElOption label="EUR (€)" value="eur" />
+                            <ElOption label="GBP (£)" value="gbp" />
+                            <ElOption label="CAD ($)" value="cad" />
+                        </ElSelect>
+                    </ElFormItem>
+                    <ElFormItem label="Time Zone">
+                        <ElSelect v-model="appearance.timezone" size="large">
+                            <ElOption
+                                label="Pacific Standard Time"
+                                value="pst"
+                            />
+                            <ElOption
+                                label="Mountain Standard Time"
+                                value="mst"
+                            />
+                            <ElOption
+                                label="Central Standard Time"
+                                value="cst"
+                            />
+                            <ElOption
+                                label="Eastern Standard Time"
+                                value="est"
+                            />
+                        </ElSelect>
+                    </ElFormItem>
+                </ElForm>
             </div>
         </ElCard>
-        <div class="flex justify-end">
-            <ElButton type="primary" @click="handleSaveAppearance">
-                <IconSave class="mr-2" size="15" />
-                Save Appearance
-            </ElButton>
-        </div>
     </div>
 </template>
+
+<style scoped lang="scss">
+:deep(.el-select .el-select__wrapper) {
+    background: $white;
+}
+
+:deep(.el-form-item--label-top .el-form-item__label) {
+    font-weight: $font-weight-bold;
+    color: $off-black;
+}
+</style>

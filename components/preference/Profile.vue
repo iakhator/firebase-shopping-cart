@@ -16,7 +16,7 @@ function handleSaveProfile() {
     <div class="space-y-6">
         <ElCard>
             <template #header>
-                <span class="font-bold font-briscolade"
+                <span class="font-bold font-briscolade text-base"
                     >Profile Information</span
                 >
                 <div class="text-gray-500 text-sm">
@@ -25,13 +25,14 @@ function handleSaveProfile() {
             </template>
             <div class="space-y-6">
                 <div class="flex items-center gap-6">
-                    <div class="relative">
+                    <div class="avatar-upload">
                         <ElAvatar :size="96" :src="profile.avatar" />
                         <ElButton
+                            circle
                             size="small"
-                            class="absolute -bottom-2 -right-2 rounded-full h-8 w-8 p-0"
+                            class="avatar-upload-button"
                         >
-                            <IconCamera class="mr-2" size="15" />
+                            <IconCamera size="15" />
                         </ElButton>
                     </div>
                     <div>
@@ -91,5 +92,22 @@ function handleSaveProfile() {
 <style lang="scss" scoped>
 .el-button {
     width: fit-content;
+}
+
+.avatar-upload {
+    position: relative;
+    &-button {
+        position: absolute;
+        bottom: 0;
+        right: 5%;
+        background: $black;
+        color: $white;
+        width: 32px;
+        height: 32px;
+    }
+}
+
+h3 {
+    font-size: $text-base;
 }
 </style>

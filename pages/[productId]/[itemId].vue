@@ -1,6 +1,13 @@
 <template>
     <el-row class="product__grid product">
         <el-col>
+            <!-- Breadcrumb Navigation -->
+            <el-breadcrumb separator="/" class="mb-4">
+                <el-breadcrumb-item to="/">Home</el-breadcrumb-item>
+                <el-breadcrumb-item>Categories</el-breadcrumb-item>
+                <el-breadcrumb-item to="/products">Products</el-breadcrumb-item>
+                <el-breadcrumb-item>{{ item?.name }}</el-breadcrumb-item>
+            </el-breadcrumb>
             <el-row>
                 <el-col :md="12">
                     <div class="product__item-image">

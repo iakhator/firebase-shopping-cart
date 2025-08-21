@@ -1,5 +1,16 @@
 <template>
     <div class="order-list-container">
+        <ElBreadcrumb separator="/">
+            <ElBreadcrumbItem to="/">Home</ElBreadcrumbItem>
+            <ElBreadcrumbItem>Orders</ElBreadcrumbItem>
+        </ElBreadcrumb>
+        <div class="mb-4">
+            <h2 class="mb-2 font-briscolade text-2xl">My Orders</h2>
+            <p class="text-gray-600">
+                View and manage all your orders, track shipments, and review
+                your purchase history.
+            </p>
+        </div>
         <div class="filter-bar">
             <div class="filter-buttons">
                 <UIButton
@@ -304,8 +315,8 @@ const filterOptions = [
 const selectedFilter = ref('all')
 const expandedOrderId = ref(null)
 
-onMounted(() => {
-    fetchOrders()
+onMounted(async () => {
+    await fetchOrders()
 })
 
 const filteredOrders = computed(() => {

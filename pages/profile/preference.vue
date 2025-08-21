@@ -49,14 +49,29 @@ const menuItems = [
     { id: 'appearance', label: 'Appearance', icon: Palette },
 ]
 
+// Privacy section state
+
 // Security section state
 const passwordVisible = ref(false)
+
+function handleSaveShipping() {
+    // Save shipping logic
+}
+
+function handleSaveAppearance() {
+    // Save appearance logic
+}
 </script>
 
 <template>
-    <div class="container mx-auto px-4 py-8">
+    <div class="container mx-auto px-4">
+        <el-breadcrumb separator="/" class="mb-4">
+            <el-breadcrumb-item to="/">Home</el-breadcrumb-item>
+            <el-breadcrumb-item>Profile</el-breadcrumb-item>
+            <el-breadcrumb-item>Preferences</el-breadcrumb-item>
+        </el-breadcrumb>
         <div class="mb-4">
-            <h1 class="mb-2 font-briscolade">Account Preferences</h1>
+            <h2 class="mb-2 font-briscolade text-2xl">Account Preferences</h2>
             <p class="text-gray-600">
                 Manage your account settings and preferences
             </p>
@@ -105,6 +120,106 @@ const passwordVisible = ref(false)
                     v-if="activeSection"
                     :is="preferenceComponents[activeSection]"
                 />
+
+                <!-- Shipping Section -->
+                <!-- <div v-else-if="activeSection === 'shipping'" class="space-y-6">
+                    <ElCard>
+                        <template #header>
+                            <span class="font-bold">Shipping Addresses</span>
+                            <div class="text-gray-500 text-sm">
+                                Manage your shipping addresses
+                            </div>
+                        </template>
+                        <div class="space-y-4">
+                            <div
+                                v-for="address in shipping.addresses"
+                                :key="address.label"
+                                class="border rounded-lg p-4"
+                            >
+                                <div
+                                    class="flex items-start justify-between mb-2"
+                                >
+                                    <div>
+                                        <p class="font-medium">
+                                            {{ address.label }}
+                                        </p>
+                                        <ElTag
+                                            v-if="address.default"
+                                            type="success"
+                                            class="text-xs"
+                                            >Default</ElTag
+                                        >
+                                    </div>
+                                    <ElButton type="text" size="small">
+                                        <Edit class="h-4 w-4" />
+                                        Edit
+                                    </ElButton>
+                                </div>
+                                <div class="text-sm text-gray-600">
+                                    <p>{{ address.name }}</p>
+                                    <p>{{ address.address }}</p>
+                                    <p>
+                                        {{ address.city }},
+                                        {{ address.zip }}
+                                    </p>
+                                    <p>{{ address.country }}</p>
+                                </div>
+                            </div>
+                            <ElButton
+                                type="default"
+                                class="w-full bg-transparent"
+                            >
+                                <MapPin class="h-4 w-4 mr-2" />
+                                Add New Address
+                            </ElButton>
+                        </div>
+                    </ElCard>
+                    <ElCard>
+                        <template #header>
+                            <span class="font-bold">Shipping Preferences</span>
+                            <div class="text-gray-500 text-sm">
+                                Set your default shipping options
+                            </div>
+                        </template>
+                        <div class="space-y-4">
+                            <ElFormItem label="Default Shipping Speed">
+                                <ElSelect v-model="shipping.preferences.speed">
+                                    <ElOption
+                                        label="Standard (5-7 days)"
+                                        value="standard"
+                                    />
+                                    <ElOption
+                                        label="Express (2-3 days)"
+                                        value="express"
+                                    />
+                                    <ElOption
+                                        label="Overnight"
+                                        value="overnight"
+                                    />
+                                </ElSelect>
+                            </ElFormItem>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="font-medium"
+                                        >Delivery Instructions</span
+                                    >
+                                    <p class="text-sm text-gray-600">
+                                        Leave packages at door if not home
+                                    </p>
+                                </div>
+                                <ElSwitch
+                                    v-model="shipping.preferences.instructions"
+                                />
+                            </div>
+                        </div>
+                    </ElCard>
+                    <div class="flex justify-end">
+                        <ElButton type="primary" @click="handleSaveShipping">
+                            <Save class="h-4 w-4 mr-1" />
+                            Save Shipping Info
+                        </ElButton>
+                    </div>
+                </div> -->
 
                 <!-- Appearance Section -->
                 <!-- <div
@@ -234,10 +349,10 @@ nav {
         font-size: $text-sm;
 
         &.active {
-            background: $bg-blue-50;
-            color: $text-blue-600;
-            font-weight: 500;
-            border-right: 4px solid $border-blue-600;
+            background: $bg-gray-100;
+            color: $off-black;
+            font-weight: $font-weight-bold;
+            border-right: 4px solid $off-black;
         }
     }
 }
