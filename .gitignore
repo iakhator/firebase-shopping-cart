@@ -87,5 +87,8 @@ sw.*
 # Mac OSX
 .DS_Store
 
+.output
+
+
 api/config/serviceAccountKey.json
 server/api/config/serviceAccountKey.json
