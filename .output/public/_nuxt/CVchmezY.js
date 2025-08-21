@@ -1,0 +1,1 @@
+import{u as r,c as s,t,h as o,o as u}from"./D9U9Eznd.js";const _={__name:"[userId]",setup(a){const e=r().params.userId;return(c,p)=>(u(),s("div",null,"user profile "+t(o(e)),1))}};export{_ as default};

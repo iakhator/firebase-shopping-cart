@@ -122,7 +122,6 @@
 import { Delete, ShoppingBag, CreditCard } from '@element-plus/icons-vue'
 import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
 const { toUSD } = useCurrency()
-import ShoppingBagBlack from '~/components/icons/ShoppingBagBlack.vue'
 const authStore = useAuthStore()
 const cartStore = useCartStore()
 

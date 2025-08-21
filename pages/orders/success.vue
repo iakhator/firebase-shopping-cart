@@ -1,17 +1,15 @@
 <script setup>
 import UIButton from '@/components/ui/UIButton.vue'
-import { useOrderStore } from '@/stores/orderStore'
+import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
 import { CreditCard, ArrowRight, Van } from '@element-plus/icons-vue'
-import Spinner from '~/components/icons/Spinner.vue'
-
 const route = useRoute()
 const router = useRouter()
 
 const orderId = route.query.ref
-const orderStore = useOrderStore()
+const { order, isLoading, fetchOrderById } = useOrderStore()
 
-const order = computed(() => orderStore.order)
-const isLoading = computed(() => orderStore.isLoading)
+// const order = computed(() => orderStore.order)
+// const isLoading = computed(() => orderStore.isLoading)
 
 onMounted(async () => {
     console.log('Order ID from route:', orderId)
@@ -22,7 +20,7 @@ onMounted(async () => {
         return
     }
 
-    await orderStore.fetchOrderById(orderId)
+    await fetchOrderById(orderId)
 })
 
 watch(order, (newOrder) => {
@@ -44,7 +42,11 @@ const continueShopping = () => {
 <template>
     <ClientOnly>
         <div class="order-confirmation">
-            <Spinner v-if="isLoading" />
+            <LoadingSpinner
+                v-if="isLoading"
+                type="spinner"
+                message="Loading order details..."
+            />
             <el-container v-else>
                 <el-main class="confirmation-container">
                     <el-card shadow="never" class="confirmation-card">

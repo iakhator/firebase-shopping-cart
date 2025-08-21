@@ -59,7 +59,6 @@ CMD ["npm", "run", "dev"]
 # ----------------------------------
 #
 FROM base AS build
-COPY . ./
 ENV NODE_ENV=production
 RUN npm run build
 
