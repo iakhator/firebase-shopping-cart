@@ -1,9 +1,9 @@
-export const useOrderStore = () => {
+export const useOrderStore = defineStore('orders', () => {
   // Global state for orders
-  const orders = useState('orders', () => [])
-  const order = useState('order', () => {})
-  const isLoading = useState('ordersLoading', () => false)
-  const error = useState('ordersError', () => null)
+  const orders = ref([])
+  const order = ref({})
+  const isLoading = ref(false)
+  const error = ref(null)
 
   // Fetch orders from API
   async function fetchOrders() {
@@ -11,6 +11,7 @@ export const useOrderStore = () => {
     error.value = null
     try {
       const response = await $fetch('/api/orders')
+      console.log(response, 'response')
       orders.value = response.orders || []
     } catch (err) {
       error.value = err
@@ -52,4 +53,4 @@ export const useOrderStore = () => {
     fetchOrderById,
     refreshOrders,
   }
-}
+})

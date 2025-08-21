@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import { useCartStore } from '~/stores/cartStore'
 import { ssrFetch } from '~/utils/ssrFetch'
+import { useCartStore } from '~/stores/cartStore'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)

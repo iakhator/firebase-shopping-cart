@@ -1,20 +1,22 @@
+import { useAuthStore } from '~/stores/authStore'
+
 export const useFavouriteStore = defineStore('favourites', () => {
   const favourites = ref([])
   const favouriteIds = ref([])
   const loading = ref(false)
   const error = ref(null)
 
-  const authStore = useAuthStore()
-
   const toggleFavourite = async (productId) => {
     try {
       loading.value = true
       error.value = null
 
+      const authStore = useAuthStore()
       if (!authStore.user?.uid) {
         throw new Error('Please login to manage favourites')
       }
 
+      // const userId = authStore.user.uid
       const response = await $fetch('/api/user/favourite', {
         method: 'POST',
         body: {
@@ -29,7 +31,7 @@ export const useFavouriteStore = defineStore('favourites', () => {
           favouriteIds.value.push(productId)
         } else {
           favouriteIds.value = favouriteIds.value.filter(
-            (id) => id !== productId
+            (id) => id !== productId,
           )
         }
 
@@ -53,6 +55,7 @@ export const useFavouriteStore = defineStore('favourites', () => {
       loading.value = true
       error.value = null
 
+      const authStore = useAuthStore()
       if (!authStore.user?.uid) {
         return { success: false, error: 'Please login to view favourites' }
       }

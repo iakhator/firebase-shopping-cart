@@ -1,9 +1,9 @@
 export const useProductStore = defineStore('product', () => {
-  const { isLoading, error, fetchData } = useFetchWithLoading()
   const { $toast } = useNuxtApp()
 
   const products = ref([])
   const product = ref(null)
+  const isLoading = ref(false)
   const errorMessage = ref(null)
 
   const getAllProducts = async (filters) => {
@@ -14,13 +14,15 @@ export const useProductStore = defineStore('product', () => {
     if (filters?.storage?.length)
       query.set('storage', filters.storage.join(','))
 
+    isLoading.value = true
     try {
-      const data = await fetchData(`/api/products?${query.toString()}`)
-
+      const data = await $fetch(`/api/products?${query.toString()}`)
       products.value = data.products || []
     } catch (err) {
       errorMessage.value = err.message
       if ($toast) $toast.error(err.message)
+    } finally {
+      isLoading.value = false
     }
   }
 
