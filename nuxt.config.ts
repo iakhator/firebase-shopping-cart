@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     routeRules: {
       '/.well-known/**': { prerender: false, swr: false },
       // Homepage - prerender for better SEO and performance (disable for now due to Redis)
-      '/': { prerender: false },
+      // '/': { prerender: false },
       // Auth pages - SPA mode (no SSR needed)
       '/auth/**': { ssr: false },
       // Cart pages - SPA mode (user-specific content)

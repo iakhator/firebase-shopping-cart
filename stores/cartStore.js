@@ -1,11 +1,12 @@
 export const useCartStore = defineStore('cart', () => {
-  const { isLoading, error, fetchData } = useFetchWithLoading()
   const { $toast } = useNuxtApp()
 
   // State
   const cart = ref([])
   const totalQuantity = ref(0)
   const totalPrice = ref(0)
+  const isLoading = ref(false)
+  const error = ref(null)
 
   // Getters (computed)
   const isEmpty = computed(() => cart.value.length === 0)
@@ -21,12 +22,16 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   const fetchCart = async () => {
+    isLoading.value = true
     try {
-      const data = await fetchData(`/api/cart/get`)
+      const data = await $fetch(`/api/cart/get`)
       cart.value = data.cart || []
       updateTotals()
     } catch (error) {
-      console.error('Error fetching cart:', error)
+      error.value = error
+      $toast.error(error)
+    } finally {
+      isLoading.value = false
     }
   }
 
