@@ -9,8 +9,8 @@ export default defineNuxtConfig({
     },
     routeRules: {
       '/.well-known/**': { prerender: false, swr: false },
-      // Homepage - prerender for better SEO and performance
-      '/': { prerender: true },
+      // Homepage - prerender for better SEO and performance (disable for now due to Redis)
+      '/': { prerender: false },
       // Auth pages - SPA mode (no SSR needed)
       '/auth/**': { ssr: false },
       // Cart pages - SPA mode (user-specific content)
@@ -23,6 +23,16 @@ export default defineNuxtConfig({
     esbuild: {
       options: {
         format: 'esm',
+      },
+    },
+    // Prevent Redis connections during build
+    experimental: {
+      wasm: false,
+    },
+    // Set environment variables for build
+    runtimeConfig: {
+      redis: {
+        enabled: process.env.NODE_ENV === 'production',
       },
     },
   },
