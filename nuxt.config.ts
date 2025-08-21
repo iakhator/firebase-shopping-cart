@@ -25,16 +25,6 @@ export default defineNuxtConfig({
         format: 'esm',
       },
     },
-    // Prevent Redis connections during build
-    // experimental: {
-    //   wasm: false,
-    // },
-    // // Set environment variables for build
-    // runtimeConfig: {
-    //   redis: {
-    //     enabled: process.env.NODE_ENV === 'production',
-    //   },
-    // },
   },
 
   vite: {
@@ -46,18 +36,18 @@ export default defineNuxtConfig({
         },
       },
     },
-    // build: {
-    //   chunkSizeWarningLimit: 1000,
-    //   rollupOptions: {
-    //     output: {
-    //       manualChunks: {
-    //         'element-plus': ['element-plus'],
-    //         'vue-vendor': ['vue', 'vue-router'],
-    //         icons: ['@element-plus/icons-vue'],
-    //       },
-    //     },
-    //   },
-    // },
+    build: {
+      chunkSizeWarningLimit: 1000,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'element-plus': ['element-plus'],
+            'vue-vendor': ['vue', 'vue-router'],
+            icons: ['@element-plus/icons-vue'],
+          },
+        },
+      },
+    },
   },
   /*
    ** Headers of the page
