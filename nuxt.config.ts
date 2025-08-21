@@ -9,6 +9,16 @@ export default defineNuxtConfig({
     },
     routeRules: {
       '/.well-known/**': { prerender: false, swr: false },
+      // Homepage - prerender for better SEO and performance
+      '/': { prerender: true },
+      // Auth pages - SPA mode (no SSR needed)
+      '/auth/**': { ssr: false },
+      // Cart pages - SPA mode (user-specific content)
+      '/cart/**': { ssr: false },
+      // Profile pages - SPA mode (user-specific content)
+      '/profile/**': { ssr: false },
+      // Orders pages - SPA mode (user-specific content)
+      '/orders/**': { ssr: false },
     },
     esbuild: {
       options: {
@@ -23,6 +33,18 @@ export default defineNuxtConfig({
       preprocessorOptions: {
         scss: {
           additionalData: '@use "~/assets/scss/variables.scss" as *;',
+        },
+      },
+    },
+    build: {
+      chunkSizeWarningLimit: 1000,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'element-plus': ['element-plus'],
+            'vue-vendor': ['vue', 'vue-router'],
+            icons: ['@element-plus/icons-vue'],
+          },
         },
       },
     },

@@ -44,6 +44,7 @@ export const useOrderStore = () => {
   }
 
   return {
+    order,
     orders,
     isLoading,
     error,

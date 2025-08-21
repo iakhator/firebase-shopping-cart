@@ -350,19 +350,7 @@ const rules = reactive({
             trigger: 'blur',
         },
     ],
-    phone: [
-        { validator: checkPhone, trigger: 'blur' },
-        // {
-        //     required: true,
-        //     message: 'Phone number is required',
-        //     trigger: 'blur',
-        // },
-        // {
-        //     type: 'number',
-        //     message: 'Phone number is required',
-        //     trigger: 'blur',
-        // },
-    ],
+    phone: [{ validator: checkPhone, trigger: 'blur' }],
     firstName: [
         {
             required: true,

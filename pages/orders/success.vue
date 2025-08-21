@@ -8,12 +8,7 @@ const router = useRouter()
 const orderId = route.query.ref
 const { order, isLoading, fetchOrderById } = useOrderStore()
 
-// const order = computed(() => orderStore.order)
-// const isLoading = computed(() => orderStore.isLoading)
-
 onMounted(async () => {
-    console.log('Order ID from route:', orderId)
-
     if (!orderId) {
         error.value = 'No order ID provided'
         router.push('/payment/error?error=Missing order information')
@@ -23,12 +18,12 @@ onMounted(async () => {
     await fetchOrderById(orderId)
 })
 
-watch(order, (newOrder) => {
-    if (newOrder) {
-        console.log(newOrder, 'new order')
-        // Perform actions when order changes
-    }
-})
+// watch(order, (newOrder) => {
+//     if (newOrder) {
+//         console.log(newOrder, 'new order')
+//         // Perform actions when order changes
+//     }
+// })
 
 const viewOrderHistory = () => {
     router.push(`/orders`)
