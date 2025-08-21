@@ -3,8 +3,6 @@
 </template>
 
 <script setup>
-import ProductList from '../components/ProductList'
-
 const route = useRoute()
 const productStore = useProductStore()
 

@@ -8,9 +8,9 @@ export default defineNuxtConfig({
       inline: ['nodemailer', 'handlebars', '@faker-js/faker'],
     },
     routeRules: {
-      //   '/.well-known/**': { prerender: false, swr: false },
+      '/.well-known/**': { prerender: false, swr: false },
       //   // Homepage - prerender for better SEO and performance (disable for now due to Redis)
-      //   // '/': { prerender: false },
+      '/': { prerender: false },
       //   // Auth pages - SPA mode (no SSR needed)
       '/auth/**': { ssr: false },
       //   // Cart pages - SPA mode (user-specific content)
@@ -25,16 +25,6 @@ export default defineNuxtConfig({
         format: 'esm',
       },
     },
-    // Prevent Redis connections during build
-    // experimental: {
-    //   wasm: false,
-    // },
-    // // Set environment variables for build
-    // runtimeConfig: {
-    //   redis: {
-    //     enabled: process.env.NODE_ENV === 'production',
-    //   },
-    // },
   },
 
   vite: {
@@ -46,18 +36,10 @@ export default defineNuxtConfig({
         },
       },
     },
-    // build: {
-    //   chunkSizeWarningLimit: 1000,
-    //   rollupOptions: {
-    //     output: {
-    //       manualChunks: {
-    //         'element-plus': ['element-plus'],
-    //         'vue-vendor': ['vue', 'vue-router'],
-    //         icons: ['@element-plus/icons-vue'],
-    //       },
-    //     },
-    //   },
-    // },
+    build: {
+      chunkSizeWarningLimit: 2000,
+      // Removed complex rollup options that cause initialization errors
+    },
   },
   /*
    ** Headers of the page
