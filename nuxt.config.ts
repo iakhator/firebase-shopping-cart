@@ -26,15 +26,15 @@ export default defineNuxtConfig({
       },
     },
     // Prevent Redis connections during build
-    experimental: {
-      wasm: false,
-    },
-    // Set environment variables for build
-    runtimeConfig: {
-      redis: {
-        enabled: process.env.NODE_ENV === 'production',
-      },
-    },
+    // experimental: {
+    //   wasm: false,
+    // },
+    // // Set environment variables for build
+    // runtimeConfig: {
+    //   redis: {
+    //     enabled: process.env.NODE_ENV === 'production',
+    //   },
+    // },
   },
 
   vite: {
