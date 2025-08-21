@@ -52,11 +52,16 @@
             <h2 class="collection-heading font-briscolade text-2xl">
                 Browse our latest collection
             </h2>
-            <Spinner v-if="isLoading" />
+            <LoadingSpinner
+                v-if="isLoading"
+                type="spinner"
+                size="small"
+                message="Loading products..."
+            />
             <div v-else-if="!products?.length" class="no-products">
                 <div class="no-products-container">
                     <div class="no-products-icon">
-                        <IconBox size="70" color="#000" />
+                        <IconBox size="70" color="#d1d5db" />
                     </div>
 
                     <div class="no-products-content">
@@ -229,8 +234,8 @@
 
 <script setup>
 import UIButton from '~/components/ui/UIButton'
+import LoadingSpinner from '~/components/ui/LoadingSpinner.vue'
 import { Filter, Close, ArrowRight, Check } from '@element-plus/icons-vue'
-import Spinner from '~/components/icons/Spinner.vue'
 
 const isFavHovered = ref('')
 const showMobileFilters = ref(false)
@@ -298,7 +303,6 @@ const props = defineProps({
 })
 
 async function addToWishlist(product) {
-    // console.log('wish list', item)
     const result = await favouritesStore.toggleFavourite(product.id)
 
     if (result.success) {
@@ -306,11 +310,6 @@ async function addToWishlist(product) {
     } else {
         $toast.error(result.error)
     }
-}
-
-function handleHello() {
-    // console.log('hello one', $noty)
-    $toast.success('Hello')
 }
 
 function toggleMobileFilters() {
@@ -424,7 +423,7 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 60vh;
+    min-height: 40vh;
     padding: 40px 20px;
 }
 
@@ -442,9 +441,8 @@ onUnmounted(() => {
 
 .no-products-content {
     .no-products-title {
-        font-size: 1.3rem;
-        font-weight: 700;
-        color: $black;
+        font-size: 1rem;
+        font-weight: 600;
         margin: 0 0 12px 0;
         line-height: 1.2;
 

@@ -1,6 +1,11 @@
 <template>
     <ClientOnly>
         <div class="checkout">
+            <el-breadcrumb separator="/" class="mb-4">
+                <el-breadcrumb-item to="/">Home</el-breadcrumb-item>
+                <el-breadcrumb-item>Profile</el-breadcrumb-item>
+                <el-breadcrumb-item>Preferences</el-breadcrumb-item>
+            </el-breadcrumb>
             <h2 class="font-briscolade">Checkout</h2>
             <div class="checkout-container">
                 <!-- Payment Section (Left) -->
