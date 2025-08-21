@@ -52,7 +52,7 @@ COPY . .
 FROM base AS dev
 ENV NODE_ENV=development
 
-# COPY . .
+# COPY . ./
 
 EXPOSE 3000
 CMD ["npm", "run", "dev"]
@@ -68,7 +68,7 @@ RUN npm run build
 # ----------------------------------
 #  Production Stage
 # ----------------------------------
-FROM base AS prod
+FROM node:22-alpine AS prod
 WORKDIR /app
 
 ENV NODE_ENV=production
