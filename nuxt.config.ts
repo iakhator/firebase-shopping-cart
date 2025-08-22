@@ -38,7 +38,6 @@ export default defineNuxtConfig({
     },
     build: {
       chunkSizeWarningLimit: 2000,
-      // Removed complex rollup options that cause initialization errors
     },
   },
   /*

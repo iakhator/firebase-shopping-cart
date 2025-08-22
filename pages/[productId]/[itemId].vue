@@ -97,12 +97,21 @@
                         </UIButton>
                         <UIButton
                             size="large"
-                            @click="addToWhishlist"
                             variant="secondary"
                             label="Add to wishlist"
+                            @click="addToWishlist(item)"
+                            @mouseenter="isFavHovered = item.id"
+                            @mouseleave="isFavHovered = ''"
                         >
                             <template #icon>
-                                <el-icon class="mr-2"><Star /></el-icon>
+                                <IconHeart
+                                    :size="15"
+                                    :fill="
+                                        favouritesStore?.isFavourite(item.id)
+                                            ? '#000000'
+                                            : 'none'
+                                    "
+                                />
                             </template>
                         </UIButton>
                     </div>
@@ -327,10 +336,11 @@ import UIButton from '~/components/ui/UIButton'
 import UICounter from '~/components/ui/UICounter'
 import UIColorBox from '~/components/ui/UIColorBox'
 import { ShoppingCart, Star, Van } from '@element-plus/icons-vue'
-import { ref, computed, onMounted } from 'vue'
+// import { ref, computed, onMounted } from 'vue'
 
 const cartStore = useCartStore()
 const productStore = useProductStore()
+const favouriteStore = useFavouriteStore()
 
 const route = useRoute()
 const { toUSD } = useCurrency()
@@ -441,9 +451,14 @@ function handleBundleChange(item) {
 //     qty.value = value
 // }
 
-function addToWhishlist() {
-    // wishlistStore.addToWishlist(item.value.id)
-    console.log('Added to wishlist')
+async function addToWishlist(product) {
+    const result = await favouritesStore.toggleFavourite(product.id)
+
+    if (result.success) {
+        $toast.success(result.message)
+    } else {
+        $toast.error(result.error)
+    }
 }
 
 async function updateCart() {

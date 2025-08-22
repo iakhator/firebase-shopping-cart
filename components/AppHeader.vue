@@ -40,6 +40,7 @@
                             </template>
                             <template v-else>
                                 <el-dropdown
+                                    ref="profileDropdown"
                                     trigger="click"
                                     placement="bottom-end"
                                 >
@@ -81,6 +82,7 @@
                                                 <NuxtLink
                                                     class="link"
                                                     :to="`/user/${uid}`"
+                                                    @click="closeDropdown"
                                                 >
                                                     <el-icon
                                                         ><Avatar
@@ -90,6 +92,7 @@
                                                 <NuxtLink
                                                     class="link"
                                                     to="/orders"
+                                                    @click="closeDropdown"
                                                 >
                                                     <el-icon><Grid /></el-icon>
                                                     <span>View Orders</span>
@@ -98,6 +101,7 @@
                                                 <NuxtLink
                                                     class="link"
                                                     to="/profile/preference"
+                                                    @click="closeDropdown"
                                                 >
                                                     <el-icon
                                                         ><Setting
@@ -158,6 +162,7 @@ const cartStore = useCartStore()
 
 const activeIndex = ref('1')
 const profileOpen = ref(false)
+const profileDropdown = ref(null)
 
 // Handle desktop menu selection
 const handleSelect = (key) => {
@@ -173,6 +178,12 @@ const handleMobileSelect = (key) => {
 // Toggle mobile menu
 const toggleDrawer = () => {
     profileOpen.value = !profileOpen.value
+}
+
+const closeDropdown = () => {
+    if (profileDropdown.value) {
+        profileDropdown.value.handleClose()
+    }
 }
 
 onMounted(async () => {
@@ -192,7 +203,7 @@ async function signOut() {
     await authStore.logout()
     navigateTo('/')
     await nextTick()
-    toggleDrawer()
+    closeDropdown()
 }
 </script>
 
