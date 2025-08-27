@@ -7,7 +7,7 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     globals: true,
-    setupFiles: [],
+    setupFiles: ['./tests/setup.js'],
   },
   resolve: {
     alias: {
@@ -18,5 +18,9 @@ export default defineConfig({
   define: {
     __VUE_OPTIONS_API__: true,
     __VUE_PROD_DEVTOOLS__: false,
+    global: 'globalThis',
+  },
+  optimizeDeps: {
+    include: ['vue', '@vue/test-utils'],
   },
 })

@@ -20,11 +20,13 @@
   "dependencies": {
     "@element-plus/nuxt": "^1.0.10",
     "@faker-js/faker": "^9.9.0",
+    "@nuxt/eslint": "^1.9.0",
     "@nuxtjs/style-resources": "^1.2.2",
     "@pinia/nuxt": "^0.11.2",
     "@sidebase/nuxt-session": "^0.2.8",
     "@stripe/stripe-js": "^7.3.1",
     "dayjs": "^1.11.13",
+    "eslint": "^9.34.0",
     "firebase": "^11.6.0",
     "firebase-admin": "^13.2.0",
     "handlebars": "^4.7.8",

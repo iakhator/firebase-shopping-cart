@@ -48,19 +48,6 @@ jobs:
             echo "This is just a suggestion - PR will still be processed"
           fi
 
-      - name: Check PR description
-        run: |
-          PR_BODY="${{ github.event.pull_request.body }}"
-
-          if [ -z "$PR_BODY" ] || [ ${#PR_BODY} -lt 10 ]; then
-            echo "⚠️ PR description is very short or missing"
-            echo "Consider adding a brief description of your changes"
-            echo "This helps reviewers understand the context"
-            # Don't fail - just warn
-          else
-            echo "✅ PR description provided"
-          fi
-
       - name: Check for breaking changes
         run: |
           if [[ "${{ github.event.pull_request.title }}" == *"BREAKING CHANGE"* ]] ||
