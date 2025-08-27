@@ -1,5 +1,5 @@
 <template>
-    <product-list :products="products" :isLoading="productStore.isLoading" />
+    <product-list :products="products" :is-loading="productStore.isLoading" />
 </template>
 
 <script setup>

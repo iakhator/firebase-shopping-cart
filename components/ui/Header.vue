@@ -23,16 +23,16 @@
             </div>
 
             <!-- Spacer -->
-            <div class="flex-grow"></div>
+            <div class="flex-grow"/>
 
             <!-- Desktop Actions -->
             <div class="actions desktop-actions">
                 <el-badge :value="cartQuantity" class="cart-badge">
                     <el-button
-                        @click="goToCart"
                         circle
                         aria-label="Cart"
                         class="icon-btn"
+                        @click="goToCart"
                     >
                         <el-icon><IconShoppingBag /></el-icon>
                     </el-button>
@@ -68,10 +68,10 @@
                 </el-dropdown>
                 <el-button
                     v-else
-                    @click="goToLogin"
                     circle
                     aria-label="Login"
                     class="icon-btn"
+                    @click="goToLogin"
                 >
                     <el-icon><IconCircleUserRound /></el-icon>
                 </el-button>
@@ -130,20 +130,20 @@
             <div class="drawer-actions">
                 <el-badge :value="cartQuantity" class="cart-badge">
                     <el-button
-                        @click="goToCart"
                         circle
                         aria-label="Cart"
                         class="icon-btn"
+                        @click="goToCart"
                     >
                         <el-icon><IconShoppingBag /></el-icon>
                     </el-button>
                 </el-badge>
                 <el-button
                     v-if="!isAuthenticated"
-                    @click="goToLogin"
                     circle
                     aria-label="Login"
                     class="icon-btn"
+                    @click="goToLogin"
                 >
                     <el-icon><IconCircleUserRound /></el-icon>
                 </el-button>
@@ -154,24 +154,24 @@
                     </div>
                     <el-divider />
                     <el-button
-                        @click="goToProfile"
                         class="drawer-user-btn"
                         link
+                        @click="goToProfile"
                     >
                         <el-icon><Avatar /></el-icon> Profile
                     </el-button>
-                    <el-button @click="goToOrders" class="drawer-user-btn" link>
+                    <el-button class="drawer-user-btn" link @click="goToOrders">
                         <el-icon><Grid /></el-icon> Orders
                     </el-button>
                     <el-button
-                        @click="goToSettings"
                         class="drawer-user-btn"
                         link
+                        @click="goToSettings"
                     >
                         <el-icon><Setting /></el-icon> Preferences
                     </el-button>
                     <el-divider />
-                    <el-button @click="signOut" class="drawer-user-btn" link>
+                    <el-button class="drawer-user-btn" link @click="signOut">
                         <el-icon><SwitchButton /></el-icon> Sign Out
                     </el-button>
                 </div>

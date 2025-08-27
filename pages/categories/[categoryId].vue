@@ -4,7 +4,6 @@
 
 <script setup>
 const route = useRoute()
-const productId = ref('')
 const categoryProducts = ref([])
 
 onMounted(async () => {

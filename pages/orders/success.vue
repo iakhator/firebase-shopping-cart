@@ -61,8 +61,8 @@ const continueShopping = () => {
                                 >
                                     <path
                                         d="M22 11.08V12a10 10 0 1 1-5.93-9.14"
-                                    ></path>
-                                    <path d="m9 11 3 3L22 4"></path>
+                                    />
+                                    <path d="m9 11 3 3L22 4"/>
                                 </svg>
                             </div>
                             <h1 class="title">Order Confirmed!</h1>
@@ -89,12 +89,12 @@ const continueShopping = () => {
                                             stroke-linejoin="round"
                                             class="lucide lucide-package h-5 w-5 mr-2"
                                         >
-                                            <path d="m7.5 4.27 9 5.15"></path>
+                                            <path d="m7.5 4.27 9 5.15"/>
                                             <path
                                                 d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"
-                                            ></path>
-                                            <path d="m3.3 7 8.7 5 8.7-5"></path>
-                                            <path d="M12 22V12"></path></svg
+                                            />
+                                            <path d="m3.3 7 8.7 5 8.7-5"/>
+                                            <path d="M12 22V12"/></svg
                                     ></span>
                                     Order Details
                                 </h2>
@@ -150,7 +150,7 @@ const continueShopping = () => {
                                 </div>
                             </div>
 
-                            <el-divider></el-divider>
+                            <el-divider/>
 
                             <div class="space-y-2">
                                 <div class="flex justify-between">
@@ -171,8 +171,8 @@ const continueShopping = () => {
                                     data-orientation="horizontal"
                                     role="none"
                                     class="shrink-0 bg-border h-[1px] w-full"
-                                ></div>
-                                <el-divider></el-divider>
+                                />
+                                <el-divider/>
                                 <div
                                     class="flex justify-between text-lg font-bold"
                                 >
@@ -234,7 +234,7 @@ const continueShopping = () => {
                             />
                         </div>
 
-                        <el-divider></el-divider>
+                        <el-divider/>
 
                         <!-- Help Section -->
                         <div class="help-section">

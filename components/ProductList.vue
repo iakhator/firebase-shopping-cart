@@ -2,7 +2,7 @@
     <div class="product-layout">
         <!-- Mobile Filter Toggle -->
         <div class="mobile-filter-toggle">
-            <el-button @click="toggleMobileFilters" class="filter-btn">
+            <el-button class="filter-btn" @click="toggleMobileFilters">
                 <el-icon class="filter-toggle-icon"><Filter /></el-icon>
                 Filters
                 <el-icon
@@ -14,7 +14,7 @@
         </div>
 
         <!-- Filter Sidebar (Desktop) -->
-        <div class="sidebar-container" v-if="!isMobile">
+        <div v-if="!isMobile" class="sidebar-container">
             <div class="sidebar-content">
                 <div class="flex justify-between items-center">
                     <h3>Filters</h3>
@@ -40,7 +40,7 @@
                 "
             >
                 <h3 style="margin: 0" class="font-briscolade">Filters</h3>
-                <el-button @click="closeMobileFilters" circle class="close-btn">
+                <el-button circle class="close-btn" @click="closeMobileFilters">
                     <el-icon><Close /></el-icon>
                 </el-button>
             </div>
@@ -83,8 +83,8 @@
                     <div class="product-sort">
                         <el-dropdown
                             placement="bottom-end"
-                            @command="handleSortCommand"
                             trigger="click"
+                            @command="handleSortCommand"
                         >
                             <UIButton
                                 label="Sort"
@@ -153,7 +153,7 @@
                                             :src="item?.imageUrl"
                                             alt=""
                                             loading="lazy"
-                                        />
+                                        >
                                     </span>
                                     <div class="product__grid-w__list-content">
                                         <span
@@ -202,6 +202,7 @@
                                             <el-button
                                                 text
                                                 circle
+                                                class="favourite"
                                                 @click.prevent="
                                                     addToWishlist(item)
                                                 "
@@ -209,7 +210,6 @@
                                                     isFavHovered = item.id
                                                 "
                                                 @mouseleave="isFavHovered = ''"
-                                                class="favourite"
                                                 ><IconHeart
                                                     :size="24"
                                                     :fill="
@@ -262,7 +262,7 @@ const selectedSort = ref('price-asc')
 
 const sortedProducts = computed(() => {
     if (!Array.isArray(props.products)) return []
-    let sorted = [...props.products]
+    const sorted = [...props.products]
     switch (selectedSort.value) {
         case 'price-asc':
             sorted.sort((a, b) => {

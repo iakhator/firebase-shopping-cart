@@ -20,12 +20,11 @@
                     size="small"
                     variant="success"
                     style="flex-basis: fit-content"
-                    @click="selectedFilter = option.value"
                     :type="
                         selectedFilter === option.value ? 'primary' : 'default'
                     "
-                >
-                </UIButton>
+                    @click="selectedFilter = option.value"
+                />
             </div>
         </div>
         <LoadingSpinner
@@ -39,7 +38,7 @@
             <p>Start shopping to fill your cart!</p>
         </div>
 
-        <div class="orders-container" v-else>
+        <div v-else class="orders-container">
             <div
                 v-for="order in filteredOrders"
                 :key="order.id"
@@ -48,10 +47,10 @@
                 <div class="order-header">
                     <div class="order-header-left">
                         <el-button
-                            @click="toggleOrderExpansion(order.id)"
                             circle
                             size="small"
                             class="expand-button"
+                            @click="toggleOrderExpansion(order.id)"
                         >
                             <el-icon>
                                 <Plus
@@ -105,7 +104,7 @@
                                             :src="item.imageUrl || ''"
                                             :alt="item.name"
                                             class="item-image"
-                                        />
+                                        >
                                         <div class="item-info">
                                             <h5>{{ item.name }}</h5>
                                             <p>
@@ -283,7 +282,7 @@ const { $dayjs } = useNuxtApp()
 
 const orders = computed(() => orderStore.orders)
 const isLoading = computed(() => orderStore.isLoading)
-const error = computed(() => orderStore.error)
+// const error = computed(() => orderStore.error)
 
 const statusConfig = {
     processing: {

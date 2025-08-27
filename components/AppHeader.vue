@@ -8,8 +8,8 @@
             background-color="#000"
             text-color="#fff"
             :ellipsis="false"
-            @select="handleSelect"
             aria-label="Main Navigation Menu"
+            @select="handleSelect"
         >
             <div class="el-top-menu">
                 <el-menu-item index="0">
@@ -28,12 +28,12 @@
                         <el-menu-item
                             index="5"
                             role="button"
+                            class="el-menu-navlist"
                             @click="
                                 isAuthenticatedUser
                                     ? toggleDrawer()
                                     : navigateTo('/auth/login')
                             "
-                            class="el-menu-navlist"
                         >
                             <template v-if="!isAuthenticatedUser">
                                 <p class="display-name">Account</p>
@@ -112,9 +112,9 @@
                                             <UIButton
                                                 variant="primary"
                                                 size="large"
-                                                @click="signOut"
                                                 label="SIGN OUT"
                                                 style="width: 100%"
+                                                @click="signOut"
                                             >
                                                 <template #icon-right>
                                                     <span class="ml-2">
@@ -146,8 +146,6 @@
 </template>
 
 <script setup>
-import { Menu, Close } from '@element-plus/icons-vue'
-import UIButton from '~/components/ui/UIButton.vue'
 import {
     UserFilled,
     Setting,
@@ -155,8 +153,8 @@ import {
     Avatar,
     SwitchButton,
 } from '@element-plus/icons-vue'
+import UIButton from '~/components/ui/UIButton.vue'
 
-const router = useRouter()
 const authStore = useAuthStore()
 const cartStore = useCartStore()
 
@@ -170,10 +168,10 @@ const handleSelect = (key) => {
 }
 
 // Handle mobile menu selection
-const handleMobileSelect = (key) => {
-    activeIndex.value = key
-    mobileMenuOpen.value = false
-}
+// const handleMobileSelect = (key) => {
+//     activeIndex.value = key
+//     mobileMenuOpen.value = false
+// }
 
 // Toggle mobile menu
 const toggleDrawer = () => {

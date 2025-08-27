@@ -1,8 +1,8 @@
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware(() => {
   const authStore = useAuthStore()
 
   // If user is authenticated, redirect them away from auth pages
-  if (authStore.isAuthenticated) {
+  if (authStore.authenticated) {
     return navigateTo('/')
   }
 })

@@ -148,8 +148,8 @@
                     class="black auth-button"
                     :loading="loading"
                     native-type="submit"
-                    @click="handleSubmit"
                     label="Create Account"
+                    @click="handleSubmit"
                 />
             </el-form-item>
 
@@ -179,7 +179,7 @@
 </template>
 
 <script setup>
-import { Message, Lock, ShoppingBag, User } from '@element-plus/icons-vue'
+import { Message, Lock, User } from '@element-plus/icons-vue'
 
 // Meta tags for the page
 definePageMeta({

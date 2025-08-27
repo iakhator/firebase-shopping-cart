@@ -1,4 +1,4 @@
-import { adminAuth, adminFirestore as db } from '~/server/utils/firebaseAdmin'
+import { adminFirestore as db } from '~/server/utils/firebaseAdmin'
 
 export default defineEventHandler(async (event) => {
   try {

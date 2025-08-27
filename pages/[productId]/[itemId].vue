@@ -46,16 +46,16 @@
 
                                 <div class="item__contents-bundle-options">
                                     <UIButton
+                                        v-for="item in item.bundles"
+                                        :key="item.id"
                                         :class="{
                                             'is-active':
                                                 itemBundle.id === item.id,
                                         }"
-                                        v-for="item in item.bundles"
-                                        @click="handleBundleChange(item)"
-                                        :key="item.id"
                                         :label="`${item?.ram}/${item?.storage}`"
                                         variant="transparent"
                                         size="large"
+                                        @click="handleBundleChange(item)"
                                     />
                                 </div>
                             </div>
@@ -66,14 +66,14 @@
                                 </p>
                                 <UIColorBox
                                     :variants="item.variant"
-                                    :activeVariant="selectedVariant"
-                                    @update:activeVariant="
+                                    :active-variant="selectedVariant"
+                                    @update:active-variant="
                                         selectedVariant = $event
                                     "
                                 />
                                 <p
-                                    class="error el-tag--danger"
                                     v-if="errorMessage"
+                                    class="error el-tag--danger"
                                 >
                                     {{ errorMessage }}
                                 </p>
@@ -88,8 +88,8 @@
                         <UIButton
                             size="large"
                             class="black flex-3"
-                            @click="updateCart"
                             label="Add to cart"
+                            @click="updateCart"
                         >
                             <template #icon>
                                 <el-icon class="mr-2"><ShoppingCart /></el-icon>
@@ -168,7 +168,7 @@
                                     </span>
                                 </div>
                                 <!-- Divider -->
-                                <div class="w-full border-t my-8"></div>
+                                <div class="w-full border-t my-8" />
 
                                 <!-- Display reviews list -->
                                 <div
@@ -244,8 +244,8 @@
                                             >Your Comment:</label
                                         >
                                         <el-input
-                                            type="textarea"
                                             v-model="userComment"
+                                            type="textarea"
                                             :rows="4"
                                             placeholder="Share your experience with this product..."
                                             maxlength="500"
@@ -254,8 +254,8 @@
                                         />
                                     </div>
                                     <p
-                                        class="error el-tag--danger"
                                         v-if="ratingErrorMessage"
+                                        class="error el-tag--danger"
                                     >
                                         {{ ratingErrorMessage }}
                                     </p>
@@ -335,7 +335,7 @@
 import UIButton from '~/components/ui/UIButton'
 import UICounter from '~/components/ui/UICounter'
 import UIColorBox from '~/components/ui/UIColorBox'
-import { ShoppingCart, Star, Van } from '@element-plus/icons-vue'
+import { ShoppingCart } from '@element-plus/icons-vue'
 // import { ref, computed, onMounted } from 'vue'
 
 const cartStore = useCartStore()
@@ -349,8 +349,7 @@ const itemBundle = ref({})
 const selectedVariant = ref({})
 const qty = ref(1)
 
-let errorMessage = ref('')
-const loading = ref(true)
+const errorMessage = ref('')
 
 const productId = route.params.itemId
 
@@ -443,8 +442,8 @@ function submitReview() {
     }, 3000)
 }
 
-function handleBundleChange(item) {
-    itemBundle.value = item
+function handleBundleChange(itm) {
+    itemBundle.value = itm
 }
 
 // function handleQtyChange(value) {
@@ -452,7 +451,7 @@ function handleBundleChange(item) {
 // }
 
 async function addToWishlist(product) {
-    const result = await favouritesStore.toggleFavourite(product.id)
+    const result = await favouriteStore.toggleFavourite(product.id)
 
     if (result.success) {
         $toast.success(result.message)

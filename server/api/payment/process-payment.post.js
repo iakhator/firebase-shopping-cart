@@ -1,6 +1,6 @@
 // server/api/create-payment-intent.post.js
 import Stripe from 'stripe'
-import { adminAuth, adminFirestore as db } from '~/server/utils/firebaseAdmin'
+import { adminFirestore as db } from '~/server/utils/firebaseAdmin'
 import { generateOrderId } from '~/server/utils/orders'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET)

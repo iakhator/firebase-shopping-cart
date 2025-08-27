@@ -11,7 +11,7 @@
             :tabindex="activeVariant.color === variant.color ? '0' : '-1'"
             @click="setActive(variant, index)"
             @keydown="handleKeydown($event, variant)"
-        ></div>
+        />
     </div>
 </template>
 
@@ -29,7 +29,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:activeVariant'])
 
-const setActive = (variant, index) => {
+const setActive = (variant) => {
     if (props.activeVariant.color !== variant.color) {
         emit('update:activeVariant', variant)
     }

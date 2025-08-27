@@ -7,9 +7,9 @@
             class=".el-input"
         >
             <el-input
-                class="custom-input"
                 :id="id"
                 v-model="inputValue"
+                class="custom-input"
                 :type="type"
                 :placeholder="placeholder"
                 :disabled="disabled"
@@ -31,14 +31,14 @@
 
 <script setup>
 const props = defineProps({
-    modelValue: String,
-    label: String,
+    modelValue: { type: String, default: '' },
+    label: { type: String, default: '' },
     type: { type: String, default: 'text' },
-    placeholder: String,
-    disabled: Boolean,
-    error: String,
-    id: String,
-    prop: String,
+    placeholder: { type: String, default: '' },
+    disabled: { type: Boolean, default: false },
+    error: { type: String, default: '' },
+    id: { type: String, default: '' },
+    prop: { type: String, default: '' },
 })
 
 const emit = defineEmits(['update:modelValue', 'focus', 'blur'])
