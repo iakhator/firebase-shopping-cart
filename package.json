@@ -21,7 +21,7 @@
     "@element-plus/nuxt": "^1.0.10",
     "@faker-js/faker": "^9.9.0",
     "@nuxtjs/style-resources": "^1.2.2",
-    "@pinia/nuxt": "^0.5.4",
+    "@pinia/nuxt": "^0.11.2",
     "@sidebase/nuxt-session": "^0.2.8",
     "@stripe/stripe-js": "^7.3.1",
     "dayjs": "^1.11.13",
@@ -33,7 +33,7 @@
     "nodemailer": "^6.10.1",
     "nuxt": "^3.13.2",
     "nuxt-lucide-icons": "^1.0.5",
-    "pinia": "^2.2.2",
+    "pinia": "^3.0.3",
     "sass": "^1.64.1",
     "sass-loader": "^13.3.0",
     "stripe": "^12.5.0",
@@ -42,7 +42,13 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "^1.4.1",
+    "@nuxt/test-utils": "^3.19.2",
+    "@pinia/testing": "^1.0.2",
+    "@vue/test-utils": "^2.4.6",
     "element-plus": "^2.8.3",
-    "vite-plugin-svg-sprite": "^0.6.2"
+    "happy-dom": "^18.0.1",
+    "playwright-core": "^1.55.0",
+    "vite-plugin-svg-sprite": "^0.6.2",
+    "vitest": "^3.2.4"
   }
 }

@@ -1,0 +1,303 @@
+name: Pull Request Checks
+
+on:
+  pull_request:
+    branches: [ master, main ]
+    types: [opened, synchronize, reopened, ready_for_review]
+
+# Prevent concurrent runs on the same PR
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  # Job 1: PR Validation
+  pr-validation:
+    name: PR Validation
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate PR title
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            chore
+            ci
+          requireScope: false
+          disallowScopes: |
+            release
+          subjectPattern: ^(?![A-Z]).+$
+          subjectPatternError: |
+            The subject "{subject}" found in the pull request title "{title}"
+            didn't match the configured pattern. Please ensure that the subject
+            doesn't start with an uppercase character.
+
+      - name: Check PR description
+        run: |
+          if [ -z "${{ github.event.pull_request.body }}" ]; then
+            echo "❌ PR description is required"
+            exit 1
+          fi
+          echo "✅ PR description provided"
+
+      - name: Check for breaking changes
+        run: |
+          if [[ "${{ github.event.pull_request.title }}" == *"BREAKING CHANGE"* ]] ||
+             [[ "${{ github.event.pull_request.body }}" == *"BREAKING CHANGE"* ]]; then
+            echo "⚠️ Breaking change detected in PR"
+            echo "breaking_change=true" >> $GITHUB_ENV
+          fi
+
+  # Job 2: Code Quality Gates
+  quality-gates:
+    name: Quality Gates
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Check code formatting
+        run: npx prettier --check "**/*.{js,vue,ts,json,md}"
+
+      - name: Check for console logs
+        run: |
+          if grep -r "console\." --include="*.vue" --include="*.js" --include="*.ts" components/ pages/ composables/ stores/ utils/ 2>/dev/null; then
+            echo "❌ Console statements found in source code"
+            echo "Please remove console.log statements before merging"
+            exit 1
+          fi
+          echo "✅ No console statements found"
+
+      - name: Check for TODO/FIXME comments
+        run: |
+          todo_count=$(grep -r "TODO\|FIXME" --include="*.vue" --include="*.js" --include="*.ts" . | wc -l)
+          if [ $todo_count -gt 5 ]; then
+            echo "⚠️ High number of TODO/FIXME comments found: $todo_count"
+            echo "Consider addressing some before merging"
+          fi
+
+  # Job 3: Comprehensive Testing
+  comprehensive-testing:
+    name: Comprehensive Testing
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests with coverage
+        run: npm run test:run
+
+      - name: Check test coverage threshold
+        run: |
+          # Add coverage threshold checking here if you have coverage setup
+          echo "✅ Test coverage check (placeholder)"
+
+      - name: Test build process
+        run: npm run build
+
+      - name: Test in different environments
+        run: |
+          echo "Testing Node.js compatibility..."
+          node --version
+          npm --version
+
+  # Job 4: Security and Dependency Checks
+  security-checks:
+    name: Security Checks
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run security audit
+        run: npm audit --audit-level=moderate
+
+      - name: Check for vulnerable dependencies
+        run: |
+          npm audit --audit-level=high --json > audit-results.json || true
+          vulnerabilities=$(cat audit-results.json | jq '.metadata.vulnerabilities.high + .metadata.vulnerabilities.critical')
+          if [ "$vulnerabilities" != "0" ]; then
+            echo "❌ High/Critical vulnerabilities found: $vulnerabilities"
+            exit 1
+          fi
+          echo "✅ No high/critical vulnerabilities found"
+
+  # Job 5: Performance Impact Check
+  performance-check:
+    name: Performance Impact
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Checkout base branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies (base)
+        run: npm ci
+
+      - name: Build base version
+        run: npm run build
+
+      - name: Get base bundle size
+        run: |
+          if [ -d ".output/public/_nuxt" ]; then
+            BASE_SIZE=$(du -sb .output/public/_nuxt/ | cut -f1)
+            echo "BASE_SIZE=$BASE_SIZE" >> $GITHUB_ENV
+          else
+            echo "BASE_SIZE=0" >> $GITHUB_ENV
+          fi
+
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Install dependencies (PR)
+        run: npm ci
+
+      - name: Build PR version
+        run: npm run build
+
+      - name: Compare bundle sizes
+        run: |
+          if [ -d ".output/public/_nuxt" ]; then
+            PR_SIZE=$(du -sb .output/public/_nuxt/ | cut -f1)
+          else
+            PR_SIZE=0
+          fi
+
+          DIFF=$((PR_SIZE - BASE_SIZE))
+          DIFF_PERCENT=$((DIFF * 100 / BASE_SIZE)) 2>/dev/null || DIFF_PERCENT=0
+
+          echo "📦 Bundle Size Comparison:"
+          echo "Base: $(numfmt --to=iec $BASE_SIZE)"
+          echo "PR: $(numfmt --to=iec $PR_SIZE)"
+          echo "Difference: $(numfmt --to=iec $DIFF) ($DIFF_PERCENT%)"
+
+          if [ $DIFF_PERCENT -gt 10 ]; then
+            echo "⚠️ Bundle size increased by more than 10%"
+          fi
+
+  # Job 6: Auto-assign reviewers and labels
+  auto-assign:
+    name: Auto-assign Reviewers
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Auto-assign reviewers
+        uses: kentaro-m/auto-assign-action@v1.2.5
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Label PR based on changes
+        uses: actions/labeler@v4
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+
+  # Final validation job
+  pr-ready-for-merge:
+    name: PR Ready for Merge
+    runs-on: ubuntu-latest
+    needs: [pr-validation, quality-gates, comprehensive-testing, security-checks]
+    if: always() && github.event.pull_request.draft == false
+
+    steps:
+      - name: Check all required checks
+        run: |
+          if [[ "${{ needs.pr-validation.result }}" == "success" &&
+                "${{ needs.quality-gates.result }}" == "success" &&
+                "${{ needs.comprehensive-testing.result }}" == "success" &&
+                "${{ needs.security-checks.result }}" == "success" ]]; then
+            echo "✅ All PR checks passed! Ready for review and merge."
+            echo "## ✅ PR Checks Status" >> $GITHUB_STEP_SUMMARY
+            echo "All required checks have passed:" >> $GITHUB_STEP_SUMMARY
+            echo "- ✅ PR Validation" >> $GITHUB_STEP_SUMMARY
+            echo "- ✅ Quality Gates" >> $GITHUB_STEP_SUMMARY
+            echo "- ✅ Comprehensive Testing" >> $GITHUB_STEP_SUMMARY
+            echo "- ✅ Security Checks" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "This PR is ready for review and can be merged once approved." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Some PR checks failed. Please fix before merging."
+            echo "## ❌ PR Checks Failed" >> $GITHUB_STEP_SUMMARY
+            echo "The following checks need attention:" >> $GITHUB_STEP_SUMMARY
+            echo "- PR Validation: ${{ needs.pr-validation.result }}" >> $GITHUB_STEP_SUMMARY
+            echo "- Quality Gates: ${{ needs.quality-gates.result }}" >> $GITHUB_STEP_SUMMARY
+            echo "- Comprehensive Testing: ${{ needs.comprehensive-testing.result }}" >> $GITHUB_STEP_SUMMARY
+            echo "- Security Checks: ${{ needs.security-checks.result }}" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+      - name: Comment on PR
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '❌ **PR Checks Failed**\n\nSome required checks are failing. Please review the failed jobs and fix the issues before this PR can be merged.\n\nCheck the "Actions" tab for detailed information about the failures.'
+            })

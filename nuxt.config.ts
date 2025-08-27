@@ -78,7 +78,12 @@ export default defineNuxtConfig({
   /*
    ** Nuxt.js modules
    */
-  modules: ['@pinia/nuxt', '@element-plus/nuxt', 'nuxt-lucide-icons'],
+  modules: [
+    '@pinia/nuxt',
+    '@element-plus/nuxt',
+    'nuxt-lucide-icons',
+    '@nuxt/test-utils/module',
+  ],
   lucide: {
     namePrefix: 'Icon',
   },
