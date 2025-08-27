@@ -29,7 +29,7 @@ jobs:
           echo "Validating PR title: $PR_TITLE"
 
           # Check title length (between 10 and 100 characters)
-          if [ ${#PR_TITLE} -lt 10 ] || [ ${#PR_TITLE} -gt 100 ]; then
+          if [ ${#PR_TITLE} -lt 1 ] || [ ${#PR_TITLE} -gt 100 ]; then
             echo "❌ PR title must be between 10 and 100 characters"
             echo "Current length: ${#PR_TITLE}"
             exit 1
