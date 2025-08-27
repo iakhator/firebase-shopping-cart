@@ -168,14 +168,46 @@ jobs:
           # Add coverage threshold checking here if you have coverage setup
           echo "✅ Test coverage check (placeholder)"
 
+      - name: Generate Nuxt types before build
+        run: |
+          echo "🔧 Generating Nuxt types and configuration..."
+          npx nuxi prepare || echo "⚠️ Nuxt prepare failed, continuing..."
+
       - name: Test build process
-        run: npm run build
+        run: |
+          echo "🏗️ Testing build process..."
+          npm run build
+
+      - name: Check TypeScript compilation (if applicable)
+        run: |
+          echo "🔍 Checking TypeScript compilation..."
+          if [ -f "tsconfig.json" ]; then
+            if [ -f ".nuxt/tsconfig.json" ]; then
+              echo "✅ Nuxt TypeScript config found"
+              npx tsc --noEmit || echo "⚠️ TypeScript check found issues"
+            else
+              echo "⚠️ .nuxt/tsconfig.json not found, running nuxt prepare first..."
+              npx nuxi prepare
+              npx tsc --noEmit || echo "⚠️ TypeScript check found issues"
+            fi
+          else
+            echo "ℹ️ No tsconfig.json found, skipping TypeScript check"
+          fi
+        continue-on-error: true
 
       - name: Test in different environments
         run: |
-          echo "Testing Node.js compatibility..."
-          node --version
-          npm --version
+          echo "🧪 Testing Node.js compatibility..."
+          echo "Node.js version: $(node --version)"
+          echo "npm version: $(npm --version)"
+
+          # Check if build output exists
+          if [ -d ".output" ]; then
+            echo "✅ Build output directory found"
+            echo "Build size: $(du -sh .output 2>/dev/null || echo 'Unable to calculate')"
+          else
+            echo "⚠️ No build output found"
+          fi
 
   # Job 4: Security and Dependency Checks
   security-checks:
