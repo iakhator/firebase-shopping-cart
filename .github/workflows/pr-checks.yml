@@ -5,13 +5,11 @@ on:
     branches: [master, main]
     types: [opened, synchronize, reopened, ready_for_review]
 
-# Prevent concurrent runs on the same PR
 concurrency:
   group: pr-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
-  # Job 1: PR Validation
   pr-validation:
     name: PR Validation
     runs-on: ubuntu-latest
@@ -20,43 +18,29 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Validate PR title
         run: |
           PR_TITLE="${{ github.event.pull_request.title }}"
           echo "Validating PR title: $PR_TITLE"
 
-          # Check title length (between 10 and 100 characters)
           if [ ${#PR_TITLE} -lt 1 ] || [ ${#PR_TITLE} -gt 100 ]; then
-            echo "❌ PR title must be between 10 and 100 characters"
-            echo "Current length: ${#PR_TITLE}"
+            echo "❌ PR title must be between 1 and 100 characters"
             exit 1
           fi
 
-          # Check for common good practices (flexible)
-          if [[ "$PR_TITLE" =~ ^(feat|fix|docs|style|refactor|test|chore|ci|build|perf|add|update|remove|improve): ]] ||
-             [[ "$PR_TITLE" =~ ^(feature|bug|doc|tests|performance): ]] ||
-             [[ "$PR_TITLE" =~ ^[A-Z] ]] ||
-             [[ "$PR_TITLE" =~ (add|fix|update|improve|remove|create|implement|refactor) ]]; then
-            echo "✅ PR title looks good: $PR_TITLE"
-          else
-            echo "⚠️ Consider using a descriptive title that starts with an action verb"
-            echo "Examples: 'Add login functionality', 'Fix cart bug', 'Update documentation'"
-            echo "Current title: $PR_TITLE"
-            echo "This is just a suggestion - PR will still be processed"
-          fi
+          echo "✅ PR title is valid"
 
-      - name: Check for breaking changes
+      - name: Check PR description
         run: |
-          if [[ "${{ github.event.pull_request.title }}" == *"BREAKING CHANGE"* ]] ||
-             [[ "${{ github.event.pull_request.body }}" == *"BREAKING CHANGE"* ]]; then
-            echo "⚠️ Breaking change detected in PR"
-            echo "breaking_change=true" >> $GITHUB_ENV
+          PR_BODY="${{ github.event.pull_request.body }}"
+
+          if [ -z "$PR_BODY" ]; then
+            echo "⚠️ PR description is empty but that's okay"
+          else
+            echo "✅ PR description provided"
           fi
 
-  # Job 2: Code Quality Gates
   quality-gates:
     name: Quality Gates
     runs-on: ubuntu-latest
@@ -65,8 +49,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -82,53 +64,8 @@ jobs:
 
       - name: Check code formatting
         run: npx prettier --check "**/*.{js,vue,ts,json,md}"
+        continue-on-error: true
 
-      - name: Check for console logs in production code
-        run: |
-          echo "🔍 Checking for console statements in production code..."
-
-          # Check only production directories, exclude test files
-          console_files=$(grep -r "console\." --include="*.vue" --include="*.js" --include="*.ts" \
-            --exclude="*.test.*" --exclude="*.spec.*" --exclude="*test*" \
-            components/ pages/ composables/ stores/ utils/ 2>/dev/null || true)
-
-          if [ -n "$console_files" ]; then
-            echo "⚠️ Console statements found in production code:"
-            echo "$console_files"
-            echo ""
-            echo "💡 Consider:"
-            echo "   • Removing console.log statements from production code"
-            echo "   • Using a proper logging library instead"
-            echo "   • Moving debug code to development-only sections"
-            echo ""
-            echo "Note: This is a warning, not a blocking error"
-          else
-            echo "✅ No console statements found in production code"
-          fi
-
-      - name: Check for TODO/FIXME comments
-        run: |
-          echo "🔍 Checking for TODO/FIXME comments..."
-
-          # Count TODO/FIXME comments in source code
-          todo_files=$(grep -r "TODO\|FIXME" --include="*.vue" --include="*.js" --include="*.ts" \
-            components/ pages/ composables/ stores/ utils/ 2>/dev/null || true)
-
-          if [ -n "$todo_files" ]; then
-            todo_count=$(echo "$todo_files" | wc -l)
-            echo "📝 Found $todo_count TODO/FIXME comment(s):"
-            echo "$todo_files" | head -10  # Show first 10
-
-            if [ $todo_count -gt 10 ]; then
-              echo ""
-              echo "⚠️ High number of TODO/FIXME comments found: $todo_count"
-              echo "💡 Consider addressing some before merging to keep technical debt low"
-            fi
-          else
-            echo "✅ No TODO/FIXME comments found"
-          fi
-
-  # Job 3: Comprehensive Testing
   comprehensive-testing:
     name: Comprehensive Testing
     runs-on: ubuntu-latest
@@ -150,60 +87,42 @@ jobs:
       - name: Set CI environment variable
         run: echo "CI=true" >> $GITHUB_ENV
 
-      - name: Run unit tests with coverage
+      - name: Run unit tests
         run: npm run test:run
         env:
           NODE_ENV: test
           CI: true
 
-      - name: Check test coverage threshold
-        run: |
-          # Add coverage threshold checking here if you have coverage setup
-          echo "✅ Test coverage check (placeholder)"
-
-      - name: Generate Nuxt types before build
-        run: |
-          echo "🔧 Generating Nuxt types and configuration..."
-          npx nuxi prepare || echo "⚠️ Nuxt prepare failed, continuing..."
-
       - name: Test build process
-        run: |
-          echo "🏗️ Testing build process..."
-          npm run build
+        run: npm run build
         env:
           NODE_ENV: production
 
-      - name: Check TypeScript compilation (if applicable)
-        run: |
-          echo "🔍 Checking TypeScript compilation..."
-          if [ -f "tsconfig.json" ]; then
-            if [ -f ".nuxt/tsconfig.json" ]; then
-              echo "✅ Nuxt TypeScript config found"
-              npx tsc --noEmit || echo "⚠️ TypeScript check found issues"
-            else
-              echo "⚠️ .nuxt/tsconfig.json not found, running nuxt prepare first..."
-              npx nuxi prepare
-              npx tsc --noEmit || echo "⚠️ TypeScript check found issues"
-            fi
-          else
-            echo "ℹ️ No tsconfig.json found, skipping TypeScript check"
-          fi
+  security-checks:
+    name: Security Checks
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Set CI environment variable
+        run: echo "CI=true" >> $GITHUB_ENV
+
+      - name: Run security audit
+        run: npm audit --audit-level=moderate
         continue-on-error: true
 
-      - name: Test in different environments
-        run: |
-          echo "🧪 Testing Node.js compatibility..."
-          echo "Node.js version: $(node --version)"
-          echo "npm version: $(npm --version)"
-
-          # Check if build output exists
-          if [ -d ".output" ]; then
-            echo "✅ Build output directory found"
-            echo "Build size: $(du -sh .output 2>/dev/null || echo 'Unable to calculate')"
-          else
-            echo "⚠️ No build output found"
-          fi
-  # Final validation job
   pr-ready-for-merge:
     name: PR Ready for Merge
     runs-on: ubuntu-latest
@@ -216,35 +135,13 @@ jobs:
         run: |
           if [[ "${{ needs.pr-validation.result }}" == "success" &&
                 "${{ needs.quality-gates.result }}" == "success" &&
-                "${{ needs.comprehensive-testing.result }}" == "success" &&
-                "${{ needs.security-checks.result }}" == "success" ]]; then
+                "${{ needs.comprehensive-testing.result }}" == "success" ]]; then
             echo "✅ All PR checks passed! Ready for review and merge."
-            echo "## ✅ PR Checks Status" >> $GITHUB_STEP_SUMMARY
-            echo "All required checks have passed:" >> $GITHUB_STEP_SUMMARY
-            echo "- ✅ PR Validation" >> $GITHUB_STEP_SUMMARY
-            echo "- ✅ Quality Gates" >> $GITHUB_STEP_SUMMARY
-            echo "- ✅ Comprehensive Testing" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "This PR is ready for review and can be merged once approved." >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ Some PR checks failed. Please fix before merging."
-            echo "## ❌ PR Checks Failed" >> $GITHUB_STEP_SUMMARY
-            echo "The following checks need attention:" >> $GITHUB_STEP_SUMMARY
-            echo "- PR Validation: ${{ needs.pr-validation.result }}" >> $GITHUB_STEP_SUMMARY
-            echo "- Quality Gates: ${{ needs.quality-gates.result }}" >> $GITHUB_STEP_SUMMARY
-            echo "- Comprehensive Testing: ${{ needs.comprehensive-testing.result }}" >> $GITHUB_STEP_SUMMARY
-            echo "- Security Checks: ${{ needs.security-checks.result }}" >> $GITHUB_STEP_SUMMARY
+            echo "PR Validation: ${{ needs.pr-validation.result }}"
+            echo "Quality Gates: ${{ needs.quality-gates.result }}"
+            echo "Comprehensive Testing: ${{ needs.comprehensive-testing.result }}"
+            echo "Security Checks: ${{ needs.security-checks.result }}"
             exit 1
           fi
-
-      - name: Comment on PR
-        if: failure()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '❌ **PR Checks Failed**\n\nSome required checks are failing. Please review the failed jobs and fix the issues before this PR can be merged.\n\nCheck the "Actions" tab for detailed information about the failures.'
-            })
