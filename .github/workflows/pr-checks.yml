@@ -59,6 +59,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Generate Nuxt files
+        run: npx nuxi prepare
+
       - name: Run linting
         run: npm run lint
 
@@ -81,8 +84,10 @@ jobs:
           node-version: '18'
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Clean install dependencies
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install
 
       - name: Set CI environment variable
         run: echo "CI=true" >> $GITHUB_ENV
