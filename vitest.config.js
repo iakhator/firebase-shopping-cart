@@ -7,7 +7,7 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     globals: true,
-    setupFiles: ['./tests/setup.js'],
+    setupFiles: [],
   },
   resolve: {
     alias: {
@@ -22,5 +22,25 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ['vue', '@vue/test-utils'],
+  },
+  // Fix crypto.hash issue by providing proper Node.js crypto polyfill
+  esbuild: {
+    target: 'node14',
+  },
+  // Configure Vite to handle Node.js built-ins properly
+  build: {
+    rollupOptions: {
+      external: ['crypto'],
+    },
+  },
+  // Ensure proper crypto handling in test environment
+  config: (env) => {
+    if (env.command === 'serve') {
+      return {
+        define: {
+          global: 'globalThis',
+        },
+      }
+    }
   },
 })

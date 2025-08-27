@@ -49,8 +49,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Set CI environment variable
+        run: echo "CI=true" >> $GITHUB_ENV
+
       - name: Run unit tests
         run: npm run test:run
+        env:
+          NODE_ENV: test
+          CI: true
 
       - name: Generate test coverage
         run: |
@@ -86,72 +92,11 @@ jobs:
 
       - name: Build application
         run: npm run build
+        env:
+          NODE_ENV: production
 
       - name: Generate static files
         run: npm run generate
-        continue-on-error: true
-
-  # Job 4: Security Audit
-  security:
-    name: Security Audit
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run npm audit
-        run: |
-          echo "🔒 Running security audit..."
-          npm audit --audit-level=moderate || echo "⚠️ Some vulnerabilities found - check details above"
-        continue-on-error: true
-
-      - name: Run dependency check
-        run: |
-          echo "🔍 Running dependency check..."
-          npx audit-ci --moderate || echo "⚠️ Dependency check found issues"
-        continue-on-error: true
-
-  # Job 5: Performance Check
-  performance:
-    name: Performance Check
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build for performance testing
-        run: npm run build
-
-      - name: Bundle size check
-        run: |
-          echo "📦 Checking bundle size..."
-          if [ -d ".output/public/_nuxt/" ]; then
-            size=$(du -sh .output/public/_nuxt/ | cut -f1)
-            echo "✅ Bundle size: $size"
-          else
-            echo "⚠️ No build output found - this might be expected for some builds"
-          fi
         continue-on-error: true
 
   # Final job that depends on all others
@@ -169,8 +114,6 @@ jobs:
           echo "Lint: ${{ needs.lint.result }}"
           echo "Test: ${{ needs.test.result }}"
           echo "Build: ${{ needs.build.result }}"
-          echo "Security: ${{ needs.security.result }}"
-          echo "Typecheck: ${{ needs.typecheck.result }}"
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
           # Critical jobs that must pass

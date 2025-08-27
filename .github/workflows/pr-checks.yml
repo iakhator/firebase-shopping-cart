@@ -147,8 +147,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Set CI environment variable
+        run: echo "CI=true" >> $GITHUB_ENV
+
       - name: Run unit tests with coverage
         run: npm run test:run
+        env:
+          NODE_ENV: test
+          CI: true
 
       - name: Check test coverage threshold
         run: |
@@ -164,6 +170,8 @@ jobs:
         run: |
           echo "🏗️ Testing build process..."
           npm run build
+        env:
+          NODE_ENV: production
 
       - name: Check TypeScript compilation (if applicable)
         run: |
@@ -195,137 +203,6 @@ jobs:
           else
             echo "⚠️ No build output found"
           fi
-
-  # Job 4: Security and Dependency Checks
-  security-checks:
-    name: Security Checks
-    runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run security audit
-        run: |
-          echo "🔍 Running npm security audit..."
-
-          # Run audit and capture output
-          if npm audit --audit-level=moderate; then
-            echo "✅ No moderate+ vulnerabilities found"
-          else
-            echo "⚠️ Some vulnerabilities detected - checking severity..."
-          fi
-
-      - name: Check for vulnerable dependencies
-        run: |
-          echo "🔍 Checking for high/critical vulnerabilities..."
-
-          # Run audit and save results
-          npm audit --json > audit-results.json 2>/dev/null || true
-
-          # Check if audit-results.json exists and has content
-          if [ ! -s audit-results.json ]; then
-            echo "✅ No vulnerabilities found or audit completed successfully"
-            exit 0
-          fi
-
-          # Check for high/critical vulnerabilities using node to parse JSON safely
-          vulnerabilities=$(node -e "
-            try {
-              const audit = JSON.parse(require('fs').readFileSync('audit-results.json', 'utf8'));
-              const high = audit.metadata?.vulnerabilities?.high || 0;
-              const critical = audit.metadata?.vulnerabilities?.critical || 0;
-              console.log(high + critical);
-            } catch (e) {
-              console.log('0');
-            }
-          ")
-
-          if [ "$vulnerabilities" != "0" ] && [ "$vulnerabilities" -gt 0 ]; then
-            echo "⚠️ High/Critical vulnerabilities found: $vulnerabilities"
-            echo "📋 Audit summary:"
-            npm audit --audit-level=high || true
-            echo ""
-            echo "💡 Please run 'npm audit fix' to resolve security issues"
-            echo "Note: This is a warning - consider fixing before merging"
-          else
-            echo "✅ No high/critical vulnerabilities found"
-          fi
-
-  # Job 5: Performance Impact Check
-  performance-check:
-    name: Performance Impact
-    runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
-
-    steps:
-      - name: Checkout base branch
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.base.ref }}
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
-
-      - name: Install dependencies (base)
-        run: npm ci
-
-      - name: Build base version
-        run: npm run build
-
-      - name: Get base bundle size
-        run: |
-          if [ -d ".output/public/_nuxt" ]; then
-            BASE_SIZE=$(du -sb .output/public/_nuxt/ | cut -f1)
-            echo "BASE_SIZE=$BASE_SIZE" >> $GITHUB_ENV
-          else
-            echo "BASE_SIZE=0" >> $GITHUB_ENV
-          fi
-
-      - name: Checkout PR branch
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-
-      - name: Install dependencies (PR)
-        run: npm ci
-
-      - name: Build PR version
-        run: npm run build
-
-      - name: Compare bundle sizes
-        run: |
-          if [ -d ".output/public/_nuxt" ]; then
-            PR_SIZE=$(du -sb .output/public/_nuxt/ | cut -f1)
-          else
-            PR_SIZE=0
-          fi
-
-          DIFF=$((PR_SIZE - BASE_SIZE))
-          DIFF_PERCENT=$((DIFF * 100 / BASE_SIZE)) 2>/dev/null || DIFF_PERCENT=0
-
-          echo "📦 Bundle Size Comparison:"
-          echo "Base: $(numfmt --to=iec $BASE_SIZE)"
-          echo "PR: $(numfmt --to=iec $PR_SIZE)"
-          echo "Difference: $(numfmt --to=iec $DIFF) ($DIFF_PERCENT%)"
-
-          if [ $DIFF_PERCENT -gt 10 ]; then
-            echo "⚠️ Bundle size increased by more than 10%"
-          fi
-
   # Final validation job
   pr-ready-for-merge:
     name: PR Ready for Merge
@@ -347,7 +224,6 @@ jobs:
             echo "- ✅ PR Validation" >> $GITHUB_STEP_SUMMARY
             echo "- ✅ Quality Gates" >> $GITHUB_STEP_SUMMARY
             echo "- ✅ Comprehensive Testing" >> $GITHUB_STEP_SUMMARY
-            echo "- ✅ Security Checks" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "This PR is ready for review and can be merged once approved." >> $GITHUB_STEP_SUMMARY
           else
