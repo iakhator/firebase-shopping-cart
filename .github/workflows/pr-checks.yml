@@ -11,6 +11,64 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Job 1: PR Validation
+  pr-validation:
+    name: PR Validation
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate PR title
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          echo "Validating PR title: $PR_TITLE"
+
+          # Check title length (between 10 and 100 characters)
+          if [ ${#PR_TITLE} -lt 10 ] || [ ${#PR_TITLE} -gt 100 ]; then
+            echo "❌ PR title must be between 10 and 100 characters"
+            echo "Current length: ${#PR_TITLE}"
+            exit 1
+          fi
+
+          # Check for common good practices (flexible)
+          if [[ "$PR_TITLE" =~ ^(feat|fix|docs|style|refactor|test|chore|ci|build|perf|add|update|remove|improve): ]] ||
+             [[ "$PR_TITLE" =~ ^(feature|bug|doc|tests|performance): ]] ||
+             [[ "$PR_TITLE" =~ ^[A-Z] ]] ||
+             [[ "$PR_TITLE" =~ (add|fix|update|improve|remove|create|implement|refactor) ]]; then
+            echo "✅ PR title looks good: $PR_TITLE"
+          else
+            echo "⚠️ Consider using a descriptive title that starts with an action verb"
+            echo "Examples: 'Add login functionality', 'Fix cart bug', 'Update documentation'"
+            echo "Current title: $PR_TITLE"
+            echo "This is just a suggestion - PR will still be processed"
+          fi
+
+      - name: Check PR description
+        run: |
+          PR_BODY="${{ github.event.pull_request.body }}"
+
+          if [ -z "$PR_BODY" ] || [ ${#PR_BODY} -lt 10 ]; then
+            echo "⚠️ PR description is very short or missing"
+            echo "Consider adding a brief description of your changes"
+            echo "This helps reviewers understand the context"
+            # Don't fail - just warn
+          else
+            echo "✅ PR description provided"
+          fi
+
+      - name: Check for breaking changes
+        run: |
+          if [[ "${{ github.event.pull_request.title }}" == *"BREAKING CHANGE"* ]] ||
+             [[ "${{ github.event.pull_request.body }}" == *"BREAKING CHANGE"* ]]; then
+            echo "⚠️ Breaking change detected in PR"
+            echo "breaking_change=true" >> $GITHUB_ENV
+          fi
+
   # Job 2: Code Quality Gates
   quality-gates:
     name: Quality Gates
