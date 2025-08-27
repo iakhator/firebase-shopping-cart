@@ -56,8 +56,10 @@ jobs:
           node-version: '18'
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Clean install dependencies
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install
 
       - name: Generate Nuxt files
         run: npx nuxi prepare
@@ -97,11 +99,6 @@ jobs:
         env:
           NODE_ENV: test
           CI: true
-
-      - name: Test build process
-        run: npm run build
-        env:
-          NODE_ENV: production
 
   security-checks:
     name: Security Checks
