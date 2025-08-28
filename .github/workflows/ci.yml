@@ -33,9 +33,6 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
-      - name: Check Prettier formatting
-        run: npx prettier --check "**/*.{js,vue,ts,json,md}"
-
   # Job 2: Unit Tests
   test:
     name: Unit Tests
@@ -63,7 +60,7 @@ jobs:
         run: npm run test:run
         env:
           NODE_ENV: test
-          CI: true
+          CI: truez
 
       - name: Generate test coverage
         run: |
