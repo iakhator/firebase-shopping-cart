@@ -15,9 +15,9 @@
                             Contact Information
                         </h3>
                         <el-form
+                            ref="ruleFormRef"
                             :model="ruleForm"
                             :rules="rules"
-                            ref="ruleFormRef"
                             label-position="top"
                         >
                             <el-row :gutter="12">
@@ -150,7 +150,7 @@
                                             id="card-number-element"
                                             class="stripe-element"
                                             aria-labelledby="card-number-label"
-                                        ></div>
+                                        />
                                     </div>
 
                                     <div class="card-row">
@@ -162,7 +162,7 @@
                                                 id="card-expiry-element"
                                                 class="stripe-element"
                                                 aria-labelledby="card-expiry-label"
-                                            ></div>
+                                            />
                                         </div>
 
                                         <div class="card-field cvc">
@@ -173,14 +173,14 @@
                                                 id="card-cvc-element"
                                                 aria-labelledby="card-cvc-label"
                                                 class="stripe-element"
-                                            ></div>
+                                            />
                                         </div>
                                     </div>
 
                                     <div
+                                        v-if="cardError"
                                         id="card-errors"
                                         class="stripe-errors"
-                                        v-if="cardError"
                                     >
                                         {{ cardError }}
                                     </div>
@@ -191,17 +191,17 @@
                                         src="/images/visa.svg"
                                         alt="Visa"
                                         class="card-icon"
-                                    />
+                                    >
                                     <img
                                         src="/images/mastercard.svg"
                                         alt="Mastercard"
                                         class="card-icon"
-                                    />
+                                    >
                                     <img
                                         src="/images/amex.svg"
                                         alt="American Express"
                                         class="card-icon"
-                                    />
+                                    >
                                 </div>
 
                                 <el-checkbox v-model="saveCard"
@@ -218,12 +218,16 @@
                             Order Summary
                         </h2>
 
-                        <div class="product-card" v-for="item in cartItems">
+                        <div
+                            v-for="(item, idx) in cartItems"
+                            :key="idx"
+                            class="product-card"
+                        >
                             <div class="product-image">
                                 <img
                                     :src="item.variant?.imageUrl"
                                     alt="OnePlus 12 Dual 5G"
-                                />
+                                >
                             </div>
                             <div class="product-details">
                                 <h3 class="font-medium">
@@ -275,10 +279,10 @@
                         <div class="actions">
                             <UIButton
                                 variant="mild"
-                                @click="processPayment"
                                 :loading="loading"
                                 size="large"
                                 label="Place Order"
+                                @click="processPayment"
                             >
                                 <template #icon>
                                     <el-icon class="el-icon--left"
@@ -383,7 +387,7 @@ const rules = reactive({
 })
 
 // Stripe and payment state
-const stripe = ref(null)
+// const stripe = ref(null)
 const cardElement = ref(null)
 const cardNumberElement = ref(null)
 const cardExpiryElement = ref(null)
@@ -392,7 +396,7 @@ const cardError = ref('')
 const loading = ref(false)
 const saveCard = ref(false)
 
-const isAuthenticated = computed(() => authStore.isAuthenticated)
+// const isAuthenticated = computed(() => authStore.isAuthenticated)
 const cartItems = computed(() => cartStore.cart)
 const subtotal = computed(() => cartStore.totalPrice)
 const discount = computed(() => Math.round(subtotal.value * 0.05))

@@ -6,8 +6,8 @@
         :loading="loading"
         :disabled="disabled || loading"
     >
-        <span class="mr-2"><slot name="icon"></slot></span>{{ label }}
-        <slot name="icon-right"></slot>
+        <span class="mr-2"><slot name="icon"/></span>{{ label }}
+        <slot name="icon-right"/>
     </el-button>
 </template>
 

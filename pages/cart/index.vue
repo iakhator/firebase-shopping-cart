@@ -36,7 +36,7 @@
                                 :src="item.variant?.imageUrl"
                                 :alt="item.name"
                                 class="item-image"
-                            />
+                            >
                             <div class="item-details">
                                 <p class="item-name">{{ item.name }}</p>
                                 <p>Bundle: {{ item.bundle }}</p>
@@ -76,7 +76,7 @@
                             <span>Delivery Fee</span>
                             <span>${{ deliveryFee }}</span>
                         </div>
-                        <hr />
+                        <hr >
                         <div class="summary-row total">
                             <span>Total</span>
                             <span>{{ toUSD(total) }}</span>
@@ -92,8 +92,8 @@
                             v-if="authStore.isAuthenticatedUser"
                             size="large"
                             class="black checkout-btn"
-                            @click="navigateTo('/cart/checkout')"
                             label="Go to Checkout"
+                            @click="navigateTo('/cart/checkout')"
                         >
                             <template #icon>
                                 <el-icon class="mr-2"><CreditCard /></el-icon>
@@ -104,8 +104,8 @@
                             v-else
                             size="large"
                             class="black checkout-btn"
-                            @click="navigateTo('/auth/login')"
                             label="Login to Checkout"
+                            @click="navigateTo('/auth/login')"
                         >
                             <template #icon>
                                 <el-icon class="mr-2"><CreditCard /></el-icon>

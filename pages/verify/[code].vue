@@ -12,7 +12,7 @@
             <div v-if="successMessage" class="verify-success">
                 {{ successMessage }}
             </div>
-            <form @submit.prevent="submitPin" v-if="!successMessage">
+            <form v-if="!successMessage" @submit.prevent="submitPin">
                 <div class="pin-input-group">
                     <template v-for="(digit, idx) in pinDigits" :key="idx">
                         <el-input
@@ -22,15 +22,15 @@
                             inputmode="numeric"
                             type="text"
                             class="pin-input"
-                            @input="onInput(idx)"
-                            @keydown.backspace="onBackspace(idx)"
-                            @focus="onFocus(idx)"
                             :autofocus="idx === 0"
                             style="
                                 width: 2.5rem;
                                 margin: 0 0.25rem;
                                 text-align: center;
                             "
+                            @input="onInput(idx)"
+                            @keydown.backspace="onBackspace(idx)"
+                            @focus="onFocus(idx)"
                         />
                         <span v-if="idx < 5" class="pin-dash">-</span>
                     </template>
@@ -51,10 +51,9 @@
 <script setup>
 import { ref, onMounted, nextTick } from 'vue'
 import UIButton from '~/components/ui/UIButton.vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const router = useRouter()
 const code = route.params.code
 
 const pinDigits = ref(['', '', '', '', '', ''])
@@ -87,6 +86,7 @@ onMounted(async () => {
 
         userId.value = res.userId
     } catch (err) {
+        console.error(err)
         errorMessage.value = 'Unable to validate verification link.'
     }
 })
@@ -105,7 +105,7 @@ function onInput(idx) {
     }
 }
 
-function onBackspace(idx, e) {
+function onBackspace(idx, _) {
     if (!pinDigits.value[idx] && idx > 0) {
         nextTick(() => {
             if (elPinInputs.value[idx - 1]) {

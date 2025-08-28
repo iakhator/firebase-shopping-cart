@@ -2,25 +2,25 @@
   <div class="loading-container" :class="{ fullscreen: fullscreen }">
     <div v-if="type === 'spinner'" class="spinner-wrapper">
       <div class="spinner">
-        <div class="spinner-circle"></div>
+        <div class="spinner-circle"/>
       </div>
       <p v-if="message" class="loading-message">{{ message }}</p>
     </div>
 
     <div v-else-if="type === 'dots'" class="dots-wrapper">
       <div class="dots">
-        <div class="dot dot-1"></div>
-        <div class="dot dot-2"></div>
-        <div class="dot dot-3"></div>
+        <div class="dot dot-1"/>
+        <div class="dot dot-2"/>
+        <div class="dot dot-3"/>
       </div>
       <p v-if="message" class="loading-message">{{ message }}</p>
     </div>
 
     <div v-else-if="type === 'pulse'" class="pulse-wrapper">
       <div class="pulse">
-        <div class="pulse-ring pulse-ring-1"></div>
-        <div class="pulse-ring pulse-ring-2"></div>
-        <div class="pulse-ring pulse-ring-3"></div>
+        <div class="pulse-ring pulse-ring-1"/>
+        <div class="pulse-ring pulse-ring-2"/>
+        <div class="pulse-ring pulse-ring-3"/>
       </div>
       <p v-if="message" class="loading-message">{{ message }}</p>
     </div>
@@ -28,7 +28,7 @@
     <!-- Default: Progress bar like NuxtLoadingIndicator -->
     <div v-else class="progress-wrapper">
       <div class="progress-bar">
-        <div class="progress-fill" :style="{ width: `${progress}%` }"></div>
+        <div class="progress-fill" :style="{ width: `${progress}%` }"/>
       </div>
       <p v-if="message" class="loading-message">{{ message }}</p>
     </div>

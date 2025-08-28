@@ -137,7 +137,7 @@
 </template>
 
 <script setup>
-import { Message, Lock, ShoppingBag } from '@element-plus/icons-vue'
+import { Message, Lock } from '@element-plus/icons-vue'
 
 // Meta tags for the page
 definePageMeta({
@@ -195,7 +195,7 @@ const handleSubmit = async () => {
 
         loading.value = true
 
-        const response = await authStore.signIn({
+        await authStore.signIn({
             email: loginForm.value.email,
             password: loginForm.value.password,
         })

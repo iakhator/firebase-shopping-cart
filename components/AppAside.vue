@@ -11,14 +11,14 @@
                     :key="brand"
                     class="filter-label"
                 >
-                    <input
-                        type="checkbox"
+                    <FormInput
                         v-model="selectedBrands"
+                        type="checkbox"
                         :value="brand"
-                        @change="emitFilters"
                         class="filter-checkbox"
+                        @change="emitFilters"
                     />
-                    <span class="checkmark"></span>
+                    <span class="checkmark" />
                     {{ brand }}
                 </label>
             </div>
@@ -35,14 +35,14 @@
                     :key="range.label"
                     class="filter-label"
                 >
-                    <input
-                        type="checkbox"
+                    <FormInput
                         v-model="selectedPriceRanges"
+                        type="checkbox"
                         :value="range"
-                        @change="emitFilters"
                         class="filter-checkbox"
+                        @change="emitFilters"
                     />
-                    <span class="checkmark"></span>
+                    <span class="checkmark" />
                     {{ range.label }}
                 </label>
             </div>
@@ -59,21 +59,21 @@
                     :key="storage"
                     class="filter-label"
                 >
-                    <input
-                        type="checkbox"
+                    <FormInput
                         v-model="selectedStorage"
+                        type="checkbox"
                         :value="storage"
-                        @change="emitFilters"
                         class="filter-checkbox"
+                        @change="emitFilters"
                     />
-                    <span class="checkmark"></span>
+                    <span class="checkmark" />
                     {{ storage }}
                 </label>
             </div>
         </div>
 
         <div class="filter-actions">
-            <button @click="clearAllFilters" class="clear-filters-btn">
+            <button class="clear-filters-btn" @click="clearAllFilters">
                 <el-icon class="clear-icon"><Delete /></el-icon>
                 Clear All Filters
             </button>

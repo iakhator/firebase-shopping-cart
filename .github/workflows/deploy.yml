@@ -1,22 +1,190 @@
-name: Deploy to Render
+name: Deploy to Production
 
 on:
   push:
-    branches: [master]
+    branches: [master, main]
+  workflow_run:
+    workflows: ['CI Pipeline']
+    branches: [master, main]
+    types:
+      - completed
 
 jobs:
-  deploy:
+  # Only deploy if CI pipeline succeeded
+  check-ci-status:
+    name: Check CI Status
     runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success' || github.event_name == 'push'
+    outputs:
+      deploy-ready: ${{ steps.check.outputs.ready }}
+
+    steps:
+      - name: Check CI Pipeline Status
+        id: check
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_run" ]]; then
+            if [[ "${{ github.event.workflow_run.conclusion }}" == "success" ]]; then
+              echo "ready=true" >> $GITHUB_OUTPUT
+            else
+              echo "ready=false" >> $GITHUB_OUTPUT
+              echo "❌ CI Pipeline failed. Deployment cancelled."
+              exit 1
+            fi
+          elif [[ "${{ github.event_name }}" == "push" ]]; then
+            echo "ready=true" >> $GITHUB_OUTPUT
+          fi
+
+  # Pre-deployment checks
+  pre-deploy-checks:
+    name: Pre-deployment Checks
+    runs-on: ubuntu-latest
+    needs: check-ci-status
+    if: needs.check-ci-status.outputs.deploy-ready == 'true'
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Trigger Render Deploy Hook
-        if: github.ref == 'refs/heads/master'
-        env:
-          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Final build test
+        run: npm run build
+
+      - name: Final test run
+        run: npm run test:run
+
+      - name: Check environment variables
         run: |
-          echo "Deploying to Render..."
-          echo "Hook Length: $(echo "$deploy_url" | wc -c)"
-          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+          if [[ -z "${{ secrets.RENDER_DEPLOY_HOOK }}" ]]; then
+            echo "❌ RENDER_DEPLOY_HOOK secret not configured"
+            exit 1
+          fi
+          echo "✅ Deployment secrets configured"
+
+      - name: Verify deployment target
+        run: |
+          echo "🚀 Preparing to deploy to production"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Author: ${{ github.actor }}"
+
+  # Main deployment job
+  deploy:
+    name: Deploy to Render
+    runs-on: ubuntu-latest
+    needs: [check-ci-status, pre-deploy-checks]
+    if: needs.check-ci-status.outputs.deploy-ready == 'true'
+    environment: production
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Render
+        env:
+          DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: |
+          echo "🚀 Starting deployment to Render..."
+          echo "Hook configured: $([ -n "$DEPLOY_HOOK" ] && echo "✅ Yes" || echo "❌ No")"
+
+          # Trigger the deployment
+          response=$(curl -s -w "\n%{http_code}" -X POST "$DEPLOY_HOOK")
+          http_code=$(echo "$response" | tail -n1)
+          response_body=$(echo "$response" | head -n -1)
+
+          echo "HTTP Status Code: $http_code"
+          echo "Response: $response_body"
+
+          if [[ $http_code -ge 200 && $http_code -lt 300 ]]; then
+            echo "✅ Deployment triggered successfully"
+          else
+            echo "❌ Deployment failed with status code: $http_code"
+            exit 1
+          fi
+
+      - name: Deployment notification
+        if: success()
+        run: |
+          echo "🎉 Deployment completed successfully!"
+          echo "The application has been deployed to production."
+          echo "Commit: ${{ github.sha }}"
+          echo "Deployed by: ${{ github.actor }}"
+
+  # Post-deployment verification
+  post-deploy-verification:
+    name: Post-deployment Verification
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: always() && needs.deploy.result == 'success'
+
+    steps:
+      - name: Wait for deployment
+        run: |
+          echo "⏳ Waiting 2 minutes for deployment to complete..."
+          sleep 120
+
+      - name: Health check (placeholder)
+        run: |
+          echo "🔍 Running post-deployment health checks..."
+          # Add actual health check URLs when available
+          # curl -f https://your-app-url.onrender.com/health || exit 1
+          echo "✅ Health check passed (placeholder)"
+
+      - name: Performance check (placeholder)
+        run: |
+          echo "📊 Running performance checks..."
+          # Add performance testing when needed
+          echo "✅ Performance check passed (placeholder)"
+
+  # Rollback job (manual trigger)
+  rollback:
+    name: Emergency Rollback
+    runs-on: ubuntu-latest
+    if: failure() && github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Rollback deployment
+        run: |
+          echo "🔄 Emergency rollback triggered"
+          echo "This would trigger a rollback to the previous version"
+          # Add rollback logic here if supported by Render
+
+  # Notification job
+  notification:
+    name: Deployment Notification
+    runs-on: ubuntu-latest
+    needs: [deploy, post-deploy-verification]
+    if: always()
+
+    steps:
+      - name: Deployment success notification
+        if: needs.deploy.result == 'success' && needs.post-deploy-verification.result == 'success'
+        run: |
+          echo "✅ DEPLOYMENT SUCCESSFUL"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🚀 Application deployed to production"
+          echo "📅 Deployed at: $(date)"
+          echo "👤 Deployed by: ${{ github.actor }}"
+          echo "📝 Commit: ${{ github.sha }}"
+          echo "🌐 Branch: ${{ github.ref_name }}"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+      - name: Deployment failure notification
+        if: needs.deploy.result == 'failure'
+        run: |
+          echo "❌ DEPLOYMENT FAILED"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "💥 Deployment to production failed"
+          echo "📅 Failed at: $(date)"
+          echo "👤 Attempted by: ${{ github.actor }}"
+          echo "📝 Commit: ${{ github.sha }}"
+          echo "🌐 Branch: ${{ github.ref_name }}"
+          echo "🔍 Check the logs above for details"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

@@ -6,7 +6,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "precommit": "npm run lint",
     "test": "vitest",
     "test:run": "vitest run",
@@ -20,11 +21,13 @@
   "dependencies": {
     "@element-plus/nuxt": "^1.0.10",
     "@faker-js/faker": "^9.9.0",
+    "@nuxt/eslint": "^1.9.0",
     "@nuxtjs/style-resources": "^1.2.2",
-    "@pinia/nuxt": "^0.5.4",
+    "@pinia/nuxt": "^0.11.2",
     "@sidebase/nuxt-session": "^0.2.8",
     "@stripe/stripe-js": "^7.3.1",
     "dayjs": "^1.11.13",
+    "eslint": "^9.34.0",
     "firebase": "^11.6.0",
     "firebase-admin": "^13.2.0",
     "handlebars": "^4.7.8",
@@ -33,7 +36,7 @@
     "nodemailer": "^6.10.1",
     "nuxt": "^3.13.2",
     "nuxt-lucide-icons": "^1.0.5",
-    "pinia": "^2.2.2",
+    "pinia": "^3.0.3",
     "sass": "^1.64.1",
     "sass-loader": "^13.3.0",
     "stripe": "^12.5.0",
@@ -42,7 +45,13 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "^1.4.1",
+    "@nuxt/test-utils": "^3.19.2",
+    "@pinia/testing": "^1.0.2",
+    "@vue/test-utils": "^2.4.6",
     "element-plus": "^2.8.3",
-    "vite-plugin-svg-sprite": "^0.6.2"
+    "happy-dom": "^18.0.1",
+    "playwright-core": "^1.55.0",
+    "vite-plugin-svg-sprite": "^0.6.2",
+    "vitest": "^3.2.4"
   }
 }

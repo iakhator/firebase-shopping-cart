@@ -41,6 +41,7 @@ export default defineEventHandler(async (event) => {
         path: '/',
       })
     } catch (err) {
+      console.error(err)
       throw createError({ statusCode: 401, message: 'Invalid refresh token' })
     }
   }
@@ -54,6 +55,7 @@ export default defineEventHandler(async (event) => {
     const decodedToken = await adminAuth.verifyIdToken(idToken)
     event.context.user = decodedToken
   } catch (err) {
+    console.error(err)
     event.context.user = null
     throw createError({ statusCode: 401, message: 'Invalid token' })
   }

@@ -1,4 +1,4 @@
-import { adminAuth, adminFirestore } from '~/server/utils/firebaseAdmin'
+import { adminFirestore } from '~/server/utils/firebaseAdmin'
 
 export default defineEventHandler(async (event) => {
   const user = event.context.user

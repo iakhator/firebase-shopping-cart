@@ -19,9 +19,9 @@ function handleDeleteAccount() {
     })
 }
 
-function handleSavePrivacy() {
-    // Implement save functionality here
-}
+// function handleSavePrivacy() {
+//     // Implement save functionality here
+// }
 </script>
 
 <template>

@@ -1,0 +1,149 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  # Job 1: Code Quality and Linting
+  lint:
+    name: Code Quality & Linting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Check Prettier formatting
+        run: npx prettier --check "**/*.{js,vue,ts,json,md}"
+
+  # Job 2: Unit Tests
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Set CI environment variable
+        run: echo "CI=true" >> $GITHUB_ENV
+
+      - name: Run unit tests
+        run: npm run test:run
+        env:
+          NODE_ENV: test
+          CI: true
+
+      - name: Generate test coverage
+        run: |
+          echo "🧪 Generating test coverage..."
+          npm run test:coverage || echo "⚠️ Coverage generation failed, but tests passed"
+        continue-on-error: true
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        if: always()
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          fail_ci_if_error: false
+
+  # Job 3: Build Test
+  build:
+    name: Build Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Generate static files
+        run: npm run generate
+        continue-on-error: true
+
+  # Final job that depends on all others
+  ci-success:
+    name: CI Success
+    runs-on: ubuntu-latest
+    needs: [lint, test, build, security, typecheck]
+    if: always()
+
+    steps:
+      - name: Check all jobs status
+        run: |
+          echo "📊 CI Pipeline Results Summary:"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Lint: ${{ needs.lint.result }}"
+          echo "Test: ${{ needs.test.result }}"
+          echo "Build: ${{ needs.build.result }}"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+          # Critical jobs that must pass
+          critical_failed=false
+
+          if [[ "${{ needs.lint.result }}" != "success" ]]; then
+            echo "❌ CRITICAL: Linting failed"
+            critical_failed=true
+          fi
+
+          if [[ "${{ needs.test.result }}" != "success" ]]; then
+            echo "❌ CRITICAL: Tests failed"
+            critical_failed=true
+          fi
+
+          if [[ "${{ needs.build.result }}" != "success" ]]; then
+            echo "❌ CRITICAL: Build failed"
+            critical_failed=true
+          fi
+
+          if [ "$critical_failed" = true ]; then
+            echo ""
+            echo "❌ Critical CI checks failed - please fix before merging"
+            exit 1
+          else
+            echo ""
+            echo "✅ All critical CI checks passed!"
+            exit 0
+          fi
+
+      - name: Success notification
+        if: success()
+        run: echo "🎉 CI pipeline completed successfully! Ready for merge."

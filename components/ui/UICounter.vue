@@ -2,7 +2,7 @@
 import { Plus, Minus } from '@element-plus/icons-vue'
 
 const props = defineProps({
-    modelValue: Number,
+    modelValue: { type: Number, required: true },
     min: { type: Number, default: 1 },
     readonly: { type: Boolean, default: false },
 })
@@ -65,25 +65,25 @@ const allowOnlyNumbers = (event) => {
 <template>
     <div class="counter">
         <div
-            @click="decrease"
             :aria-disabled="modelValue <= min"
             class="btn"
             role="button"
             tabindex="0"
+            @click="decrease"
         >
             <el-icon><Minus /></el-icon>
         </div>
         <span
+            ref="countSpan"
             class="count"
             :contenteditable="!readonly"
-            ref="countSpan"
+            :class="{ readonly: readonly }"
             @input="handleInput"
             @blur="validateInput"
             @keypress="allowOnlyNumbers"
-            :class="{ readonly: readonly }"
             >{{ modelValue }}</span
         >
-        <div @click="increase" class="btn" role="button" tabindex="0">
+        <div class="btn" role="button" tabindex="0" @click="increase">
             <el-icon><Plus /></el-icon>
         </div>
     </div>

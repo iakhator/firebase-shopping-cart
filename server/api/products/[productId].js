@@ -1,4 +1,3 @@
-import { H3Error } from 'h3'
 import { adminFirestore as db } from '~/server/utils/firebaseAdmin'
 
 export default defineEventHandler(async (event) => {

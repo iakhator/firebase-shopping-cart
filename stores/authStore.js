@@ -103,6 +103,7 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = response.user || null
       cartStore.fetchCart()
     } catch (error) {
+      console.error(error)
       authenticated.value = false
       user.value = null
     }
