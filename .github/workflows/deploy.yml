@@ -136,7 +136,7 @@ jobs:
         run: |
           echo "🔍 Running post-deployment health checks..."
           # Add actual health check URLs when available
-          # curl -f https://your-app-url.onrender.com/health || exit 1
+          # curl -f https://rincart.app/health || exit 1
           echo "✅ Health check passed (placeholder)"
 
       - name: Performance check (placeholder)
