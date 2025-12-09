@@ -3,7 +3,6 @@
     <NuxtLayout>
         <NuxtPage />
         <Toaster
-            :rich-color="richColors"
             position="top-center"
             :toast-options="{
                 style: { height: '50px', padding: '5px 10px', top: '50px' },

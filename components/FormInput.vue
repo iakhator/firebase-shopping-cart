@@ -31,7 +31,7 @@
 
 <script setup>
 const props = defineProps({
-    modelValue: { type: String, default: '' },
+    modelValue: { type: [String, Array, Boolean, String], default: '' },
     label: { type: String, default: '' },
     type: { type: String, default: 'text' },
     placeholder: { type: String, default: '' },

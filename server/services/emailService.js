@@ -33,18 +33,40 @@ export async function sendOrderConfirmation({
 }
 
 export async function sendEmailVerificationLink({ email, pin, firstName }) {
-  const data = {
-    email,
-    pin,
-    firstName,
+  try {
+    const data = {
+      email,
+      pin,
+      firstName,
+    }
+
+    const { html, text } = await renderTemplate('email-verification', data)
+
+    const result = await sendEmail({
+      to: email,
+      subject: 'Verify your email address',
+      html,
+      text,
+    })
+
+
+    if (!result?.success) {
+      return {
+        success: false,
+        error: result?.error || 'Email sending failed',
+      }
+    }
+
+    return {
+      success: true,
+    }
+
+  } catch (err) {
+    console.error('sendEmailVerificationLink failed:', err)
+
+    return {
+      success: false,
+      error: err.message || 'Could not send verification email',
+    }
   }
-
-  const { html, text } = await renderTemplate('email-verification', data)
-
-  await sendEmail({
-    to: email,
-    subject: 'Verify your email address',
-    html,
-    text,
-  })
 }

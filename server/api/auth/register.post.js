@@ -57,6 +57,7 @@ export default defineEventHandler(async (event) => {
     }
   } catch (error) {
     setResponseStatus(event, 400)
+    console.log(error, 'error')
     let errorMessage = 'Failed to create user.'
 
     if (error.code === 'auth/email-already-exists') {
