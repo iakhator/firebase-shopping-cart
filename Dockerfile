@@ -27,4 +27,4 @@ COPY --from=build /app/server/emails ./server/emails
 
 EXPOSE 3000
 
-CMD ["node", "server/index.mjs"]
+CMD ["node", "/app/server/index.mjs"]
