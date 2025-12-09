@@ -6,23 +6,8 @@ const isProd = import.meta.dev === false
 
 export async function sendEmail({ to, subject, text, html }) {
   try {
-    // const transporter = isProd
-    //   ? nodemailer.createTransport({
-    //       host: 'smtp.mailgun.org',
-    //       port: 587,
-    //       secure: false,
-    //       auth: {
-    //         user: process.env.SMTP_USER,
-    //         pass: process.env.SMTP_PASS,
-    //       },
-    //     })
-      // : nodemailer.createTransport({
-      //     host: 'localhost', // docker 'maildev',
-      //     port: 1025,
-      //     secure: false,
-      //   })
-
-    const transporter = nodemailer.createTransport({
+    const transporter = isProd
+      ? nodemailer.createTransport({
           host: 'smtp.mailgun.org',
           port: 587,
           secure: false,
@@ -30,6 +15,11 @@ export async function sendEmail({ to, subject, text, html }) {
             user: process.env.SMTP_USER,
             pass: process.env.SMTP_PASS,
           },
+        })
+      : nodemailer.createTransport({
+          host: 'localhost', // docker 'maildev',
+          port: 1025,
+          secure: false,
         })
 
     const info = await transporter.sendMail({
