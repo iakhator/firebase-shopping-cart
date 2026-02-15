@@ -33,7 +33,7 @@
     "handlebars": "^4.7.8",
     "ioredis": "^5.5.0",
     "nanoid": "^5.1.5",
-    "nodemailer": "^6.10.1",
+    "nodemailer": "^7.0.11",
     "nuxt": "^3.13.2",
     "nuxt-lucide-icons": "^1.0.5",
     "pinia": "^3.0.3",
